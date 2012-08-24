@@ -51,7 +51,7 @@ namespace Ibasa.Numerics.Random
         {
             double u = Generator.NextDouble();
             double v = Generator.NextDouble();
-            double z = Functions.Sqrt(-2.0 * Functions.Log(u)) * Functions.Cos(2.0 * Functions.PI * v);
+            double z = Functions.Sqrt(-2.0 * Functions.Log(u)) * Functions.Cos(2.0 * Constants.PI * v);
             return Mean + StandardDeviation * z;
         }
     }
