@@ -4,3 +4,6 @@ obj
 
 # mstest test results
 TestResults
+
+# Visual Studio user options
+*.suo
