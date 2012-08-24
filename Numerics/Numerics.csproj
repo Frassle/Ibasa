@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="Binary.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Half.cs" />
     <Compile Include="Morton.cs" />
     <Compile Include="Random\Cauchy.cs" />
     <Compile Include="Random\Discrete.cs" />
