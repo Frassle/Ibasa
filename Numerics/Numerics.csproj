@@ -94,80 +94,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitops.cs" />
-    <Compile Include="BoundingBox.cs" />
-    <Compile Include="BoundingFrustum.cs" />
-    <Compile Include="BoundingSphere.cs" />
-    <Compile Include="Box.cs" />
-    <Compile Include="Complex.cs" />
-    <Compile Include="ComponentModel\FieldPropertyDescriptor.cs" />
-    <Compile Include="ComponentModel\Vector2Converter.cs" />
-    <Compile Include="ComponentModel\Vector4Converter.cs" />
-    <Compile Include="Curves\Bezier.cs" />
-    <Compile Include="Curves\ICurve.cs" />
-    <Compile Include="Curves\CurvePoint.cs" />
+    <Compile Include="Binary.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Morton.cs" />
     <Compile Include="Random\Cauchy.cs" />
     <Compile Include="Random\Discrete.cs" />
     <Compile Include="Random\Exponential.cs" />
-    <Compile Include="FNV.cs" />
-    <Compile Include="Half.cs" />
-    <Compile Include="Matrix.cs" />
-    <Compile Include="Matrix3x3.cs" />
-    <Compile Include="FFT.cs" />
-    <Compile Include="Color.cs" />
-    <Compile Include="Curve.cs" />
-    <Compile Include="CurveKey.cs" />
-    <Compile Include="ComponentModel\Vector3Converter.cs" />
-    <None Include="MiniFloat.cs" />
-    <Compile Include="Patches\IPatch.cs" />
     <Compile Include="Random\Distribution.cs" />
     <Compile Include="Random\Generator.cs" />
     <Compile Include="Random\Lcg.cs" />
     <Compile Include="Random\Normal.cs" />
     <Compile Include="Random\Truncated.cs" />
     <Compile Include="Random\Uniform.cs" />
-    <Compile Include="Vector.cs" />
-    <Compile Include="Vector2.cs" />
-    <Compile Include="Vector3.cs" />
-    <Compile Include="Vector4.cs" />
-    <Compile Include="Enums.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Functions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Geometry.cs" />
-    <Compile Include="GJK.cs" />
-    <Compile Include="Matrix4x4.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Octonion.cs" />
-    <Compile Include="Patches\Bezier.cs" />
-    <Compile Include="Patches\PatchPoint.cs" />
-    <Compile Include="Plane.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Point.cs" />
-    <Compile Include="Quaternion.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Random\MersenneTwister.cs" />
-    <Compile Include="Rational.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Ray.cs" />
-    <Compile Include="Rectangle.cs" />
-    <Compile Include="Size.cs" />
-    <Compile Include="Tessellation\PatchTessellator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tessellation\GridTessellator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tessellation\Tessellator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
