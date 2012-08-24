@@ -357,5 +357,29 @@ namespace Ibasa.IO
 
             Write(buffer, 0, size);
         }
+
+        /// <summary>
+        /// Writes structures from an array into the writer.
+        /// </summary>
+        /// <typeparam name="T">The type of structure.</typeparam>
+        /// <param name="array">The array to write into the accessor.</param>
+        /// /// <exception cref="System.ArgumentNullException">array is null.</exception>
+        public void Write<T>(ArraySegment<T> array) where T : struct
+        {
+            if (array == null)
+                throw new ArgumentNullException("array is null.");
+
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
+            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(array.Array, System.Runtime.InteropServices.GCHandleType.Pinned);
+            IntPtr target = handle.AddrOfPinnedObject();
+            for (int i = 0; i < array.Count; ++i)
+            {
+                System.Runtime.InteropServices.Marshal.Copy(target, buffer, 0, size);
+                Write(buffer, 0, size);
+                target += size;
+            }
+            handle.Free();
+        }
     }
 }

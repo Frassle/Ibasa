@@ -477,5 +477,48 @@ namespace Ibasa.IO
 
             return structure;
         }
+
+        /// <summary>
+        /// Reads structures from the reader into an array.
+        /// </summary>
+        /// <typeparam name="T">The type of structure.</typeparam>
+        /// <param name="array">The array segment to contain the structures read from the stream.</param>
+        /// <exception cref="System.IO.EndOfStreamException">There are not enough bytes left to read in a structure of type T</exception>
+        /// <exception cref="System.ArgumentNullException">array is null.</exception>
+        public void Read<T>(ArraySegment<T> array) where T : struct
+        {
+            if (array == null)
+                throw new ArgumentNullException("array is null.");
+
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
+            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(array.Array, System.Runtime.InteropServices.GCHandleType.Pinned);
+            IntPtr target = handle.AddrOfPinnedObject();
+            for (int i = 0; i < array.Count; ++i)
+            {
+                int read = Read(buffer, 0, size);
+                if (read != size)
+                    throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", typeof(T).Name));
+
+                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, target, size);
+                target += size;
+            }
+            handle.Free();
+        }
+
+        /// <summary>
+        /// Reads structures from the reader into an array.
+        /// </summary>
+        /// <typeparam name="T">The type of structure.</typeparam>
+        /// <param name="count">The number of structures to read from the stream.</param>
+        /// <returns>The array of structures read from the stream.</param>
+        /// <exception cref="System.IO.EndOfStreamException">There are not enough bytes left to read in a structure of type T</exception>
+        /// <exception cref="System.ArgumentNullException">array is null.</exception>
+        public T[] Read<T>(int count) where T : struct
+        {
+            T[] array = new T[count];
+            Read<T>(array);
+            return array;
+        }
     }
 }
