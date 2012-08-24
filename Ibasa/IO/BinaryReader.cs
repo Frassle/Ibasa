@@ -28,7 +28,7 @@ namespace Ibasa.IO
         /// <summary>
         /// Internal working buffer.
         /// </summary>
-        readonly protected byte[] Buffer;
+        protected byte[] Buffer;
 
         protected void FillBuffer(int count)
         {
@@ -215,6 +215,16 @@ namespace Ibasa.IO
             return BaseStream.Seek(offset, origin);
         }
 
+        /// <summary>
+        /// Sets the size of the internal buffer.
+        /// </summary>
+        /// <param name="bytes">The number of bytes in the buffer, must be at least 16.</param>
+        public void SetBufferSize(int bytes)
+        {
+            Contract.Requires(bytes >= 16);
+            Buffer = bytes == Buffer.Length ? Buffer : new byte[bytes];
+        }
+
         public int Read(byte[] buffer, int index, int count)
         {
             Contract.Requires(buffer != null);
@@ -363,62 +373,62 @@ namespace Ibasa.IO
                 throw new EndOfStreamException();
             return Encoding.GetString(bytes);
         }
-        public virtual decimal ReadDecimal()
+        public decimal ReadDecimal()
         {
             FillBuffer(16);
 
             return BitConverter.ToDecimal(Buffer, 0);
         }
-        public virtual double ReadDouble()
+        public double ReadDouble()
         {
             FillBuffer(8);
 
             return BitConverter.ToDouble(Buffer, 0);
         }
-        public virtual float ReadSingle()
+        public float ReadSingle()
         {
             FillBuffer(4);
 
             return BitConverter.ToSingle(Buffer, 0);
         }
-        public virtual bool ReadBoolean()
+        public bool ReadBoolean()
         {
             return ReadByte() != 0;
         }
-        public virtual byte ReadByte()
+        public byte ReadByte()
         {
             int b = BaseStream.ReadByte();
             if (b == -1)
                 throw new EndOfStreamException("The end of the stream is reached.");
             return (byte)b;
         }
-        public virtual char ReadChar()
+        public char ReadChar()
         {
             char[] chars = ReadChars(1);
             if (chars.Length == 0)
                 throw new EndOfStreamException();
             return chars[0];
         }
-        public virtual short ReadInt16()
+        public short ReadInt16()
         {
             FillBuffer(2);
 
             return BitConverter.ToInt16(Buffer, 0);
         }
-        public virtual int ReadInt32()
+        public int ReadInt32()
         {
             FillBuffer(4);
             
             return BitConverter.ToInt32(Buffer, 0);
         }
-        public virtual long ReadInt64()
+        public long ReadInt64()
         {
             FillBuffer(8);
 
             return BitConverter.ToInt64(Buffer, 0);
         }
         [CLSCompliant(false)]
-        public virtual sbyte ReadSByte()
+        public sbyte ReadSByte()
         {
             int b = BaseStream.ReadByte();
             if (b == -1)
@@ -426,25 +436,46 @@ namespace Ibasa.IO
             return (sbyte)(byte)b;
         }
         [CLSCompliant(false)]
-        public virtual ushort ReadUInt16()
+        public ushort ReadUInt16()
         {
             FillBuffer(2);
             
             return BitConverter.ToUInt16(Buffer, 0);
         }
         [CLSCompliant(false)]
-        public virtual uint ReadUInt32()
+        public uint ReadUInt32()
         {
             FillBuffer(4);
             
             return BitConverter.ToUInt32(Buffer, 0);
         }
         [CLSCompliant(false)]
-        public virtual ulong ReadUInt64()
+        public ulong ReadUInt64()
         {
             FillBuffer(8);
             
             return BitConverter.ToUInt64(Buffer, 0);
+        }
+
+        /// <summary>
+        /// Reads a structure of type T.
+        /// </summary>
+        /// <typeparam name="T">The type of structure.</typeparam>
+        /// <exception cref="System.IO.EndOfStreamException">There are not enough bytes left to read in a structure of type T</exception>
+        public T Read<T>() where T : struct
+        {
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
+            int read = Read(buffer, 0, size);
+            if (read != size)
+                throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", typeof(T).Name));
+
+            T structure = new T();
+            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(structure, System.Runtime.InteropServices.GCHandleType.Pinned);
+            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, handle.AddrOfPinnedObject(), size);
+            handle.Free();
+
+            return structure;
         }
     }
 }

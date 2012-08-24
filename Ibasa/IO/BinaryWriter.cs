@@ -28,7 +28,7 @@ namespace Ibasa.IO
         /// <summary>
         /// Internal working buffer.
         /// </summary>
-        protected readonly byte[] Buffer;
+        protected byte[] Buffer;
 
         /// <summary>
         /// Initializes a new instance of the BinaryWriter class based on the
@@ -198,7 +198,6 @@ namespace Ibasa.IO
         public void SetLength(long value)
         {
             Contract.Requires(0 <= value);
-
             BaseStream.SetLength(value);
         }
         /// <summary>
@@ -213,6 +212,16 @@ namespace Ibasa.IO
         public long Seek(long offset, System.IO.SeekOrigin origin)
         {
             return BaseStream.Seek(offset, origin);
+        }
+
+        /// <summary>
+        /// Sets the size of the internal buffer.
+        /// </summary>
+        /// <param name="bytes">The number of bytes in the buffer, must be at least 16.</param>
+        public void SetBufferSize(int bytes)
+        {
+            Contract.Requires(bytes >= 16);
+            Buffer = bytes == Buffer.Length ? Buffer : new byte[bytes];
         }
         
         public void Write(byte[] buffer)
@@ -267,70 +276,86 @@ namespace Ibasa.IO
             Write7BitEncodedInt(bytes.Length);
             Write(bytes);
         }
-        public virtual void Write(decimal value)
+        public void Write(decimal value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 16);
         }
-        public virtual void Write(double value)
+        public void Write(double value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 8);
         }
-        public virtual void Write(float value)
+        public void Write(float value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 4);
         }
-        public virtual void Write(bool value)
+        public void Write(bool value)
         {
             BaseStream.WriteByte(value ? (byte)0 : byte.MaxValue);
         }
-        public virtual void Write(byte value)
+        public void Write(byte value)
         {
             BaseStream.WriteByte(value);
         }
-        public virtual void Write(char value)
+        public void Write(char value)
         {
             Write((short)value);
         }
-        public virtual void Write(short value)
+        public void Write(short value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 2);
         }
-        public virtual void Write(int value)
+        public void Write(int value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 4);
         }
-        public virtual void Write(long value)
+        public void Write(long value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 8);
         }
         [CLSCompliant(false)]
-        public virtual void Write(sbyte value)
+        public void Write(sbyte value)
         {
             BaseStream.WriteByte((byte)value);
         }
         [CLSCompliant(false)]
-        public virtual void Write(ushort value)
+        public void Write(ushort value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 2);
         }
         [CLSCompliant(false)]
-        public virtual void Write(uint value)
+        public void Write(uint value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 4);
         }
         [CLSCompliant(false)]
-        public virtual void Write(ulong value)
+        public void Write(ulong value)
         {
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 8);
+        }
+
+        /// <summary>
+        /// Writes a structure into the writer.
+        /// </summary>
+        /// <typeparam name="T">The type of structure.</typeparam>
+        /// <param name="structure">The structure to write.</param>
+        public void Write<T>(T structure) where T : struct
+        {
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
+            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(structure, System.Runtime.InteropServices.GCHandleType.Pinned);
+            System.Runtime.InteropServices.Marshal.Copy(handle.AddrOfPinnedObject(), buffer, 0, size);
+            handle.Free();
+
+            Write(buffer, 0, size);
         }
     }
 }
