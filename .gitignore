@@ -7,3 +7,4 @@ TestResults
 
 # Visual Studio user options
 *.suo
+*.csproj.user
