@@ -43,6 +43,6 @@ namespace Ibasa.Numerics
         /// <summary>
         /// The speed of light in a vacuum, in meters per second.
         /// </summary>
-        public const float Cf = 299792458.0f;
+        public const float Cf = (float)C;
     }
 }
