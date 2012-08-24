@@ -6,6 +6,9 @@ using System.Runtime.ConstrainedExecution;
 
 namespace Ibasa.Numerics
 {
+    /// <summary>
+    /// Provides static methods for trigonometric, logarithmic, and other common mathematical functions.
+    /// </summary>
     public static class Functions
     {
         #region Tests
@@ -474,7 +477,7 @@ namespace Ibasa.Numerics
         public static float Exp(float x)
         {
             return (float)Math.Exp(x);
-        } 
+        }
         /// <summary>
         /// Returns the natural (base e) logarithm of a specified number.
         /// </summary>
@@ -666,6 +669,24 @@ namespace Ibasa.Numerics
         public static float Max(float val1, float val2)
         {
             return Math.Max(val1, val2);
+        }
+        //
+        // Summary:
+        //     Returns the larger of two single-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two single-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two single-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger. If val1, or val2, or both val1
+        //     and val2 are equal to System.Single.NaN, System.Single.NaN is returned.
+        public static Half Max(Half val1, Half val2)
+        {
+            return Half.Max(val1, val2);
         }
         //
         // Summary:
@@ -865,6 +886,24 @@ namespace Ibasa.Numerics
         }
         //
         // Summary:
+        //     Returns the smaller of two single-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two single-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two single-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller. If val1, val2, or both val1
+        //     and val2 are equal to System.Single.NaN, System.Single.NaN is returned.
+        public static Half Min(Half val1, Half val2)
+        {
+            return Half.Min(val1, val2);
+        }
+        //
+        // Summary:
         //     Returns the smaller of two 32-bit signed integers.
         //
         // Parameters:
@@ -1046,6 +1085,27 @@ namespace Ibasa.Numerics
         public static int Sign(float value)
         {
             return Math.Sign(value);
+        }
+        //
+        // Summary:
+        //     Returns a value indicating the sign of a single-precision floating-point
+        //     number.
+        //
+        // Parameters:
+        //   value:
+        //     A signed number.
+        //
+        // Returns:
+        //     A number that indicates the sign of value, as shown in the following table.Return
+        //     value Meaning -1 value is less than zero. 0 value is equal to zero. 1 value
+        //     is greater than zero.
+        //
+        // Exceptions:
+        //   System.ArithmeticException:
+        //     value is equal to System.Single.NaN.
+        public static int Sign(Half value)
+        {
+            return Half.Sign(value);
         }
         //
         // Summary:
@@ -1636,6 +1696,20 @@ namespace Ibasa.Numerics
         }
         //
         // Summary:
+        //     Returns the absolute value of a single-precision floating-point number.
+        //
+        // Parameters:
+        //   value:
+        //     A number in the range System.Single.MinValue≤value≤System.Single.MaxValue.
+        //
+        // Returns:
+        //     A single-precision floating-point number, x, such that 0 ≤ x ≤System.Single.MaxValue.
+        public static Half Abs(Half value)
+        {
+            return Half.Abs(value);
+        }
+        //
+        // Summary:
         //     Returns the absolute value of a 32-bit signed integer.
         //
         // Parameters:
@@ -1651,6 +1725,11 @@ namespace Ibasa.Numerics
         public static int Abs(int value)
         {
             return Math.Abs(value);
+        }
+        [CLSCompliant(false)]
+        public static uint Abs(uint value)
+        {
+            return value;
         }
         //
         // Summary:
@@ -1669,6 +1748,11 @@ namespace Ibasa.Numerics
         public static long Abs(long value)
         {
             return Math.Abs(value);
+        }
+        [CLSCompliant(false)]
+        public static ulong Abs(ulong value)
+        {
+            return value;
         }
         //
         // Summary:
@@ -1689,6 +1773,10 @@ namespace Ibasa.Numerics
         {
             return Math.Abs(value);
         }
+        public static byte Abs(byte value)
+        {
+            return value;
+        }
         //
         // Summary:
         //     Returns the absolute value of a 16-bit signed integer.
@@ -1707,9 +1795,72 @@ namespace Ibasa.Numerics
         {
             return Math.Abs(value);
         }
+        [CLSCompliant(false)]
+        public static ushort Abs(ushort value)
+        {
+            return value;
+        }
         #endregion
 
         #region Clamp
+        /// <summary>
+        /// Constrains a value to a given range.
+        /// </summary>
+        /// <param name="value">A number to constrain.</param>
+        /// <param name="min">The minimum value in the range.</param>
+        /// <param name="max">The maximum value in the range.</param>
+        /// <returns>If value is less than min, return min. 
+        /// If value is greater than max return max.
+        /// Else return value.</returns>
+        [Pure]
+        public static byte Clamp(byte value, byte min, byte max)
+        {
+            return Functions.Min(max, Functions.Max(min, value));
+        }
+        /// <summary>
+        /// Constrains a value to a given range.
+        /// </summary>
+        /// <param name="value">A number to constrain.</param>
+        /// <param name="min">The minimum value in the range.</param>
+        /// <param name="max">The maximum value in the range.</param>
+        /// <returns>If value is less than min, return min. 
+        /// If value is greater than max return max.
+        /// Else return value.</returns>
+        [Pure]
+        [CLSCompliant(false)]
+        public static sbyte Clamp(sbyte value, sbyte min, sbyte max)
+        {
+            return Functions.Min(max, Functions.Max(min, value));
+        }
+        /// <summary>
+        /// Constrains a value to a given range.
+        /// </summary>
+        /// <param name="value">A number to constrain.</param>
+        /// <param name="min">The minimum value in the range.</param>
+        /// <param name="max">The maximum value in the range.</param>
+        /// <returns>If value is less than min, return min. 
+        /// If value is greater than max return max.
+        /// Else return value.</returns>
+        [Pure]
+        public static short Clamp(short value, short min, short max)
+        {
+            return Functions.Min(max, Functions.Max(min, value));
+        }
+        /// <summary>
+        /// Constrains a value to a given range.
+        /// </summary>
+        /// <param name="value">A number to constrain.</param>
+        /// <param name="min">The minimum value in the range.</param>
+        /// <param name="max">The maximum value in the range.</param>
+        /// <returns>If value is less than min, return min. 
+        /// If value is greater than max return max.
+        /// Else return value.</returns>
+        [Pure]
+        [CLSCompliant(false)]
+        public static ushort Clamp(ushort value, ushort min, ushort max)
+        {
+            return Functions.Min(max, Functions.Max(min, value));
+        }
         /// <summary>
         /// Constrains a value to a given range.
         /// </summary>
@@ -1734,7 +1885,51 @@ namespace Ibasa.Numerics
         /// If value is greater than max return max.
         /// Else return value.</returns>
         [Pure]
+        [CLSCompliant(false)]
+        public static uint Clamp(uint value, uint min, uint max)
+        {
+            return Functions.Min(max, Functions.Max(min, value));
+        }
+        /// <summary>
+        /// Constrains a value to a given range.
+        /// </summary>
+        /// <param name="value">A number to constrain.</param>
+        /// <param name="min">The minimum value in the range.</param>
+        /// <param name="max">The maximum value in the range.</param>
+        /// <returns>If value is less than min, return min. 
+        /// If value is greater than max return max.
+        /// Else return value.</returns>
+        [Pure]
         public static long Clamp(long value, long min, long max)
+        {
+            return Functions.Min(max, Functions.Max(min, value));
+        }
+        /// <summary>
+        /// Constrains a value to a given range.
+        /// </summary>
+        /// <param name="value">A number to constrain.</param>
+        /// <param name="min">The minimum value in the range.</param>
+        /// <param name="max">The maximum value in the range.</param>
+        /// <returns>If value is less than min, return min. 
+        /// If value is greater than max return max.
+        /// Else return value.</returns>
+        [Pure]
+        [CLSCompliant(false)]
+        public static ulong Clamp(ulong value, ulong min, ulong max)
+        {
+            return Functions.Min(max, Functions.Max(min, value));
+        }
+        /// <summary>
+        /// Constrains a value to a given range.
+        /// </summary>
+        /// <param name="value">A number to constrain.</param>
+        /// <param name="min">The minimum value in the range.</param>
+        /// <param name="max">The maximum value in the range.</param>
+        /// <returns>If value is less than min, return min. 
+        /// If value is greater than max return max.
+        /// Else return value.</returns>
+        [Pure]
+        public static Half Clamp(Half value, Half min, Half max)
         {
             return Functions.Min(max, Functions.Max(min, value));
         }
@@ -1768,6 +1963,31 @@ namespace Ibasa.Numerics
         }
         #endregion
 
+        #region Saturate
+        /// <summary>
+        /// Clamps a number between 0 and 1.
+        /// </summary>
+        /// <param name="value">A number.</param>
+        /// <returns>value clamped between 0 and 1.</returns>
+        [Pure]
+        public static Half Saturate(Half value)
+        {
+            Contract.Ensures(0.0f <= Contract.Result<Half>() && Contract.Result<Half>() <= 1.0f);
+            return Functions.Min(1, Functions.Max(0, value));
+        }
+
+        /// <summary>
+        /// Clamps a number between 0 and 1.
+        /// </summary>
+        /// <param name="value">A number.</param>
+        /// <returns>value clamped between 0 and 1.</returns>
+        [Pure]
+        public static float Saturate(float value)
+        {
+            Contract.Ensures(0.0f <= Contract.Result<float>() && Contract.Result<float>() <= 1.0f);
+            return Functions.Min(1.0f, Functions.Max(0.0f, value));
+        }
+
         /// <summary>
         /// Clamps a number between 0 and 1.
         /// </summary>
@@ -1779,7 +1999,9 @@ namespace Ibasa.Numerics
             Contract.Ensures(0.0 <= Contract.Result<double>() && Contract.Result<double>() <= 1.0);
             return Functions.Min(1.0, Functions.Max(0.0, value));
         }
+        #endregion
 
+        #region Wrap
         /// <summary>
         /// Wraps a number between min and max.
         /// </summary>
@@ -1795,6 +2017,23 @@ namespace Ibasa.Numerics
 
             return min + Modulus(value - min, max - min);
         }
+
+        /// <summary>
+        /// Wraps a number between min and max.
+        /// </summary>
+        /// <param name="value">The number to wrap.</param>
+        /// <param name="min">The maximum value.</param>
+        /// <param name="max">The minimum value.</param>
+        /// <returns>value wrapped around the range [min, max].</returns>
+        [Pure]
+        public static float Wrap(float value, float min, float max)
+        {
+            Contract.Requires(min != max);
+            Contract.Ensures(min <= Contract.Result<float>() && Contract.Result<float>() <= max);
+
+            return min + Modulus(value - min, max - min);
+        }
+        #endregion
         #endregion
 
         #region Division
@@ -1820,11 +2059,9 @@ namespace Ibasa.Numerics
         // Exceptions:
         //   System.DivideByZeroException:
         //     b is zero.
-        public static Tuple<int, int> DivRem(int a, int b)
+        public static int DivRem(int a, int b, out int result)
         {
-            int rem;
-            int div = Math.DivRem(a, b, out rem);
-            return Tuple.Create(div, rem);
+            return Math.DivRem(a, b, out result);
         }
         //
         // Summary:
@@ -1847,11 +2084,9 @@ namespace Ibasa.Numerics
         // Exceptions:
         //   System.DivideByZeroException:
         //     b is zero.
-        public static Tuple<long, long> DivRem(long a, long b)
+        public static long DivRem(long a, long b, out long result)
         {
-            long rem;
-            long div = Math.DivRem(a, b, out rem);
-            return Tuple.Create(div, rem);
+            return Math.DivRem(a, b, out result);
         }
 
         //
@@ -1877,6 +2112,7 @@ namespace Ibasa.Numerics
             return Math.IEEERemainder(x, y);
         }
 
+        #region Division
         /// <summary>
         /// Floored division.
         /// </summary>
@@ -1936,7 +2172,6 @@ namespace Ibasa.Numerics
 
             return Math.Sign(divisor) * Floor(dividend, Abs(divisor));
         }
-        #region Modulus
         /// <summary>
         /// Euclidean modulus.
         /// </summary>
@@ -2070,7 +2305,7 @@ namespace Ibasa.Numerics
             //bounds for gammaln
             Contract.Requires(0.0 < n);
             Contract.Ensures(0.0 <= Contract.Result<double>());
-                
+
             double x = n;
             double y = n + 1.0;
             double t = x + (671.0 / 128.0);
@@ -2150,7 +2385,7 @@ namespace Ibasa.Numerics
         {
             Contract.Ensures(0 <= Contract.Result<long>());
 
-            if (k > n) 
+            if (k > n)
                 return 0;
 
             long r = 1;
@@ -2207,7 +2442,7 @@ namespace Ibasa.Numerics
         [Pure]
         public static double Lerp(double value1, double value2, double amount)
         {
-            return value1 + amount * (value2 - value1);
+            return (1 - amount) * value1 + amount * value2;
         }
         /// <summary>
         /// Performs a Hermite spline interpolation.
@@ -2248,18 +2483,32 @@ namespace Ibasa.Numerics
             return Hermite(value2, tangent0, value3, tangent1, amount);
         }
         /// <summary>
-        /// Performs a cubic interpolation between two values.
+        /// The function interpolates smoothly between two input values based on a third one that should be between the first two. 
+        /// The returned value is clamped between 0 and 1.
         /// </summary>
-        /// <param name="value1">First values.</param>
-        /// <param name="value2">Second values.</param>
+        /// <param name="value1">First value.</param>
+        /// <param name="value2">Second value.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="value2"/>.</param>
-        /// <returns>The cubic interpolation of the two vectors.</returns>
+        /// <returns>The smooth interpolation of the two values.</returns>
         [Pure]
         public static double SmoothStep(double value1, double value2, double amount)
         {
-            amount = Saturate(amount);
-            amount = (amount * amount) * (3.0 - (2.0 * amount));
-            return value1 + amount * (value2 - value1);
+            var t = Saturate((amount - value1) / (value2 - value1));
+            return t * t * (3 - 2 * t);
+        }
+        /// <summary>
+        /// The function interpolates smoothly between two input values based on a third one that should be between the first two. 
+        /// The returned value is clamped between 0 and 1.
+        /// </summary>
+        /// <param name="value1">First value.</param>
+        /// <param name="value2">Second value.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="value2"/>.</param>
+        /// <returns>The smooth interpolation of the two values.</returns>
+        [Pure]
+        public static double SmootherStep(double value1, double value2, double amount)
+        {
+            var t = Saturate((amount - value1) / (value2 - value1));
+            return t * t * t * (t * (t * 6 - 15) + 10);
         }
     }
 
