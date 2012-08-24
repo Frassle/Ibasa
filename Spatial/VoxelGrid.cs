@@ -8,30 +8,30 @@ using System.Diagnostics.Contracts;
 
 namespace Ibasa.Spatial
 {
-    public class Voxel
+    public class VoxelGrid<T> : IVoxel<T> where T : IEquatable<T>
     {
         public Boxl Bounds { get; private set; }
-        byte[] Volume;
+        T[] Volume;
 
-        public Voxel(Boxl bounds)
+        public VoxelGrid(Boxl bounds)
         {
             Bounds = bounds;
-            Volume = new byte[Bounds.Width * Bounds.Height * Bounds.Depth];
+            Volume = new T[Bounds.Width * Bounds.Height * Bounds.Depth];
         }
 
         // Volume is stored in columns (y is up/down), this makes traversals down columns fast.
         // After that x and z are in morton order.
-        public byte this[int x, int y, int z]
+        public T this[Point3l point]
         {
             get
             {
-                int xz = Morton.Encode(x, z);
-                return Volume[y + xz * Bounds.Height];
+                int xz = Morton.Encode((int)point.X, (int)point.Z);
+                return Volume[point.Y + xz * Bounds.Height];
             }
             set
             {
-                int xz = Morton.Encode(x, z);
-                Volume[y + xz * Bounds.Height] = value;
+                int xz = Morton.Encode((int)point.X, (int)point.Z);
+                Volume[point.Y + xz * Bounds.Height] = value;
             }
         }
     }

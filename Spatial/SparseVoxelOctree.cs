@@ -8,14 +8,14 @@ using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.Spatial
 {
-    public class SparseVoxelOctree
+    public class SparseVoxelOctree<T> : IVoxel<T> where T : IEquatable<T>
     {
         public struct Node
         {
             Node[] Children;
-            byte Value;
+            T Value;
 
-            public Node(byte value)
+            public Node(T value)
             {
                 Children = null;
                 Value = value;
@@ -46,7 +46,7 @@ namespace Ibasa.Spatial
                 return new Boxl(bounds.X + x, bounds.Y + y, bounds.Z + z, size);
             }
 
-            public byte Get(Boxl bounds, Point3l point)
+            public T Get(Boxl bounds, Point3l point)
             {
                 if (Children == null)
                 {
@@ -64,9 +64,9 @@ namespace Ibasa.Spatial
                 }
             }
 
-            public bool Set(Boxl bounds, Point3l point, byte value)
+            public bool Set(Boxl bounds, Point3l point, T value)
             {
-                if (value == Value && (Children == null || bounds.Size == Size3i.Unit))
+                if (value.Equals(Value) && (Children == null || bounds.Size == Size3i.Unit))
                 {
                     return false;
                 }
@@ -99,13 +99,13 @@ namespace Ibasa.Spatial
             {
                 var value = Children[0].Value;
                 bool all = true;
-                all &= Children[1].Value == value;
-                all &= Children[2].Value == value;
-                all &= Children[3].Value == value;
-                all &= Children[4].Value == value;
-                all &= Children[5].Value == value;
-                all &= Children[6].Value == value;
-                all &= Children[7].Value == value;
+                all &= Children[1].Value.Equals(value);
+                all &= Children[2].Value.Equals(value);
+                all &= Children[3].Value.Equals(value);
+                all &= Children[4].Value.Equals(value);
+                all &= Children[5].Value.Equals(value);
+                all &= Children[6].Value.Equals(value);
+                all &= Children[7].Value.Equals(value);
 
                 if (all)
                 {
@@ -154,7 +154,7 @@ namespace Ibasa.Spatial
             Bounds = bounds;
         }       
 
-        public byte this[Point3l point]
+        public T this[Point3l point]
         {
             get
             {
