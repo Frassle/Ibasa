@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Ibasa.Numerics
+{
+    class Constants
+    {
+        /// <summary>
+        /// Represents the natural logarithmic base, specified by the constant, e.
+        /// </summary>
+        public const double E = Math.E;
+        /// <summary>
+        /// Represents the ratio of the circumference of a circle to its diameter, specified
+        /// by the constant, π.
+        /// </summary>
+        public const double PI = Math.PI;
+        /// <summary>
+        /// Represents the ratio of the circumference of a circle to its radius, specified
+        /// by the constant, τ.
+        /// </summary>
+        public const double TAU = PI * 2.0;
+
+        /// <summary>
+        /// Represents the natural logarithmic base, specified by the constant, e.
+        /// </summary>
+        public const float Ef = (float)E;
+        /// <summary>
+        /// Represents the ratio of the circumference of a circle to its diameter, specified
+        /// by the constant, π.
+        /// </summary>
+        public const float PIf = (float)PI;
+        /// <summary>
+        /// Represents the ratio of the circumference of a circle to its radius, specified
+        /// by the constant, τ.
+        /// </summary>
+        public const float TAUf = (float)TAU;
+    }
+}
