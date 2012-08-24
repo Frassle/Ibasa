@@ -1877,6 +1877,65 @@ namespace Ibasa.Numerics
             return Math.IEEERemainder(x, y);
         }
 
+        /// <summary>
+        /// Floored division.
+        /// </summary>
+        /// <param name="dividend">The dividend.</param>
+        /// <param name="divisor">The divisor.</param>
+        /// <returns>The quotient.</returns>
+        [Pure]
+        public static int Floor(int dividend, int divisor)
+        {
+            Contract.Requires(divisor != 0, "divisor equals zero.");
+
+            if (dividend < 0)
+                dividend = dividend - (divisor - 1);
+
+            return dividend / divisor;
+        }
+        /// <summary>
+        /// Floored division.
+        /// </summary>
+        /// <param name="dividend">The dividend.</param>
+        /// <param name="divisor">The divisor.</param>
+        /// <returns>The quotient.</returns>
+        [Pure]
+        public static long Floor(long dividend, long divisor)
+        {
+            Contract.Requires(divisor != 0, "divisor equals zero.");
+
+            if (dividend < 0)
+                dividend = dividend - (divisor - 1);
+
+            return dividend / divisor;
+        }
+
+        /// <summary>
+        /// Euclidean division.
+        /// </summary>
+        /// <param name="dividend">The dividend.</param>
+        /// <param name="divisor">The divisor.</param>
+        /// <returns>The quotient.</returns>
+        [Pure]
+        public static int Divide(int dividend, int divisor)
+        {
+            Contract.Requires(divisor != 0, "divisor equals zero.");
+
+            return Math.Sign(divisor) * Floor(dividend, Abs(divisor));
+        }
+        /// <summary>
+        /// Euclidean division.
+        /// </summary>
+        /// <param name="dividend">The dividend.</param>
+        /// <param name="divisor">The divisor.</param>
+        /// <returns>The quotient.</returns>
+        [Pure]
+        public static long Divide(long dividend, long divisor)
+        {
+            Contract.Requires(divisor != 0, "divisor equals zero.");
+
+            return Math.Sign(divisor) * Floor(dividend, Abs(divisor));
+        }
         #region Modulus
         /// <summary>
         /// Euclidean modulus.
@@ -1911,7 +1970,7 @@ namespace Ibasa.Numerics
             if (rt < 0)
                 i = Functions.Sign(divisor);
             return rt + i * divisor;
-        }       
+        }
         /// <summary>
         /// Euclidean modulus.
         /// </summary>
