@@ -21,6 +21,10 @@ namespace Ibasa.Numerics
         /// by the constant, τ.
         /// </summary>
         public const double TAU = PI * 2.0;
+        /// <summary>
+        /// The speed of light in a vacuum, in meters per second.
+        /// </summary>
+        public const double C = 299792458.0;
 
         /// <summary>
         /// Represents the natural logarithmic base, specified by the constant, e.
@@ -36,5 +40,9 @@ namespace Ibasa.Numerics
         /// by the constant, τ.
         /// </summary>
         public const float TAUf = (float)TAU;
+        /// <summary>
+        /// The speed of light in a vacuum, in meters per second.
+        /// </summary>
+        public const float Cf = 299792458.0f;
     }
 }
