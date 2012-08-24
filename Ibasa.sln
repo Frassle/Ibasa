@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Numerics", "Numerics\Numeri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Numerics Generator", "Numerics Generator\Numerics Generator.csproj", "{51B367DF-235D-43AC-BDF5-8DE3781AA76F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial", "Spatial\Spatial.csproj", "{DC1263DC-87AD-4A2A-9115-DFC77E88074A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{51B367DF-235D-43AC-BDF5-8DE3781AA76F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51B367DF-235D-43AC-BDF5-8DE3781AA76F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51B367DF-235D-43AC-BDF5-8DE3781AA76F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC1263DC-87AD-4A2A-9115-DFC77E88074A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC1263DC-87AD-4A2A-9115-DFC77E88074A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC1263DC-87AD-4A2A-9115-DFC77E88074A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC1263DC-87AD-4A2A-9115-DFC77E88074A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
