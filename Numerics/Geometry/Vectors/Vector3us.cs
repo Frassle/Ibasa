@@ -1621,6 +1621,20 @@ namespace Ibasa.Numerics.Geometry
 			ulong z = (ulong)(vector.Z) << 32;
 			return (ulong)(x | y | z);
 		}
+		public static Vector3us Unpack(int xBits, int yBits, int zBits, ushort bits)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 16, "xBits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 16, "yBits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= zBits && zBits <= 16, "zBits must be between 0 and 16 inclusive.");
+			Contract.Requires(xBits + yBits + zBits <= 64);
+			ulong x = (ulong)(bits);
+			x &= ((1UL << xBits) - 1);
+			ulong y = (ulong)(bits) >> (xBits);
+			y &= ((1UL << yBits) - 1);
+			ulong z = (ulong)(bits) >> (xBits + yBits);
+			z &= ((1UL << zBits) - 1);
+			return new Vector3us((ushort)x, (ushort)y, (ushort)z);
+		}
 		#endregion
 		#region Operations
 		/// <summary>

@@ -3840,6 +3840,23 @@ namespace Ibasa.Numerics.Geometry
 			w <<= xBits + yBits + zBits;
 			return (long)(x | y | z | w);
 		}
+		public static Vector4i Unpack(int xBits, int yBits, int zBits, int wBits, int bits)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 32, "xBits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 32, "yBits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= zBits && zBits <= 32, "zBits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= wBits && wBits <= 32, "wBits must be between 0 and 32 inclusive.");
+			Contract.Requires(xBits + yBits + zBits + wBits <= 64);
+			ulong x = (ulong)(bits);
+			x &= ((1UL << xBits) - 1);
+			ulong y = (ulong)(bits) >> (xBits);
+			y &= ((1UL << yBits) - 1);
+			ulong z = (ulong)(bits) >> (xBits + yBits);
+			z &= ((1UL << zBits) - 1);
+			ulong w = (ulong)(bits) >> (xBits + yBits + zBits);
+			w &= ((1UL << wBits) - 1);
+			return new Vector4i((int)x, (int)y, (int)z, (int)w);
+		}
 		#endregion
 		#region Operations
 		/// <summary>

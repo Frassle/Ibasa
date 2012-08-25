@@ -753,6 +753,59 @@ namespace Ibasa.Numerics.Geometry
 			v15 <<= v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits + v10Bits + v11Bits + v12Bits + v13Bits + v14Bits;
 			return (long)(v0 | v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8 | v9 | v10 | v11 | v12 | v13 | v14 | v15);
 		}
+		public static Vector16ui Unpack(int v0Bits, int v1Bits, int v2Bits, int v3Bits, int v4Bits, int v5Bits, int v6Bits, int v7Bits, int v8Bits, int v9Bits, int v10Bits, int v11Bits, int v12Bits, int v13Bits, int v14Bits, int v15Bits, uint bits)
+		{
+			Contract.Requires(0 <= v0Bits && v0Bits <= 32, "v0Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v1Bits && v1Bits <= 32, "v1Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v2Bits && v2Bits <= 32, "v2Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v3Bits && v3Bits <= 32, "v3Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v4Bits && v4Bits <= 32, "v4Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v5Bits && v5Bits <= 32, "v5Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v6Bits && v6Bits <= 32, "v6Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v7Bits && v7Bits <= 32, "v7Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v8Bits && v8Bits <= 32, "v8Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v9Bits && v9Bits <= 32, "v9Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v10Bits && v10Bits <= 32, "v10Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v11Bits && v11Bits <= 32, "v11Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v12Bits && v12Bits <= 32, "v12Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v13Bits && v13Bits <= 32, "v13Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v14Bits && v14Bits <= 32, "v14Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v15Bits && v15Bits <= 32, "v15Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits + v10Bits + v11Bits + v12Bits + v13Bits + v14Bits + v15Bits <= 64);
+			ulong v0 = (ulong)(bits);
+			v0 &= ((1UL << v0Bits) - 1);
+			ulong v1 = (ulong)(bits) >> (v0Bits);
+			v1 &= ((1UL << v1Bits) - 1);
+			ulong v2 = (ulong)(bits) >> (v0Bits + v1Bits);
+			v2 &= ((1UL << v2Bits) - 1);
+			ulong v3 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits);
+			v3 &= ((1UL << v3Bits) - 1);
+			ulong v4 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits);
+			v4 &= ((1UL << v4Bits) - 1);
+			ulong v5 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits);
+			v5 &= ((1UL << v5Bits) - 1);
+			ulong v6 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits);
+			v6 &= ((1UL << v6Bits) - 1);
+			ulong v7 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits);
+			v7 &= ((1UL << v7Bits) - 1);
+			ulong v8 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits);
+			v8 &= ((1UL << v8Bits) - 1);
+			ulong v9 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits);
+			v9 &= ((1UL << v9Bits) - 1);
+			ulong v10 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits);
+			v10 &= ((1UL << v10Bits) - 1);
+			ulong v11 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits + v10Bits);
+			v11 &= ((1UL << v11Bits) - 1);
+			ulong v12 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits + v10Bits + v11Bits);
+			v12 &= ((1UL << v12Bits) - 1);
+			ulong v13 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits + v10Bits + v11Bits + v12Bits);
+			v13 &= ((1UL << v13Bits) - 1);
+			ulong v14 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits + v10Bits + v11Bits + v12Bits + v13Bits);
+			v14 &= ((1UL << v14Bits) - 1);
+			ulong v15 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits + v8Bits + v9Bits + v10Bits + v11Bits + v12Bits + v13Bits + v14Bits);
+			v15 &= ((1UL << v15Bits) - 1);
+			return new Vector16ui((uint)v0, (uint)v1, (uint)v2, (uint)v3, (uint)v4, (uint)v5, (uint)v6, (uint)v7, (uint)v8, (uint)v9, (uint)v10, (uint)v11, (uint)v12, (uint)v13, (uint)v14, (uint)v15);
+		}
 		#endregion
 		#region Operations
 		/// <summary>

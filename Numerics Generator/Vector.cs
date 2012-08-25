@@ -763,41 +763,38 @@ namespace Numerics_Generator
 
                 // Unpack
 
-                if (packed == Type)
+                WriteLine("public static {0} Unpack({1}, {2} bits)", Name,
+                    string.Join(", ", args.Select(arg => string.Format("int {0}", arg))), Type);
+                WriteLine("{");
+                Indent();
+                for (int i = 0; i < args.Length; ++i)
                 {
-                    WriteLine("public static {0} Unpack({1}, {2} bits)", Name,
-                       string.Join(", ", args.Select(arg => string.Format("int {0}", arg))), packed);
-                    WriteLine("{");
-                    Indent();
-                    for (int i = 0; i < args.Length; ++i)
-                    {
-                        WriteLine("Contract.Requires(0 <= {0} && {0} <= {1}, \"{0} must be between 0 and {1} inclusive.\");",
-                            args[i], Type.Size * 8);
-                    }
-                    WriteLine("Contract.Requires({0} <= {1});", string.Join(" + ", args), bits);
-
-                    for (int i = 0; i < Components.Length; ++i)
-                    {
-                        var var = Components[i].Name.ToLower();
-                        var name = Components[i].Name;
-                        var bitarg = args[i];
-                        var offset = string.Join(" + ", Enumerable.Range(0, i).Select(j => args[j]));
-                        if (offset != "")
-                        {
-                            WriteLine("ulong {0} = (ulong)(bits) >> ({1});", var, offset);
-                        }
-                        else
-                        {
-                            WriteLine("ulong {0} = (ulong)(bits);", var);
-                        }
-                        WriteLine("{0} &= ((1UL << {1}) - 1);", var, bitarg);
-                    }
-
-                    WriteLine("return new {0}({1});", Name,
-                        string.Join(", ", Components.Select(component => string.Format("({0}){1}", Type, component.Name.ToLower()))));
-                    Dedent();
-                    WriteLine("}");
+                    WriteLine("Contract.Requires(0 <= {0} && {0} <= {1}, \"{0} must be between 0 and {1} inclusive.\");",
+                        args[i], Type.Size * 8);
                 }
+                WriteLine("Contract.Requires({0} <= {1});", string.Join(" + ", args), bits);
+
+                for (int i = 0; i < Components.Length; ++i)
+                {
+                    var var = Components[i].Name.ToLower();
+                    var name = Components[i].Name;
+                    var bitarg = args[i];
+                    var offset = string.Join(" + ", Enumerable.Range(0, i).Select(j => args[j]));
+                    if (offset != "")
+                    {
+                        WriteLine("ulong {0} = (ulong)(bits) >> ({1});", var, offset);
+                    }
+                    else
+                    {
+                        WriteLine("ulong {0} = (ulong)(bits);", var);
+                    }
+                    WriteLine("{0} &= ((1UL << {1}) - 1);", var, bitarg);
+                }
+
+                WriteLine("return new {0}({1});", Name,
+                    string.Join(", ", Components.Select(component => string.Format("({0}){1}", Type, component.Name.ToLower()))));
+                Dedent();
+                WriteLine("}");
                 
                 WriteLine("#endregion");
             }

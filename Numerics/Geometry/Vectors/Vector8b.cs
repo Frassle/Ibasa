@@ -569,6 +569,35 @@ namespace Ibasa.Numerics.Geometry
 			ulong v7 = (ulong)(vector.V7) << 56;
 			return (long)(v0 | v1 | v2 | v3 | v4 | v5 | v6 | v7);
 		}
+		public static Vector8b Unpack(int v0Bits, int v1Bits, int v2Bits, int v3Bits, int v4Bits, int v5Bits, int v6Bits, int v7Bits, byte bits)
+		{
+			Contract.Requires(0 <= v0Bits && v0Bits <= 8, "v0Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= v1Bits && v1Bits <= 8, "v1Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= v2Bits && v2Bits <= 8, "v2Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= v3Bits && v3Bits <= 8, "v3Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= v4Bits && v4Bits <= 8, "v4Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= v5Bits && v5Bits <= 8, "v5Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= v6Bits && v6Bits <= 8, "v6Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= v7Bits && v7Bits <= 8, "v7Bits must be between 0 and 8 inclusive.");
+			Contract.Requires(v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits <= 64);
+			ulong v0 = (ulong)(bits);
+			v0 &= ((1UL << v0Bits) - 1);
+			ulong v1 = (ulong)(bits) >> (v0Bits);
+			v1 &= ((1UL << v1Bits) - 1);
+			ulong v2 = (ulong)(bits) >> (v0Bits + v1Bits);
+			v2 &= ((1UL << v2Bits) - 1);
+			ulong v3 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits);
+			v3 &= ((1UL << v3Bits) - 1);
+			ulong v4 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits);
+			v4 &= ((1UL << v4Bits) - 1);
+			ulong v5 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits);
+			v5 &= ((1UL << v5Bits) - 1);
+			ulong v6 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits);
+			v6 &= ((1UL << v6Bits) - 1);
+			ulong v7 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits);
+			v7 &= ((1UL << v7Bits) - 1);
+			return new Vector8b((byte)v0, (byte)v1, (byte)v2, (byte)v3, (byte)v4, (byte)v5, (byte)v6, (byte)v7);
+		}
 		#endregion
 		#region Operations
 		/// <summary>

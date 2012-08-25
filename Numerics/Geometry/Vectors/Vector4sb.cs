@@ -3845,6 +3845,23 @@ namespace Ibasa.Numerics.Geometry
 			ulong w = (ulong)(vector.W) << 24;
 			return (uint)(x | y | z | w);
 		}
+		public static Vector4sb Unpack(int xBits, int yBits, int zBits, int wBits, sbyte bits)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 8, "xBits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 8, "yBits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= zBits && zBits <= 8, "zBits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= wBits && wBits <= 8, "wBits must be between 0 and 8 inclusive.");
+			Contract.Requires(xBits + yBits + zBits + wBits <= 32);
+			ulong x = (ulong)(bits);
+			x &= ((1UL << xBits) - 1);
+			ulong y = (ulong)(bits) >> (xBits);
+			y &= ((1UL << yBits) - 1);
+			ulong z = (ulong)(bits) >> (xBits + yBits);
+			z &= ((1UL << zBits) - 1);
+			ulong w = (ulong)(bits) >> (xBits + yBits + zBits);
+			w &= ((1UL << wBits) - 1);
+			return new Vector4sb((sbyte)x, (sbyte)y, (sbyte)z, (sbyte)w);
+		}
 		#endregion
 		#region Operations
 		/// <summary>

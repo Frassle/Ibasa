@@ -700,6 +700,17 @@ namespace Ibasa.Numerics.Geometry
 			ulong y = (ulong)(vector.Y) << 32;
 			return (ulong)(x | y);
 		}
+		public static Vector2ui Unpack(int xBits, int yBits, uint bits)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 32, "xBits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 32, "yBits must be between 0 and 32 inclusive.");
+			Contract.Requires(xBits + yBits <= 64);
+			ulong x = (ulong)(bits);
+			x &= ((1UL << xBits) - 1);
+			ulong y = (ulong)(bits) >> (xBits);
+			y &= ((1UL << yBits) - 1);
+			return new Vector2ui((uint)x, (uint)y);
+		}
 		#endregion
 		#region Operations
 		/// <summary>

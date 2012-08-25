@@ -703,6 +703,17 @@ namespace Ibasa.Numerics.Geometry
 			ulong y = (ulong)(vector.Y) << 8;
 			return (short)(x | y);
 		}
+		public static Vector2b Unpack(int xBits, int yBits, byte bits)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 8, "xBits must be between 0 and 8 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 8, "yBits must be between 0 and 8 inclusive.");
+			Contract.Requires(xBits + yBits <= 16);
+			ulong x = (ulong)(bits);
+			x &= ((1UL << xBits) - 1);
+			ulong y = (ulong)(bits) >> (xBits);
+			y &= ((1UL << yBits) - 1);
+			return new Vector2b((byte)x, (byte)y);
+		}
 		#endregion
 		#region Operations
 		/// <summary>

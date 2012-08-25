@@ -557,6 +557,35 @@ namespace Ibasa.Numerics.Geometry
 			v7 <<= v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits;
 			return (long)(v0 | v1 | v2 | v3 | v4 | v5 | v6 | v7);
 		}
+		public static Vector8s Unpack(int v0Bits, int v1Bits, int v2Bits, int v3Bits, int v4Bits, int v5Bits, int v6Bits, int v7Bits, short bits)
+		{
+			Contract.Requires(0 <= v0Bits && v0Bits <= 16, "v0Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= v1Bits && v1Bits <= 16, "v1Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= v2Bits && v2Bits <= 16, "v2Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= v3Bits && v3Bits <= 16, "v3Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= v4Bits && v4Bits <= 16, "v4Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= v5Bits && v5Bits <= 16, "v5Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= v6Bits && v6Bits <= 16, "v6Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= v7Bits && v7Bits <= 16, "v7Bits must be between 0 and 16 inclusive.");
+			Contract.Requires(v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits <= 64);
+			ulong v0 = (ulong)(bits);
+			v0 &= ((1UL << v0Bits) - 1);
+			ulong v1 = (ulong)(bits) >> (v0Bits);
+			v1 &= ((1UL << v1Bits) - 1);
+			ulong v2 = (ulong)(bits) >> (v0Bits + v1Bits);
+			v2 &= ((1UL << v2Bits) - 1);
+			ulong v3 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits);
+			v3 &= ((1UL << v3Bits) - 1);
+			ulong v4 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits);
+			v4 &= ((1UL << v4Bits) - 1);
+			ulong v5 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits);
+			v5 &= ((1UL << v5Bits) - 1);
+			ulong v6 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits);
+			v6 &= ((1UL << v6Bits) - 1);
+			ulong v7 = (ulong)(bits) >> (v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits);
+			v7 &= ((1UL << v7Bits) - 1);
+			return new Vector8s((short)v0, (short)v1, (short)v2, (short)v3, (short)v4, (short)v5, (short)v6, (short)v7);
+		}
 		#endregion
 		#region Operations
 		/// <summary>
