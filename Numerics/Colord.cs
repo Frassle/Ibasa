@@ -3959,6 +3959,212 @@ namespace Ibasa.Numerics
 		{
 			return new Colord((double)value.X, (double)value.Y, (double)value.Z, (double)value.W);
 		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3d.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3d.</param>
+		/// <returns>A Vector3d that has all components equal to value.</returns>
+		public static explicit operator Vector3d(Colord value)
+		{
+			return new Vector3d((double)value.R, (double)value.G, (double)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3d value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		public static explicit operator Colord(Vector3d value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3f.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3f.</param>
+		/// <returns>A Vector3f that has all components equal to value.</returns>
+		public static explicit operator Vector3f(Colord value)
+		{
+			return new Vector3f((float)value.R, (float)value.G, (float)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3f value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		public static explicit operator Colord(Vector3f value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3h.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3h.</param>
+		/// <returns>A Vector3h that has all components equal to value.</returns>
+		public static explicit operator Vector3h(Colord value)
+		{
+			return new Vector3h((Half)value.R, (Half)value.G, (Half)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3h value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		public static explicit operator Colord(Vector3h value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3ul.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3ul.</param>
+		/// <returns>A Vector3ul that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Vector3ul(Colord value)
+		{
+			return new Vector3ul((ulong)value.R, (ulong)value.G, (ulong)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3ul value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Colord(Vector3ul value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3l.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3l.</param>
+		/// <returns>A Vector3l that has all components equal to value.</returns>
+		public static explicit operator Vector3l(Colord value)
+		{
+			return new Vector3l((long)value.R, (long)value.G, (long)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3l value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		public static explicit operator Colord(Vector3l value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3ui.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3ui.</param>
+		/// <returns>A Vector3ui that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Vector3ui(Colord value)
+		{
+			return new Vector3ui((uint)value.R, (uint)value.G, (uint)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3ui value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Colord(Vector3ui value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3i.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3i.</param>
+		/// <returns>A Vector3i that has all components equal to value.</returns>
+		public static explicit operator Vector3i(Colord value)
+		{
+			return new Vector3i((int)value.R, (int)value.G, (int)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3i value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		public static explicit operator Colord(Vector3i value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3us.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3us.</param>
+		/// <returns>A Vector3us that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Vector3us(Colord value)
+		{
+			return new Vector3us((ushort)value.R, (ushort)value.G, (ushort)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3us value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Colord(Vector3us value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3s.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3s.</param>
+		/// <returns>A Vector3s that has all components equal to value.</returns>
+		public static explicit operator Vector3s(Colord value)
+		{
+			return new Vector3s((short)value.R, (short)value.G, (short)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3s value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		public static explicit operator Colord(Vector3s value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3b.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3b.</param>
+		/// <returns>A Vector3b that has all components equal to value.</returns>
+		public static explicit operator Vector3b(Colord value)
+		{
+			return new Vector3b((byte)value.R, (byte)value.G, (byte)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3b value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		public static explicit operator Colord(Vector3b value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Colord value to a Vector3sb.
+		/// </summary>
+		/// <param name="value">The value to convert to a Vector3sb.</param>
+		/// <returns>A Vector3sb that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Vector3sb(Colord value)
+		{
+			return new Vector3sb((sbyte)value.R, (sbyte)value.G, (sbyte)value.B);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a Vector3sb value to a Colord.
+		/// </summary>
+		/// <param name="value">The value to convert to a Colord.</param>
+		/// <returns>A explicit that has all components equal to value.</returns>
+		[CLSCompliant(false)]
+		public static explicit operator Colord(Vector3sb value)
+		{
+			return new Colord((double)value.X, (double)value.Y, (double)value.Z, 1);
+		}
 		#endregion
 		#region Equatable
 		/// <summary>
@@ -4179,6 +4385,140 @@ namespace Ibasa.Numerics
 		public static bool Any(Colord value, Predicate<double> predicate)
 		{
 			return predicate(value.R) || predicate(value.G) || predicate(value.B) || predicate(value.A);
+		}
+		#endregion
+		#region Negative, Premultiply and Normalize
+		/// <summary>
+		/// Returns the color negative of a normalized color.
+		/// </summary>
+		/// <param name="color">A normalized color.</param>
+		/// <returns>The negative of color.</returns>
+		public static Colord Negative(Colord color)
+		{
+			Contract.Requires(0 <= color.R && color.R <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.G && color.G <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.B && color.B <= 1, "color must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().R && Contract.Result<Colord>().R <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().G && Contract.Result<Colord>().G <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().B && Contract.Result<Colord>().B <= 1, "Result must be normalized.");
+			return new Colord(1 - color.R, 1 - color.G, 1 - color.B, color.A);
+		}
+		/// <summary>
+		/// Multiplies the RGB values of the color by the alpha value.
+		/// </summary>
+		/// <param name="color">The color to premultiply.</param>
+		/// <returns>The premultipled color.</returns>
+		public static Colord Premultiply(Colord color)
+		{
+			return new Colord(color.R * color.A, color.G * color.A, color.B * color.A, color.A);
+		}
+		/// <summary>
+		/// Normalizes a color so all its RGB values are in the range [0.0, 1.0].
+		/// </summary>
+		/// <param name="color">The color to normalize.</param>
+		/// <returns>The normalized color.</returns>
+		public static Colord Normalize(Colord color)
+		{
+			Contract.Ensures(0 <= Contract.Result<Colord>().R && Contract.Result<Colord>().R <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().G && Contract.Result<Colord>().G <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().B && Contract.Result<Colord>().B <= 1, "Result must be normalized.");
+			var bias = Functions.Min(Functions.Min(Functions.Min(color.R, color.G), color.B), 0);
+			color -= new Colord(bias, bias, bias, 0);
+			var scale = Functions.Max(Functions.Max(Functions.Max(color.R, color.G), color.B), 1);
+			return color / scale;
+		}
+		#endregion
+		#region Colorspace
+		/// <summary>
+		/// Converts a color to greyscale.
+		/// </summary>
+		/// <param name="color">The color to convert.</param>
+		/// <returns>color in greyscale.</returns>
+		public static Colord Greyscale(Colord color)
+		{
+			Contract.Requires(0 <= color.R && color.R <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.G && color.G <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.B && color.B <= 1, "color must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().R && Contract.Result<Colord>().R <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().G && Contract.Result<Colord>().G <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().B && Contract.Result<Colord>().B <= 1, "Result must be normalized.");
+			var greyscale = 0.2125 * color.R + 0.7154 * color.G + 0.0721 * color.B;
+			return new Colord(greyscale, greyscale, greyscale, color.A);
+		}
+		/// <summary>
+		/// Converts a color to black or white.
+		/// </summary>
+		/// <param name="color">The color to convert.</param>
+		/// <returns>color in black or white.</returns>
+		public static Colord BlackWhite(Colord color)
+		{
+			Contract.Requires(0 <= color.R && color.R <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.G && color.G <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.B && color.B <= 1, "color must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().R && Contract.Result<Colord>().R <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().G && Contract.Result<Colord>().G <= 1, "Result must be normalized.");
+			Contract.Ensures(0 <= Contract.Result<Colord>().B && Contract.Result<Colord>().B <= 1, "Result must be normalized.");
+			var bw = Functions.Round(0.2125 * color.R + 0.7154 * color.G + 0.0721 * color.B);
+			return new Colord(bw, bw, bw, color.A);
+		}
+		/// <summary>
+		/// Gamma correct a color.
+		/// </summary>
+		/// <param name="color">Color to gamma correct.</param>
+		/// <param name="gamma">Gamma value to use.</param>
+		/// <returns>The gamma corrected color.</returns>
+		public static Colord Gamma(Colord color, double gamma)
+		{
+			var r = Functions.Pow(color.R, gamma);
+			var g = Functions.Pow(color.G, gamma);
+			var b = Functions.Pow(color.B, gamma);
+			var a = Functions.Pow(color.A, gamma);
+			return new Colord(r, g, b, a);
+		}
+		#endregion
+		#region Quantization
+		public static Vector4l Quantize(int redBits, int greenBits, int blueBits, int alphaBits, Colord color)
+		{
+			Contract.Requires(0 <= redBits && redBits <= 63, "redBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= greenBits && greenBits <= 63, "greenBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= blueBits && blueBits <= 63, "blueBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= alphaBits && alphaBits <= 63, "alphaBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= color.R && color.R <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.G && color.G <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.B && color.B <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.A && color.A <= 1, "color must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Vector4l>().X, "result must be positive.");
+			Contract.Requires(0 <= Contract.Result<Vector4l>().Y, "result must be positive.");
+			Contract.Requires(0 <= Contract.Result<Vector4l>().Z, "result must be positive.");
+			Contract.Requires(0 <= Contract.Result<Vector4l>().W, "result must be positive.");
+			long r = (long)(color.R * long.MaxValue);
+			long g = (long)(color.G * long.MaxValue);
+			long b = (long)(color.B * long.MaxValue);
+			long a = (long)(color.A * long.MaxValue);
+			r >>= (63 - redBits);
+			g >>= (63 - greenBits);
+			b >>= (63 - blueBits);
+			a >>= (63 - alphaBits);
+			return new Vector4l(r, g, b, a);
+		}
+		public static Vector3l Quantize(int redBits, int greenBits, int blueBits, Colord color)
+		{
+			Contract.Requires(0 <= redBits && redBits <= 63, "redBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= greenBits && greenBits <= 63, "greenBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= blueBits && blueBits <= 63, "blueBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= color.R && color.R <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.G && color.G <= 1, "color must be normalized.");
+			Contract.Requires(0 <= color.B && color.B <= 1, "color must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Vector3l>().X, "result must be positive.");
+			Contract.Requires(0 <= Contract.Result<Vector3l>().Y, "result must be positive.");
+			Contract.Requires(0 <= Contract.Result<Vector3l>().Z, "result must be positive.");
+			long r = (long)(color.R * long.MaxValue);
+			long g = (long)(color.G * long.MaxValue);
+			long b = (long)(color.B * long.MaxValue);
+			r >>= (63 - redBits);
+			g >>= (63 - greenBits);
+			b >>= (63 - blueBits);
+			return new Vector3l(r, g, b);
 		}
 		#endregion
 		#region Per component

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -522,6 +523,36 @@ namespace Ibasa.Numerics.Geometry
 		public static Vector8ui ReadVector8ui(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Vector8ui(reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadUInt32());
+		}
+		#endregion
+		#region Pack
+		public static long Pack(int v0Bits, int v1Bits, int v2Bits, int v3Bits, int v4Bits, int v5Bits, int v6Bits, int v7Bits, Vector8ui vector)
+		{
+			Contract.Requires(0 <= v0Bits && v0Bits <= 32, "v0Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v1Bits && v1Bits <= 32, "v1Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v2Bits && v2Bits <= 32, "v2Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v3Bits && v3Bits <= 32, "v3Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v4Bits && v4Bits <= 32, "v4Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v5Bits && v5Bits <= 32, "v5Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v6Bits && v6Bits <= 32, "v6Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(0 <= v7Bits && v7Bits <= 32, "v7Bits must be between 0 and 32 inclusive.");
+			Contract.Requires(v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits + v7Bits <= 64);
+			ulong v0 = (ulong)(vector.V0) >> (64 - v0Bits);
+			ulong v1 = (ulong)(vector.V1) >> (64 - v1Bits);
+			v1 <<= v0Bits;
+			ulong v2 = (ulong)(vector.V2) >> (64 - v2Bits);
+			v2 <<= v0Bits + v1Bits;
+			ulong v3 = (ulong)(vector.V3) >> (64 - v3Bits);
+			v3 <<= v0Bits + v1Bits + v2Bits;
+			ulong v4 = (ulong)(vector.V4) >> (64 - v4Bits);
+			v4 <<= v0Bits + v1Bits + v2Bits + v3Bits;
+			ulong v5 = (ulong)(vector.V5) >> (64 - v5Bits);
+			v5 <<= v0Bits + v1Bits + v2Bits + v3Bits + v4Bits;
+			ulong v6 = (ulong)(vector.V6) >> (64 - v6Bits);
+			v6 <<= v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits;
+			ulong v7 = (ulong)(vector.V7) >> (64 - v7Bits);
+			v7 <<= v0Bits + v1Bits + v2Bits + v3Bits + v4Bits + v5Bits + v6Bits;
+			return (long)(v0 | v1 | v2 | v3 | v4 | v5 | v6 | v7);
 		}
 		#endregion
 		#region Operations

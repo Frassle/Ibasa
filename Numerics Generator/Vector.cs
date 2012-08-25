@@ -49,6 +49,7 @@ namespace Numerics_Generator
         void Namespace()
         {
             WriteLine("using System;");
+            WriteLine("using System.Diagnostics.Contracts;");
             WriteLine("using System.Globalization;");
             WriteLine("using System.Runtime.InteropServices;");
             WriteLine("");
@@ -696,6 +697,110 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("#endregion");
+            #endregion
+
+            #region Pack
+            if(!Type.IsReal)
+            {
+                WriteLine("#region Pack");
+
+                int size = Components.Length * Type.Size;
+
+                var packed = NumberType.Types.
+                    Where(type => !type.IsReal && (type.IsCLSCompliant || !Type.IsCLSCompliant) && type.Size >= size).
+                    Concat(new NumberType[] { NumberType.Long }).
+                    OrderBy(type => type.Size).
+                    First();
+
+                var args = Components.Select(c => string.Format("{0}Bits", c.Name.ToLower())).ToArray();
+                int bits = packed.Size * 8;
+
+                WriteLine("public static {0} Pack({1}, {2} vector)", packed, 
+                    string.Join(", ", args.Select(arg => string.Format("int {0}", arg))), Name);
+                WriteLine("{");
+                Indent();
+                for (int i = 0; i < args.Length; ++i)
+                {
+                    WriteLine("Contract.Requires(0 <= {0} && {0} <= {1}, \"{0} must be between 0 and {1} inclusive.\");", 
+                        args[i], Type.Size * 8);
+                }
+                WriteLine("Contract.Requires({0} <= {1});", string.Join(" + ", args), bits);
+
+                for (int i = 0; i < Components.Length; ++i)
+                {
+                    var var = Components[i].Name.ToLower();
+                    var name = Components[i].Name;
+                    var bitarg = args[i];
+                    var offset = string.Join(" + ", Enumerable.Range(0, i).Select(j => args[j]));
+                    WriteLine("ulong {0} = (ulong)(vector.{1}) >> ({2} - {3});", var, name, bits, bitarg);
+                    if (offset.Length != 0)
+                    {
+                        WriteLine("{0} <<= {1};", var, offset);
+                    }
+                }
+
+                WriteLine("return ({0})({1});", packed, string.Join(" | ", Components.Select(component => component.Name.ToLower())));
+                Dedent(); 
+                WriteLine("}");
+
+                if (packed.Size >= size)
+                {
+                    WriteLine("public static {0} Pack({1} vector)", packed, Name);
+                    WriteLine("{");
+                    Indent();
+                    for (int i = 0; i < Components.Length; ++i)
+                    {
+                        var var = Components[i].Name.ToLower();
+                        var name = Components[i].Name;
+                        var offset = (Type.Size * 8 * i).ToString();
+                        WriteLine("ulong {0} = (ulong)(vector.{1}) << {2};", var, name, offset);
+                    }
+
+                    WriteLine("return ({0})({1});", packed, string.Join(" | ", Components.Select(component => component.Name.ToLower())));
+                    Dedent();
+                    WriteLine("}");
+                }
+
+                // Unpack
+
+                if (packed == Type)
+                {
+                    WriteLine("public static {0} Unpack({1}, {2} bits)", Name,
+                       string.Join(", ", args.Select(arg => string.Format("int {0}", arg))), packed);
+                    WriteLine("{");
+                    Indent();
+                    for (int i = 0; i < args.Length; ++i)
+                    {
+                        WriteLine("Contract.Requires(0 <= {0} && {0} <= {1}, \"{0} must be between 0 and {1} inclusive.\");",
+                            args[i], Type.Size * 8);
+                    }
+                    WriteLine("Contract.Requires({0} <= {1});", string.Join(" + ", args), bits);
+
+                    for (int i = 0; i < Components.Length; ++i)
+                    {
+                        var var = Components[i].Name.ToLower();
+                        var name = Components[i].Name;
+                        var bitarg = args[i];
+                        var offset = string.Join(" + ", Enumerable.Range(0, i).Select(j => args[j]));
+                        if (offset != "")
+                        {
+                            WriteLine("ulong {0} = (ulong)(bits) >> ({1});", var, offset);
+                        }
+                        else
+                        {
+                            WriteLine("ulong {0} = (ulong)(bits);", var);
+                        }
+                        WriteLine("{0} &= ((1UL << {1}) - 1);", var, bitarg);
+                    }
+
+                    WriteLine("return new {0}({1});", Name,
+                        string.Join(", ", Components.Select(component => string.Format("({0}){1}", Type, component.Name.ToLower()))));
+                    Dedent();
+                    WriteLine("}");
+                }
+                
+                WriteLine("#endregion");
+            }
             #endregion
 
             #region Operations

@@ -479,6 +479,53 @@ namespace Numerics_Generator
                 WriteLine("}");
             }
 
+            foreach (var type in Vector.Types)
+            {
+                Vector vector = new Vector(type, 3);
+
+                var to_vector = string.Join(", ",
+                    string.Format("({0})value.R", type),
+                    string.Format("({0})value.G", type),
+                    string.Format("({0})value.B", type));
+
+                var to_color = string.Join(", ",
+                    string.Format("({0})value.X", Type),
+                    string.Format("({0})value.Y", Type),
+                    string.Format("({0})value.Z", Type), "1");
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Defines an explicit conversion of a {0} value to a {1}.", Name, vector);
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"value\">The value to convert to a {0}.</param>", vector);
+                WriteLine("/// <returns>A {0} that has all components equal to value.</returns>", vector);
+                if (Type.IsCLSCompliant && !type.IsCLSCompliant)
+                {
+                    WriteLine("[CLSCompliant(false)]");
+                }
+                WriteLine("public static explicit operator {0}({1} value)", vector, Name);
+                WriteLine("{");
+                Indent();
+                WriteLine("return new {0}({1});", vector, to_vector);
+                Dedent();
+                WriteLine("}");
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Defines an explicit conversion of a {0} value to a {1}.", vector, Name);
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"value\">The value to convert to a {0}.</param>", Name);
+                WriteLine("/// <returns>A explicit that has all components equal to value.</returns>", Name);
+                if (Type.IsCLSCompliant && !type.IsCLSCompliant)
+                {
+                    WriteLine("[CLSCompliant(false)]");
+                }
+                WriteLine("public static explicit operator {0}({1} value)", Name, vector);
+                WriteLine("{");
+                Indent();
+                WriteLine("return new {0}({1});", Name, to_color);
+                Dedent();
+                WriteLine("}");
+            }
+
             WriteLine("#endregion");
         }
 
@@ -794,6 +841,172 @@ namespace Numerics_Generator
             Indent();
             WriteLine("return {0};",
                 string.Join(" || ", Components.Select(component => string.Format("predicate(value.{0})", component))));
+            Dedent();
+            WriteLine("}");
+            WriteLine("#endregion");
+            #endregion
+
+            #region Color transforms
+            WriteLine("#region Negative, Premultiply and Normalize");
+            WriteLine("/// <summary>");
+            WriteLine("/// Returns the color negative of a normalized color.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"color\">A normalized color.</param>");
+            WriteLine("/// <returns>The negative of color.</returns>");
+            WriteLine("public static {0} Negative({0} color)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Requires(0 <= color.R && color.R <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.G && color.G <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.B && color.B <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().R && Contract.Result<{0}>().R <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().G && Contract.Result<{0}>().G <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().B && Contract.Result<{0}>().B <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("return new {0}(1 - color.R, 1 - color.G, 1 - color.B, color.A);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Multiplies the RGB values of the color by the alpha value.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"color\">The color to premultiply.</param>");
+            WriteLine("/// <returns>The premultipled color.</returns>");
+            WriteLine("public static {0} Premultiply({0} color)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}(color.R * color.A, color.G * color.A, color.B * color.A, color.A);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Normalizes a color so all its RGB values are in the range [0.0, 1.0].");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"color\">The color to normalize.</param>");
+            WriteLine("/// <returns>The normalized color.</returns>");
+            WriteLine("public static {0} Normalize({0} color)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().R && Contract.Result<{0}>().R <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().G && Contract.Result<{0}>().G <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().B && Contract.Result<{0}>().B <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("var bias = Functions.Min(Functions.Min(Functions.Min(color.R, color.G), color.B), 0);");
+            WriteLine("color -= new {0}(bias, bias, bias, 0);", Name);
+            WriteLine("var scale = Functions.Max(Functions.Max(Functions.Max(color.R, color.G), color.B), 1);");
+            WriteLine("return color / scale;");
+            Dedent();
+            WriteLine("}");
+            WriteLine("#endregion");
+            #endregion
+
+            #region Colorspace
+            WriteLine("#region Colorspace");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Converts a color to greyscale.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"color\">The color to convert.</param>");
+            WriteLine("/// <returns>color in greyscale.</returns>");
+            WriteLine("public static {0} Greyscale({0} color)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Requires(0 <= color.R && color.R <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.G && color.G <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.B && color.B <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().R && Contract.Result<{0}>().R <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().G && Contract.Result<{0}>().G <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().B && Contract.Result<{0}>().B <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("var greyscale = 0.2125{0} * color.R + 0.7154{0} * color.G + 0.0721{0} * color.B;", Type == NumberType.Float ? "f" : "");
+            WriteLine("return new {0}(greyscale, greyscale, greyscale, color.A);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Converts a color to black or white.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"color\">The color to convert.</param>");
+            WriteLine("/// <returns>color in black or white.</returns>");
+            WriteLine("public static {0} BlackWhite({0} color)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Requires(0 <= color.R && color.R <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.G && color.G <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.B && color.B <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().R && Contract.Result<{0}>().R <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().G && Contract.Result<{0}>().G <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("Contract.Ensures(0 <= Contract.Result<{0}>().B && Contract.Result<{0}>().B <= 1, \"Result must be normalized.\");", Name);
+            WriteLine("var bw = Functions.Round(0.2125{0} * color.R + 0.7154{0} * color.G + 0.0721{0} * color.B);", Type == NumberType.Float ? "f" : "");
+            WriteLine("return new {0}(bw, bw, bw, color.A);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Gamma correct a color.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"color\">Color to gamma correct.</param>");
+            WriteLine("/// <param name=\"gamma\">Gamma value to use.</param>");
+            WriteLine("/// <returns>The gamma corrected color.</returns>");
+            WriteLine("public static {0} Gamma({0} color, {1} gamma)", Name, Type);
+            WriteLine("{");
+            Indent();
+            WriteLine("var r = Functions.Pow(color.R, gamma);");
+            WriteLine("var g = Functions.Pow(color.G, gamma);");
+            WriteLine("var b = Functions.Pow(color.B, gamma);");
+            WriteLine("var a = Functions.Pow(color.A, gamma);");
+            WriteLine("return new {0}(r, g, b, a);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("#endregion");
+            #endregion
+
+            #region Packing and quantization
+            WriteLine("#region Quantization");
+            WriteLine("public static Vector4l Quantize(int redBits, int greenBits, int blueBits, int alphaBits, {0} color)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Requires(0 <= redBits && redBits <= 63, \"redBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= greenBits && greenBits <= 63, \"greenBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= blueBits && blueBits <= 63, \"blueBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= alphaBits && alphaBits <= 63, \"alphaBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= color.R && color.R <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.G && color.G <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.B && color.B <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.A && color.A <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector4l>().X, \"result must be positive.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector4l>().Y, \"result must be positive.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector4l>().Z, \"result must be positive.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector4l>().W, \"result must be positive.\");");
+            WriteLine("long r = (long)(color.R * long.MaxValue);");
+            WriteLine("long g = (long)(color.G * long.MaxValue);");
+            WriteLine("long b = (long)(color.B * long.MaxValue);");
+            WriteLine("long a = (long)(color.A * long.MaxValue);");
+            WriteLine("r >>= (63 - redBits);");
+            WriteLine("g >>= (63 - greenBits);");
+            WriteLine("b >>= (63 - blueBits);");
+            WriteLine("a >>= (63 - alphaBits);");
+            WriteLine("return new Vector4l(r, g, b, a);");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public static Vector3l Quantize(int redBits, int greenBits, int blueBits, {0} color)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Requires(0 <= redBits && redBits <= 63, \"redBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= greenBits && greenBits <= 63, \"greenBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= blueBits && blueBits <= 63, \"blueBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= color.R && color.R <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.G && color.G <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= color.B && color.B <= 1, \"color must be normalized.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().X, \"result must be positive.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().Y, \"result must be positive.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().Z, \"result must be positive.\");", Name);
+            WriteLine("long r = (long)(color.R * long.MaxValue);");
+            WriteLine("long g = (long)(color.G * long.MaxValue);");
+            WriteLine("long b = (long)(color.B * long.MaxValue);");
+            WriteLine("r >>= (63 - redBits);");
+            WriteLine("g >>= (63 - greenBits);");
+            WriteLine("b >>= (63 - blueBits);");
+            WriteLine("return new Vector3l(r, g, b);");
             Dedent();
             WriteLine("}");
             WriteLine("#endregion");

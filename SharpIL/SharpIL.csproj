@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{55ACA20C-0204-4A40-B274-5BC258CEC87F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ibasa.SharpIL</RootNamespace>
+    <AssemblyName>Ibasa.SharpIL</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Ibasa.SharpIL.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Formats\A8.cs" />
+    <Compile Include="Formats\B5G6R5.cs" />
+    <Compile Include="Formats\B8G8R8A8.cs" />
+    <Compile Include="Formats\BC1.cs" />
+    <Compile Include="Formats\B8G8R8.cs" />
+    <Compile Include="Formats\BC2.cs" />
+    <Compile Include="Formats\BC3.cs" />
+    <Compile Include="Formats\BC4.cs" />
+    <Compile Include="Formats\BC5.cs" />
+    <None Include="Formats\BC6.cs" />
+    <Compile Include="Formats\BC7.cs" />
+    <Compile Include="Formats\R8G8B8.cs" />
+    <Compile Include="Formats\R16.cs" />
+    <Compile Include="Formats\R16G16.cs" />
+    <Compile Include="Formats\R16G16B16A16.cs" />
+    <Compile Include="Formats\R32.cs" />
+    <Compile Include="Formats\R32G32.cs" />
+    <Compile Include="Formats\R32G32B32.cs" />
+    <Compile Include="Format.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="Internal\Blocks.cs" />
+    <Compile Include="Internal\BoxFit.cs" />
+    <Compile Include="Manipulator.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="Internal\Sets.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Formats\R32G32B32A32.cs" />
+    <Compile Include="Formats\R8.cs" />
+    <Compile Include="Formats\R8G8.cs" />
+    <Compile Include="Formats\R8G8B8A8.cs" />
+    <Compile Include="Resource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Numerics\Numerics.csproj">
+      <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
+      <Name>Numerics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

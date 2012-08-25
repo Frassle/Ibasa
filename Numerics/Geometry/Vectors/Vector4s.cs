@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -3820,6 +3821,32 @@ namespace Ibasa.Numerics.Geometry
 		public static Vector4s ReadVector4s(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Vector4s(reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16());
+		}
+		#endregion
+		#region Pack
+		public static long Pack(int xBits, int yBits, int zBits, int wBits, Vector4s vector)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 16, "xBits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 16, "yBits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= zBits && zBits <= 16, "zBits must be between 0 and 16 inclusive.");
+			Contract.Requires(0 <= wBits && wBits <= 16, "wBits must be between 0 and 16 inclusive.");
+			Contract.Requires(xBits + yBits + zBits + wBits <= 64);
+			ulong x = (ulong)(vector.X) >> (64 - xBits);
+			ulong y = (ulong)(vector.Y) >> (64 - yBits);
+			y <<= xBits;
+			ulong z = (ulong)(vector.Z) >> (64 - zBits);
+			z <<= xBits + yBits;
+			ulong w = (ulong)(vector.W) >> (64 - wBits);
+			w <<= xBits + yBits + zBits;
+			return (long)(x | y | z | w);
+		}
+		public static long Pack(Vector4s vector)
+		{
+			ulong x = (ulong)(vector.X) << 0;
+			ulong y = (ulong)(vector.Y) << 16;
+			ulong z = (ulong)(vector.Z) << 32;
+			ulong w = (ulong)(vector.W) << 48;
+			return (long)(x | y | z | w);
 		}
 		#endregion
 		#region Operations

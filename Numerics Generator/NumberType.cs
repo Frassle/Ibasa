@@ -7,23 +7,23 @@ namespace Numerics_Generator
 {
     class NumberType
     {
-        public static readonly NumberType Invalid = new NumberType("invalid", "", "", true, true, false);
+        public static readonly NumberType Invalid = new NumberType("invalid", "", "", 0, true, true, false);
 
-        public static readonly NumberType Double = new NumberType("double", "Double", "d", true, false, true);
-        public static readonly NumberType Float = new NumberType("float", "Single", "f", true, false, true);
-        public static readonly NumberType Half = new NumberType("Half", "Half", "h", true, false, true, Float, Float, Float);
+        public static readonly NumberType Double = new NumberType("double", "Double", "d", 8, true, false, true);
+        public static readonly NumberType Float = new NumberType("float", "Single", "f", 4, true, false, true);
+        public static readonly NumberType Half = new NumberType("Half", "Half", "h", 2, true, false, true, Float, Float, Float);
 
-        public static readonly NumberType ULong = new NumberType("ulong", "UInt64", "ul", false, true, false, Float, Invalid);
-        public static readonly NumberType Long = new NumberType("long", "Int64", "l", true, false, false, Float);
+        public static readonly NumberType ULong = new NumberType("ulong", "UInt64", "ul", 8, false, true, false, Float, Invalid);
+        public static readonly NumberType Long = new NumberType("long", "Int64", "l", 8, true, false, false, Float);
 
-        public static readonly NumberType UInt = new NumberType("uint", "UInt32", "ui", false, true, false, Float, Long);
-        public static readonly NumberType Int = new NumberType("int", "Int32", "i", true, false, false, Float);
+        public static readonly NumberType UInt = new NumberType("uint", "UInt32", "ui", 4, false, true, false, Float, Long);
+        public static readonly NumberType Int = new NumberType("int", "Int32", "i", 4, true, false, false, Float);
 
-        public static readonly NumberType UShort = new NumberType("ushort", "UInt16", "us", false, true, false, Float, Int, Int);
-        public static readonly NumberType Short = new NumberType("short", "Int16", "s", true, false, false, Float, Int, Int);
+        public static readonly NumberType UShort = new NumberType("ushort", "UInt16", "us", 2, false, true, false, Float, Int, Int);
+        public static readonly NumberType Short = new NumberType("short", "Int16", "s", 2, true, false, false, Float, Int, Int);
 
-        public static readonly NumberType Byte = new NumberType("byte", "Byte", "b", true, true, false, Float, Int, Int);
-        public static readonly NumberType SByte = new NumberType("sbyte", "SByte", "sb", false, false, false, Float, Int, Int);
+        public static readonly NumberType Byte = new NumberType("byte", "Byte", "b", 1, true, true, false, Float, Int, Int);
+        public static readonly NumberType SByte = new NumberType("sbyte", "SByte", "sb", 1, false, false, false, Float, Int, Int);
 
         public static NumberType[] Types
         {
@@ -39,11 +39,12 @@ namespace Numerics_Generator
             }
         }
 
-        private NumberType(string name, string clrName, string suffix, bool clsCompliant, bool unsigned, bool real, NumberType realType = null, NumberType negativeType = null, NumberType positiveType = null)
+        private NumberType(string name, string clrName, string suffix, int size, bool clsCompliant, bool unsigned, bool real, NumberType realType = null, NumberType negativeType = null, NumberType positiveType = null)
 	    {
 		    Name = name;
             CLRName = clrName;
             Suffix = suffix;
+            Size = size;
 		    IsCLSCompliant = clsCompliant;
 		    IsUnsigned = unsigned;
 		    IsReal = real;
@@ -116,6 +117,7 @@ namespace Numerics_Generator
         public string Name { get; private set; }
         public string CLRName { get; private set; }
         public string Suffix { get; private set; }
+        public int Size { get; private set; }
         public bool IsCLSCompliant { get; private set; }
         public bool IsUnsigned { get; private set; }
         public bool IsReal { get; private set; }

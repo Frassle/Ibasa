@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -671,6 +672,18 @@ namespace Ibasa.Numerics.Geometry
 		public static Vector2ul ReadVector2ul(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Vector2ul(reader.ReadUInt64(), reader.ReadUInt64());
+		}
+		#endregion
+		#region Pack
+		public static long Pack(int xBits, int yBits, Vector2ul vector)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 64, "xBits must be between 0 and 64 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 64, "yBits must be between 0 and 64 inclusive.");
+			Contract.Requires(xBits + yBits <= 64);
+			ulong x = (ulong)(vector.X) >> (64 - xBits);
+			ulong y = (ulong)(vector.Y) >> (64 - yBits);
+			y <<= xBits;
+			return (long)(x | y);
 		}
 		#endregion
 		#region Operations

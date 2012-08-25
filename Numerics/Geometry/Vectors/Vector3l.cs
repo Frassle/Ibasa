@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -1600,6 +1601,35 @@ namespace Ibasa.Numerics.Geometry
 		public static Vector3l ReadVector3l(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Vector3l(reader.ReadInt64(), reader.ReadInt64(), reader.ReadInt64());
+		}
+		#endregion
+		#region Pack
+		public static long Pack(int xBits, int yBits, int zBits, Vector3l vector)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 64, "xBits must be between 0 and 64 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 64, "yBits must be between 0 and 64 inclusive.");
+			Contract.Requires(0 <= zBits && zBits <= 64, "zBits must be between 0 and 64 inclusive.");
+			Contract.Requires(xBits + yBits + zBits <= 64);
+			ulong x = (ulong)(vector.X) >> (64 - xBits);
+			ulong y = (ulong)(vector.Y) >> (64 - yBits);
+			y <<= xBits;
+			ulong z = (ulong)(vector.Z) >> (64 - zBits);
+			z <<= xBits + yBits;
+			return (long)(x | y | z);
+		}
+		public static Vector3l Unpack(int xBits, int yBits, int zBits, long bits)
+		{
+			Contract.Requires(0 <= xBits && xBits <= 64, "xBits must be between 0 and 64 inclusive.");
+			Contract.Requires(0 <= yBits && yBits <= 64, "yBits must be between 0 and 64 inclusive.");
+			Contract.Requires(0 <= zBits && zBits <= 64, "zBits must be between 0 and 64 inclusive.");
+			Contract.Requires(xBits + yBits + zBits <= 64);
+			ulong x = (ulong)(bits);
+			x &= ((1UL << xBits) - 1);
+			ulong y = (ulong)(bits) >> (xBits);
+			y &= ((1UL << yBits) - 1);
+			ulong z = (ulong)(bits) >> (xBits + yBits);
+			z &= ((1UL << zBits) - 1);
+			return new Vector3l((long)x, (long)y, (long)z);
 		}
 		#endregion
 		#region Operations
