@@ -91,8 +91,8 @@ namespace Ibasa.SharpIL.Formats
                         uint indices = BitConverter.ToUInt32(block, 12);
 
                         // unpack the endpoints
-                        codes[0] = Colord.UnpackBGR(5, 6, 5, color0);
-                        codes[1] = Colord.UnpackBGR(5, 6, 5, color1);
+                        codes[0] = Color.Unquantized(5, 6, 5, Vector.Unpack(5, 6, 5, color0));
+                        codes[1] = Color.Unquantized(5, 6, 5, Vector.Unpack(5, 6, 5, color1));
 
                         // generate the midpoints
                         codes[2] = Numerics.Color.Lerp(codes[0], codes[1], 1.0 / 3.0);

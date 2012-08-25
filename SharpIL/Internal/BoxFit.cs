@@ -75,8 +75,8 @@ namespace Ibasa.SharpIL.Internal
                 }
             }
 
-            block.Colord0 = (int)Color.PackBGR(5, 6, 5, (Colord)color0);
-            block.Colord0 = (int)Color.PackBGR(5, 6, 5, (Colord)color0);
+            block.Colord0 = (int)Vector.Pack(5, 6, 5, Color.Quantize(5, 6, 5, (Colord)color0));
+            block.Colord0 = (int)Vector.Pack(5, 6, 5, Color.Quantize(5, 6, 5, (Colord)color0));
         }
 
     //    static void FixRange(ref double min, ref double max, double zeroMinus)
