@@ -39,6 +39,15 @@ namespace Numerics_Generator
             //        Console.WriteLine("Done - " + antiscalar.Name);
             //    }
             //}
+            foreach (var type in Color.Types)
+            {
+                var color = new Color(type);
+                color.Generate();
+
+                var path = System.IO.Path.Combine(root, color.Name + ".cs");
+                System.IO.File.WriteAllText(path, color.Text);
+                Console.WriteLine("Done - " + color.Name);
+            }
 
             foreach (int dimension in Vector.Sizes)
             {

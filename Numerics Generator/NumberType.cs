@@ -39,7 +39,7 @@ namespace Numerics_Generator
             }
         }
 
-        public NumberType(string name, string clrName, string suffix, bool clsCompliant, bool unsigned, bool real, NumberType realType = null, NumberType negativeType = null, NumberType positiveType = null)
+        private NumberType(string name, string clrName, string suffix, bool clsCompliant, bool unsigned, bool real, NumberType realType = null, NumberType negativeType = null, NumberType positiveType = null)
 	    {
 		    Name = name;
             CLRName = clrName;
@@ -55,6 +55,9 @@ namespace Numerics_Generator
 
         public bool IsImplicitlyConvertibleTo(NumberType to)
         {
+            if (this == to)
+                return true;
+
             if (this == Byte)
                 return
                     to == UShort || to == Short ||
