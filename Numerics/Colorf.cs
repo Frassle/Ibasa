@@ -4520,6 +4520,43 @@ namespace Ibasa.Numerics
 			b >>= (63 - blueBits);
 			return new Vector3l(r, g, b);
 		}
+		public static Colorf Unquantizef(int redBits, int greenBits, int blueBits, int alphaBits, Vector4l color)
+		{
+			Contract.Requires(0 <= redBits && redBits <= 63, "redBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= greenBits && greenBits <= 63, "greenBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= blueBits && blueBits <= 63, "blueBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= alphaBits && alphaBits <= 63, "alphaBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= color.X, "color must be positive.");
+			Contract.Requires(0 <= color.Y, "color must be positive.");
+			Contract.Requires(0 <= color.Z, "color must be positive.");
+			Contract.Requires(0 <= color.W, "color must be positive.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().R && Contract.Result<Colorf>().R <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().G && Contract.Result<Colorf>().G <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().B && Contract.Result<Colorf>().B <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().A && Contract.Result<Colorf>().A <= 1, "result must be normalized.");
+			var r = (float)color.X / ((1L << redBits) - 1);
+			var g = (float)color.Y / ((1L << greenBits) - 1);
+			var b = (float)color.Z / ((1L << blueBits) - 1);
+			var a = (float)color.W / ((1L << alphaBits) - 1);
+			return new Colorf(r, g, b, a);
+		}
+		public static Colorf Unquantizef(int redBits, int greenBits, int blueBits, Vector3l color)
+		{
+			Contract.Requires(0 <= redBits && redBits <= 63, "redBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= greenBits && greenBits <= 63, "greenBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= blueBits && blueBits <= 63, "blueBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= color.X, "color must be positive.");
+			Contract.Requires(0 <= color.Y, "color must be positive.");
+			Contract.Requires(0 <= color.Z, "color must be positive.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().R && Contract.Result<Colorf>().R <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().G && Contract.Result<Colorf>().G <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().B && Contract.Result<Colorf>().B <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colorf>().A && Contract.Result<Colorf>().A <= 1, "result must be normalized.");
+			var r = (float)color.X / ((1L << redBits) - 1);
+			var g = (float)color.Y / ((1L << greenBits) - 1);
+			var b = (float)color.Z / ((1L << blueBits) - 1);
+			return new Colorf(r, g, b, 1);
+		}
 		#endregion
 		#region Per component
 		#region Transform

@@ -959,7 +959,7 @@ namespace Numerics_Generator
             WriteLine("#endregion");
             #endregion
 
-            #region Packing and quantization
+            #region Quantization
             WriteLine("#region Quantization");
             WriteLine("public static Vector4l Quantize(int redBits, int greenBits, int blueBits, int alphaBits, {0} color)", Name);
             WriteLine("{");
@@ -997,9 +997,9 @@ namespace Numerics_Generator
             WriteLine("Contract.Requires(0 <= color.R && color.R <= 1, \"color must be normalized.\");");
             WriteLine("Contract.Requires(0 <= color.G && color.G <= 1, \"color must be normalized.\");");
             WriteLine("Contract.Requires(0 <= color.B && color.B <= 1, \"color must be normalized.\");");
-            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().X, \"result must be positive.\");", Name);
-            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().Y, \"result must be positive.\");", Name);
-            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().Z, \"result must be positive.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().X, \"result must be positive.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().Y, \"result must be positive.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<Vector3l>().Z, \"result must be positive.\");");
             WriteLine("long r = (long)(color.R * long.MaxValue);");
             WriteLine("long g = (long)(color.G * long.MaxValue);");
             WriteLine("long b = (long)(color.B * long.MaxValue);");
@@ -1007,6 +1007,49 @@ namespace Numerics_Generator
             WriteLine("g >>= (63 - greenBits);");
             WriteLine("b >>= (63 - blueBits);");
             WriteLine("return new Vector3l(r, g, b);");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public static {0} Unquantize{1}(int redBits, int greenBits, int blueBits, int alphaBits, Vector4l color)", Name, Type.Suffix);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Requires(0 <= redBits && redBits <= 63, \"redBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= greenBits && greenBits <= 63, \"greenBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= blueBits && blueBits <= 63, \"blueBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= alphaBits && alphaBits <= 63, \"alphaBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= color.X, \"color must be positive.\");");
+            WriteLine("Contract.Requires(0 <= color.Y, \"color must be positive.\");");
+            WriteLine("Contract.Requires(0 <= color.Z, \"color must be positive.\");");
+            WriteLine("Contract.Requires(0 <= color.W, \"color must be positive.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().R && Contract.Result<{0}>().R <= 1, \"result must be normalized.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().G && Contract.Result<{0}>().G <= 1, \"result must be normalized.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().B && Contract.Result<{0}>().B <= 1, \"result must be normalized.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().A && Contract.Result<{0}>().A <= 1, \"result must be normalized.\");", Name);
+            WriteLine("var r = ({0})color.X / ((1L << redBits) - 1);", Type);
+            WriteLine("var g = ({0})color.Y / ((1L << greenBits) - 1);", Type);
+            WriteLine("var b = ({0})color.Z / ((1L << blueBits) - 1);", Type);
+            WriteLine("var a = ({0})color.W / ((1L << alphaBits) - 1);", Type);
+            WriteLine("return new {0}(r, g, b, a);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public static {0} Unquantize{1}(int redBits, int greenBits, int blueBits, Vector3l color)", Name, Type.Suffix);
+            WriteLine("{");
+            Indent();
+            WriteLine("Contract.Requires(0 <= redBits && redBits <= 63, \"redBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= greenBits && greenBits <= 63, \"greenBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= blueBits && blueBits <= 63, \"blueBits must be between 0 and 63 inclusive.\");");
+            WriteLine("Contract.Requires(0 <= color.X, \"color must be positive.\");");
+            WriteLine("Contract.Requires(0 <= color.Y, \"color must be positive.\");");
+            WriteLine("Contract.Requires(0 <= color.Z, \"color must be positive.\");");
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().R && Contract.Result<{0}>().R <= 1, \"result must be normalized.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().G && Contract.Result<{0}>().G <= 1, \"result must be normalized.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().B && Contract.Result<{0}>().B <= 1, \"result must be normalized.\");", Name);
+            WriteLine("Contract.Requires(0 <= Contract.Result<{0}>().A && Contract.Result<{0}>().A <= 1, \"result must be normalized.\");", Name);
+            WriteLine("var r = ({0})color.X / ((1L << redBits) - 1);", Type);
+            WriteLine("var g = ({0})color.Y / ((1L << greenBits) - 1);", Type);
+            WriteLine("var b = ({0})color.Z / ((1L << blueBits) - 1);", Type);
+            WriteLine("return new {0}(r, g, b, 1);", Name);
             Dedent();
             WriteLine("}");
             WriteLine("#endregion");
@@ -1026,7 +1069,6 @@ namespace Numerics_Generator
                 WriteLine("/// <param name=\"value\">The color to transform.</param>");
                 WriteLine("/// <param name=\"transformer\">A transform function to apply to each component.</param>");
                 WriteLine("/// <returns>The result of transforming each component of value.</returns>");
-                if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
                 WriteLine("public static {0} Transform({1} value, Func<{2}, {3}> transformer)", transform, Name, Type, transform.Type);
                 WriteLine("{");
                 Indent();
@@ -1043,7 +1085,6 @@ namespace Numerics_Generator
             WriteLine("/// <param name=\"left\">The first color to modulate.</param>");
             WriteLine("/// <param name=\"right\">The second color to modulate.</param>");
             WriteLine("/// <returns>The result of multiplying each component of left by the matching component in right.</returns>");
-            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
             WriteLine("public static {0} Modulate({0} left, {0} right)", Name);
             WriteLine("{");
             Indent();
@@ -1056,7 +1097,6 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">A color.</param>");
             WriteLine("/// <returns>The absolute value (per component) of value.</returns>");
-            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
             WriteLine("public static {0} Abs({0} value)", Name);
             WriteLine("{");
             Indent();
@@ -1070,7 +1110,6 @@ namespace Numerics_Generator
             WriteLine("/// <param name=\"value1\">The first color.</param>");
             WriteLine("/// <param name=\"value2\">The second color.</param>");
             WriteLine("/// <returns>The lowest of each component in left and the matching component in right.</returns>");
-            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
             WriteLine("public static {0} Min({0} value1, {0} value2)", Name);
             WriteLine("{");
             Indent();
@@ -1084,7 +1123,6 @@ namespace Numerics_Generator
             WriteLine("/// <param name=\"value1\">The first color.</param>");
             WriteLine("/// <param name=\"value2\">The second color.</param>");
             WriteLine("/// <returns>The highest of each component in left and the matching component in right.</returns>");
-            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
             WriteLine("public static {0} Max({0} value1, {0} value2)", Name);
             WriteLine("{");
             Indent();
@@ -1099,7 +1137,6 @@ namespace Numerics_Generator
             WriteLine("/// <param name=\"min\">The minimum values for each component.</param>");
             WriteLine("/// <param name=\"max\">The maximum values for each component.</param>");
             WriteLine("/// <returns>A color with each component constrained to the given range.</returns>");
-            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
             WriteLine("public static {0} Clamp({0} value, {0} min, {0} max)", Name);
             WriteLine("{");
             Indent();
@@ -1112,7 +1149,6 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">A color to saturate.</param>");
             WriteLine("/// <returns>A color with each component constrained to the range 0 to 1.</returns>");
-            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
             WriteLine("public static {0} Saturate({0} value)", Name);
             WriteLine("{");
             Indent();
@@ -1132,7 +1168,6 @@ namespace Numerics_Generator
             WriteLine("/// <param name=\"color2\">Second color.</param>");
             WriteLine("/// <param name=\"amount\">Value between 0 and 1 indicating the weight of <paramref name=\"color2\"/>.</param>");
             WriteLine("/// <returns>The linear interpolation of the two values.</returns>");
-            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
             WriteLine("public static {0} Lerp({0} color1, {0} color2, {1} amount)", Name, Type);
             WriteLine("{");
             Indent();

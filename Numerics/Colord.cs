@@ -4520,6 +4520,43 @@ namespace Ibasa.Numerics
 			b >>= (63 - blueBits);
 			return new Vector3l(r, g, b);
 		}
+		public static Colord Unquantized(int redBits, int greenBits, int blueBits, int alphaBits, Vector4l color)
+		{
+			Contract.Requires(0 <= redBits && redBits <= 63, "redBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= greenBits && greenBits <= 63, "greenBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= blueBits && blueBits <= 63, "blueBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= alphaBits && alphaBits <= 63, "alphaBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= color.X, "color must be positive.");
+			Contract.Requires(0 <= color.Y, "color must be positive.");
+			Contract.Requires(0 <= color.Z, "color must be positive.");
+			Contract.Requires(0 <= color.W, "color must be positive.");
+			Contract.Requires(0 <= Contract.Result<Colord>().R && Contract.Result<Colord>().R <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colord>().G && Contract.Result<Colord>().G <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colord>().B && Contract.Result<Colord>().B <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colord>().A && Contract.Result<Colord>().A <= 1, "result must be normalized.");
+			var r = (double)color.X / ((1L << redBits) - 1);
+			var g = (double)color.Y / ((1L << greenBits) - 1);
+			var b = (double)color.Z / ((1L << blueBits) - 1);
+			var a = (double)color.W / ((1L << alphaBits) - 1);
+			return new Colord(r, g, b, a);
+		}
+		public static Colord Unquantized(int redBits, int greenBits, int blueBits, Vector3l color)
+		{
+			Contract.Requires(0 <= redBits && redBits <= 63, "redBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= greenBits && greenBits <= 63, "greenBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= blueBits && blueBits <= 63, "blueBits must be between 0 and 63 inclusive.");
+			Contract.Requires(0 <= color.X, "color must be positive.");
+			Contract.Requires(0 <= color.Y, "color must be positive.");
+			Contract.Requires(0 <= color.Z, "color must be positive.");
+			Contract.Requires(0 <= Contract.Result<Colord>().R && Contract.Result<Colord>().R <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colord>().G && Contract.Result<Colord>().G <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colord>().B && Contract.Result<Colord>().B <= 1, "result must be normalized.");
+			Contract.Requires(0 <= Contract.Result<Colord>().A && Contract.Result<Colord>().A <= 1, "result must be normalized.");
+			var r = (double)color.X / ((1L << redBits) - 1);
+			var g = (double)color.Y / ((1L << greenBits) - 1);
+			var b = (double)color.Z / ((1L << blueBits) - 1);
+			return new Colord(r, g, b, 1);
+		}
 		#endregion
 		#region Per component
 		#region Transform
