@@ -95,6 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binary.cs" />
+    <Compile Include="Colord.cs" />
+    <Compile Include="Colorf.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Geometry\Boxd.cs" />
     <Compile Include="Geometry\Boxf.cs" />
