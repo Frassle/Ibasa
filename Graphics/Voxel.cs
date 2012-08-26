@@ -51,30 +51,19 @@ namespace Ibasa.Graphics
         int width, height, depth;
         Vector4b[] voxels;
 
-        public Voxel(Vector4b[][] colors, int width, int height)
+        public Voxel(Vector4b[] colors, int width, int height, int depth)
         {
             this.width = width;
-            this.height = colors.Length;
-            this.depth = height;
+            this.height = height;
+            this.depth = depth;
+            voxels = colors;
 
             List<Vertex> vertices = new List<Vertex>();
-
-            voxels = new Vector4b[this.depth * this.width * this.height];
-            for (int z = 0; z < this.depth; ++z)
-            {
-                for (int y = 0; y < this.height; ++y)
-                {
-                    for (int x = 0; x < this.width; ++x)
-                    {
-                        voxels[x + y * this.width + z * this.width * this.height] = colors[y][x + z * this.width];
-                    }
-                }
-            }
         }
 
-        public static Vertex[] Mesh(Vector4b[][] colors, int width, int height)
+        public static Vertex[] Mesh(Vector4b[] colors, int width, int height, int depth)
         {
-            var voxel = new Voxel(colors, width, height);
+            var voxel = new Voxel(colors, width, height, depth);
 
             return voxel.Mesh();
         }
@@ -83,9 +72,9 @@ namespace Ibasa.Graphics
         {
             var vertices = new List<Vertex>();
 
-            for (int z = 0; z < depth; ++z)
+            for (int y = 0; y < height; ++y)
             {
-                for (int y = 0; y < height; ++y)
+                for (int z = 0; z < depth; ++z)
                 {
                     for (int x = 0; x < width; ++x)
                     {
