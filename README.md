@@ -1,6 +1,9 @@
 Ibasa
 =====
 
+A collection of C# libraries.
+
+
 License 
 =====
 Copyright (C) 2012 Fraser Waters
