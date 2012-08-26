@@ -58,6 +58,7 @@ namespace Ibasa.Media.Visual
             FormatMap = new Collections.Bimap<System.Drawing.Imaging.PixelFormat, Format>();
             FormatMap.AddLeft(System.Drawing.Imaging.PixelFormat.Format32bppArgb, Format.B8G8R8A8UNorm);
             FormatMap.AddLeft(System.Drawing.Imaging.PixelFormat.Format32bppPArgb, Format.B8G8R8A8UNorm);
+            FormatMap.AddLeft(System.Drawing.Imaging.PixelFormat.Format24bppRgb, Format.B8G8R8UNorm);
         }
 
         private void Load(Stream stream)
@@ -67,10 +68,10 @@ namespace Ibasa.Media.Visual
             Image = new Resource(new Numerics.Geometry.Size3i(bitmap.Width, bitmap.Height, 1), 1, 1, FormatMap.GetLeft(bitmap.PixelFormat).First());
 
             var data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, bitmap.PixelFormat);
-
+            var bpp = Image.Format.GetByteCount(Numerics.Geometry.Size3i.Unit);
             for (int y = 0; y < Image.Height; ++y)
             {
-                System.Runtime.InteropServices.Marshal.Copy(data.Scan0 + data.Stride * y, Image[0], y * Image.Width, data.Stride);
+                System.Runtime.InteropServices.Marshal.Copy(data.Scan0 + data.Stride * y, Image[0], y * Image.Width * bpp, data.Stride);
             }
 
             bitmap.UnlockBits(data);
@@ -89,10 +90,10 @@ namespace Ibasa.Media.Visual
             var bitmap = new System.Drawing.Bitmap(Image.Width, Image.Height, FormatMap.GetRight(Image.Format).First());
 
             var data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, bitmap.PixelFormat);
-
+            var bpp = Image.Format.GetByteCount(Numerics.Geometry.Size3i.Unit);
             for (int y = 0; y < Image.Height; ++y)
             {
-                System.Runtime.InteropServices.Marshal.Copy(Image[0], y * Image.Width, data.Scan0 + data.Stride * y, data.Stride);
+                System.Runtime.InteropServices.Marshal.Copy(Image[0], y * Image.Width * bpp, data.Scan0 + data.Stride * y, data.Stride);
             }
 
             bitmap.UnlockBits(data);
