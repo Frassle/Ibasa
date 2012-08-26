@@ -8,7 +8,7 @@ using System.Diagnostics.Contracts;
 
 namespace Ibasa.Spatial
 {
-    public class VoxelGrid<T> : IVoxel<T> where T : IEquatable<T>
+    public class VoxelGrid<T>
     {
         public Boxl Bounds { get; private set; }
         T[] Volume;
@@ -25,13 +25,17 @@ namespace Ibasa.Spatial
         {
             get
             {
-                int xz = Morton.Encode((int)point.X, (int)point.Z);
-                return Volume[point.Y + xz * Bounds.Height];
+                Contract.Requires(Box.Contains(Bounds, point));
+
+                int xz = Morton.Encode((int)(point.X - Bounds.X), (int)(point.Z - Bounds.Z));
+                return Volume[(point.Y - Bounds.Y) + xz * Bounds.Height];
             }
             set
             {
-                int xz = Morton.Encode((int)point.X, (int)point.Z);
-                Volume[point.Y + xz * Bounds.Height] = value;
+                Contract.Requires(Box.Contains(Bounds, point));
+
+                int xz = Morton.Encode((int)(point.X - Bounds.X), (int)(point.Z - Bounds.Z));
+                Volume[(point.Y - Bounds.Y) + xz * Bounds.Height] = value;
             }
         }
     }
