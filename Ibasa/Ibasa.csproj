@@ -91,7 +91,9 @@
   <ItemGroup>
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="ArraySegment.cs" />
+    <Compile Include="Collections\Bimap.cs" />
     <Compile Include="Collections\Immutable\ImmutableArray.cs" />
+    <Compile Include="Collections\Multimap.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IO\BinaryReader.cs" />
     <Compile Include="BitConverter.cs" />
