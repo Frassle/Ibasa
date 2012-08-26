@@ -60,16 +60,16 @@ namespace Ibasa.Numerics
             return x;
         }
 
-        public static Ibasa.Tuple<int,int> DecodeMorton2(int code)
+        public static STuple<int,int> DecodeMorton2(int code)
         {
-            return new Ibasa.Tuple<int, int>(
+            return new STuple<int, int>(
                 (int)Compact1By1((uint)code >> 0),
                 (int)Compact1By1((uint)code >> 1));
         }
 
-        public static Ibasa.Tuple<int, int, int> DecodeMorton3(int code)
+        public static STuple<int, int, int> DecodeMorton3(int code)
         {
-            return new Ibasa.Tuple<int, int, int>(
+            return new STuple<int, int, int>(
                 (int)Compact1By2((uint)code >> 0),
                 (int)Compact1By2((uint)code >> 1),
                 (int)Compact1By2((uint)code >> 2));
