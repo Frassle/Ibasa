@@ -9,13 +9,13 @@ namespace Ibasa
     /// Represents a 1-tuple, or singleton.
     /// </summary>
     /// <typeparam name="T1">The type of the tuple's only component.</typeparam>
-    public struct Tuple<T1>
+    public struct STuple<T1>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Ibasa.Tuple<T1>"/> structure.
         /// </summary>
         /// <param name="value1">The value of the tuple's only component.</param>
-        public Tuple(T1 item1)
+        public STuple(T1 item1)
         {
             Item1 = item1;
         }
@@ -31,14 +31,14 @@ namespace Ibasa
     /// </summary>
     /// <typeparam name="T1">The type of the tuple's first component.</typeparam>
     /// <typeparam name="T2">The type of the tuple's second component.</typeparam>
-    public struct Tuple<T1, T2>
+    public struct STuple<T1, T2>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Ibasa.Tuple<T1,T2>"/> class.
         /// </summary>
         /// <param name="item1">The value of the tuple's first component.</param>
         /// <param name="item2">The value of the tuple's second component.</param>
-        public Tuple(T1 item1, T2 item2)
+        public STuple(T1 item1, T2 item2)
         {
             Item1 = item1;
             Item2 = item2;
@@ -55,9 +55,9 @@ namespace Ibasa
         public readonly T2 Item2;
     }
 
-    public struct Tuple<T1, T2, T3>
+    public struct STuple<T1, T2, T3>
     {
-        public Tuple(T1 item1, T2 item2, T3 item3)
+        public STuple(T1 item1, T2 item2, T3 item3)
         {
             Item1 = item1;
             Item2 = item2;
@@ -74,7 +74,7 @@ namespace Ibasa
     /// <summary>
     /// Provides static methods for creating tuple objects.
     /// </summary>
-    public static class Tuple
+    public static class STuple
     {
         // Summary:
         //     Creates a new 1-tuple, or singleton.
@@ -89,9 +89,9 @@ namespace Ibasa
         //
         // Returns:
         //     A tuple whose value is (item1).
-        public static Tuple<T1> Create<T1>(T1 item1)
+        public static STuple<T1> Create<T1>(T1 item1)
         {
-            return new Tuple<T1>(item1);
+            return new STuple<T1>(item1);
         }
         //
         // Summary:
@@ -113,14 +113,14 @@ namespace Ibasa
         //
         // Returns:
         //     A 2-tuple whose value is (item1, item2).
-        public static Tuple<T1, T2> Create<T1, T2>(T1 item1, T2 item2)
+        public static STuple<T1, T2> Create<T1, T2>(T1 item1, T2 item2)
         {
-            return new Tuple<T1, T2>(item1, item2);
+            return new STuple<T1, T2>(item1, item2);
         }
 
-        public static Tuple<T1, T2, T3> Create<T1, T2, T3>(T1 item1, T2 item2, T3 item3)
+        public static STuple<T1, T2, T3> Create<T1, T2, T3>(T1 item1, T2 item2, T3 item3)
         {
-            return new Tuple<T1, T2, T3>(item1, item2, item3);
+            return new STuple<T1, T2, T3>(item1, item2, item3);
         }
     }
 }
