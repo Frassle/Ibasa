@@ -27,14 +27,14 @@ namespace Ibasa.Spatial
             {
                 Contract.Requires(Box.Contains(Bounds, point));
 
-                int xz = Morton.Encode((int)(point.X - Bounds.X), (int)(point.Z - Bounds.Z));
+                long xz = Morton.Encode(point.X - Bounds.X, point.Z - Bounds.Z);
                 return Volume[(point.Y - Bounds.Y) + xz * Bounds.Height];
             }
             set
             {
                 Contract.Requires(Box.Contains(Bounds, point));
 
-                int xz = Morton.Encode((int)(point.X - Bounds.X), (int)(point.Z - Bounds.Z));
+                long xz = Morton.Encode(point.X - Bounds.X, point.Z - Bounds.Z);
                 Volume[(point.Y - Bounds.Y) + xz * Bounds.Height] = value;
             }
         }
