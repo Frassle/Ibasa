@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Ibasa.Numerics
 {
@@ -31,11 +32,12 @@ namespace Ibasa.Numerics
 
         private static ulong Part1By1(ulong x)
         {
-            x &= 0x0000ffff;                 // x = ---- ---- ---- ---- fedc ba98 7654 3210
-            x = (x ^ (x << 8)) & 0x00ff00ff; // x = ---- ---- fedc ba98 ---- ---- 7654 3210
-            x = (x ^ (x << 4)) & 0x0f0f0f0f; // x = ---- fedc ---- ba98 ---- 7654 ---- 3210
-            x = (x ^ (x << 2)) & 0x33333333; // x = --fe --dc --ba --98 --76 --54 --32 --10
-            x = (x ^ (x << 1)) & 0x55555555; // x = -f-e -d-c -b-a -9-8 -7-6 -5-4 -3-2 -1-0
+            x &= 0x00000000ffffffff;                  // x = ---- ---- ---- ---- ---- ---- ---- ---- vuts rqpo nmlk jihg fedc ba98 7654 3210
+            x = (x ^ (x << 16)) & 0x0000ffff0000ffff; // x = ---- ---- ---- ---- vuts rqpo nmlk jihg ---- ---- ---- ---- fedc ba98 7654 3210
+            x = (x ^ (x << 8)) & 0x00ff00ff00ff00ff;  // x = ---- ---- vuts rqpo ---- ---- nmlk jihg ---- ---- fedc ba98 ---- ---- 7654 3210
+            x = (x ^ (x << 4)) & 0x0f0f0f0f0f0f0f0f;  // x = ---- vuts ---- rqpo ---- nmlk ---- jihg ---- fedc ---- ba98 ---- 7654 ---- 3210
+            x = (x ^ (x << 2)) & 0x3333333333333333;  // x = --vu --ts --rq --po --nm --lk --ji --hg --fe --dc --ba --98 --76 --54 --32 --10
+            x = (x ^ (x << 1)) & 0x5555555555555555;  // x = -v-u -t-s -r-q -p-o -n-m -l-k -j-i -h-g -f-e -d-c -b-a -9-8 -7-6 -5-4 -3-2 -1-0
             return x;
         }
 
@@ -51,6 +53,9 @@ namespace Ibasa.Numerics
 
         public static int Encode(int x, int y)
         {
+            Contract.Requires(0 <= x && x < ushort.MaxValue);
+            Contract.Requires(0 <= y && y < ushort.MaxValue);
+
             return (int)((Part1By1((uint)y) << 1) + Part1By1((uint)x));
         }
 
@@ -62,6 +67,9 @@ namespace Ibasa.Numerics
 
         public static long Encode(long x, long y)
         {
+            Contract.Requires(0 <= x && x < uint.MaxValue);
+            Contract.Requires(0 <= y && y < uint.MaxValue);
+
             return (long)((Part1By1((ulong)y) << 1) + Part1By1((ulong)x));
         }
 
