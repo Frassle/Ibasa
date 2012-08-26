@@ -293,62 +293,62 @@ namespace Ibasa.SharpIL
         #endregion
         
         #region B5GxR5Ax
-        private static Format<ushort> _B5G6R5;
+        private static Format<ushort> _B5G6R5UNorm;
         /// <summary>
         /// A three-component, 16-bit unsigned-normalized integer format.
         /// </summary>
-        public static Format<ushort> B5G6R5
+        public static Format<ushort> B5G6R5UNorm
         {
             get
             {
-                if (_B5G6R5 == null)
-                    _B5G6R5 = new B5G6R5();
-                return _B5G6R5;
+                if (_B5G6R5UNorm == null)
+                    _B5G6R5UNorm = new B5G6R5UNorm();
+                return _B5G6R5UNorm;
             }
         }
-        private static Format<ushort> _B5G5R5A1;
+        private static Format<ushort> _B5G5R5A1UNorm;
         /// <summary>
         /// A four-component, 16-bit unsigned-normalized integer format that supports 1-bit alpha.
         /// </summary>
-        public static Format<ushort> B5G5R5A1
+        public static Format<ushort> B5G5R5A1UNorm
         {
             get
             {
-                if (_B5G5R5A1 == null)
-                    _B5G5R5A1 = new B5G5R5A1();
-                return _B5G5R5A1;
+                if (_B5G5R5A1UNorm == null)
+                    _B5G5R5A1UNorm = new B5G5R5A1UNorm();
+                return _B5G5R5A1UNorm;
             }
         }
         #endregion
 
         #region B8G8R8A8
-        private static Format<Vector4b> _B8G8R8A8;
+        private static Format<Vector4b> _B8G8R8A8UNorm;
         /// <summary>
         /// A four-component, 32-bit unsigned-normalized integer format that supports 8-bit alpha.
         /// </summary>
-        public static Format<Vector4b> B8G8R8A8
+        public static Format<Vector4b> B8G8R8A8UNorm
         {
             get
             {
-                if (_B8G8R8A8 == null)
-                    _B8G8R8A8 = new B8G8R8A8();
-                return _B8G8R8A8;
+                if (_B8G8R8A8UNorm == null)
+                    _B8G8R8A8UNorm = new B8G8R8A8UNorm();
+                return _B8G8R8A8UNorm;
             }
         }
         #endregion
 
         #region B8G8R8
-        private static Format<Vector3b> _B8G8R8;
+        private static Format<Vector3b> _B8G8R8UNorm;
         /// <summary>
         /// A three-component, 24-bit unsigned-normalized integer format.
         /// </summary>
-        public static Format<Vector3b> B8G8R8
+        public static Format<Vector3b> B8G8R8UNorm
         {
             get
             {
-                if (_B8G8R8 == null)
-                    _B8G8R8 = new B8G8R8();
-                return _B8G8R8;
+                if (_B8G8R8UNorm == null)
+                    _B8G8R8UNorm = new B8G8R8UNorm();
+                return _B8G8R8UNorm;
             }
         }
         #endregion
@@ -435,30 +435,30 @@ namespace Ibasa.SharpIL
                 return _R16G16B16A16Int;
             }
         }
-        private static Format<Vector4us> _R16G16B16A16;
+        private static Format<Vector4us> _R16G16B16A16UNorm;
         /// <summary>
         /// A four-component, 64-bit unsigned-integer format.
         /// </summary>
-        public static Format<Vector4us> R16G16B16A16
+        public static Format<Vector4us> R16G16B16A16UNorm
         {
             get
             {
-                if (_R16G16B16A16 == null)
-                    _R16G16B16A16 = new R16G16B16A16();
-                return _R16G16B16A16;
+                if (_R16G16B16A16UNorm == null)
+                    _R16G16B16A16UNorm = new R16G16B16A16UNorm();
+                return _R16G16B16A16UNorm;
             }
         }
-        private static Format<Vector4s> _R16G16B16A16Norm;
+        private static Format<Vector4s> _R16G16B16A16SNorm;
         /// <summary>
         /// A four-component, 64-bit signed-integer format.
         /// </summary>
-        public static Format<Vector4s> R16G16B16A16Norm
+        public static Format<Vector4s> R16G16B16A16SNorm
         {
             get
             {
-                if (_R16G16B16A16Norm == null)
-                    _R16G16B16A16Norm = new R16G16B16A16Norm();
-                return _R16G16B16A16Norm;
+                if (_R16G16B16A16SNorm == null)
+                    _R16G16B16A16SNorm = new R16G16B16A16SNorm();
+                return _R16G16B16A16SNorm;
             }
         }
         #endregion
@@ -490,17 +490,17 @@ namespace Ibasa.SharpIL
                 return _R8G8B8A8Int;
             }
         }
-        private static Format<Vector4b> _R8G8B8A8;
+        private static Format<Vector4b> _R8G8B8A8UNorm;
         /// <summary>
         /// A four-component, 32-bit unsigned-integer format.
         /// </summary>
-        public static Format<Vector4b> R8G8B8A8
+        public static Format<Vector4b> R8G8B8A8UNorm
         {
             get
             {
-                if (_R8G8B8A8 == null)
-                    _R8G8B8A8 = new R8G8B8A8();
-                return _R8G8B8A8;
+                if (_R8G8B8A8UNorm == null)
+                    _R8G8B8A8UNorm = new R8G8B8A8UNorm();
+                return _R8G8B8A8UNorm;
             }
         }
         private static Format<Vector4sb> _R8G8B8A8SNorm;
@@ -561,17 +561,17 @@ namespace Ibasa.SharpIL
         #endregion
 
         #region R8G8B8
-        private static Format<Vector3b> _R8G8B8;
+        private static Format<Vector3b> _R8G8B8UNorm;
         /// <summary>
         /// A three-component, 24-bit unsigned-normalized integer format.
         /// </summary>
-        public static Format<Vector3b> R8G8B8
+        public static Format<Vector3b> R8G8B8UNorm
         {
             get
             {
-                if (_R8G8B8 == null)
-                    _R8G8B8 = new R8G8B8();
-                return _R8G8B8;
+                if (_R8G8B8UNorm == null)
+                    _R8G8B8UNorm = new R8G8B8UNorm();
+                return _R8G8B8UNorm;
             }
         }
         #endregion
@@ -684,17 +684,17 @@ namespace Ibasa.SharpIL
                 return _R16G16Int;
             }
         }
-        private static Format<Vector2us> _R16G16;
+        private static Format<Vector2us> _R16G16UNorm;
         /// <summary>
         /// A two-component, 16-bit unsigned-integer format.
         /// </summary>
-        public static Format<Vector2us> R16G16
+        public static Format<Vector2us> R16G16UNorm
         {
             get
             {
-                if (_R16G16 == null)
-                    _R16G16 = new R16G16();
-                return _R16G16;
+                if (_R16G16UNorm == null)
+                    _R16G16UNorm = new R16G16UNorm();
+                return _R16G16UNorm;
             }
         }
         private static Format<Vector2s> _R16G16Norm;
@@ -739,17 +739,17 @@ namespace Ibasa.SharpIL
                 return _R8G8Int;
             }
         }
-        private static Format<Vector2b> _R8G8;
+        private static Format<Vector2b> _R8G8UNorm;
         /// <summary>
         /// A two-component, 16-bit unsigned-integer format.
         /// </summary>
-        public static Format<Vector2b> R8G8
+        public static Format<Vector2b> R8G8UNorm
         {
             get
             {
-                if (_R8G8 == null)
-                    _R8G8 = new R8G8();
-                return _R8G8;
+                if (_R8G8UNorm == null)
+                    _R8G8UNorm = new R8G8UNorm();
+                return _R8G8UNorm;
             }
         }
         private static Format<Vector2sb> _R8G8Norm;
@@ -849,17 +849,17 @@ namespace Ibasa.SharpIL
                 return _R16Int;
             }
         }
-        private static Format<ushort> _R16;
+        private static Format<ushort> _R16UNorm;
         /// <summary>
         /// A single-component, 16-bit unsigned-integer format.
         /// </summary>
-        public static Format<ushort> R16
+        public static Format<ushort> R16UNorm
         {
             get
             {
-                if (_R16 == null)
-                    _R16 = new R16();
-                return _R16;
+                if (_R16UNorm == null)
+                    _R16UNorm = new R16UNorm();
+                return _R16UNorm;
             }
         }
         private static Format<short> _R16Norm;
@@ -904,17 +904,17 @@ namespace Ibasa.SharpIL
                 return _R8Int;
             }
         }
-        private static Format<byte> _R8;
+        private static Format<byte> _R8UNorm;
         /// <summary>
         /// A single-component, 8-bit unsigned-integer format.
         /// </summary>
-        public static Format<byte> R8
+        public static Format<byte> R8UNorm
         {
             get
             {
-                if (_R8 == null)
-                    _R8 = new R8();
-                return _R8;
+                if (_R8UNorm == null)
+                    _R8UNorm = new R8UNorm();
+                return _R8UNorm;
             }
         }
         private static Format<sbyte> _R8Norm;
@@ -930,17 +930,17 @@ namespace Ibasa.SharpIL
                 return _R8Norm;
             }
         }
-        private static Format<byte> _A8;
+        private static Format<byte> _A8UNorm;
         /// <summary>
         /// A single-component, 8-bit unsigned-integer format.
         /// </summary>
-        public static Format<byte> A8
+        public static Format<byte> A8UNorm
         {
             get
             {
-                if (_A8 == null)
-                    _A8 = new A8();
-                return _A8;
+                if (_A8UNorm == null)
+                    _A8UNorm = new A8UNorm();
+                return _A8UNorm;
             }
         }
         #endregion

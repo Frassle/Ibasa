@@ -5,11 +5,11 @@ using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.SharpIL.Formats
 {
-    public sealed class A8 : Format<Byte>
+    public sealed class A8UNorm : Format<Byte>
     {
-        public A8()
+        public A8UNorm()
             : base("A8_UNorm", new Colord(0.0, 0.0, 0.0, 0.0), new Colord(0.0, 0.0, 0.0, 1.0), true)
-        { }
+        { } 
 
         public override Size3i GetPhysicalSize(Size3i size)
         {

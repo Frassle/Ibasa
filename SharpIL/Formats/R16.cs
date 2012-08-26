@@ -390,9 +390,9 @@ namespace Ibasa.SharpIL.Formats
         //}
     }
 
-    public sealed class R16 : Format<ushort>
+    public sealed class R16UNorm : Format<ushort>
     {
-        public R16()
+        public R16UNorm()
             : base("R16_UNorm", new Colord(0.0, 0.0, 0.0), new Colord(1.0, 0.0, 0.0), true)
         {
         }

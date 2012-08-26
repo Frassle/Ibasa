@@ -529,9 +529,9 @@ namespace Ibasa.SharpIL.Formats
         //}
     }
 
-    public sealed class R16G16B16A16 : Format<Vector4us>
+    public sealed class R16G16B16A16UNorm : Format<Vector4us>
     {
-        public R16G16B16A16()
+        public R16G16B16A16UNorm()
             : base("NotImplemented", Colord.Black, Colord.White, false)
         {
         }
@@ -706,9 +706,9 @@ namespace Ibasa.SharpIL.Formats
         //}
     }
 
-    public sealed class R16G16B16A16Norm : Format<Vector4s>
+    public sealed class R16G16B16A16SNorm : Format<Vector4s>
     {
-        public R16G16B16A16Norm()
+        public R16G16B16A16SNorm()
             : base("NotImplemented", Colord.Black, Colord.White, false)
         {
         }

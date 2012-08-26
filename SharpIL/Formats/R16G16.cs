@@ -404,9 +404,9 @@ namespace Ibasa.SharpIL.Formats
         //}
     }
 
-    public sealed class R16G16 : Format<Vector2us>
+    public sealed class R16G16UNorm : Format<Vector2us>
     {
-        public R16G16()
+        public R16G16UNorm()
             : base("NotImplemented", Colord.Black, Colord.White, false)
         {
         }

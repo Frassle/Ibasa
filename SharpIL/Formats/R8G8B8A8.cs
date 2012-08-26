@@ -374,9 +374,9 @@ namespace Ibasa.SharpIL.Formats
         }
     }
 
-    public sealed class R8G8B8A8 : Format<Vector4b>
+    public sealed class R8G8B8A8UNorm : Format<Vector4b>
     {
-        public R8G8B8A8()
+        public R8G8B8A8UNorm()
             : base("R8G8B8A8_UNorm", new Colord(0.0, 0.0, 0.0, 0.0), new Colord(1.0, 1.0, 1.0, 1.0), true)
         {
         }

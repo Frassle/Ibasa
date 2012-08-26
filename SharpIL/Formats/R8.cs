@@ -339,9 +339,9 @@ namespace Ibasa.SharpIL.Formats
         //}
     }
 
-    public sealed class R8 : Format<Byte>
+    public sealed class R8UNorm : Format<Byte>
     {
-        public R8()
+        public R8UNorm()
             : base("R8_UNorm", Colord.Black, Colord.Red, false)
         {
         }

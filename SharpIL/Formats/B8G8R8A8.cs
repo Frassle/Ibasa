@@ -5,9 +5,9 @@ using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.SharpIL.Formats
 {
-    public sealed class B8G8R8A8 : Format<Vector4b>
+    public sealed class B8G8R8A8UNorm : Format<Vector4b>
     {
-        public B8G8R8A8()
+        public B8G8R8A8UNorm()
             : base("B8G8R8A8_UNorm", new Colord(0.0, 0.0, 0.0, 0.0), new Colord(1.0, 1.0, 1.0, 1.0), true)
         {
         }

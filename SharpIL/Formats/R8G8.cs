@@ -351,9 +351,9 @@ namespace Ibasa.SharpIL.Formats
         //}
     }
 
-    public sealed class R8G8 : Format<Vector2b>
+    public sealed class R8G8UNorm : Format<Vector2b>
     {
-        public R8G8()
+        public R8G8UNorm()
             : base("NotImplemented", Colord.Black, Colord.White, false)
         {
         }

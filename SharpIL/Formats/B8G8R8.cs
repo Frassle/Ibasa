@@ -5,10 +5,10 @@ using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.SharpIL.Formats
 {
-    public sealed class B8G8R8 : Format<Vector3b>
+    public sealed class B8G8R8UNorm : Format<Vector3b>
     {
-        public B8G8R8()
-            : base("B8G8R8_UNorm", new Colord(0.0, 0.0, 0.0, 1.0), new Colord(1.0, 1.0, 1.0, 1.0), true)
+        public B8G8R8UNorm()
+            : base("B8G8R8_UNorm", new Colord(0.0, 0.0, 0.0), new Colord(1.0, 1.0, 1.0), true)
         {
         }
 
