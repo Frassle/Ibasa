@@ -147,7 +147,7 @@ namespace Ibasa.Media
             char c = (char)((Code >> 16) & 0xFF);
             char d = (char)((Code >> 24) & 0xFF);
 
-            return string.Concat(a, b, c, d);
+            return string.Concat(a.ToString(), b.ToString(), c.ToString(), d.ToString());
         }
 
         public static explicit operator int(FourCC fourCC)
