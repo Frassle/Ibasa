@@ -8,7 +8,7 @@ using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.Spatial
 {
-    public class SparseVoxelOctree<T> : IVoxel<T> where T : IEquatable<T>
+    public class SparseVoxelOctree<T> where T : IEquatable<T>
     {
         public struct Node
         {
