@@ -62,6 +62,10 @@ namespace Ibasa.Numerics
 
         public static int Encode(int x, int y, int z)
         {
+            Contract.Requires(0 <= x && x < 1024); // 1023 = low 10 bits set
+            Contract.Requires(0 <= y && y < 1024);
+            Contract.Requires(0 <= z && z < 1024);
+
             return (int)((Part1By2((uint)z) << 2) + (Part1By2((uint)y) << 1) + Part1By2((uint)x));
         }
 
@@ -76,6 +80,10 @@ namespace Ibasa.Numerics
 
         public static long Encode(long x, long y, long z)
         {
+            Contract.Requires(0 <= x && x < 2097152); // 2097151 = low 21 bits set
+            Contract.Requires(0 <= y && y < 2097152);
+            Contract.Requires(0 <= z && z < 2097152);
+
             return (long)((Part1By2((ulong)z) << 2) + (Part1By2((ulong)y) << 1) + Part1By2((ulong)x));
         }
 
