@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IVoxel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SparseVoxelOctree.cs" />
     <Compile Include="VoxelGrid.cs" />
