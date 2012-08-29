@@ -114,11 +114,11 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Gets the y-coordinate of the top edge of this rectangle.");
             WriteLine("/// </summary>");
-            WriteLine("public {0} Top {{ get {{ return Y; }} }}", Type);
+            WriteLine("public {0} Top {{ get {{ return Y + Height; }} }}", Type);
             WriteLine("/// <summary>");
             WriteLine("/// Gets the y-coordinate of the bottom edge of this rectangle.");
             WriteLine("/// </summary>");
-            WriteLine("public {0} Bottom {{ get {{ return Y + Height; }} }}", Type);
+            WriteLine("public {0} Bottom {{ get {{ return Y; }} }}", Type);
             WriteLine("/// <summary>");
             WriteLine("/// Gets the x-coordinate of the left edge of this rectangle.");
             WriteLine("/// </summary>");
@@ -136,7 +136,7 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("public Size2{0} Size {{ get {{ return new Size2{0}(Width, Height); }} }}", Type.Suffix);
             WriteLine("/// <summary>");
-            WriteLine("/// Gets the coordinates of the upper-left corner of this rectangle.");
+            WriteLine("/// Gets the coordinates of the lower-left corner of this rectangle.");
             WriteLine("/// </summary>");
             WriteLine("public Point2{0} Location {{ get {{ return new Point2{0}(X, Y); }} }}", Type.Suffix);
 
@@ -170,7 +170,7 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified location and size.", Name);
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"location\">The upper-left corner of the rectangle.</param>");
+            WriteLine("/// <param name=\"location\">The lower-left corner of the rectangle.</param>");
             WriteLine("/// <param name=\"size\">The size of the rectangle.</param>");
             WriteLine("public {0}(Point2{1} location, Size2{1} size)", Name, Type.Suffix);
             WriteLine("{");

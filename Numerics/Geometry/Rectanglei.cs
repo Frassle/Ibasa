@@ -42,11 +42,11 @@ namespace Ibasa.Numerics.Geometry
 		/// <summary>
 		/// Gets the y-coordinate of the top edge of this rectangle.
 		/// </summary>
-		public int Top { get { return Y; } }
+		public int Top { get { return Y + Height; } }
 		/// <summary>
 		/// Gets the y-coordinate of the bottom edge of this rectangle.
 		/// </summary>
-		public int Bottom { get { return Y + Height; } }
+		public int Bottom { get { return Y; } }
 		/// <summary>
 		/// Gets the x-coordinate of the left edge of this rectangle.
 		/// </summary>
@@ -64,7 +64,7 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		public Size2i Size { get { return new Size2i(Width, Height); } }
 		/// <summary>
-		/// Gets the coordinates of the upper-left corner of this rectangle.
+		/// Gets the coordinates of the lower-left corner of this rectangle.
 		/// </summary>
 		public Point2i Location { get { return new Point2i(X, Y); } }
 		#endregion
@@ -89,7 +89,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Rectanglei"/> using the specified location and size.
 		/// </summary>
-		/// <param name="location">The upper-left corner of the rectangle.</param>
+		/// <param name="location">The lower-left corner of the rectangle.</param>
 		/// <param name="size">The size of the rectangle.</param>
 		public Rectanglei(Point2i location, Size2i size)
 		{

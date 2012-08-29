@@ -47,7 +47,7 @@ namespace Numerics_Generator
         {
             WriteLine("/// <summary>");
             WriteLine("/// Represents an ordered tuple of integer x, y, width, and height components that defines a");
-            WriteLine("/// location and size in a two-dimensional space.");
+            WriteLine("/// location and size in a three-dimensional space.");
             WriteLine("/// </summary>");
             WriteLine("[Serializable]");
             WriteLine("[ComVisible(true)]");
@@ -122,11 +122,11 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Gets the y-coordinate of the top face of this box.");
             WriteLine("/// </summary>");
-            WriteLine("public {0} Top {{ get {{ return Y; }} }}", Type);
+            WriteLine("public {0} Top {{ get {{ return Y + Height; }} }}", Type);
             WriteLine("/// <summary>");
             WriteLine("/// Gets the y-coordinate of the bottom face of this box.");
             WriteLine("/// </summary>");
-            WriteLine("public {0} Bottom {{ get {{ return Y + Height; }} }}", Type);
+            WriteLine("public {0} Bottom {{ get {{ return Y; }} }}", Type);
             WriteLine("/// <summary>");
             WriteLine("/// Gets the x-coordinate of the left face of this box.");
             WriteLine("/// </summary>");
@@ -152,7 +152,7 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("public Size3{0} Size {{ get {{ return new Size3{0}(Width, Height, Depth); }} }}", Type.Suffix);
             WriteLine("/// <summary>");
-            WriteLine("/// Gets the coordinates of the front-upper-left corner of this box.");
+            WriteLine("/// Gets the coordinates of the front-lower-left corner of this box.");
             WriteLine("/// </summary>");
             WriteLine("public Point3{0} Location {{ get {{ return new Point3{0}(X, Y, Z); }} }}", Type.Suffix);
 
@@ -190,7 +190,7 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified location and size.", Name);
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"location\">The front-upper-left corner of the box.</param>");
+            WriteLine("/// <param name=\"location\">The front-lower-left corner of the box.</param>");
             WriteLine("/// <param name=\"size\">The size of the box.</param>");
             WriteLine("public {0}(Point3{1} location, Size3{1} size)", Name, Type.Suffix);
             WriteLine("{");
@@ -226,7 +226,7 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified location and size.", Name);
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"location\">The front-upper-left corner of the box.</param>");
+            WriteLine("/// <param name=\"location\">The front-lower-left corner of the box.</param>");
             WriteLine("/// <param name=\"width\">Value for the Width component of the box.</param>");
             WriteLine("/// <param name=\"height\">Value for the Height component of the box.</param>");
             WriteLine("/// <param name=\"depth\">Value for the Depth component of the box.</param>");

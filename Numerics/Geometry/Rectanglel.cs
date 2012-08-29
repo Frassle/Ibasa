@@ -42,11 +42,11 @@ namespace Ibasa.Numerics.Geometry
 		/// <summary>
 		/// Gets the y-coordinate of the top edge of this rectangle.
 		/// </summary>
-		public long Top { get { return Y; } }
+		public long Top { get { return Y + Height; } }
 		/// <summary>
 		/// Gets the y-coordinate of the bottom edge of this rectangle.
 		/// </summary>
-		public long Bottom { get { return Y + Height; } }
+		public long Bottom { get { return Y; } }
 		/// <summary>
 		/// Gets the x-coordinate of the left edge of this rectangle.
 		/// </summary>
@@ -64,7 +64,7 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		public Size2l Size { get { return new Size2l(Width, Height); } }
 		/// <summary>
-		/// Gets the coordinates of the upper-left corner of this rectangle.
+		/// Gets the coordinates of the lower-left corner of this rectangle.
 		/// </summary>
 		public Point2l Location { get { return new Point2l(X, Y); } }
 		#endregion
@@ -89,7 +89,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Rectanglel"/> using the specified location and size.
 		/// </summary>
-		/// <param name="location">The upper-left corner of the rectangle.</param>
+		/// <param name="location">The lower-left corner of the rectangle.</param>
 		/// <param name="size">The size of the rectangle.</param>
 		public Rectanglel(Point2l location, Size2l size)
 		{

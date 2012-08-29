@@ -7,7 +7,7 @@ namespace Ibasa.Numerics.Geometry
 {
 	/// <summary>
 	/// Represents an ordered tuple of integer x, y, width, and height components that defines a
-	/// location and size in a two-dimensional space.
+	/// location and size in a three-dimensional space.
 	/// </summary>
 	[Serializable]
 	[ComVisible(true)]
@@ -50,11 +50,11 @@ namespace Ibasa.Numerics.Geometry
 		/// <summary>
 		/// Gets the y-coordinate of the top face of this box.
 		/// </summary>
-		public double Top { get { return Y; } }
+		public double Top { get { return Y + Height; } }
 		/// <summary>
 		/// Gets the y-coordinate of the bottom face of this box.
 		/// </summary>
-		public double Bottom { get { return Y + Height; } }
+		public double Bottom { get { return Y; } }
 		/// <summary>
 		/// Gets the x-coordinate of the left face of this box.
 		/// </summary>
@@ -80,7 +80,7 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		public Size3d Size { get { return new Size3d(Width, Height, Depth); } }
 		/// <summary>
-		/// Gets the coordinates of the front-upper-left corner of this box.
+		/// Gets the coordinates of the front-lower-left corner of this box.
 		/// </summary>
 		public Point3d Location { get { return new Point3d(X, Y, Z); } }
 		#endregion
@@ -109,7 +109,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Boxd"/> using the specified location and size.
 		/// </summary>
-		/// <param name="location">The front-upper-left corner of the box.</param>
+		/// <param name="location">The front-lower-left corner of the box.</param>
 		/// <param name="size">The size of the box.</param>
 		public Boxd(Point3d location, Size3d size)
 		{
@@ -139,7 +139,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Boxd"/> using the specified location and size.
 		/// </summary>
-		/// <param name="location">The front-upper-left corner of the box.</param>
+		/// <param name="location">The front-lower-left corner of the box.</param>
 		/// <param name="width">Value for the Width component of the box.</param>
 		/// <param name="height">Value for the Height component of the box.</param>
 		/// <param name="depth">Value for the Depth component of the box.</param>
