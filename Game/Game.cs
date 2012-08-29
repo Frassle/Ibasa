@@ -70,9 +70,9 @@ namespace Ibasa.Game
             MessageQueue.Enqueue(message);
         }
 
-        public void AddProperty<T>(string name, bool persistent)
+        public void AddProperty<T>(string name)
         {
-            Properties.Add(new Property<T>(this, name, persistent));
+            Properties.Add(new Property<T>(this, name));
         }
 
         public Property<T> GetProperty<T>(string name)
