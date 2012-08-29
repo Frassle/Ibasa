@@ -28,10 +28,10 @@ namespace Ibasa.Game
 
     public class Property<T> : Property, IEnumerable<KeyValuePair<Entity, T>>
     {
-				KeyValuePair<Entity, T>[] Frontbuffer;
-				KeyValuePair<Entity, T>[] Backbuffer;
+        KeyValuePair<Entity, T>[] Frontbuffer;
+        KeyValuePair<Entity, T>[] Backbuffer;
 
-				Dictionary<Entity, int> Indices;
+        Dictionary<Entity, int> Indices;
 
         System.Collections.Concurrent.ConcurrentBag<KeyValuePair<Entity, T>> ToAdd;
         System.Collections.Concurrent.ConcurrentBag<Entity> ToRemove;
@@ -39,32 +39,32 @@ namespace Ibasa.Game
         public Property(IGame game, string name)
             : base(game, name)
         {
-            Frontbuffer = new KeyValuePair<Entity, T>[0];
-            Backbuffer = new KeyValuePair<Entity, T>[0];
-						Indices = new Dictionary<Entity, T>();
+            Frontbuffer = new KeyValuePair<Entity, T>[10];
+            Backbuffer = new KeyValuePair<Entity, T>[10];
+            Indices = new Dictionary<Entity, int>();
 
             ToAdd = new System.Collections.Concurrent.ConcurrentBag<KeyValuePair<Entity, T>>();
             ToRemove = new System.Collections.Concurrent.ConcurrentBag<Entity>();
         }
 
-				public int Count
-				{
-					get { return Indices.Count; } }
-				}
+        public int Count
+        {
+            get { return Indices.Count; }
+        }
 
-				public int Capacity
-				{
-					get
-					{
-						return Frontbuffer.Length;
-					}
-					set
-					{
-						value = Math.Max(value, Capacity);
-						Array.Resize(ref Frontbuffer, value);
-						Array.Resize(ref Backbuffer, value);
-					}
-				}
+        public int Capacity
+        {
+            get
+            {
+                return Frontbuffer.Length;
+            }
+            set
+            {
+                value = Math.Max(value, Capacity);
+                Array.Resize(ref Frontbuffer, value);
+                Array.Resize(ref Backbuffer, value);
+            }
+        }
 
         public T this[Entity entity]
         {
@@ -74,29 +74,29 @@ namespace Ibasa.Game
             }
             set
             {
-								SetBackbuffer(entity, value);
-                if(!Game.IsParallel)
-								{
-									SetFrontbuffer(entity, value);
-            		}
-						}
+                SetBackbuffer(entity, value);
+                if (!Game.IsParallel)
+                {
+                    SetFrontbuffer(entity, value);
+                }
+            }
         }
 
         public void Add(Entity entity, T value)
         {
-						var pair = new KeyValuePair<Entity, T>(entity, value);
+            var pair = new KeyValuePair<Entity, T>(entity, value);
             if (Game.IsParallel)
             {
                 ToAdd.Add(pair);
             }
             else
             {
-								if(Capacity == Count)
-									Capacity = (Capacity * 3) / 2; // *= 1.5
-								
-								Frontbuffer[Count] = pair;
-								Backbuffer[Count] = pair;
-								Indices.Add(entity, Count);
+                if (Capacity == Count)
+                    Capacity = (Capacity * 3) / 2; // *= 1.5
+
+                Frontbuffer[Count] = pair;
+                Backbuffer[Count] = pair;
+                Indices.Add(entity, Count);
             }
         }
 
@@ -108,95 +108,101 @@ namespace Ibasa.Game
             }
             else
             {
-								var index = Indices[item];
-								var swap = Frontbuffer[Count - 1].Key;
+                var index = Indices[entity];
+                var swap = Frontbuffer[Count - 1].Key;
 
-								Frontbuffer[index] = Frontbuffer[Count - 1];
-								Backbuffer[index] = Backbuffer[Count - 1];
+                Frontbuffer[index] = Frontbuffer[Count - 1];
+                Backbuffer[index] = Backbuffer[Count - 1];
 
-								Indices[swap] = index;
-								Indices.Remove(item);
+                Indices[swap] = index;
+                Indices.Remove(entity);
             }
         }
 
         public T GetFrontbuffer(Entity entity)
         {
-						int index = Indices[entity];
-            return Frontbuffer[index];
+            int index = Indices[entity];
+            return Frontbuffer[index].Value;
         }
 
         public bool TryGetFrontbuffer(Entity entity, out T value)
         {
-						int index;
-						if(Indices.TryGetValue(entity, out index))
-						{
-							value = Frontbuffer[index];
-							return true;
-						}
-						value = default(T);
-						return false;
+            int index;
+            if (Indices.TryGetValue(entity, out index))
+            {
+                value = Frontbuffer[index].Value;
+                return true;
+            }
+            value = default(T);
+            return false;
         }
 
         public void SetFrontbuffer(Entity entity, T value)
         {
-						int index = Indices[entity];
-            Frontbuffer[index] = value;
+            int index = Indices[entity];
+            Frontbuffer[index] = new KeyValuePair<Entity, T>(entity, value);
         }
 
         public IEnumerator<KeyValuePair<Entity, T>> GetFrontbuffer()
         {
-            return Frontbuffer.GetEnumerator();
+            for (int i = 0; i < Count; ++i)
+            {
+                yield return Frontbuffer[i];
+            }
         }
 
         public T GetBackbuffer(Entity entity)
         {
-						int index = Indices[entity];
-            return Backbuffer[index];
+            int index = Indices[entity];
+            return Backbuffer[index].Value;
         }
 
         public bool TryGetBackbuffer(Entity entity, out T value)
         {
-						int index;
-						if(Indices.TryGetValue(entity, out index))
-						{
-							value = Backbuffer[index];
-							return true;
-						}
-						value = default(T);
-						return false;
+            int index;
+            if (Indices.TryGetValue(entity, out index))
+            {
+                value = Backbuffer[index].Value;
+                return true;
+            }
+            value = default(T);
+            return false;
         }
 
         public void SetBackbuffer(Entity entity, T value)
         {
-						int index = Indices[entity];
-            Backbuffer[index] = value;
+            int index = Indices[entity];
+            Backbuffer[index] = new KeyValuePair<Entity, T>(entity, value);
         }
 
         public IEnumerator<KeyValuePair<Entity, T>> GetBackbuffer()
         {
-            return Backbuffer.GetEnumerator();
+            for (int i = 0; i < Count; ++i)
+            {
+                yield return Backbuffer[i];
+            }
         }
 
         public void Swap()
         {
-						if(Game.IsParallel)
-							throw new Exception();
+            if (Game.IsParallel)
+                throw new Exception("Tryed to swap in a parallel context.");
 
-						var buffer = Frontbuffer;
+            var buffer = Frontbuffer;
 
-						Frontbuffer = Backbuffer;
-						Backbuffer = buffer;
+            Frontbuffer = Backbuffer;
+            Backbuffer = buffer;
 
-            foreach (var item in ToRemove)
+            Entity remove;
+            while(ToRemove.TryTake(out remove))
             {
-								Remove(item);
+                Remove(remove);
             }
-						ToRemove.Clear();
-            foreach (var item in ToAdd)
+            KeyValuePair<Entity, T> pair;
+            while (ToAdd.TryTake(out pair))
             {
-								Add(item.Key, item.Value);
+                Add(pair.Key, pair.Value);
             }
-						ToAdd.Clear();
         }
 
         public IEnumerator<KeyValuePair<Entity, T>> GetEnumerator()
