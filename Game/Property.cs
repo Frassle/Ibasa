@@ -191,10 +191,12 @@ namespace Ibasa.Game
             {
 								Remove(item);
             }
+						ToRemove.Clear();
             foreach (var item in ToAdd)
             {
 								Add(item.Key, item.Value);
             }
+						ToAdd.Clear();
         }
 
         public IEnumerator<KeyValuePair<Entity, T>> GetEnumerator()
