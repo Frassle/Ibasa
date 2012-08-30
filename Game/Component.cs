@@ -234,13 +234,21 @@ namespace Ibasa.Game
         /// <summary>
         /// Called when the GameComponent needs to be updated. Called for each component sequentially based on UpdateOrder.
         /// </summary>
-        /// <param name="elapsed">Time elapsed since the last call to Update</param>
+        /// <param name="elapsed">Time elapsed since the last call to Update.</param>
         public virtual void Update(GameTime elapsed) { }
 
         /// <summary>
         /// Called when the GameComponent needs to be updated. Called in parallel with all other systems after sequential Update.
         /// </summary>
-        /// <param name="elapsed">Time elapsed since the last call to ParallelUpdate</param>
+        /// <param name="elapsed">Time elapsed since the last call to ParallelUpdate.</param>
         public virtual void ParallelUpdate(GameTime elapsed) { }
+
+        /// <summary>
+        /// Called when the GameComponent needs to be rendered.
+        /// </summary>
+        /// <param name="elapsed">Time elapsed since the last call to Render.</param>
+        public virtual void Render(GameTime elapsed)
+        {
+        }
     }
 }
