@@ -27,7 +27,7 @@ namespace Ibasa.Numerics
         /// <param name="shift">The number of bits to rotate value to the left.</param>
         /// <returns>A value that has been rotated to the left by the specified number of bits.</returns>
         [Pure]
-        public static byte Rotateleft(byte value, int shift)
+        public static byte RotateLeft(byte value, int shift)
         {
             return (byte)(value << shift | value >> (8 - shift));
         }
@@ -51,7 +51,7 @@ namespace Ibasa.Numerics
         /// <returns>A value that has been rotated to the left by the specified number of bits.</returns>
         [Pure]
         [CLSCompliant(false)]
-        public static int Rotateleft(ushort value, int shift)
+        public static int RotateLeft(ushort value, int shift)
         {
             return (short)(value << shift | value >> (16 - shift));
         }
@@ -75,7 +75,7 @@ namespace Ibasa.Numerics
         /// <returns>A value that has been rotated to the left by the specified number of bits.</returns>
         [Pure]
         [CLSCompliant(false)]
-        public static uint Rotateleft(uint value, int shift)
+        public static uint RotateLeft(uint value, int shift)
         {
             return value << shift | value >> (32 - shift);
         }
@@ -99,7 +99,7 @@ namespace Ibasa.Numerics
         /// <returns>A value that has been rotated to the left by the specified number of bits.</returns>
         [Pure]
         [CLSCompliant(false)]
-        public static ulong Rotateleft(ulong value, int shift)
+        public static ulong RotateLeft(ulong value, int shift)
         {
             return value << shift | value >> (64 - shift);
         }
