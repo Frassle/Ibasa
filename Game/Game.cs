@@ -70,9 +70,11 @@ namespace Ibasa.Game
             MessageQueue.Enqueue(message);
         }
 
-        public void AddProperty<T>(string name)
+        public Property<T> AddProperty<T>(string name)
         {
-            Properties.Add(new Property<T>(this, name));
+            var property = new Property<T>(this, name);
+            Properties.Add(property);
+            return property;
         }
 
         public Property<T> GetProperty<T>(string name)
@@ -173,6 +175,10 @@ namespace Ibasa.Game
 
         protected virtual void Render(GameTime elapsed)
         {
+            foreach (var component in Components)
+            {
+                component.Render(elapsed);
+            } 
         }
     }
 }
