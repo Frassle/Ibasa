@@ -9,7 +9,7 @@ namespace Numerics_Generator
     {
         static void Main(string[] args)
         {
-            string root = "..\\..\\..\\Numerics\\";
+            string root = System.IO.Path.Combine("..", "..", "..", "Numerics");
 
             //foreach (int dimension in Exterior.Sizes)
             //{
