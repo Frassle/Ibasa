@@ -318,23 +318,6 @@ namespace Ibasa.IO
             return charCount;
         }
 
-        int Read7BitEncodedInt()
-        {
-            byte b;
-            int shift = 0;
-            int number = 0;
-            do
-            {
-                if (shift == 25)
-                    throw new FormatException();
-
-                b = ReadByte();
-                number |= (b & 0x7F) << shift;
-                shift += 7;
-            } while ((b & 0x80) != 0);
-            return number;
-        }
-
         public int PeekByte()
         {
             if (!BaseStream.CanSeek)
@@ -367,7 +350,7 @@ namespace Ibasa.IO
         {
             Contract.Ensures(Contract.Result<string>() != null);
 
-            int length = Read7BitEncodedInt();
+            int length = (int)ReadVariableUInt32();
             byte[] bytes = ReadBytes(length);
             if (bytes.Length != length)
                 throw new EndOfStreamException();
@@ -456,6 +439,76 @@ namespace Ibasa.IO
             
             return BitConverter.ToUInt64(Buffer, 0);
         }
+
+				public short ReadVariableInt16()
+				{
+					ushort value = ReadVariableUInt16();
+					return (short)((int)(value >> 1) ^ -(int)(value & 1));
+				}
+				public int ReadVariableInt32()
+				{
+					uint value = ReadVariableUInt32();
+					return (int)(value >> 1) ^ -(int)(value & 1);
+				}
+				public long ReadVariableInt64()
+				{
+					ulong value = ReadVariableUInt64();
+					return (long)(value >> 1) ^ -(long)(value & 1);
+				}
+
+				[CLSCompliant(false)]
+				public ushort ReadVariableUInt16()
+				{
+					byte b;
+					uint result = 0;
+					int shift = 0;
+					do
+					{
+						if(shift == 21)
+							throw new FormatException("The stream is corrupted.");
+
+						b = ReadByte();
+						result |= (uint)(b & 0x7f) << shift;
+						shift += 7;
+					} while((b & 0x80) != 0);
+					return (ushort)result;
+				}
+
+				[CLSCompliant(false)]
+				public uint ReadVariableUInt32()
+				{
+					byte b;
+					uint result = 0;
+					int shift = 0;
+					do
+					{
+						if(shift == 35)
+							throw new FormatException("The stream is corrupted.");
+
+						b = ReadByte();
+						result |= (uint)(b & 0x7f) << shift;
+						shift += 7;
+					} while((b & 0x80) != 0);
+					return result;
+				}
+
+				[CLSCompliant(false)]
+				public ulong ReadVariableUInt64()
+				{
+					byte b;
+					ulong result = 0;
+					int shift = 0;
+					do
+					{
+						if(shift == 70)
+							throw new FormatException("The stream is corrupted.");
+
+						b = ReadByte();
+						result |= (ulong)(b & 0x7f) << shift;
+						shift += 7;
+					} while((b & 0x80) != 0);
+					return result;
+				}
 
         /// <summary>
         /// Reads a structure of type T.

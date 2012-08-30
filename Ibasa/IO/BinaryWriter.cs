@@ -240,14 +240,15 @@ namespace Ibasa.IO
 
             BaseStream.Write(buffer, index, count);
         }
-        public void Write(char[] chars)
+        public int Write(char[] chars)
         {
             Contract.Requires(chars != null);
 
             byte[] buffer = Encoding.GetBytes(chars);
             BaseStream.Write(buffer, 0, buffer.Length);
+						return buffer.Length;
         }
-        public void Write(char[] chars, int index, int count)
+        public int Write(char[] chars, int index, int count)
         {
             Contract.Requires(chars != null);
             Contract.Requires(0 <= index);
@@ -257,24 +258,16 @@ namespace Ibasa.IO
 
             byte[] buffer = Encoding.GetBytes(chars, index, count);
             BaseStream.Write(buffer, 0, buffer.Length);
+						return buffer.Length;
         }
-        void Write7BitEncodedInt(int value)
-        {
-            uint uvalue = (uint)value;
-            while (uvalue >= 0x80)
-            {
-                BaseStream.WriteByte((byte)(uvalue | 0x80));
-                uvalue >>= 7;
-            }
-            BaseStream.WriteByte((byte)uvalue);
-        }
-        public void Write(string value)
+        public int Write(string value)
         {
             Contract.Requires(value != null);
 
             byte[] bytes = Encoding.GetBytes(value);
-            Write7BitEncodedInt(bytes.Length);
+            int count = WriteVariable((uint)bytes.Length);
             Write(bytes);
+						return count + bytes.Length;
         }
         public void Write(decimal value)
         {
@@ -341,6 +334,62 @@ namespace Ibasa.IO
             BitConverter.GetBytes(Buffer, 0, value);
             Write(Buffer, 0, 8);
         }
+
+				public int WriteVariable(short value)
+				{
+					ushort signmag = (ushort)((value << 1) ^ (value >> 15));
+					return WriteVariable(signmag);
+				}
+				public int WriteVariable(int value)
+				{
+					uint signmag = (uint)((value << 1) ^ (value >> 31));
+					return WriteVariable(signmag);
+				}
+				public int WriteVariable(long value)
+				{
+					ulong signmag = (ulong)((value << 1) ^ (value >> 63));
+					return WriteVariable(signmag);
+				}
+
+				[CLSCompliant(false)]
+				public int WriteVariable(ushort value)
+				{
+					int count = 1;
+					while(value >= 0x80)
+					{
+						Write((byte)(value | 0x80));
+						value >>= 7;
+						++count;
+					}
+					Write((byte)value);
+					return count;
+				}
+				[CLSCompliant(false)]
+				public int WriteVariable(uint value)
+				{
+					int count = 1;
+					while(value >= 0x80)
+					{
+						Write((byte)(value | 0x80));
+						value >>= 7;
+						++count;
+					}
+					Write((byte)value);
+					return count;
+				}
+				[CLSCompliant(false)]
+				public int WriteVariable(ulong value)
+				{
+					int count = 1;
+					while(value >= 0x80)
+					{
+						Write((byte)(value | 0x80));
+						value >>= 7;
+						++count;
+					}
+					Write((byte)value);
+					return count;
+				}
 
         /// <summary>
         /// Writes a structure into the writer.
