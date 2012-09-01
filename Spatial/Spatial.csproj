@@ -46,6 +46,7 @@
     <Compile Include="VirtualVoxelGrid.cs" />
     <Compile Include="VoxelGrid.cs" />
     <Compile Include="VoxelOctree.cs" />
+    <Compile Include="VoxelChunk.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">
