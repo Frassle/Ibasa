@@ -5,7 +5,10 @@ using System.Text;
 
 namespace Ibasa.Numerics
 {
-    class Constants
+		/// <summary>
+		/// Provides common mathematical and physical constants.
+		/// </summary>
+    public static class Constants
     {
         /// <summary>
         /// Represents the natural logarithmic base, specified by the constant, e.
