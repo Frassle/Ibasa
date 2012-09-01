@@ -102,6 +102,16 @@ namespace Numerics_Generator
                 box.Generate();
                 System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, box.Name + ".cs"), box.Text);
                 Console.WriteLine("Done - " + box.Name);
+
+                var circle = new Circle(type);
+                circle.Generate();
+                System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, circle.Name + ".cs"), circle.Text);
+                Console.WriteLine("Done - " + circle.Name);
+
+                var sphere = new Sphere(type);
+                sphere.Generate();
+                System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, sphere.Name + ".cs"), sphere.Text);
+                Console.WriteLine("Done - " + sphere.Name);
             }
 
             Console.ReadLine();

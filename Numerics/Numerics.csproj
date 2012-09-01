@@ -102,6 +102,10 @@
     <Compile Include="Geometry\Boxf.cs" />
     <Compile Include="Geometry\Boxi.cs" />
     <Compile Include="Geometry\Boxl.cs" />
+    <Compile Include="Geometry\Circled.cs" />
+    <Compile Include="Geometry\Circlef.cs" />
+    <Compile Include="Geometry\Circlei.cs" />
+    <Compile Include="Geometry\Circlel.cs" />
     <Compile Include="Geometry\Matrices\Matrix2x2d.cs" />
     <Compile Include="Geometry\Matrices\Matrix2x2f.cs" />
     <Compile Include="Geometry\Matrices\Matrix2x3d.cs" />
@@ -142,6 +146,10 @@
     <Compile Include="Geometry\Size3f.cs" />
     <Compile Include="Geometry\Size3i.cs" />
     <Compile Include="Geometry\Size3l.cs" />
+    <Compile Include="Geometry\Sphered.cs" />
+    <Compile Include="Geometry\Spheref.cs" />
+    <Compile Include="Geometry\Spherei.cs" />
+    <Compile Include="Geometry\Spherel.cs" />
     <Compile Include="Geometry\Vectors\Vector16b.cs" />
     <Compile Include="Geometry\Vectors\Vector16d.cs" />
     <Compile Include="Geometry\Vectors\Vector16f.cs" />
@@ -221,7 +229,6 @@
       <Name>Ibasa</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

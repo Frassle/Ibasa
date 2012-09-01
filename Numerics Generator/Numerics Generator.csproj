@@ -51,6 +51,8 @@
     <Compile Include="Common.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Box.cs" />
+    <Compile Include="Circle.cs" />
+    <Compile Include="Sphere.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="Exterior.cs" />
     <Compile Include="Grade.cs" />
