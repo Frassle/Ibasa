@@ -453,10 +453,17 @@ namespace Numerics_Generator
             //        rectangle.Height);
             //}
 
-            //public bool Contains(Point2D point)
-            //{
-            //    return (Left <= point.X) && (Right >= point.X) && (Bottom <= point.Y) && (Top >= point.Y);
-            //}
+
+            WriteLine("#region Contains");
+            WriteLine("public static bool Contains({0} box, {1} point)", Name, new Point(Type, 2));
+            WriteLine("{");
+            Indent();
+            WriteLine("return (box.Left <= point.X) && (box.Right >= point.X) &&");
+            WriteLine("       (box.Bottom <= point.Y) && (box.Top >= point.Y);");
+            Dedent();
+            WriteLine("}");
+            WriteLine("#endregion");
+
             //public bool Contains(Rectangle rectangle)
             //{
             //    return (Left <= rectangle.Left) && (Right >= rectangle.Right) && 

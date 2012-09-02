@@ -272,5 +272,12 @@ namespace Ibasa.Numerics.Geometry
 			return left == right;
 		}
 		#endregion
+		#region Contains
+		public static bool Contains(Rectangled box, Point2d point)
+		{
+			return (box.Left <= point.X) && (box.Right >= point.X) &&
+			       (box.Bottom <= point.Y) && (box.Top >= point.Y);
+		}
+		#endregion
 	}
 }
