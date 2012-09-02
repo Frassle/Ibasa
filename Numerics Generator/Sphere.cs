@@ -346,7 +346,7 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Provides static methods for sphere functions.");
             WriteLine("/// </summary>");
-            WriteLine("public static partial class sphere");
+            WriteLine("public static partial class Sphere");
             WriteLine("{");
             Indent();
 

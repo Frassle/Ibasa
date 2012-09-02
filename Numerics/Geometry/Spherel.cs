@@ -217,7 +217,7 @@ namespace Ibasa.Numerics.Geometry
 	/// <summary>
 	/// Provides static methods for sphere functions.
 	/// </summary>
-	public static partial class sphere
+	public static partial class Sphere
 	{
 		#region Binary
 		/// <summary>

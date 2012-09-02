@@ -210,7 +210,7 @@ namespace Ibasa.Numerics.Geometry
 	/// <summary>
 	/// Provides static methods for circle functions.
 	/// </summary>
-	public static partial class circle
+	public static partial class Circle
 	{
 		#region Binary
 		/// <summary>

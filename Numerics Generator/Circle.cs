@@ -339,7 +339,7 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Provides static methods for circle functions.");
             WriteLine("/// </summary>");
-            WriteLine("public static partial class circle");
+            WriteLine("public static partial class Circle");
             WriteLine("{");
             Indent();
 
