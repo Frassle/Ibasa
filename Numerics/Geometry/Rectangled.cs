@@ -273,10 +273,10 @@ namespace Ibasa.Numerics.Geometry
 		}
 		#endregion
 		#region Contains
-		public static bool Contains(Rectangled box, Point2d point)
+		public static bool Contains(Rectangled rectangle, Point2d point)
 		{
-			return (box.Left <= point.X) && (box.Right >= point.X) &&
-			       (box.Bottom <= point.Y) && (box.Top >= point.Y);
+			return (rectangle.Left <= point.X) && (rectangle.Right >= point.X) &&
+			       (rectangle.Bottom <= point.Y) && (rectangle.Top >= point.Y);
 		}
 		#endregion
 	}

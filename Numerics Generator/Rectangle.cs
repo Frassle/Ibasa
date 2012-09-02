@@ -455,11 +455,11 @@ namespace Numerics_Generator
 
 
             WriteLine("#region Contains");
-            WriteLine("public static bool Contains({0} box, {1} point)", Name, new Point(Type, 2));
+            WriteLine("public static bool Contains({0} rectangle, {1} point)", Name, new Point(Type, 2));
             WriteLine("{");
             Indent();
-            WriteLine("return (box.Left <= point.X) && (box.Right >= point.X) &&");
-            WriteLine("       (box.Bottom <= point.Y) && (box.Top >= point.Y);");
+            WriteLine("return (rectangle.Left <= point.X) && (rectangle.Right >= point.X) &&");
+            WriteLine("       (rectangle.Bottom <= point.Y) && (rectangle.Top >= point.Y);");
             Dedent();
             WriteLine("}");
             WriteLine("#endregion");
