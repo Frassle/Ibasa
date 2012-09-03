@@ -214,18 +214,18 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Circlei"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Circlei"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Circlei circle)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Circlei circle)
 		{
 			writer.Write(circle.X);
 			writer.Write(circle.Y);
 			writer.Write(circle.Radius);
 		}
 		/// <summary>
-		/// Reads a <see cref="Circlei"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Circlei"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
-		public static Circlei ReadCirclei(this System.IO.BinaryReader reader)
+		public static Circlei ReadCirclei(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Circlei(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
 		}

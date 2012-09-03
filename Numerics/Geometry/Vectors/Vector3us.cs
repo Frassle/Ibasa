@@ -1584,7 +1584,7 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Vector3us"/> to a Ibasa.IO.BinaryWriter.
+		/// Writes the given <see cref="Vector3us"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
 		public static void Write(this Ibasa.IO.BinaryWriter writer, Vector3us vector)
 		{
@@ -1593,7 +1593,7 @@ namespace Ibasa.Numerics.Geometry
 			writer.Write(vector.Z);
 		}
 		/// <summary>
-		/// Reads a <see cref="Vector3us"/> to a Ibasa.IO.BinaryReader.
+		/// Reads a <see cref="Vector3us"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
 		public static Vector3us ReadVector3us(this Ibasa.IO.BinaryReader reader)
 		{

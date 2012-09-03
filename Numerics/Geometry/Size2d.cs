@@ -221,17 +221,17 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Size2d"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Size2d"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Size2d size)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Size2d size)
 		{
 			writer.Write(size.Width);
 			writer.Write(size.Height);
 		}
 		/// <summary>
-		/// Reads a <see cref="Size2d"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Size2d"/> from an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static Size2d ReadSize2d(this System.IO.BinaryReader reader)
+		public static Size2d ReadSize2d(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Size2d(reader.ReadDouble(), reader.ReadDouble());
 		}

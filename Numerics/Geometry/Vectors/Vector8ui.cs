@@ -504,7 +504,7 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Vector8ui"/> to a Ibasa.IO.BinaryWriter.
+		/// Writes the given <see cref="Vector8ui"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
 		public static void Write(this Ibasa.IO.BinaryWriter writer, Vector8ui vector)
 		{
@@ -518,7 +518,7 @@ namespace Ibasa.Numerics.Geometry
 			writer.Write(vector.V7);
 		}
 		/// <summary>
-		/// Reads a <see cref="Vector8ui"/> to a Ibasa.IO.BinaryReader.
+		/// Reads a <see cref="Vector8ui"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
 		public static Vector8ui ReadVector8ui(this Ibasa.IO.BinaryReader reader)
 		{

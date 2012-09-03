@@ -331,17 +331,17 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Point2f"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Point2f"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Point2f point)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Point2f point)
 		{
 			writer.Write(point.X);
 			writer.Write(point.Y);
 		}
 		/// <summary>
-		/// Reads a <see cref="Point2f"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Point2f"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
-		public static Point2f ReadPoint2f(this System.IO.BinaryReader reader)
+		public static Point2f ReadPoint2f(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Point2f(reader.ReadSingle(), reader.ReadSingle());
 		}

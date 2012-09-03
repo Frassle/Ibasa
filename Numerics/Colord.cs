@@ -4274,7 +4274,7 @@ namespace Ibasa.Numerics
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Colord"/> to a Ibasa.IO.BinaryWriter.
+		/// Writes the given <see cref="Colord"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
 		public static void Write(this Ibasa.IO.BinaryWriter writer, Colord vector)
 		{
@@ -4284,7 +4284,7 @@ namespace Ibasa.Numerics
 			writer.Write(vector.A);
 		}
 		/// <summary>
-		/// Reads a <see cref="Colord"/> to a Ibasa.IO.BinaryReader.
+		/// Reads a <see cref="Colord"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
 		public static Colord ReadColord(this Ibasa.IO.BinaryReader reader)
 		{

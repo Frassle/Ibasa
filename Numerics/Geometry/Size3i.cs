@@ -240,18 +240,18 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Size3i"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Size3i"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Size3i size)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Size3i size)
 		{
 			writer.Write(size.Width);
 			writer.Write(size.Height);
 			writer.Write(size.Depth);
 		}
 		/// <summary>
-		/// Reads a <see cref="Size3i"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Size3i"/> from an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static Size3i ReadSize3i(this System.IO.BinaryReader reader)
+		public static Size3i ReadSize3i(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Size3i(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
 		}

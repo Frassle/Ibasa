@@ -576,9 +576,9 @@ namespace Numerics_Generator
             #region Binary
             WriteLine("#region Binary");
             WriteLine("/// <summary>");
-            WriteLine("/// Writes the given <see cref=\"{0}\"/> to a System.IO.BinaryWriter.", Name);
+            WriteLine("/// Writes the given <see cref=\"{0}\"/> to an <see cref=\"Ibasa.IO.BinaryWriter\">.", Name);
             WriteLine("/// </summary>");
-            WriteLine("public static void Write(this System.IO.BinaryWriter writer, {0} point)", Name);
+            WriteLine("public static void Write(this Ibasa.IO.BinaryWriter writer, {0} point)", Name);
             WriteLine("{");
             Indent();
             for (int i = 0; i < Dimension; ++i)
@@ -588,9 +588,9 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
-            WriteLine("/// Reads a <see cref=\"{0}\"/> to a System.IO.BinaryReader.", Name);
+            WriteLine("/// Reads a <see cref=\"{0}\"/> from an <see cref=\"Ibasa.IO.BinaryReader\">.", Name);
             WriteLine("/// </summary>");
-            WriteLine("public static {0} Read{0}(this System.IO.BinaryReader reader)", Name);
+            WriteLine("public static {0} Read{0}(this Ibasa.IO.BinaryReader reader)", Name);
             WriteLine("{");
             Indent();
             WriteLine("return new {0}({1});", Name, string.Join(", ", Components.Select(c => string.Format("reader.Read{0}()", Type.CLRName))));

@@ -311,9 +311,9 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Boxf"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Boxf"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Boxf box)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Boxf box)
 		{
 			writer.Write(box.X);
 			writer.Write(box.Y);
@@ -323,9 +323,9 @@ namespace Ibasa.Numerics.Geometry
 			writer.Write(box.Depth);
 		}
 		/// <summary>
-		/// Reads a <see cref="Boxf"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Boxf"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
-		public static Boxf ReadBoxf(this System.IO.BinaryReader reader)
+		public static Boxf ReadBoxf(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Boxf(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}

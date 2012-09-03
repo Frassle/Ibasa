@@ -221,9 +221,9 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Spherei"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Spherei"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Spherei sphere)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Spherei sphere)
 		{
 			writer.Write(sphere.X);
 			writer.Write(sphere.Y);
@@ -231,9 +231,9 @@ namespace Ibasa.Numerics.Geometry
 			writer.Write(sphere.Radius);
 		}
 		/// <summary>
-		/// Reads a <see cref="Spherei"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Spherei"/> from an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static Spherei ReadSpherei(this System.IO.BinaryReader reader)
+		public static Spherei ReadSpherei(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Spherei(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
 		}

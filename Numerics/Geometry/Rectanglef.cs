@@ -253,9 +253,9 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Rectanglef"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Rectanglef"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Rectanglef rectangle)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Rectanglef rectangle)
 		{
 			writer.Write(rectangle.X);
 			writer.Write(rectangle.Y);
@@ -263,9 +263,9 @@ namespace Ibasa.Numerics.Geometry
 			writer.Write(rectangle.Height);
 		}
 		/// <summary>
-		/// Reads a <see cref="Rectanglef"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Rectanglef"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
-		public static Rectanglef ReadRectanglef(this System.IO.BinaryReader reader)
+		public static Rectanglef ReadRectanglef(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Rectanglef(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}

@@ -352,18 +352,18 @@ namespace Ibasa.Numerics.Geometry
 	{
 		#region Binary
 		/// <summary>
-		/// Writes the given <see cref="Point3d"/> to a System.IO.BinaryWriter.
+		/// Writes the given <see cref="Point3d"/> to an <see cref="Ibasa.IO.BinaryWriter">.
 		/// </summary>
-		public static void Write(this System.IO.BinaryWriter writer, Point3d point)
+		public static void Write(this Ibasa.IO.BinaryWriter writer, Point3d point)
 		{
 			writer.Write(point.X);
 			writer.Write(point.Y);
 			writer.Write(point.Z);
 		}
 		/// <summary>
-		/// Reads a <see cref="Point3d"/> to a System.IO.BinaryReader.
+		/// Reads a <see cref="Point3d"/> from an <see cref="Ibasa.IO.BinaryReader">.
 		/// </summary>
-		public static Point3d ReadPoint3d(this System.IO.BinaryReader reader)
+		public static Point3d ReadPoint3d(this Ibasa.IO.BinaryReader reader)
 		{
 			return new Point3d(reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble());
 		}

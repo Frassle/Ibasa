@@ -685,7 +685,7 @@ namespace Numerics_Generator
             #region Binary
             WriteLine("#region Binary");
             WriteLine("/// <summary>");
-            WriteLine("/// Writes the given <see cref=\"{0}\"/> to a Ibasa.IO.BinaryWriter.", Name);
+            WriteLine("/// Writes the given <see cref=\"{0}\"/> to an <see cref=\"Ibasa.IO.BinaryWriter\">.", Name);
             WriteLine("/// </summary>");
             WriteLine("public static void Write(this Ibasa.IO.BinaryWriter writer, {0} vector)", Name);
             WriteLine("{");
@@ -697,7 +697,7 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
-            WriteLine("/// Reads a <see cref=\"{0}\"/> to a Ibasa.IO.BinaryReader.", Name);
+            WriteLine("/// Reads a <see cref=\"{0}\"/> from an <see cref=\"Ibasa.IO.BinaryReader\">.", Name);
             WriteLine("/// </summary>");
             WriteLine("public static {0} Read{0}(this Ibasa.IO.BinaryReader reader)", Name);
             WriteLine("{");
