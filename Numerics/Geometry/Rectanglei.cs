@@ -68,7 +68,7 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		public Point2i Location { get { return new Point2i(X, Y); } }
 		/// <summary>
-		/// Gets the corners of this rectangle, from lower-left clockwise.
+		/// Gets the corners of this rectangle.
 		/// </summary>
 		public Point2i[] Corners
 		{

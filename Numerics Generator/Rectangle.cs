@@ -140,7 +140,7 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("public Point2{0} Location {{ get {{ return new Point2{0}(X, Y); }} }}", Type.Suffix);
             WriteLine("/// <summary>");
-            WriteLine("/// Gets the corners of this rectangle, from lower-left clockwise.");
+            WriteLine("/// Gets the corners of this rectangle.");
             WriteLine("/// </summary>");
             WriteLine("public Point2{0}[] Corners", Type.Suffix);
             WriteLine("{");

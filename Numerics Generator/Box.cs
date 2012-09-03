@@ -156,7 +156,7 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("public Point3{0} Location {{ get {{ return new Point3{0}(X, Y, Z); }} }}", Type.Suffix);
             WriteLine("/// <summary>");
-            WriteLine("/// Gets the corners of this box, from front-lower-left clockwise.");
+            WriteLine("/// Gets the corners of this box.");
             WriteLine("/// </summary>");
             WriteLine("public Point3{0}[] Corners", Type.Suffix);
             WriteLine("{");
