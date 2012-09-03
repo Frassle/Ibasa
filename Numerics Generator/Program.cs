@@ -114,6 +114,16 @@ namespace Numerics_Generator
                 Console.WriteLine("Done - " + sphere.Name);
             }
 
+            foreach (var type in Ray.Types)
+            {
+                var ray = new Ray(type);
+                ray.Generate();
+
+                var path = System.IO.Path.Combine(root, "Geometry", ray.Name + ".cs");
+                System.IO.File.WriteAllText(path, ray.Text);
+                Console.WriteLine("Done - " + ray.Name);
+            }
+
             Console.ReadLine();
         }
     }

@@ -134,6 +134,8 @@
     <Compile Include="Geometry\Point3f.cs" />
     <Compile Include="Geometry\Point3i.cs" />
     <Compile Include="Geometry\Point3l.cs" />
+    <Compile Include="Geometry\Rayd.cs" />
+    <Compile Include="Geometry\Rayf.cs" />
     <Compile Include="Geometry\Rectangled.cs" />
     <Compile Include="Geometry\Rectanglef.cs" />
     <Compile Include="Geometry\Rectanglei.cs" />
