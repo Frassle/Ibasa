@@ -28,9 +28,9 @@ namespace Ibasa.Spatial
         Dictionary<Point3l, Page> Pages = new Dictionary<Point3l, Page>();
         long Timestamp = 0;
 
-        public VirtualVoxelGrid()
+        public VirtualVoxelGrid(int pageSize = 16)
         {
-            PageSize = new Size3l(16, 16, 16);
+            PageSize = new Size3l(pageSize, pageSize, pageSize);
             Residency = 16;
         }
 
