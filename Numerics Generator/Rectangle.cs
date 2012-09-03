@@ -139,6 +139,20 @@ namespace Numerics_Generator
             WriteLine("/// Gets the coordinates of the lower-left corner of this rectangle.");
             WriteLine("/// </summary>");
             WriteLine("public Point2{0} Location {{ get {{ return new Point2{0}(X, Y); }} }}", Type.Suffix);
+            WriteLine("/// <summary>");
+            WriteLine("/// Gets the corners of this rectangle, from lower-left clockwise.");
+            WriteLine("/// </summary>");
+            WriteLine("public Point2{0}[] Corners", Type.Suffix);
+            WriteLine("{");
+            Indent();
+            WriteLine("get");
+            WriteLine("{");
+            Indent();
+            WriteLine("return new Point2{0}[] {{ new Point2{0}(X, Y), new Point2{0}(X + Width, Y), new Point2{0}(X + Width, Y + Height), new Point2{0}(X, Y + Height) }};", Type.Suffix);
+            Dedent();
+            WriteLine("}");
+            Dedent();
+            WriteLine("}");
 
             WriteLine("#endregion");
         }

@@ -83,6 +83,20 @@ namespace Ibasa.Numerics.Geometry
 		/// Gets the coordinates of the front-lower-left corner of this box.
 		/// </summary>
 		public Point3l Location { get { return new Point3l(X, Y, Z); } }
+		/// <summary>
+		/// Gets the corners of this box, from front-lower-left clockwise.
+		/// </summary>
+		public Point3l[] Corners
+		{
+			get
+			{
+				return new Point3l[]
+				{
+					new Point3l(X, Y, Z), new Point3l(X + Width, Y, Z), new Point3l(X + Width, Y + Height, Z), new Point3l(X, Y + Height, Z),
+					new Point3l(X, Y, Z + Depth), new Point3l(X + Width, Y, Z + Depth), new Point3l(X + Width, Y + Height, Z + Depth), new Point3l(X, Y + Height, Z + Depth)
+				};
+			}
+		}
 		#endregion
 		#region Constructors
 		/// <summary>

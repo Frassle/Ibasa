@@ -67,6 +67,16 @@ namespace Ibasa.Numerics.Geometry
 		/// Gets the coordinates of the lower-left corner of this rectangle.
 		/// </summary>
 		public Point2d Location { get { return new Point2d(X, Y); } }
+		/// <summary>
+		/// Gets the corners of this rectangle, from lower-left clockwise.
+		/// </summary>
+		public Point2d[] Corners
+		{
+			get
+			{
+				return new Point2d[] { new Point2d(X, Y), new Point2d(X + Width, Y), new Point2d(X + Width, Y + Height), new Point2d(X, Y + Height) };
+			}
+		}
 		#endregion
 		#region Constructors
 		/// <summary>
