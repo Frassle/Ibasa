@@ -576,7 +576,7 @@ namespace Ibasa.Numerics
         /// </summary>
         /// <param name="x">A number.</param>
         /// <returns>
-				/// The square root of x if x is zero or positive, else returns NaN.
+        /// The square root of x if x is zero or positive, else returns NaN.
         /// </returns>
         [Pure]
         public static double Sqrt(double x)
@@ -588,7 +588,7 @@ namespace Ibasa.Numerics
         /// </summary>
         /// <param name="x">A number.</param>
         /// <returns>
-				/// The square root of x if x is zero or positive, else returns NaN.
+        /// The square root of x if x is zero or positive, else returns NaN.
         /// </returns>
         [Pure]
         public static float Sqrt(float x)
