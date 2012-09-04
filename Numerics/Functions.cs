@@ -576,9 +576,7 @@ namespace Ibasa.Numerics
         /// </summary>
         /// <param name="x">A number.</param>
         /// <returns>
-        /// One of the values in the following table. d parameter Return value Zero,
-        /// or positive The positive square root of d. Negative System.Double.NaNEquals
-        /// System.Double.NaNSystem.Double.NaNEquals System.Double.PositiveInfinitySystem.Double.PositiveInfinity
+				/// The square root of x if x is zero or positive, else returns NaN.
         /// </returns>
         [Pure]
         public static double Sqrt(double x)
@@ -590,6 +588,7 @@ namespace Ibasa.Numerics
         /// </summary>
         /// <param name="x">A number.</param>
         /// <returns>
+				/// The square root of x if x is zero or positive, else returns NaN.
         /// </returns>
         [Pure]
         public static float Sqrt(float x)
