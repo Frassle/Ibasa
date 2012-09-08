@@ -839,7 +839,15 @@ namespace Ibasa.Numerics.Geometry
 		[CLSCompliant(false)]
 		public static Vector2f Normalize(Vector2ul value)
 		{
-			return (Vector2f)value / Absolute(value);
+			var absolute = Absolute(value);
+			if(absolute <= float.Epsilon)
+			{
+				return Vector2ul.Zero;
+			}
+			else
+			{
+				return (Vector2f)value / absolute;
+			}
 		}
 		#endregion
 		#region Per component

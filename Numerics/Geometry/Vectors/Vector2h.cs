@@ -829,7 +829,15 @@ namespace Ibasa.Numerics.Geometry
 		/// <returns>The normalized value of value.</returns>
 		public static Vector2f Normalize(Vector2h value)
 		{
-			return (Vector2f)value / Absolute(value);
+			var absolute = Absolute(value);
+			if(absolute <= float.Epsilon)
+			{
+				return Vector2h.Zero;
+			}
+			else
+			{
+				return (Vector2f)value / absolute;
+			}
 		}
 		#endregion
 		#region Per component

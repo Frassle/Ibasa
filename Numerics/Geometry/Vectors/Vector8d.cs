@@ -671,7 +671,15 @@ namespace Ibasa.Numerics.Geometry
 		/// <returns>The normalized value of value.</returns>
 		public static Vector8d Normalize(Vector8d value)
 		{
-			return (Vector8d)value / Absolute(value);
+			var absolute = Absolute(value);
+			if(absolute <= double.Epsilon)
+			{
+				return Vector8d.Zero;
+			}
+			else
+			{
+				return (Vector8d)value / absolute;
+			}
 		}
 		#endregion
 		#region Per component

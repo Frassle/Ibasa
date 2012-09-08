@@ -1759,7 +1759,15 @@ namespace Ibasa.Numerics.Geometry
 		/// <returns>The normalized value of value.</returns>
 		public static Vector3d Normalize(Vector3d value)
 		{
-			return (Vector3d)value / Absolute(value);
+			var absolute = Absolute(value);
+			if(absolute <= double.Epsilon)
+			{
+				return Vector3d.Zero;
+			}
+			else
+			{
+				return (Vector3d)value / absolute;
+			}
 		}
 		#endregion
 		#region Per component

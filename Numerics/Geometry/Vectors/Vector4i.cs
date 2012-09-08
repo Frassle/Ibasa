@@ -4001,7 +4001,15 @@ namespace Ibasa.Numerics.Geometry
 		/// <returns>The normalized value of value.</returns>
 		public static Vector4f Normalize(Vector4i value)
 		{
-			return (Vector4f)value / Absolute(value);
+			var absolute = Absolute(value);
+			if(absolute <= float.Epsilon)
+			{
+				return Vector4i.Zero;
+			}
+			else
+			{
+				return (Vector4f)value / absolute;
+			}
 		}
 		#endregion
 		#region Per component

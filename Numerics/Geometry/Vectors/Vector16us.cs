@@ -958,7 +958,15 @@ namespace Ibasa.Numerics.Geometry
 		[CLSCompliant(false)]
 		public static Vector16f Normalize(Vector16us value)
 		{
-			return (Vector16f)value / Absolute(value);
+			var absolute = Absolute(value);
+			if(absolute <= float.Epsilon)
+			{
+				return Vector16us.Zero;
+			}
+			else
+			{
+				return (Vector16f)value / absolute;
+			}
 		}
 		#endregion
 		#region Per component

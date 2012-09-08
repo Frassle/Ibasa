@@ -846,7 +846,15 @@ namespace Ibasa.Numerics.Geometry
 		/// <returns>The normalized value of value.</returns>
 		public static Vector16d Normalize(Vector16d value)
 		{
-			return (Vector16d)value / Absolute(value);
+			var absolute = Absolute(value);
+			if(absolute <= double.Epsilon)
+			{
+				return Vector16d.Zero;
+			}
+			else
+			{
+				return (Vector16d)value / absolute;
+			}
 		}
 		#endregion
 		#region Per component
