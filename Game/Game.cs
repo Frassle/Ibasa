@@ -167,7 +167,19 @@ namespace Ibasa.Game
             Message message;
             while (MessageQueue.TryDequeue(out message))
             {
-                Parallel.ForEach(Components, component => component.Dispatch(message));
+                int responses = 0;
+                Parallel.ForEach(Components, component =>
+                {
+                    if (component.Dispatch(message))
+                    {
+                        System.Threading.Interlocked.Increment(ref responses);
+                    }
+                });
+
+                if (responses == 0)
+                {
+                    Console.WriteLine("No response to message {0}", message.Method);
+                }
             }
 
             IsParallel = false;

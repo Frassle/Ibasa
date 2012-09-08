@@ -147,7 +147,7 @@ namespace Ibasa.Game
         /// The base component type does dynamic dispatch.
         /// </summary>
         /// <param name="message">A message</param>
-        public virtual void Dispatch(Message message)
+        public virtual bool Dispatch(Message message)
         {
             foreach (var method in Methods)
             {
@@ -190,10 +190,11 @@ namespace Ibasa.Game
                     if (parametersMatch)
                     {
                         method.Invoke(this, args);
-                        break;
+                        return true;
                     }
                 }
             }
+            return false;
         }
 
         /// <summary>
