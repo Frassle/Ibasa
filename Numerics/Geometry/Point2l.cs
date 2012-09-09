@@ -58,6 +58,128 @@ namespace Ibasa.Numerics.Geometry
 				X, Y
 			};
 		}
+		#region Swizzles
+		/// <summary>
+		/// Returns the point (X, X).
+		/// </summary>
+		public Point2l XX
+		{
+			get
+			{
+				return new Point2l(X, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Y).
+		/// </summary>
+		public Point2l XY
+		{
+			get
+			{
+				return new Point2l(X, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, X).
+		/// </summary>
+		public Point2l YX
+		{
+			get
+			{
+				return new Point2l(Y, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Y).
+		/// </summary>
+		public Point2l YY
+		{
+			get
+			{
+				return new Point2l(Y, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, X, X).
+		/// </summary>
+		public Point3l XXX
+		{
+			get
+			{
+				return new Point3l(X, X, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, X, Y).
+		/// </summary>
+		public Point3l XXY
+		{
+			get
+			{
+				return new Point3l(X, X, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Y, X).
+		/// </summary>
+		public Point3l XYX
+		{
+			get
+			{
+				return new Point3l(X, Y, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Y, Y).
+		/// </summary>
+		public Point3l XYY
+		{
+			get
+			{
+				return new Point3l(X, Y, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, X, X).
+		/// </summary>
+		public Point3l YXX
+		{
+			get
+			{
+				return new Point3l(Y, X, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, X, Y).
+		/// </summary>
+		public Point3l YXY
+		{
+			get
+			{
+				return new Point3l(Y, X, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Y, X).
+		/// </summary>
+		public Point3l YYX
+		{
+			get
+			{
+				return new Point3l(Y, Y, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Y, Y).
+		/// </summary>
+		public Point3l YYY
+		{
+			get
+			{
+				return new Point3l(Y, Y, Y);
+			}
+		}
+		#endregion
 		#endregion
 		#region Constructors
 		/// <summary>

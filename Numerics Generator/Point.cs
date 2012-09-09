@@ -165,6 +165,36 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
 
+            #region Swizzles
+            WriteLine("#region Swizzles");
+            foreach (var size in Shapes.Sizes)
+            {
+                foreach (var permutation in
+                    Ibasa.EnumerableExtensions.PermutationsWithRepetition(Components, size))
+                {
+                    string components = string.Concat("(", string.Join(", ", permutation), ")");
+
+                    var sizePoint = new Point(Type, size);
+
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Returns the point {0}.", components);
+                    WriteLine("/// </summary>");
+                    WriteLine("public {0} {1}", sizePoint, string.Concat(permutation));
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("get");
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("return new {0}{1};", sizePoint, components);
+                    Dedent();
+                    WriteLine("}");
+                    Dedent();
+                    WriteLine("}");
+                }
+            }
+            WriteLine("#endregion");
+            #endregion
+
             WriteLine("#endregion");
         }
 

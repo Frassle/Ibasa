@@ -64,6 +64,368 @@ namespace Ibasa.Numerics.Geometry
 				X, Y, Z
 			};
 		}
+		#region Swizzles
+		/// <summary>
+		/// Returns the point (X, X).
+		/// </summary>
+		public Point2d XX
+		{
+			get
+			{
+				return new Point2d(X, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Y).
+		/// </summary>
+		public Point2d XY
+		{
+			get
+			{
+				return new Point2d(X, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Z).
+		/// </summary>
+		public Point2d XZ
+		{
+			get
+			{
+				return new Point2d(X, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, X).
+		/// </summary>
+		public Point2d YX
+		{
+			get
+			{
+				return new Point2d(Y, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Y).
+		/// </summary>
+		public Point2d YY
+		{
+			get
+			{
+				return new Point2d(Y, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Z).
+		/// </summary>
+		public Point2d YZ
+		{
+			get
+			{
+				return new Point2d(Y, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, X).
+		/// </summary>
+		public Point2d ZX
+		{
+			get
+			{
+				return new Point2d(Z, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Y).
+		/// </summary>
+		public Point2d ZY
+		{
+			get
+			{
+				return new Point2d(Z, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Z).
+		/// </summary>
+		public Point2d ZZ
+		{
+			get
+			{
+				return new Point2d(Z, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, X, X).
+		/// </summary>
+		public Point3d XXX
+		{
+			get
+			{
+				return new Point3d(X, X, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, X, Y).
+		/// </summary>
+		public Point3d XXY
+		{
+			get
+			{
+				return new Point3d(X, X, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, X, Z).
+		/// </summary>
+		public Point3d XXZ
+		{
+			get
+			{
+				return new Point3d(X, X, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Y, X).
+		/// </summary>
+		public Point3d XYX
+		{
+			get
+			{
+				return new Point3d(X, Y, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Y, Y).
+		/// </summary>
+		public Point3d XYY
+		{
+			get
+			{
+				return new Point3d(X, Y, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Y, Z).
+		/// </summary>
+		public Point3d XYZ
+		{
+			get
+			{
+				return new Point3d(X, Y, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Z, X).
+		/// </summary>
+		public Point3d XZX
+		{
+			get
+			{
+				return new Point3d(X, Z, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Z, Y).
+		/// </summary>
+		public Point3d XZY
+		{
+			get
+			{
+				return new Point3d(X, Z, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (X, Z, Z).
+		/// </summary>
+		public Point3d XZZ
+		{
+			get
+			{
+				return new Point3d(X, Z, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, X, X).
+		/// </summary>
+		public Point3d YXX
+		{
+			get
+			{
+				return new Point3d(Y, X, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, X, Y).
+		/// </summary>
+		public Point3d YXY
+		{
+			get
+			{
+				return new Point3d(Y, X, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, X, Z).
+		/// </summary>
+		public Point3d YXZ
+		{
+			get
+			{
+				return new Point3d(Y, X, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Y, X).
+		/// </summary>
+		public Point3d YYX
+		{
+			get
+			{
+				return new Point3d(Y, Y, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Y, Y).
+		/// </summary>
+		public Point3d YYY
+		{
+			get
+			{
+				return new Point3d(Y, Y, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Y, Z).
+		/// </summary>
+		public Point3d YYZ
+		{
+			get
+			{
+				return new Point3d(Y, Y, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Z, X).
+		/// </summary>
+		public Point3d YZX
+		{
+			get
+			{
+				return new Point3d(Y, Z, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Z, Y).
+		/// </summary>
+		public Point3d YZY
+		{
+			get
+			{
+				return new Point3d(Y, Z, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Y, Z, Z).
+		/// </summary>
+		public Point3d YZZ
+		{
+			get
+			{
+				return new Point3d(Y, Z, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, X, X).
+		/// </summary>
+		public Point3d ZXX
+		{
+			get
+			{
+				return new Point3d(Z, X, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, X, Y).
+		/// </summary>
+		public Point3d ZXY
+		{
+			get
+			{
+				return new Point3d(Z, X, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, X, Z).
+		/// </summary>
+		public Point3d ZXZ
+		{
+			get
+			{
+				return new Point3d(Z, X, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Y, X).
+		/// </summary>
+		public Point3d ZYX
+		{
+			get
+			{
+				return new Point3d(Z, Y, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Y, Y).
+		/// </summary>
+		public Point3d ZYY
+		{
+			get
+			{
+				return new Point3d(Z, Y, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Y, Z).
+		/// </summary>
+		public Point3d ZYZ
+		{
+			get
+			{
+				return new Point3d(Z, Y, Z);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Z, X).
+		/// </summary>
+		public Point3d ZZX
+		{
+			get
+			{
+				return new Point3d(Z, Z, X);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Z, Y).
+		/// </summary>
+		public Point3d ZZY
+		{
+			get
+			{
+				return new Point3d(Z, Z, Y);
+			}
+		}
+		/// <summary>
+		/// Returns the point (Z, Z, Z).
+		/// </summary>
+		public Point3d ZZZ
+		{
+			get
+			{
+				return new Point3d(Z, Z, Z);
+			}
+		}
+		#endregion
 		#endregion
 		#region Constructors
 		/// <summary>
