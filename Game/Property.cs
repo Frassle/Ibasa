@@ -24,6 +24,10 @@ namespace Ibasa.Game
             Game = game;
             Name = name;
         }
+
+        public abstract void Remove(Entity entity);
+
+        public abstract void Swap();
     }
 
     public class Property<T> : Property, IEnumerable<KeyValuePair<Entity, T>>
@@ -100,7 +104,7 @@ namespace Ibasa.Game
             }
         }
 
-        public void Remove(Entity entity)
+        public override void Remove(Entity entity)
         {
             if (Game.IsParallel)
             {
@@ -183,7 +187,7 @@ namespace Ibasa.Game
             }
         }
 
-        public void Swap()
+        public override void Swap()
         {
             if (Game.IsParallel)
                 throw new Exception("Tryed to swap in a parallel context.");

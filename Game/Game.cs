@@ -107,6 +107,10 @@ namespace Ibasa.Game
         public void DestroyEntity(Entity entity)
         {
             Entities.Destroy(entity);
+            foreach (var property in Properties)
+            {
+                property.Remove(entity);
+            }
         }
 
         private bool _initalized = false;
@@ -183,6 +187,8 @@ namespace Ibasa.Game
             }
 
             IsParallel = false;
+
+            Parallel.ForEach(Properties, property => property.Swap());
         }
 
         protected virtual void Render(GameTime elapsed)
