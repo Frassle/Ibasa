@@ -841,7 +841,7 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		/// <param name="value">A vector.</param>
 		/// <returns>The absolute value of value.</returns>
-		public static float Absolute(Vector2l value)
+		public static double Absolute(Vector2l value)
 		{
 			return Functions.Sqrt(AbsoluteSquared(value));
 		}
@@ -850,16 +850,16 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		/// <param name="value">A vector.</param>
 		/// <returns>The normalized value of value.</returns>
-		public static Vector2f Normalize(Vector2l value)
+		public static Vector2d Normalize(Vector2l value)
 		{
 			var absolute = Absolute(value);
-			if(absolute <= float.Epsilon)
+			if(absolute <= double.Epsilon)
 			{
 				return Vector2l.Zero;
 			}
 			else
 			{
-				return (Vector2f)value / absolute;
+				return (Vector2d)value / absolute;
 			}
 		}
 		#endregion

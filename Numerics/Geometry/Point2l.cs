@@ -539,7 +539,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <param name="value1">The first point.</param>
 		/// <param name="value2">The second point.</param>
 		/// <returns>The distance between value1 and value2.</returns>
-		public static float Distance(Point2l value1, Point2l value2)
+		public static double Distance(Point2l value1, Point2l value2)
 		{
 			return Vector.Absolute(value2 - value1);
 		}

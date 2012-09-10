@@ -13,11 +13,11 @@ namespace Numerics_Generator
         public static readonly NumberType Float = new NumberType("float", "Single", "f", 4, true, false, true);
         public static readonly NumberType Half = new NumberType("Half", "Half", "h", 2, true, false, true, Float, Float, Float);
 
-        public static readonly NumberType ULong = new NumberType("ulong", "UInt64", "ul", 8, false, true, false, Float, Invalid);
-        public static readonly NumberType Long = new NumberType("long", "Int64", "l", 8, true, false, false, Float);
+        public static readonly NumberType ULong = new NumberType("ulong", "UInt64", "ul", 8, false, true, false, Double, Invalid);
+        public static readonly NumberType Long = new NumberType("long", "Int64", "l", 8, true, false, false, Double);
 
-        public static readonly NumberType UInt = new NumberType("uint", "UInt32", "ui", 4, false, true, false, Float, Long);
-        public static readonly NumberType Int = new NumberType("int", "Int32", "i", 4, true, false, false, Float);
+        public static readonly NumberType UInt = new NumberType("uint", "UInt32", "ui", 4, false, true, false, Double, Long);
+        public static readonly NumberType Int = new NumberType("int", "Int32", "i", 4, true, false, false, Double);
 
         public static readonly NumberType UShort = new NumberType("ushort", "UInt16", "us", 2, false, true, false, Float, Int, Int);
         public static readonly NumberType Short = new NumberType("short", "Int16", "s", 2, true, false, false, Float, Int, Int);

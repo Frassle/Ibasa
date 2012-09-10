@@ -705,7 +705,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <param name="value">A vector.</param>
 		/// <returns>The absolute value of value.</returns>
 		[CLSCompliant(false)]
-		public static float Absolute(Vector8ul value)
+		public static double Absolute(Vector8ul value)
 		{
 			return Functions.Sqrt(AbsoluteSquared(value));
 		}
@@ -715,16 +715,16 @@ namespace Ibasa.Numerics.Geometry
 		/// <param name="value">A vector.</param>
 		/// <returns>The normalized value of value.</returns>
 		[CLSCompliant(false)]
-		public static Vector8f Normalize(Vector8ul value)
+		public static Vector8d Normalize(Vector8ul value)
 		{
 			var absolute = Absolute(value);
-			if(absolute <= float.Epsilon)
+			if(absolute <= double.Epsilon)
 			{
 				return Vector8ul.Zero;
 			}
 			else
 			{
-				return (Vector8f)value / absolute;
+				return (Vector8d)value / absolute;
 			}
 		}
 		#endregion
