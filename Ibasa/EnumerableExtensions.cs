@@ -7,6 +7,54 @@ namespace Ibasa
 {
     public static class EnumerableExtensions
     {
+        public static V Min<T, K, V>(this IEnumerable<T> source, Func<T, KeyValuePair<K, V>> selector) where K : IComparable<K>
+        {
+            IEnumerator<T> e = source.GetEnumerator();
+
+            if (e.MoveNext())
+            {
+                var min = selector(e.Current);
+
+                while (e.MoveNext())
+                {
+                    var current = selector(e.Current);
+
+                    if (current.Key.CompareTo(min.Key) < 0)
+                    {
+                        min = current;
+                    }
+                }
+
+                return min.Value;
+            }
+
+            throw new ArgumentException("source is empty");
+        }
+
+        public static V Max<T, K, V>(this IEnumerable<T> source, Func<T, KeyValuePair<K, V>> selector) where K : IComparable<K>
+        {
+            IEnumerator<T> e = source.GetEnumerator();
+
+            if (e.MoveNext())
+            {
+                var max = selector(e.Current);
+
+                while (e.MoveNext())
+                {
+                    var current = selector(e.Current);
+
+                    if (current.Key.CompareTo(max.Key) > 0)
+                    {
+                        max = current;
+                    }
+                }
+
+                return max.Value;
+            }
+
+            throw new ArgumentException("source is empty");
+        }
+
         public static IEnumerable<T> Single<T>(T element)
         {
             yield return element;
