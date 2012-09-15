@@ -810,6 +810,278 @@ namespace Ibasa.Numerics
         {
             return Math.Max(val1, val2);
         }
+
+        //
+        // Summary:
+        //     Returns the larger of two 8-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 8-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 8-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        public static byte Max(byte val1, byte val2, params byte[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two decimal numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two System.Decimal numbers to compare.
+        //
+        //   val2:
+        //     The second of two System.Decimal numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        public static decimal Max(decimal val1, decimal val2, params decimal[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two double-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two double-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two double-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger. If val1, val2, or both val1
+        //     and val2 are equal to System.Double.NaN, System.Double.NaN is returned.
+        public static double Max(double val1, double val2, params double[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two single-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two single-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two single-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger. If val1, or val2, or both val1
+        //     and val2 are equal to System.Single.NaN, System.Single.NaN is returned.
+        public static float Max(float val1, float val2, params float[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two single-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two single-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two single-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger. If val1, or val2, or both val1
+        //     and val2 are equal to System.Single.NaN, System.Single.NaN is returned.
+        public static Half Max(Half val1, Half val2, params Half[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two 32-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 32-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 32-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        public static int Max(int val1, int val2, params int[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two 64-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 64-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 64-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        public static long Max(long val1, long val2, params long[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two 8-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 8-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 8-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        [CLSCompliant(false)]
+        public static sbyte Max(sbyte val1, sbyte val2, params sbyte[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two 16-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 16-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 16-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        public static short Max(short val1, short val2, params short[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two 32-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 32-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 32-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        [CLSCompliant(false)]
+        public static uint Max(uint val1, uint val2, params uint[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two 64-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 64-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 64-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        [CLSCompliant(false)]
+        public static ulong Max(ulong val1, ulong val2, params ulong[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
+        //
+        // Summary:
+        //     Returns the larger of two 16-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 16-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 16-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is larger.
+        [CLSCompliant(false)]
+        public static ushort Max(ushort val1, ushort val2, params ushort[] vals)
+        {
+            var max = Max(val1, val2);
+            foreach (var value in vals)
+            {
+                max = Max(max, value);
+            }
+            return max;
+        }
         #endregion
 
         #region Min
@@ -1023,6 +1295,278 @@ namespace Ibasa.Numerics
         public static ushort Min(ushort val1, ushort val2)
         {
             return Math.Min(val1, val2);
+        }
+
+        //
+        // Summary:
+        //     Returns the smaller of two 8-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 8-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 8-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        public static byte Min(byte val1, byte val2, params byte[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two decimal numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two System.Decimal numbers to compare.
+        //
+        //   val2:
+        //     The second of two System.Decimal numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        public static decimal Min(decimal val1, decimal val2, params decimal[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two double-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two double-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two double-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller. If val1, val2, or both val1
+        //     and val2 are equal to System.Double.NaN, System.Double.NaN is returned.
+        public static double Min(double val1, double val2, params double[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two single-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two single-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two single-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller. If val1, val2, or both val1
+        //     and val2 are equal to System.Single.NaN, System.Single.NaN is returned.
+        public static float Min(float val1, float val2, params float[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two single-precision floating-point numbers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two single-precision floating-point numbers to compare.
+        //
+        //   val2:
+        //     The second of two single-precision floating-point numbers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller. If val1, val2, or both val1
+        //     and val2 are equal to System.Single.NaN, System.Single.NaN is returned.
+        public static Half Min(Half val1, Half val2, params Half[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two 32-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 32-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 32-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        public static int Min(int val1, int val2, params int[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two 64-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 64-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 64-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        public static long Min(long val1, long val2, params long[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two 8-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 8-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 8-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        [CLSCompliant(false)]
+        public static sbyte Min(sbyte val1, sbyte val2, params sbyte[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two 16-bit signed integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 16-bit signed integers to compare.
+        //
+        //   val2:
+        //     The second of two 16-bit signed integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        public static short Min(short val1, short val2, params short[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two 32-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 32-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 32-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        [CLSCompliant(false)]
+        public static uint Min(uint val1, uint val2, params uint[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two 64-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 64-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 64-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        [CLSCompliant(false)]
+        public static ulong Min(ulong val1, ulong val2, params ulong[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
+        }
+        //
+        // Summary:
+        //     Returns the smaller of two 16-bit unsigned integers.
+        //
+        // Parameters:
+        //   val1:
+        //     The first of two 16-bit unsigned integers to compare.
+        //
+        //   val2:
+        //     The second of two 16-bit unsigned integers to compare.
+        //
+        // Returns:
+        //     Parameter val1 or val2, whichever is smaller.
+        [CLSCompliant(false)]
+        public static ushort Min(ushort val1, ushort val2, params ushort[] vals)
+        {
+            var min = Min(val1, val2);
+            foreach (var value in vals)
+            {
+                min = Min(min, value);
+            }
+            return min;
         }
         #endregion
 
