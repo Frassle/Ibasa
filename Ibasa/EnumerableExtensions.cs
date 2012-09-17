@@ -7,49 +7,55 @@ namespace Ibasa
 {
     public static class EnumerableExtensions
     {
-        public static V Min<T, K, V>(this IEnumerable<T> source, Func<T, KeyValuePair<K, V>> selector) where K : IComparable<K>
+        public static T Min<T, K>(this IEnumerable<T> source, Func<T,K> selector) where K : IComparable<K>
         {
             IEnumerator<T> e = source.GetEnumerator();
 
             if (e.MoveNext())
             {
-                var min = selector(e.Current);
+                var min = e.Current;
+                var mink = selector(min);
 
                 while (e.MoveNext())
                 {
-                    var current = selector(e.Current);
+                    var current = e.Current;
+                    var key = selector(current);
 
-                    if (current.Key.CompareTo(min.Key) < 0)
+                    if (key.CompareTo(mink) < 0)
                     {
+                        mink = key;
                         min = current;
                     }
                 }
 
-                return min.Value;
+                return min;
             }
 
             throw new ArgumentException("source is empty");
         }
 
-        public static V Max<T, K, V>(this IEnumerable<T> source, Func<T, KeyValuePair<K, V>> selector) where K : IComparable<K>
+        public static T Max<T, K>(this IEnumerable<T> source, Func<T, K> selector) where K : IComparable<K>
         {
             IEnumerator<T> e = source.GetEnumerator();
 
             if (e.MoveNext())
             {
-                var max = selector(e.Current);
+                var max = e.Current;
+                var maxk = selector(max);
 
                 while (e.MoveNext())
                 {
-                    var current = selector(e.Current);
+                    var current = e.Current;
+                    var key = selector(current);
 
-                    if (current.Key.CompareTo(max.Key) > 0)
+                    if (key.CompareTo(maxk) < 0)
                     {
+                        maxk = key;
                         max = current;
                     }
                 }
 
-                return max.Value;
+                return max;
             }
 
             throw new ArgumentException("source is empty");
