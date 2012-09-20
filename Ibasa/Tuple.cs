@@ -25,12 +25,12 @@ namespace Ibasa
         /// </summary>
         public readonly T1 Item1;
 
-        public static implicit operator Tuple<T1>(Singleton<T1> singleton)
+        public static explicit operator Tuple<T1>(Singleton<T1> singleton)
         {
             return new Tuple<T1>(singleton.Item1);
         }
 
-        public static implicit operator Singleton<T1>(Tuple<T1> tuple)
+        public static explicit operator Singleton<T1>(Tuple<T1> tuple)
         {
             return new Singleton<T1>(tuple.Item1);
         }
@@ -65,12 +65,12 @@ namespace Ibasa
         /// </summary>
         public readonly T2 Item2;
 
-        public static implicit operator Tuple<T1, T2>(Pair<T1, T2> triple)
+        public static explicit operator Tuple<T1, T2>(Pair<T1, T2> triple)
         {
             return new Tuple<T1, T2>(triple.Item1, triple.Item2);
         }
 
-        public static implicit operator Pair<T1, T2>(Tuple<T1, T2> tuple)
+        public static explicit operator Pair<T1, T2>(Tuple<T1, T2> tuple)
         {
             return new Pair<T1, T2>(tuple.Item1, tuple.Item2);
         }
@@ -113,67 +113,14 @@ namespace Ibasa
         public readonly T3 Item3;
 
 
-        public static implicit operator Tuple<T1, T2, T3>(Triple<T1, T2, T3> triple)
+        public static explicit operator Tuple<T1, T2, T3>(Triple<T1, T2, T3> triple)
         {
             return new Tuple<T1, T2, T3>(triple.Item1, triple.Item2, triple.Item3);
         }
 
-        public static implicit operator Triple<T1, T2, T3>(Tuple<T1, T2, T3> tuple)
+        public static explicit operator Triple<T1, T2, T3>(Tuple<T1, T2, T3> tuple)
         {
             return new Triple<T1, T2, T3>(tuple.Item1, tuple.Item2, tuple.Item3);
-        }
-    }
-
-    /// <summary>
-    /// Provides static methods for creating tuple objects.
-    /// </summary>
-    public static class Tuple
-    {
-        // Summary:
-        //     Creates a new 1-tuple, or singleton.
-        //
-        // Parameters:
-        //   item1:
-        //     The value of the only component of the tuple.
-        //
-        // Type parameters:
-        //   T1:
-        //     The type of the only component of the tuple.
-        //
-        // Returns:
-        //     A tuple whose value is (item1).
-        public static Singleton<T1> Create<T1>(T1 item1)
-        {
-            return new Singleton<T1>(item1);
-        }
-        //
-        // Summary:
-        //     Creates a new 2-tuple, or pair.
-        //
-        // Parameters:
-        //   item1:
-        //     The value of the first component of the tuple.
-        //
-        //   item2:
-        //     The value of the second component of the tuple.
-        //
-        // Type parameters:
-        //   T1:
-        //     The type of the first component of the tuple.
-        //
-        //   T2:
-        //     The type of the second component of the tuple.
-        //
-        // Returns:
-        //     A 2-tuple whose value is (item1, item2).
-        public static Pair<T1, T2> Create<T1, T2>(T1 item1, T2 item2)
-        {
-            return new Pair<T1, T2>(item1, item2);
-        }
-
-        public static Triple<T1, T2, T3> Create<T1, T2, T3>(T1 item1, T2 item2, T3 item3)
-        {
-            return new Triple<T1, T2, T3>(item1, item2, item3);
         }
     }
 }
