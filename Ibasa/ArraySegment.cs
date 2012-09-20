@@ -96,22 +96,56 @@ namespace Ibasa
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            for (int i = Offset; i < Offset + Count; ++i)
+            return GetEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public struct Enumerator : IEnumerator<T>
+        {
+            T[] Array;
+            int Index;
+            int End;
+
+            internal Enumerator(ArraySegment<T> segment)
             {
-                yield return Array[i];
+                Array = segment.Array;
+                Index = segment.Offset - 1;
+                End = segment.Offset + segment.Count;
+            }
+
+            public bool MoveNext()
+            {
+                return ++Index < End;
+            }
+
+            public T Current
+            {
+                get { return Array[Index]; }
+            }
+
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Reset()
+            {
+                throw new NotImplementedException();
             }
         }
 
-        #endregion
-
-        #region IEnumerable<T> Members
-
-        public IEnumerator<T> GetEnumerator()
+        public Enumerator GetEnumerator()
         {
-            for (int i = Offset; i < Offset + Count; ++i)
-            {
-                yield return Array[i];
-            }
+            return new Enumerator(this);
         }
 
         #endregion
