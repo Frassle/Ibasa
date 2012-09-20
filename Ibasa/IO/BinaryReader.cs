@@ -268,7 +268,7 @@ namespace Ibasa.IO
             } while (count > 0);
             return offset - index;
         }
-       
+
         public char[] ReadChars(int count)
         {
             Contract.Requires(0 <= count);
@@ -293,7 +293,7 @@ namespace Ibasa.IO
             int byteCount = 0;
 
             Decoder decoder = Encoding.GetDecoder();
-            bool flush = false;            
+            bool flush = false;
             while (charCount < count && !flush)
             {
                 bool completed;
@@ -401,7 +401,7 @@ namespace Ibasa.IO
         public int ReadInt32()
         {
             FillBuffer(4);
-            
+
             return BitConverter.ToInt32(Buffer, 0);
         }
         public long ReadInt64()
@@ -422,93 +422,93 @@ namespace Ibasa.IO
         public ushort ReadUInt16()
         {
             FillBuffer(2);
-            
+
             return BitConverter.ToUInt16(Buffer, 0);
         }
         [CLSCompliant(false)]
         public uint ReadUInt32()
         {
             FillBuffer(4);
-            
+
             return BitConverter.ToUInt32(Buffer, 0);
         }
         [CLSCompliant(false)]
         public ulong ReadUInt64()
         {
             FillBuffer(8);
-            
+
             return BitConverter.ToUInt64(Buffer, 0);
         }
 
-				public short ReadVariableInt16()
-				{
-					ushort value = ReadVariableUInt16();
-					return (short)((int)(value >> 1) ^ -(int)(value & 1));
-				}
-				public int ReadVariableInt32()
-				{
-					uint value = ReadVariableUInt32();
-					return (int)(value >> 1) ^ -(int)(value & 1);
-				}
-				public long ReadVariableInt64()
-				{
-					ulong value = ReadVariableUInt64();
-					return (long)(value >> 1) ^ -(long)(value & 1);
-				}
+        public short ReadVariableInt16()
+        {
+            ushort value = ReadVariableUInt16();
+            return (short)((int)(value >> 1) ^ -(int)(value & 1));
+        }
+        public int ReadVariableInt32()
+        {
+            uint value = ReadVariableUInt32();
+            return (int)(value >> 1) ^ -(int)(value & 1);
+        }
+        public long ReadVariableInt64()
+        {
+            ulong value = ReadVariableUInt64();
+            return (long)(value >> 1) ^ -(long)(value & 1);
+        }
 
-				[CLSCompliant(false)]
-				public ushort ReadVariableUInt16()
-				{
-					byte b;
-					uint result = 0;
-					int shift = 0;
-					do
-					{
-						if(shift == 21)
-							throw new FormatException("The stream is corrupted.");
+        [CLSCompliant(false)]
+        public ushort ReadVariableUInt16()
+        {
+            byte b;
+            uint result = 0;
+            int shift = 0;
+            do
+            {
+                if (shift == 21)
+                    throw new FormatException("The stream is corrupted.");
 
-						b = ReadByte();
-						result |= (uint)(b & 0x7f) << shift;
-						shift += 7;
-					} while((b & 0x80) != 0);
-					return (ushort)result;
-				}
+                b = ReadByte();
+                result |= (uint)(b & 0x7f) << shift;
+                shift += 7;
+            } while ((b & 0x80) != 0);
+            return (ushort)result;
+        }
 
-				[CLSCompliant(false)]
-				public uint ReadVariableUInt32()
-				{
-					byte b;
-					uint result = 0;
-					int shift = 0;
-					do
-					{
-						if(shift == 35)
-							throw new FormatException("The stream is corrupted.");
+        [CLSCompliant(false)]
+        public uint ReadVariableUInt32()
+        {
+            byte b;
+            uint result = 0;
+            int shift = 0;
+            do
+            {
+                if (shift == 35)
+                    throw new FormatException("The stream is corrupted.");
 
-						b = ReadByte();
-						result |= (uint)(b & 0x7f) << shift;
-						shift += 7;
-					} while((b & 0x80) != 0);
-					return result;
-				}
+                b = ReadByte();
+                result |= (uint)(b & 0x7f) << shift;
+                shift += 7;
+            } while ((b & 0x80) != 0);
+            return result;
+        }
 
-				[CLSCompliant(false)]
-				public ulong ReadVariableUInt64()
-				{
-					byte b;
-					ulong result = 0;
-					int shift = 0;
-					do
-					{
-						if(shift == 70)
-							throw new FormatException("The stream is corrupted.");
+        [CLSCompliant(false)]
+        public ulong ReadVariableUInt64()
+        {
+            byte b;
+            ulong result = 0;
+            int shift = 0;
+            do
+            {
+                if (shift == 70)
+                    throw new FormatException("The stream is corrupted.");
 
-						b = ReadByte();
-						result |= (ulong)(b & 0x7f) << shift;
-						shift += 7;
-					} while((b & 0x80) != 0);
-					return result;
-				}
+                b = ReadByte();
+                result |= (ulong)(b & 0x7f) << shift;
+                shift += 7;
+            } while ((b & 0x80) != 0);
+            return result;
+        }
 
         /// <summary>
         /// Reads a structure of type T.
@@ -523,7 +523,7 @@ namespace Ibasa.IO
             if (read != size)
                 throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", typeof(T).Name));
 
-            T structure = new T();
+            T structure = default(T);
             System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(structure, System.Runtime.InteropServices.GCHandleType.Pinned);
             System.Runtime.InteropServices.Marshal.Copy(buffer, 0, handle.AddrOfPinnedObject(), size);
             handle.Free();
