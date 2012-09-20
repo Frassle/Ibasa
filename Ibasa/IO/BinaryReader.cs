@@ -517,11 +517,12 @@ namespace Ibasa.IO
         /// <exception cref="System.IO.EndOfStreamException">There are not enough bytes left to read in a structure of type T</exception>
         public T Read<T>() where T : struct
         {
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            var type = typeof(T);
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
             int read = Read(buffer, 0, size);
             if (read != size)
-                throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", typeof(T).Name));
+                throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", type.Name));
 
             T structure = default(T);
             System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(structure, System.Runtime.InteropServices.GCHandleType.Pinned);
@@ -543,7 +544,8 @@ namespace Ibasa.IO
             if (array == null)
                 throw new ArgumentNullException("array is null.");
 
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            var type = typeof(T);
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
             System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(array.Array, System.Runtime.InteropServices.GCHandleType.Pinned);
             IntPtr target = handle.AddrOfPinnedObject();
@@ -551,7 +553,7 @@ namespace Ibasa.IO
             {
                 int read = Read(buffer, 0, size);
                 if (read != size)
-                    throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", typeof(T).Name));
+                    throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", type.Name));
 
                 System.Runtime.InteropServices.Marshal.Copy(buffer, 0, target, size);
                 target += size;

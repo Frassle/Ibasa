@@ -398,7 +398,8 @@ namespace Ibasa.IO
         /// <param name="structure">The structure to write.</param>
         public void Write<T>(T structure) where T : struct
         {
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            var type = typeof(T);
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
             System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(structure, System.Runtime.InteropServices.GCHandleType.Pinned);
             System.Runtime.InteropServices.Marshal.Copy(handle.AddrOfPinnedObject(), buffer, 0, size);
@@ -418,7 +419,8 @@ namespace Ibasa.IO
             if (array == null)
                 throw new ArgumentNullException("array is null.");
 
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+            var type = typeof(T);
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
             System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(array.Array, System.Runtime.InteropServices.GCHandleType.Pinned);
             IntPtr target = handle.AddrOfPinnedObject();
