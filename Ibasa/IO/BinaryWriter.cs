@@ -34,40 +34,40 @@ namespace Ibasa.IO
         /// Initializes a new instance of the BinaryWriter class based on the
         /// supplied stream, using System.Text.UTF8Encoding, owning the input stream.
         /// </summary>
-        /// <param name="input">A stream.</param>
-        public BinaryWriter(System.IO.Stream input) :
-            this(input, Encoding.UTF8, true)
+        /// <param name="output">A stream.</param>
+        public BinaryWriter(System.IO.Stream output) :
+            this(output, Encoding.UTF8, true)
         {
-            Contract.Requires(input != null);
-            Contract.Requires(input.CanWrite);
+            Contract.Requires(output != null);
+            Contract.Requires(output.CanWrite);
         }
         /// <summary>
         /// Initializes a new instance of the BinaryWriter class based on the
         /// supplied stream and a specific character encoding, owning the input stream.
         /// </summary>
-        /// <param name="input">A stream.</param>
+        /// <param name="output">A stream.</param>
         /// <param name="encoding">The character encoding.</param>
-        public BinaryWriter(System.IO.Stream input, Encoding encoding) :
-            this(input, encoding, true)
+        public BinaryWriter(System.IO.Stream output, Encoding encoding) :
+            this(output, encoding, true)
         {
-            Contract.Requires(input != null);
+            Contract.Requires(output != null);
             Contract.Requires(encoding != null);
-            Contract.Requires(input.CanWrite);
+            Contract.Requires(output.CanWrite);
         }
         /// <summary>
         /// Initializes a new instance of the BinaryWriter class based on the
         /// supplied stream and a specific character encoding, optionally owning the input stream.
         /// </summary>
-        /// <param name="input">A stream.</param>
+        /// <param name="output">A stream.</param>
         /// <param name="encoding">The character encoding.</param>
         /// <param name="ownsStream">Whether this BinaryWriter should take ownership of the stream.</param>
-        public BinaryWriter(System.IO.Stream input, Encoding encoding, bool ownsStream)
+        public BinaryWriter(System.IO.Stream output, Encoding encoding, bool ownsStream)
         {
-            Contract.Requires(input != null);
+            Contract.Requires(output != null);
             Contract.Requires(encoding != null);
-            Contract.Requires(input.CanWrite);
+            Contract.Requires(output.CanWrite);
 
-            BaseStream = input;
+            BaseStream = output;
             Encoding = encoding;
             OwnsStream = ownsStream;
             Buffer = new byte[16];
