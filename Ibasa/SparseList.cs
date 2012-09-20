@@ -133,7 +133,7 @@ namespace Ibasa
 
             var count = reader.ReadInt32();
             list.Compressed.Capacity = count;
-            for(int i=0; i<count; ++i)
+            for (int i = 0; i < count; ++i)
             {
                 var length = reader.ReadByte();
                 var value = reader.Read<T>();
