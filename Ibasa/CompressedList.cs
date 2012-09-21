@@ -37,8 +37,7 @@ namespace Ibasa
             AddRange(collection);
         }
 
-        private int _Count = 0;
-        public int Count { get { return _Count; } }
+        public int Count { get { return Runs.Sum(run => run.Length + 1); } }
 
         public T this[int index]
         {
@@ -61,8 +60,6 @@ namespace Ibasa
 
         public void Add(T value)
         {
-            ++_Count;
-
             // See if we can add it to the last run
             if (Runs.Count > 0)
             {
@@ -91,7 +88,6 @@ namespace Ibasa
 
         public void Clear()
         {
-            _Count = 0;
             Runs.Clear();
         }
 
