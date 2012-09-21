@@ -96,14 +96,13 @@ namespace Ibasa
             Contract.Requires(data != null);
             Contract.Requires(data.Count >= Count);
 
-            for (int i = 0; i < Runs.Count; ++i)
+            foreach(var run in Runs)
             {
-                int length = Runs[i].Length + 1;
-                T value = Runs[i].Value;
+                int length = run.Length + 1;
 
-                for (int j = 0; j < length; ++j)
+                for (int i = 0; i < length; ++i)
                 {
-                    data[i++] = value;
+                    data[i] = run.Value;
                 }
             }
         }
