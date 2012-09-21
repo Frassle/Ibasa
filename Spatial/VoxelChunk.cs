@@ -3,32 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ibasa.Numerics.Geometry;
+using System.Diagnostics.Contracts;
 
 namespace Ibasa.Spatial
 {
     public sealed class VoxelChunk<T> where T : IEquatable<T>
     {
-        public struct RLE
-        {
-            public RLE(byte length, T voxel)
-            {
-                Length = length;
-                Voxel = voxel;
-            }
-
-            public byte Length;
-            public T Voxel;
-        }
-
         public Boxl Bounds { get; private set; }
-        public List<RLE> Compressed { get; private set; }
+        public CompressedList<T> Compressed { get; private set; }
         public T[] Uncompressed { get; private set; }
         public bool IsUncompressed { get { return Uncompressed != null; } }
+        public bool IsCompressed { get { return Compressed.Count != 0; } }
 
         public VoxelChunk(Boxl bounds)
         {
             Bounds = bounds;
-            Compressed = new List<RLE>();
+            Compressed = new CompressedList<T>();
             Uncompressed = null;
             Fill(default(T));
         }
@@ -47,64 +37,48 @@ namespace Ibasa.Spatial
             {
                 Compressed.Clear();
                 long size = Bounds.Width * Bounds.Height * Bounds.Depth;
-                while(size > 0)
+                for (int i = 0; i < size; ++i)
                 {
-                    long length = Math.Min(size, byte.MaxValue + 1);
-                    size -= length;
-                    Compressed.Add(new RLE((byte)(length - 1), voxel));
+                    Compressed.Add(voxel);
                 }
             }
         }
 
         public void Compress()
         {
-            if (Compressed.Count == 0)
+            Contract.Requires(IsUncompressed);
+
+            if (!IsCompressed)
             {
-                RLE rle = new RLE(0, Uncompressed[0]);
-
-                for (int i = 1; i < Uncompressed.Length; ++i)
-                {
-                    if (Uncompressed[i].Equals(rle.Voxel) && rle.Length != byte.MaxValue)
-                    {
-                        rle.Length++;
-                    }
-                    else
-                    {
-                        Compressed.Add(rle);
-                        rle.Voxel = Uncompressed[i];
-                        rle.Length = 0;
-                    }
-                }
-
-                Compressed.Add(rle);
+                Compressed.AddRange(Uncompressed);
             }
         }
 
-        public void Uncompress()
+        public void Uncompress(T[] data)
         {
-            if (!IsUncompressed)
-            {
-                Uncompressed = new T[Bounds.Width * Bounds.Height * Bounds.Depth];
+            Contract.Requires(!IsUncompressed);
+            Contract.Requires(data != null);
+            Contract.Requires(data.Length == Bounds.Width * Bounds.Height * Bounds.Depth);
 
-                int offset = 0;
+            Uncompressed = data;
+            Compressed.CopyTo(Uncompressed);
+        }
 
-                for (int i = 0; i < Compressed.Count; ++i)
-                {
-                    int length = Compressed[i].Length + 1;
-                    T voxel = Compressed[i].Voxel;
+        public T[] Flush()
+        {
+            Contract.Requires(IsUncompressed);
 
-                    for (int j = 0; j < length; ++j)
-                    {
-                        Uncompressed[offset++] = voxel;
-                    }
-                }
+            Compress();
 
-                System.Diagnostics.Debug.Assert(offset == Uncompressed.Length);
-            }
+            var data = Uncompressed;
+            Uncompressed = null;
+            return data;
         }
 
         public T Get(Point3l point)
         {
+            Contract.Requires(IsUncompressed);
+
             point = new Point3l(point.X - Bounds.X, point.Y - Bounds.Y, point.Z - Bounds.Z);
             long index = point.Y + point.X * Bounds.Height + point.Z * Bounds.Height * Bounds.Width;
             return Uncompressed[index];
@@ -112,6 +86,8 @@ namespace Ibasa.Spatial
 
         public void Set(Point3l point, T value)
         {
+            Contract.Requires(IsUncompressed);
+
             point = new Point3l(point.X - Bounds.X, point.Y - Bounds.Y, point.Z - Bounds.Z);
             long index = point.Y + point.X * Bounds.Height + point.Z * Bounds.Height * Bounds.Width;
             Uncompressed[index] = value;
