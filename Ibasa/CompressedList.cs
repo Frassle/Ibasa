@@ -8,7 +8,7 @@ namespace Ibasa
 {
     public sealed class CompressedList<T> where T : IEquatable<T>
     {
-        struct Run
+        public struct Run
         {
             public Run(byte length, T value)
             {
