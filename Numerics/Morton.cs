@@ -108,16 +108,16 @@ namespace Ibasa.Numerics
             return x;
         }
 
-        public static STuple<int,int> DecodeMorton2(int code)
+        public static Pair<int,int> DecodeMorton2(int code)
         {
-            return new STuple<int, int>(
+            return new Pair<int, int>(
                 (int)Compact1By1((uint)code >> 0),
                 (int)Compact1By1((uint)code >> 1));
         }
 
-        public static STuple<int, int, int> DecodeMorton3(int code)
+        public static Triple<int, int, int> DecodeMorton3(int code)
         {
-            return new STuple<int, int, int>(
+            return new Triple<int, int, int>(
                 (int)Compact1By2((uint)code >> 0),
                 (int)Compact1By2((uint)code >> 1),
                 (int)Compact1By2((uint)code >> 2));
