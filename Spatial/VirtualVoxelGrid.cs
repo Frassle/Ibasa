@@ -23,34 +23,37 @@ namespace Ibasa.Spatial
         }
 
         public Size3l PageSize { get; private set; }
-        public int Residency { get; set; }
+        public int Residency { get; private set; }
 
         Dictionary<Point3l, Page> Pages = new Dictionary<Point3l, Page>();
         ulong Timestamp = 0;
         Page LastPage;
         Point3l LastChunk = new Point3l(long.MaxValue, long.MaxValue, long.MaxValue);
 
+        List<Page> UncompressedCache;
+
         public VirtualVoxelGrid(int pageSize = 16)
         {
             PageSize = new Size3l(pageSize, pageSize, pageSize);
-            Residency = 16;
+            Residency = 32;
+            UncompressedCache = new List<Page>();
         }
 
         public T this[Point3l point]
         {
             get
             {
-                var chunk = GetChunk(point);
+                var chunk = GetUncompressedChunk(point);
                 return chunk[point];
             }
             set
             {
-                var chunk = GetChunk(point);
+                var chunk = GetUncompressedChunk(point);
                 chunk[point] = value;
             }
         }
 
-        public VoxelChunk<T> GetChunk(Point3l point)
+        Page GetPage(Point3l point)
         {
             Point3l chunk = new Point3l(
                 Functions.Divide(point.X, PageSize.Width) * PageSize.Width,
@@ -59,41 +62,61 @@ namespace Ibasa.Spatial
 
             if (LastChunk == chunk)
             {
-                return LastPage.Voxels;
+                return LastPage;
             }
             LastChunk = chunk;
 
             Page page;
             if (Pages.TryGetValue(chunk, out page))
             {
-                page.Timestamp++;
-
-                LastPage = page;
-                return page.Voxels;
+                page.Timestamp = Timestamp++;
             }
             else
             {
                 page = new Page(new VoxelChunk<T>(new Boxl(chunk, PageSize)), Timestamp++);
                 Pages.Add(chunk, page);
+            }
 
-                if (Pages.Count >= 8 * 8 * 8)
+            LastPage = page;
+            return page;
+        }
+
+        public VoxelChunk<T> GetChunk(Point3l point)
+        {
+            var page = GetPage(point);
+            return page.Voxels;
+        }
+
+        public VoxelChunk<T> GetUncompressedChunk(Point3l point)
+        {
+            var page = GetPage(point);
+
+            if (!page.Voxels.IsUncompressed)
+            {
+                if (UncompressedCache.Count == Residency)
                 {
-                    Point3l key = Point3l.Zero;
+                    int index = -1;
                     var timestamp = ulong.MaxValue;
-                    foreach (var pair in Pages)
+                    for(int i=0; i < UncompressedCache.Count; ++i)
                     {
-                        if (pair.Value.Timestamp <= timestamp)
+                        if (UncompressedCache[i].Timestamp <= timestamp)
                         {
-                            timestamp = pair.Value.Timestamp;
-                            key = pair.Key;
+                            index = i;
                         }
                     }
-                    Pages.Remove(key);
-                }
 
-                LastPage = page;
-                return page.Voxels;
+                    var data = UncompressedCache[index].Voxels.Flush();
+                    page.Voxels.Uncompress(data);
+                    UncompressedCache[index] = page;
+                }
+                else
+                {
+                    page.Voxels.Uncompress(new T[PageSize.Width * PageSize.Height * PageSize.Depth]);
+                    UncompressedCache.Add(page);
+                }
             }
+
+            return page.Voxels;
         }
     }
 }
