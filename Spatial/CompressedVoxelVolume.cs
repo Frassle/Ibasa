@@ -7,7 +7,7 @@ using System.Diagnostics.Contracts;
 
 namespace Ibasa.Spatial
 {
-    public sealed class CompressedVoxelVolume<T> where T : IEquatable<T>
+    public sealed class CompressedVoxelVolume<T> : IVoxelVolume<T> where T : IEquatable<T>
     {
         public Boxl Bounds { get; private set; }
         public CompressedList<T> Compressed { get; private set; }
