@@ -23,20 +23,24 @@ namespace Ibasa.Spatial
         }
 
         public Size3l PageSize { get; private set; }
-        public int Residency { get; private set; }
+        public int Residency { get { return UncompressedCache.Capacity; } }
 
         Dictionary<Point3l, Page> Pages = new Dictionary<Point3l, Page>();
         ulong Timestamp = 0;
         Page LastPage;
         Point3l LastChunk = new Point3l(long.MaxValue, long.MaxValue, long.MaxValue);
 
-        List<Page> UncompressedCache;
+        Ibasa.Collections.Cache<Page> UncompressedCache;
 
         public VirtualVoxelGrid(int pageSize = 16)
         {
             PageSize = new Size3l(pageSize, pageSize, pageSize);
-            Residency = 32;
-            UncompressedCache = new List<Page>();
+            UncompressedCache = new Collections.Cache<Page>(Residency, EvictPage);
+        }
+
+        static bool EvictPage(Page current, Page candidate)
+        {
+            return candidate.Timestamp < current.Timestamp;
         }
 
         public T this[Point3l point]
@@ -93,27 +97,18 @@ namespace Ibasa.Spatial
 
             if (!page.Voxels.IsUncompressed)
             {
-                if (UncompressedCache.Count == Residency)
-                {
-                    int index = -1;
-                    var timestamp = ulong.MaxValue;
-                    for(int i=0; i < UncompressedCache.Count; ++i)
-                    {
-                        if (UncompressedCache[i].Timestamp <= timestamp)
-                        {
-                            index = i;
-                        }
-                    }
+                var evict = UncompressedCache.Add(page);
 
-                    var data = UncompressedCache[index].Voxels.Flush();
-                    page.Voxels.Uncompress(data);
-                    UncompressedCache[index] = page;
+                T[] data;
+                if (evict == null)
+                {
+                    data = evict.Voxels.Flush();
                 }
                 else
                 {
-                    page.Voxels.Uncompress(new T[PageSize.Width * PageSize.Height * PageSize.Depth]);
-                    UncompressedCache.Add(page);
+                    data = new T[PageSize.Width * PageSize.Height * PageSize.Depth];
                 }
+                page.Voxels.Uncompress(data);
             }
 
             return page.Voxels;
