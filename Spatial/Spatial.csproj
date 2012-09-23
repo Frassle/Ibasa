@@ -44,7 +44,6 @@
     <Compile Include="OctreeVoxelVolume.cs" />
     <Compile Include="VirtualVoxelGrid.cs" />
     <Compile Include="DenseVoxelVolume.cs" />
-    <Compile Include="VoxelOctree.cs" />
     <Compile Include="CompressedVoxelVolume.cs" />
     <Compile Include="IVoxelVolume.cs" />
   </ItemGroup>
