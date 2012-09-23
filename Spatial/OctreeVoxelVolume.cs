@@ -159,17 +159,25 @@ namespace Ibasa.Spatial
             get
             {
                 Contract.Requires(Box.Contains(Bounds, point));
-
-                return Root.Get(Bounds, point);
+                return Get(point);
             }
             set
             {
                 Contract.Requires(Box.Contains(Bounds, point));
-
-                Root.Set(Bounds, point, value);
+                Set(point, value);
             }
         }
 
-        
+        public T Get(Point3l point)
+        {
+            Contract.Requires(Box.Contains(Bounds, point));
+            return Root.Get(Bounds, point);
+        }
+
+        public void Set(Point3l point, T value)
+        {
+            Contract.Requires(Box.Contains(Bounds, point));
+            Root.Set(Bounds, point, value);
+        }
     }
 }
