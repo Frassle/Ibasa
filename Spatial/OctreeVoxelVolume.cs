@@ -8,7 +8,7 @@ using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.Spatial
 {
-    public class SparseVoxelOctree<T> where T : IEquatable<T>
+    public class OctreeVoxelVolume<T> : IVoxelVolume<T> where T : IEquatable<T>
     {
         public struct Node
         {
@@ -144,7 +144,7 @@ namespace Ibasa.Spatial
         Node Root;
         public Boxl Bounds { get; private set; }
 
-        public SparseVoxelOctree(Boxl bounds)
+        public OctreeVoxelVolume(Boxl bounds)
         {
             Contract.Requires(Functions.IsPowerOf2(bounds.Width));
             Contract.Requires(Functions.IsPowerOf2(bounds.Height));
@@ -152,7 +152,7 @@ namespace Ibasa.Spatial
             Contract.Requires(bounds.Width == bounds.Height && bounds.Height == bounds.Depth);
 
             Bounds = bounds;
-        }       
+        }
 
         public T this[Point3l point]
         {
