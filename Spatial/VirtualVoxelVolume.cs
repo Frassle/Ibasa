@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ibasa.Spatial
 {
-    public abstract class VirtualVoxelGrid<T> where T : IEquatable<T>
+    public abstract class VirtualVoxelVolume<T> where T : IEquatable<T>
     {
         class Page
         {
@@ -33,7 +33,7 @@ namespace Ibasa.Spatial
 
         Ibasa.Collections.Cache<Page> UncompressedCache;
 
-        public VirtualVoxelGrid(int pageSize = 16, int uncompressedCapacity = 32, int capacity = 1024)
+        public VirtualVoxelVolume(int pageSize = 16, int uncompressedCapacity = 32, int capacity = 1024)
         {
             PageSize = new Size3l(pageSize, pageSize, pageSize);
             UncompressedCache = new Collections.Cache<Page>(uncompressedCapacity, EvictPage);

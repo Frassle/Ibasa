@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OctreeVoxelVolume.cs" />
-    <Compile Include="VirtualVoxelGrid.cs" />
+    <Compile Include="VirtualVoxelVolume.cs" />
     <Compile Include="DenseVoxelVolume.cs" />
     <Compile Include="CompressedVoxelVolume.cs" />
     <Compile Include="IVoxelVolume.cs" />
