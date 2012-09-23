@@ -8,22 +8,23 @@ using System.Threading.Tasks;
 
 namespace Ibasa.Spatial
 {
-    public sealed class VirtualVoxelGrid<T> where T : IEquatable<T>
+    public abstract class VirtualVoxelGrid<T> where T : IEquatable<T>
     {
         class Page
         {
-            public Page(VoxelChunk<T> voxels, ulong timestamp)
+            public Page(CompressedVoxelVolume<T> voxels, ulong timestamp)
             {
                 Voxels = voxels;
                 Timestamp = timestamp;
             }
 
-            public VoxelChunk<T> Voxels;
+            public CompressedVoxelVolume<T> Voxels;
             public ulong Timestamp;
         }
 
         public Size3l PageSize { get; private set; }
-        public int Residency { get { return UncompressedCache.Capacity; } }
+        public int Capacity { get; private set; }
+        public int UncompressedCapacity { get { return UncompressedCache.Capacity; } private set { UncompressedCache.Capacity = value; } }
 
         Dictionary<Point3l, Page> Pages = new Dictionary<Point3l, Page>();
         ulong Timestamp = 0;
@@ -32,10 +33,11 @@ namespace Ibasa.Spatial
 
         Ibasa.Collections.Cache<Page> UncompressedCache;
 
-        public VirtualVoxelGrid(int pageSize = 16)
+        public VirtualVoxelGrid(int pageSize = 16, int uncompressedCapacity = 32, int capacity = 1024)
         {
             PageSize = new Size3l(pageSize, pageSize, pageSize);
-            UncompressedCache = new Collections.Cache<Page>(Residency, EvictPage);
+            UncompressedCache = new Collections.Cache<Page>(uncompressedCapacity, EvictPage);
+            Capacity = capacity;
         }
 
         static bool EvictPage(Page current, Page candidate)
@@ -47,14 +49,24 @@ namespace Ibasa.Spatial
         {
             get
             {
-                var chunk = GetUncompressedChunk(point);
-                return chunk[point];
+                return Get(point);
             }
             set
             {
-                var chunk = GetUncompressedChunk(point);
-                chunk[point] = value;
+                Set(point, value);
             }
+        }
+
+        public T Get(Point3l point)
+        {
+            var chunk = GetUncompressedChunk(point);
+            return chunk[point];
+        }
+
+        public void Set(Point3l point, T value)
+        {
+            var chunk = GetUncompressedChunk(point);
+            chunk[point] = value;
         }
 
         Page GetPage(Point3l point)
@@ -77,21 +89,42 @@ namespace Ibasa.Spatial
             }
             else
             {
-                page = new Page(new VoxelChunk<T>(new Boxl(chunk, PageSize)), Timestamp++);
+                if (Pages.Count == Capacity)
+                {
+                    var enumerator = Pages.GetEnumerator();
+                    if (enumerator.MoveNext())
+                    {
+                        KeyValuePair<Point3l, Page> evict = enumerator.Current;
+
+                        while (enumerator.MoveNext())
+                        {
+                            if (enumerator.Current.Value.Timestamp < evict.Value.Timestamp)
+                            {
+                                evict = enumerator.Current;
+                            }
+                        }
+
+                        DataOverflow(evict.Value.Voxels);
+                        Pages.Remove(evict.Key);
+                    }
+                }
+
+                page = new Page(new CompressedVoxelVolume<T>(new Boxl(chunk, PageSize)), Timestamp++);
                 Pages.Add(chunk, page);
+                DataRequired(page.Voxels);
             }
 
             LastPage = page;
             return page;
         }
 
-        public VoxelChunk<T> GetChunk(Point3l point)
+        public CompressedVoxelVolume<T> GetChunk(Point3l point)
         {
             var page = GetPage(point);
             return page.Voxels;
         }
 
-        public VoxelChunk<T> GetUncompressedChunk(Point3l point)
+        public CompressedVoxelVolume<T> GetUncompressedChunk(Point3l point)
         {
             var page = GetPage(point);
 
@@ -113,5 +146,8 @@ namespace Ibasa.Spatial
 
             return page.Voxels;
         }
+
+        protected abstract void DataRequired(CompressedVoxelVolume<T> chunk);
+        protected abstract void DataOverflow(CompressedVoxelVolume<T> chunk);
     }
 }
