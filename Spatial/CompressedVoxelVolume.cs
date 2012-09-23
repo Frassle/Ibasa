@@ -7,7 +7,7 @@ using System.Diagnostics.Contracts;
 
 namespace Ibasa.Spatial
 {
-    public sealed class VoxelChunk<T> where T : IEquatable<T>
+    public sealed class CompressedVoxelVolume<T> where T : IEquatable<T>
     {
         public Boxl Bounds { get; private set; }
         public CompressedList<T> Compressed { get; private set; }
@@ -15,7 +15,7 @@ namespace Ibasa.Spatial
         public bool IsUncompressed { get { return Uncompressed != null; } }
         public bool IsCompressed { get { return Compressed.Count != 0; } }
 
-        public VoxelChunk(Boxl bounds)
+        public CompressedVoxelVolume(Boxl bounds)
         {
             Bounds = bounds;
             Compressed = new CompressedList<T>();
