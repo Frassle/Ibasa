@@ -6,7 +6,7 @@ using System.Diagnostics.Contracts;
 
 namespace Ibasa
 {
-    public sealed class CompressedList<T> where T : IEquatable<T>
+    public sealed class CompressedList<T> : IEnumerable<T> where T : IEquatable<T>
     {
         public struct Run
         {
@@ -114,5 +114,73 @@ namespace Ibasa
             CopyTo(data);
             return data;
         }
+
+        #region IEnumerable
+        public struct Enumerator : IEnumerator<T>
+        {
+            CompressedList<T> list;
+            int index;
+            int length;
+
+            internal Enumerator(CompressedList<T> list)
+            {
+                this.list = list;
+                this.index = -1;
+                this.length = 0;
+            }
+
+            public bool MoveNext()
+            {
+                --length;
+                if (length < 0)
+                {
+                    ++index;
+                    if (index < list.Runs.Count)
+                    {
+                        length = list.Runs[index].Length;
+                    }
+                }
+                return index < list.Runs.Count;
+            }
+
+            public T Current
+            {
+                get
+                {
+                    return list.Runs[index].Value;
+                }
+            }
+
+            object System.Collections.IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
+            void IDisposable.Dispose()
+            {
+
+            }
+
+            void System.Collections.IEnumerator.Reset()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Enumerator GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        #endregion
     }
 }
