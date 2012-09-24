@@ -76,7 +76,7 @@ namespace Ibasa.Spatial
                 var evict = UncompressedCache.Add(page);
 
                 T[] data;
-                if (evict == null)
+                if (evict != null)
                 {
                     data = evict.Voxels.Flush();
                 }
