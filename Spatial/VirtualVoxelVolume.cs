@@ -69,6 +69,25 @@ namespace Ibasa.Spatial
             chunk[point] = value;
         }
 
+        void DecompressPage(Page page)
+        {
+            if (!page.Voxels.IsUncompressed)
+            {
+                var evict = UncompressedCache.Add(page);
+
+                T[] data;
+                if (evict == null)
+                {
+                    data = evict.Voxels.Flush();
+                }
+                else
+                {
+                    data = new T[PageSize.Width * PageSize.Height * PageSize.Depth];
+                }
+                page.Voxels.Decompress(data);
+            }
+        }
+
         Page GetPage(Point3l point)
         {
             Point3l chunk = new Point3l(
@@ -111,6 +130,7 @@ namespace Ibasa.Spatial
 
                 page = new Page(new CompressedVoxelVolume<T>(new Boxl(chunk, PageSize)), Timestamp++);
                 Pages.Add(chunk, page);
+                DecompressPage(page);
                 DataRequired(page.Voxels);
             }
 
@@ -127,23 +147,7 @@ namespace Ibasa.Spatial
         public CompressedVoxelVolume<T> GetUncompressedChunk(Point3l point)
         {
             var page = GetPage(point);
-
-            if (!page.Voxels.IsUncompressed)
-            {
-                var evict = UncompressedCache.Add(page);
-
-                T[] data;
-                if (evict == null)
-                {
-                    data = evict.Voxels.Flush();
-                }
-                else
-                {
-                    data = new T[PageSize.Width * PageSize.Height * PageSize.Depth];
-                }
-                page.Voxels.Uncompress(data);
-            }
-
+            DecompressPage(page);
             return page.Voxels;
         }
 

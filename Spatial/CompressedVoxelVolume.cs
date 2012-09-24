@@ -54,7 +54,7 @@ namespace Ibasa.Spatial
             }
         }
 
-        public void Uncompress(T[] data)
+        public void Decompress(T[] data)
         {
             Contract.Requires(!IsUncompressed);
             Contract.Requires(data != null);
