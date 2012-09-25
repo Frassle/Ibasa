@@ -161,6 +161,74 @@ namespace Ibasa
             }
         }
 
+        public int IndexOf(T value, int index, int count)
+        {
+            int index_of = 0;
+            int index_end = index + count;
+            foreach (var run in Runs)
+            {
+                if (index_of < index)
+                {
+                    index_of += run.Length + 1;
+                    continue;
+                }
+                if (index_of >= index_end)
+                {
+                    break;
+                }
+
+                if (run.Value.Equals(value))
+                {
+                    return index_of;
+                }
+                else
+                {
+                    index_of += run.Length + 1;
+                }
+            }
+            return -1;
+        }
+
+        public int IndexOf(T value, int index)
+        {
+            int index_of = 0;
+            foreach (var run in Runs)
+            {
+                if (index_of < index)
+                {
+                    index_of += run.Length + 1;
+                    continue;
+                }
+
+                if (run.Value.Equals(value))
+                {
+                    return index_of;
+                }
+                else
+                {
+                    index_of += run.Length + 1;
+                }
+            }
+            return -1;
+        }
+
+        public int IndexOf(T value)
+        {
+            int index_of = 0;
+            foreach(var run in Runs)
+            {
+                if (run.Value.Equals(value))
+                {
+                    return index_of;
+                }
+                else
+                {
+                    index_of += run.Length + 1;
+                }
+            }
+            return -1;
+        }
+
         public void Clear()
         {
             Runs.Clear();
