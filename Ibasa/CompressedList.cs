@@ -161,6 +161,16 @@ namespace Ibasa
             }
         }
 
+        public bool Remove(T value)
+        {
+            int index = IndexOf(value);
+            if (index != -1)
+            {
+                RemoveAt(index);
+            }
+            return index != -1;
+        }
+
         public int IndexOf(T value, int index, int count)
         {
             int index_of = 0;
