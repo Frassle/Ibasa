@@ -43,19 +43,44 @@ namespace Ibasa
         {
             get
             {
-                int i = 0;
-                while (index > Runs[i].Length)
-                {
-                    index -= Runs[i].Length + 1;
-                    ++i;
-                }
-
-                return Runs[i].Value;
+                int run, offset;
+                RunAndOffset(index, out run, out offset);
+                return Runs[run].Value;
             }
             set
             {
-                throw new NotImplementedException();
+                int run, offset;
+                RunAndOffset(index, out run, out offset);
+
+                if(!Runs[run].Value.Equals(value))
+                {
+                    var before = offset;
+                    var after = Runs[run].Length - offset;
+                    var val = Runs[run].Value;
+
+                    Runs[run] = new Run(0, value);
+
+                    if (before != 0)
+                    {
+                        Runs.Insert(run, new Run((byte)(before - 1), val));
+                    }
+                    if (after != 0)
+                    {
+                        Runs.Insert(run + 1, new Run((byte)(after - 1), val));
+                    }                    
+                }
             }
+        }
+
+        private void RunAndOffset(int index, out int run, out int offset)
+        {
+            run = 0;
+            while (index > Runs[run].Length)
+            {
+                index -= Runs[run].Length + 1;
+                ++run;
+            }
+            offset = index;
         }
 
         public void Add(T value)
