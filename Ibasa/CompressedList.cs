@@ -85,19 +85,18 @@ namespace Ibasa
 
         public void Add(T value)
         {
-            // See if we can add it to the last run
-            if (Runs.Count > 0)
-            {
-                var last = Runs[Runs.Count - 1];
-                if (last.Length != byte.MaxValue && last.Value.Equals(value))
-                {
-                    Runs[Runs.Count - 1] = new Run((byte)(last.Length + 1), last.Value);
-                    return;
-                }
-            }
+            var last = Runs.Count - 1;
 
-            // Else add new 1 element run
-            Runs.Add(new Run(0, value));
+            // See if we can add it to the last run
+            if (Runs.Count > 0 && Runs[last].Length != byte.MaxValue && Runs[last].Value.Equals(value))
+            {
+                Runs[last] = new Run((byte)(Runs[last].Length + 1), Runs[last].Value);
+            }
+            else
+            {
+                // Else add new 1 element run
+                Runs.Add(new Run(0, value));
+            }
         }
 
         public void AddRange(IEnumerable<T> collection)
