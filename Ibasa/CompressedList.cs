@@ -146,6 +146,21 @@ namespace Ibasa
             }
         }
 
+        public void RemoveAt(int index)
+        {
+            int run, offset;
+            RunAndOffset(index, out run, out offset);
+
+            if (Runs[run].Length != 0)
+            {
+                Runs[run] = new Run((byte)(Runs[run].Length - 1), Runs[run].Value);
+            }
+            else
+            {
+                Runs.RemoveAt(run);
+            }
+        }
+
         public void Clear()
         {
             Runs.Clear();
