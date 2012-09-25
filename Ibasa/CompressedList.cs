@@ -110,6 +110,42 @@ namespace Ibasa
             }
         }
 
+        public void Insert(int index, T value)
+        {
+            int run, offset;
+            RunAndOffset(index, out run, out offset);
+
+            if (Runs[run].Length != byte.MaxValue && Runs[run].Value.Equals(value))
+            {
+                Runs[run] = new Run((byte)(Runs[run].Length + 1), Runs[run].Value);
+            }
+            else if(offset == 0 && run > 0 && Runs[run - 1].Length != byte.MaxValue && Runs[run - 1].Value.Equals(value))
+            {
+                Runs[run - 1] = new Run((byte)(Runs[run - 1].Length + 1), Runs[run - 1].Value);
+            }
+            else if (offset == Runs[run].Length && run < Runs.Count - 1 && Runs[run + 1].Length != byte.MaxValue && Runs[run + 1].Value.Equals(value))
+            {
+                Runs[run + 1] = new Run((byte)(Runs[run + 1].Length + 1), Runs[run + 1].Value);
+            }
+            else
+            {
+                var before = offset;
+                var after = (Runs[run].Length + 1) - offset;
+                var val = Runs[run].Value;
+
+                Runs[run] = new Run(0, value);
+
+                if (before != 0)
+                {
+                    Runs.Insert(run, new Run((byte)(before - 1), val));
+                }
+                if (after != 0)
+                {
+                    Runs.Insert(run + 1, new Run((byte)(after - 1), val));
+                }
+            }
+        }
+
         public void Clear()
         {
             Runs.Clear();
