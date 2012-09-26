@@ -28,6 +28,10 @@ namespace Ibasa.Numerics
         /// The speed of light in a vacuum, in meters per second.
         /// </summary>
         public const double C = 299792458.0;
+        /// <summary>
+        /// The gravitational constant, in meters cubed per kilogram second squared.
+        /// </summary>
+        public const double G = 0.00000000006673848;
 
         /// <summary>
         /// Represents the natural logarithmic base, specified by the constant, e.
@@ -47,5 +51,9 @@ namespace Ibasa.Numerics
         /// The speed of light in a vacuum, in meters per second.
         /// </summary>
         public const float Cf = (float)C;
+        /// <summary>
+        /// The gravitational constant, in meters cubed per kilogram second squared.
+        /// </summary>
+        public const double Gf = (float)G;
     }
 }
