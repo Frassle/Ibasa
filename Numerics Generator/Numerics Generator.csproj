@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Antiscalar.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Component.cs" />
@@ -55,8 +54,6 @@
     <Compile Include="Ray.cs" />
     <Compile Include="Sphere.cs" />
     <Compile Include="Rectangle.cs" />
-    <Compile Include="Exterior.cs" />
-    <Compile Include="Grade.cs" />
     <Compile Include="Shapes.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Point.cs" />

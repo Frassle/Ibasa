@@ -11,34 +11,6 @@ namespace Numerics_Generator
         {
             string root = System.IO.Path.Combine("..", "..", "..", "Numerics");
 
-            //foreach (int dimension in Exterior.Sizes)
-            //{
-            //    foreach (var type in Exterior.Types)
-            //    {
-            //        foreach (int grade in Enumerable.Range(1, Grade.Grades(dimension) - 2))
-            //        {
-            //            var exterior = new Exterior(type, dimension, new Grade(grade, dimension));
-            //            exterior.Generate();
-
-            //            var path = System.IO.Path.Combine(root, "Exterior", exterior.Name + ".cs");
-            //            System.IO.File.WriteAllText(path, exterior.Text);
-            //            Console.WriteLine("Done - " + exterior.Name);
-            //        }
-            //    }
-            //}
-
-            //foreach (int dimension in Exterior.Sizes)
-            //{
-            //    foreach (var type in Exterior.Types)
-            //    {
-            //        var antiscalar = new Antiscalar(type, dimension);
-            //        antiscalar.Generate();
-
-            //        var path = System.IO.Path.Combine(root, "Exterior", antiscalar.Name + ".cs");
-            //        System.IO.File.WriteAllText(path, antiscalar.Text);
-            //        Console.WriteLine("Done - " + antiscalar.Name);
-            //    }
-            //}
             foreach (var type in Color.Types)
             {
                 var color = new Color(type);
