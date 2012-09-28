@@ -2655,7 +2655,6 @@ namespace Ibasa.Numerics
             return Math.IEEERemainder(x, y);
         }
 
-        #region Division
         /// <summary>
         /// Floored division.
         /// </summary>
@@ -2663,7 +2662,7 @@ namespace Ibasa.Numerics
         /// <param name="divisor">The divisor.</param>
         /// <returns>The quotient.</returns>
         [Pure]
-        public static int Floor(int dividend, int divisor)
+        public static int FloorDivide(int dividend, int divisor)
         {
             Contract.Requires(divisor != 0, "divisor equals zero.");
 
@@ -2679,7 +2678,7 @@ namespace Ibasa.Numerics
         /// <param name="divisor">The divisor.</param>
         /// <returns>The quotient.</returns>
         [Pure]
-        public static long Floor(long dividend, long divisor)
+        public static long FloorDivide(long dividend, long divisor)
         {
             Contract.Requires(divisor != 0, "divisor equals zero.");
 
@@ -2700,7 +2699,7 @@ namespace Ibasa.Numerics
         {
             Contract.Requires(divisor != 0, "divisor equals zero.");
 
-            return Math.Sign(divisor) * Floor(dividend, Abs(divisor));
+            return Math.Sign(divisor) * FloorDivide(dividend, Abs(divisor));
         }
         /// <summary>
         /// Euclidean division.
@@ -2713,8 +2712,9 @@ namespace Ibasa.Numerics
         {
             Contract.Requires(divisor != 0, "divisor equals zero.");
 
-            return Math.Sign(divisor) * Floor(dividend, Abs(divisor));
+            return Math.Sign(divisor) * FloorDivide(dividend, Abs(divisor));
         }
+
         /// <summary>
         /// Euclidean modulus.
         /// </summary>
@@ -2785,7 +2785,6 @@ namespace Ibasa.Numerics
                 q = Functions.Ceiling(dividend / divisor);
             return dividend - (divisor * q);
         }
-        #endregion
 
         /// <summary>
         /// Calculates the greatest common divisor of two numbers.
