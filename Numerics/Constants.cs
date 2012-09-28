@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Ibasa.Numerics
 {
-		/// <summary>
-		/// Provides common mathematical and physical constants.
-		/// </summary>
+	/// <summary>
+	/// Provides common mathematical and physical constants.
+	/// </summary>
     public static class Constants
     {
         /// <summary>
