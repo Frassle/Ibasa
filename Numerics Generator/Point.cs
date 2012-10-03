@@ -747,6 +747,23 @@ namespace Numerics_Generator
             WriteLine("return Vector.AbsoluteSquared(value2 - value1);");
             Dedent();
             WriteLine("}");
+            {
+                var abs = Components.Select(component => string.Format("Functions.Abs(value2.{0} - value1.{0})", component.Name));
+                var sum = string.Join("+", abs);
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Returns the manhatten distance between two points.");
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"value1\">The first point.</param>");
+                WriteLine("/// <param name=\"value2\">The second point.</param>");
+                WriteLine("/// <returns>The manhatten distance between value1 and value2.</returns>");
+                WriteLine("public static {0} ManhattenDistance({1} value1, {1} value2)", result.Type, Name);
+                WriteLine("{");
+                Indent();
+                WriteLine("return {0};", sum);
+                Dedent();
+                WriteLine("}");
+            }
             WriteLine("#endregion");
             #endregion
 

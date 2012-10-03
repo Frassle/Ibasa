@@ -553,6 +553,16 @@ namespace Ibasa.Numerics.Geometry
 		{
 			return Vector.AbsoluteSquared(value2 - value1);
 		}
+		/// <summary>
+		/// Returns the manhatten distance between two points.
+		/// </summary>
+		/// <param name="value1">The first point.</param>
+		/// <param name="value2">The second point.</param>
+		/// <returns>The manhatten distance between value1 and value2.</returns>
+		public static int ManhattenDistance(Point2i value1, Point2i value2)
+		{
+			return Functions.Abs(value2.X - value1.X)+Functions.Abs(value2.Y - value1.Y);
+		}
 		#endregion
 		#region Test
 		/// <summary>
