@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphics", "Graphics\Graphi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{A61DDA63-FF55-4393-8390-D3B94911B31E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packaging", "Packaging\Packaging.csproj", "{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{A61DDA63-FF55-4393-8390-D3B94911B31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A61DDA63-FF55-4393-8390-D3B94911B31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A61DDA63-FF55-4393-8390-D3B94911B31E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
