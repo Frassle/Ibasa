@@ -143,6 +143,7 @@ namespace Numerics_Generator
             WriteLine("/// Gets the z-coordinate of the back face of this box.");
             WriteLine("/// </summary>");
             WriteLine("public {0} Back {{ get {{ return Z + Depth; }} }}", Type);
+
             WriteLine("/// <summary>");
             WriteLine("/// Gets the coordinates of the center of this box.");
             WriteLine("/// </summary>");
@@ -151,10 +152,21 @@ namespace Numerics_Generator
             WriteLine("/// Gets the size of this box.");
             WriteLine("/// </summary>");
             WriteLine("public Size3{0} Size {{ get {{ return new Size3{0}(Width, Height, Depth); }} }}", Type.Suffix);
+
             WriteLine("/// <summary>");
             WriteLine("/// Gets the coordinates of the front-lower-left corner of this box.");
             WriteLine("/// </summary>");
             WriteLine("public Point3{0} Location {{ get {{ return new Point3{0}(X, Y, Z); }} }}", Type.Suffix);
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Gets the coordinates of the minimum corner of this box.");
+            WriteLine("/// </summary>");
+            WriteLine("public Point3{0} Minimum {{ get {{ return new Point3{0}(Left, Bottom, Front); }} }}", Type.Suffix);
+            WriteLine("/// <summary>");
+            WriteLine("/// Gets the coordinates of the maximum corner of this box.");
+            WriteLine("/// </summary>");
+            WriteLine("public Point3{0} Maximum {{ get {{ return new Point3{0}(Right, Top, Back); }} }}", Type.Suffix);
+
             WriteLine("/// <summary>");
             WriteLine("/// Gets the corners of this box.");
             WriteLine("/// </summary>");

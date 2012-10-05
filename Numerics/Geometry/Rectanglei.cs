@@ -68,6 +68,14 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		public Point2i Location { get { return new Point2i(X, Y); } }
 		/// <summary>
+		/// Gets the coordinates of the minimum corner of this rectangle.
+		/// </summary>
+		public Point2i Minimum { get { return new Point2i(Left, Bottom); } }
+		/// <summary>
+		/// Gets the coordinates of the maximum corner of this rectangle.
+		/// </summary>
+		public Point2i Maximum { get { return new Point2i(Right, Top); } }
+		/// <summary>
 		/// Gets the corners of this rectangle.
 		/// </summary>
 		public Point2i[] Corners

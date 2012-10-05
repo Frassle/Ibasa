@@ -84,6 +84,14 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		public Point3i Location { get { return new Point3i(X, Y, Z); } }
 		/// <summary>
+		/// Gets the coordinates of the minimum corner of this box.
+		/// </summary>
+		public Point3i Minimum { get { return new Point3i(Left, Bottom, Front); } }
+		/// <summary>
+		/// Gets the coordinates of the maximum corner of this box.
+		/// </summary>
+		public Point3i Maximum { get { return new Point3i(Right, Top, Back); } }
+		/// <summary>
 		/// Gets the corners of this box.
 		/// </summary>
 		public Point3i[] Corners

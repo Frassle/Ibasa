@@ -127,6 +127,7 @@ namespace Numerics_Generator
             WriteLine("/// Gets the x-coordinate of the right edge of this rectangle.");
             WriteLine("/// </summary>");
             WriteLine("public {0} Right {{ get {{ return X + Width; }} }}", Type);
+
             WriteLine("/// <summary>");
             WriteLine("/// Gets the coordinates of the center of this rectangle.");
             WriteLine("/// </summary>");
@@ -135,10 +136,21 @@ namespace Numerics_Generator
             WriteLine("/// Gets the size of this rectangle.");
             WriteLine("/// </summary>");
             WriteLine("public Size2{0} Size {{ get {{ return new Size2{0}(Width, Height); }} }}", Type.Suffix);
+
             WriteLine("/// <summary>");
             WriteLine("/// Gets the coordinates of the lower-left corner of this rectangle.");
             WriteLine("/// </summary>");
             WriteLine("public Point2{0} Location {{ get {{ return new Point2{0}(X, Y); }} }}", Type.Suffix);
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Gets the coordinates of the minimum corner of this rectangle.");
+            WriteLine("/// </summary>");
+            WriteLine("public Point2{0} Minimum {{ get {{ return new Point2{0}(Left, Bottom); }} }}", Type.Suffix);
+            WriteLine("/// <summary>");
+            WriteLine("/// Gets the coordinates of the maximum corner of this rectangle.");
+            WriteLine("/// </summary>");
+            WriteLine("public Point2{0} Maximum {{ get {{ return new Point2{0}(Right, Top); }} }}", Type.Suffix);
+
             WriteLine("/// <summary>");
             WriteLine("/// Gets the corners of this rectangle.");
             WriteLine("/// </summary>");
