@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Ibasa.Numerics.Geometry
@@ -784,24 +786,34 @@ namespace Ibasa.Numerics.Geometry
 		public static Point3f Sum(IEnumerable<Point3f> points, IEnumerable<float> weights)
 		{
 			Contract.Requires(weights.Sum() == 1.0);
-			var sum = Point3f.Zero;
+			float sumX = 0;
+			float sumY = 0;
+			float sumZ = 0;
 			var point = points.GetEnumerator();
 			var weight = weights.GetEnumerator();
 			while(point.MoveNext() && weight.MoveNext())
 			{
-				sum += (Vector3f)(point.Current * weight.Current);
+				var p = point.Current;
+				var w = weight.Current;
+				sumX += p.X * w;
+				sumY += p.Y * w;
+				sumZ += p.Z * w;
 			}
-			return sum;
+			return new Point3f(sumX, sumY, sumZ);
 		}
 		public static Point3f Sum(IEnumerable<Point3f> points, float weight)
 		{
 			Contract.Requires(weight * points.Count() == 1.0);
-			var sum = Point3f.Zero;
+			float sumX = 0;
+			float sumY = 0;
+			float sumZ = 0;
 			foreach (var point in points)
 			{
-				sum += (Vector3f)(point * weight);
+				sumX += point.X * weight;
+				sumY += point.Y * weight;
+				sumZ += point.Z * weight;
 			}
-			return sum;
+			return new Point3f(sumX, sumY, sumZ);
 		}
 		#endregion
 		#region Equatable

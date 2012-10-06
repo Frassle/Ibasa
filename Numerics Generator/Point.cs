@@ -34,8 +34,10 @@ namespace Numerics_Generator
         void Namespace()
         {
             WriteLine("using System;");
+            WriteLine("using System.Collections.Generic;");
             WriteLine("using System.Diagnostics.Contracts;");
             WriteLine("using System.Globalization;");
+            WriteLine("using System.Linq;");
             WriteLine("using System.Runtime.InteropServices;");
             WriteLine("");
             WriteLine("namespace Ibasa.Numerics.Geometry");
@@ -705,22 +707,29 @@ namespace Numerics_Generator
             // affine sums
             {
                 var real_point = new Point(Type.RealType, Dimension);
-                var real_vector = new Vector(Type.RealType, Dimension);
 
                 WriteLine("public static {0} Sum(IEnumerable<{1}> points, IEnumerable<{2}> weights)", real_point, Name, Type.RealType);
                 WriteLine("{");
                 Indent();
                 WriteLine("Contract.Requires(weights.Sum() == 1.0);");
-                WriteLine("var sum = {0}.Zero;", real_point);
+                foreach (var component in Components)
+                {
+                    WriteLine("{0} sum{1} = 0;", Type.RealType, component);
+                }
                 WriteLine("var point = points.GetEnumerator();");
                 WriteLine("var weight = weights.GetEnumerator();");
                 WriteLine("while(point.MoveNext() && weight.MoveNext())");
                 WriteLine("{");
                 Indent();
-                WriteLine("sum += ({0})(point.Current * weight.Current);", real_vector);
+                WriteLine("var p = point.Current;");
+                WriteLine("var w = weight.Current;");
+                foreach (var component in Components)
+                {
+                    WriteLine("sum{0} += p.{0} * w;", component);
+                }
                 Dedent();
                 WriteLine("}");
-                WriteLine("return sum;");
+                WriteLine("return new {0}({1});", real_point, string.Join(", ", Components.Select(c => string.Format("sum{0}", c))));
                 Dedent();
                 WriteLine("}");
 
@@ -728,14 +737,20 @@ namespace Numerics_Generator
                 WriteLine("{");
                 Indent();
                 WriteLine("Contract.Requires(weight * points.Count() == 1.0);");
-                WriteLine("var sum = {0}.Zero;", real_point);
+                foreach (var component in Components)
+                {
+                    WriteLine("{0} sum{1} = 0;", Type.RealType, component);
+                }
                 WriteLine("foreach (var point in points)");
                 WriteLine("{");
                 Indent();
-                WriteLine("sum += ({0})(point * weight);", real_vector);
+                foreach (var component in Components)
+                {
+                    WriteLine("sum{0} += point.{0} * weight;", component);
+                }
                 Dedent();
                 WriteLine("}");
-                WriteLine("return sum;");
+                WriteLine("return new {0}({1});", real_point, string.Join(", ", Components.Select(c => string.Format("sum{0}", c))));
                 Dedent();
                 WriteLine("}");
             }
