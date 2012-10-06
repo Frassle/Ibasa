@@ -781,6 +781,28 @@ namespace Ibasa.Numerics.Geometry
 		{
 			return new Point3f(point.X / scalar, point.Y / scalar, point.Z / scalar);
 		}
+		public static Point3f Sum(IEnumerable<Point3f> points, IEnumerable<float> weights)
+		{
+			Contract.Requires(weights.Sum() == 1.0);
+			var sum = Point3f.Zero;
+			var point = points.GetEnumerator();
+			var weight = weights.GetEnumerator();
+			while(point.MoveNext() && weight.MoveNext())
+			{
+				sum += (Vector3f)(point.Current * weight.Current);
+			}
+			return sum;
+		}
+		public static Point3f Sum(IEnumerable<Point3f> points, float weight)
+		{
+			Contract.Requires(weight * points.Count() == 1.0);
+			var sum = Point3f.Zero;
+			foreach (var point in points)
+			{
+				sum += (Vector3f)(point * weight);
+			}
+			return sum;
+		}
 		#endregion
 		#region Equatable
 		/// <summary>

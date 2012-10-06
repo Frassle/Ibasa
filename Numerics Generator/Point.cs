@@ -701,6 +701,44 @@ namespace Numerics_Generator
                 string.Join(", ", Components.Select(component => string.Format("point.{0} / scalar", component))));
             Dedent();
             WriteLine("}");
+
+            // affine sums
+            {
+                var real_point = new Point(Type.RealType, Dimension);
+                var real_vector = new Vector(Type.RealType, Dimension);
+
+                WriteLine("public static {0} Sum(IEnumerable<{1}> points, IEnumerable<{2}> weights)", real_point, Name, Type.RealType);
+                WriteLine("{");
+                Indent();
+                WriteLine("Contract.Requires(weights.Sum() == 1.0);");
+                WriteLine("var sum = {0}.Zero;", real_point);
+                WriteLine("var point = points.GetEnumerator();");
+                WriteLine("var weight = weights.GetEnumerator();");
+                WriteLine("while(point.MoveNext() && weight.MoveNext())");
+                WriteLine("{");
+                Indent();
+                WriteLine("sum += ({0})(point.Current * weight.Current);", real_vector);
+                Dedent();
+                WriteLine("}");
+                WriteLine("return sum;");
+                Dedent();
+                WriteLine("}");
+
+                WriteLine("public static {0} Sum(IEnumerable<{1}> points, {2} weight)", real_point, Name, Type.RealType);
+                WriteLine("{");
+                Indent();
+                WriteLine("Contract.Requires(weight * points.Count() == 1.0);");
+                WriteLine("var sum = {0}.Zero;", real_point);
+                WriteLine("foreach (var point in points)");
+                WriteLine("{");
+                Indent();
+                WriteLine("sum += ({0})(point * weight);", real_vector);
+                Dedent();
+                WriteLine("}");
+                WriteLine("return sum;");
+                Dedent();
+                WriteLine("}");
+            }
             WriteLine("#endregion");
             #endregion
 
@@ -783,7 +821,7 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
-            WriteLine("/// Determines whether all components of a point satisfy a condition."); 
+            WriteLine("/// Determines whether all components of a point satisfy a condition.");
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">A point.</param>");
             WriteLine("/// <param name=\"predicate\">A function to test each component for a condition.</param>");
@@ -863,7 +901,7 @@ namespace Numerics_Generator
             WriteLine("public static {0} Modulate({1} left, {1} right)", result, Name);
             WriteLine("{");
             Indent();
-            WriteLine("return new {0}({1});", result, 
+            WriteLine("return new {0}({1});", result,
                 string.Join(", ", Components.Select(component => string.Format("left.{0} * right.{0}", component))));
             Dedent();
             WriteLine("}");
@@ -876,7 +914,7 @@ namespace Numerics_Generator
             WriteLine("public static {0} Abs({0} value)", Name);
             WriteLine("{");
             Indent();
-            WriteLine("return new {0}({1});", Name, 
+            WriteLine("return new {0}({1});", Name,
                 string.Join(", ", Components.Select(component => string.Format("Functions.Abs(value.{0})", component))));
             Dedent();
             WriteLine("}");
@@ -919,11 +957,11 @@ namespace Numerics_Generator
             WriteLine("public static {0} Clamp({0} value, {0} min, {0} max)", Name);
             WriteLine("{");
             Indent();
-            WriteLine("return new {0}({1});", Name, 
+            WriteLine("return new {0}({1});", Name,
                 string.Join(", ", Components.Select(component => string.Format("Functions.Clamp(value.{0}, min.{0}, max.{0})", component))));
             Dedent();
             WriteLine("}");
-            if(Type.IsReal)
+            if (Type.IsReal)
             {
                 WriteLine("/// <summary>");
                 WriteLine("/// Constrains each component to the range 0 to 1.");
@@ -934,7 +972,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Saturate({0} value)", Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", Name, 
+                WriteLine("return new {0}({1});", Name,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Saturate(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
@@ -948,7 +986,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Ceiling({1} value)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Ceiling(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
@@ -962,7 +1000,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Floor({1} value)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Floor(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
@@ -975,7 +1013,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Truncate({1} value)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Truncate(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
@@ -988,7 +1026,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Fractional({1} value)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Fractional(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
@@ -1001,7 +1039,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Round({1} value)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Round(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
@@ -1015,7 +1053,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Round({1} value, int digits)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Round(value.{0}, digits)", component))));
                 Dedent();
                 WriteLine("}");
@@ -1029,7 +1067,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Round({1} value, MidpointRounding mode)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Round(value.{0}, mode)", component))));
                 Dedent();
                 WriteLine("}");
@@ -1044,7 +1082,7 @@ namespace Numerics_Generator
                 WriteLine("public static {0} Round({1} value, int digits, MidpointRounding mode)", result, Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", result, 
+                WriteLine("return new {0}({1});", result,
                     string.Join(", ", Components.Select(component => string.Format("Functions.Round(value.{0}, digits, mode)", component))));
                 Dedent();
                 WriteLine("}");
@@ -1063,7 +1101,7 @@ namespace Numerics_Generator
                 WriteLine("}");
             }
             WriteLine("#endregion");
-            #endregion 
+            #endregion
 
             #region Barycentric
             //if(Type.IsReal)
@@ -1093,7 +1131,7 @@ namespace Numerics_Generator
             #endregion
 
             #region Interpolation
-            if(Type.IsReal)
+            if (Type.IsReal)
             {
                 WriteLine("#region Interpolation");
                 WriteLine("/// <summary>");
@@ -1113,7 +1151,7 @@ namespace Numerics_Generator
                 WriteLine("#endregion");
             }
             #endregion
-    
+
             Dedent();
             WriteLine("}");
         }
