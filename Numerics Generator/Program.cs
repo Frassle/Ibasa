@@ -52,6 +52,12 @@ namespace Numerics_Generator
             foreach (var type in Shapes.Types)
             {
                 var rpath = System.IO.Path.Combine(root, "Geometry");
+
+                var line1 = new Line(type, 1);
+                line1.Generate();
+                System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, line1.Name + ".cs"), line1.Text);
+                Console.WriteLine("Done - " + line1.Name);
+
                 foreach (int dimension in Shapes.Sizes)
                 {
                     var point = new Point(type, dimension);
@@ -68,6 +74,11 @@ namespace Numerics_Generator
                     polygon.Generate();
                     System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, polygon.Name + ".cs"), polygon.Text);
                     Console.WriteLine("Done - " + polygon.Name);
+
+                    var line = new Line(type, dimension);
+                    line.Generate();
+                    System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, line.Name + ".cs"), line.Text);
+                    Console.WriteLine("Done - " + line.Name);
                 }
 
                 var rectangle = new Rectangle(type);
