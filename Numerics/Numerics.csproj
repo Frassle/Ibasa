@@ -134,6 +134,14 @@
     <Compile Include="Geometry\Point3f.cs" />
     <Compile Include="Geometry\Point3i.cs" />
     <Compile Include="Geometry\Point3l.cs" />
+    <Compile Include="Geometry\Polygon2d.cs" />
+    <Compile Include="Geometry\Polygon2f.cs" />
+    <Compile Include="Geometry\Polygon2i.cs" />
+    <Compile Include="Geometry\Polygon2l.cs" />
+    <Compile Include="Geometry\Polygon3d.cs" />
+    <Compile Include="Geometry\Polygon3f.cs" />
+    <Compile Include="Geometry\Polygon3i.cs" />
+    <Compile Include="Geometry\Polygon3l.cs" />
     <Compile Include="Geometry\Rayd.cs" />
     <Compile Include="Geometry\Rayf.cs" />
     <Compile Include="Geometry\Rectangled.cs" />

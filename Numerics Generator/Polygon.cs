@@ -40,8 +40,10 @@ namespace Numerics_Generator
         void Namespace()
         {
             WriteLine("using System;");
+            WriteLine("using System.Collections.Generic;");
             WriteLine("using System.Diagnostics.Contracts;");
             WriteLine("using System.Globalization;");
+            WriteLine("using System.Linq;");
             WriteLine("using System.Runtime.InteropServices;");
             WriteLine("");
             WriteLine("namespace Ibasa.Numerics.Geometry");
@@ -111,17 +113,70 @@ namespace Numerics_Generator
             WriteLine("#region Properties");
 
             WriteLine("/// <summary>");
-            WriteLine("/// Gets the coordinates of the center of this polygon.");
+            WriteLine("/// Returns the number of points that make up this polygon.");
             WriteLine("/// </summary>");
-            WriteLine("public {0} Center", Point);
+            WriteLine("/// <returns>The number of points that make up this polygon.</returns>");
+            WriteLine("public int Count");
             WriteLine("{");
             Indent();
             WriteLine("get");
             WriteLine("{");
             Indent();
-            WriteLine("return Points.");
+            WriteLine("return Points == null ? 0 : Points.Length;");
             Dedent();
             WriteLine("}");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Returns the indexed point of this polygon.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"index\">The index of the point.</param>");
+            WriteLine("/// <returns>The value of the indexed point.</returns>");
+            WriteLine("public {0} this[int index]", Point);
+            WriteLine("{");
+            Indent();
+            WriteLine("get");
+            WriteLine("{");
+            Indent();
+            WriteLine("if (index < 0 || index >= Count)");
+            WriteLine("{");
+            Indent();
+            WriteLine("throw new IndexOutOfRangeException(\"Index out of range.\");");
+            Dedent();
+            WriteLine("}");
+            WriteLine("return Points[index];");
+            Dedent();
+            WriteLine("}");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Gets the coordinates of the center of this polygon.");
+            WriteLine("/// </summary>");
+            WriteLine("public {0} Center", new Point(Type.RealType, Dimension));
+            WriteLine("{");
+            Indent();
+            WriteLine("get");
+            WriteLine("{");
+            Indent();
+            WriteLine("return Points == null ? {0}.Zero : Point.Sum(Points, 1.0f / Points.Length);", new Point(Type.RealType, Dimension));
+            Dedent();
+            WriteLine("}");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public {0}[] ToArray()", Point);
+            WriteLine("{");
+            Indent();
+            WriteLine("var result = new {0}[Count];", Point);
+            WriteLine("for (int i=0; i<Count; ++i)");
+            WriteLine("{");
+            Indent();
+            WriteLine("result[i] = this[i];", Point);
+            Dedent();
+            WriteLine("}");
+            WriteLine("return result;");
             Dedent();
             WriteLine("}");
 
@@ -135,31 +190,24 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified values.", Name);
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"x\">Value for the X component of the circle.</param>");
-            WriteLine("/// <param name=\"y\">Value for the Y component of the circle.</param>");
-            WriteLine("/// <param name=\"radius\">Value for the Radius of the circle.</param>");
-            WriteLine("public {0}({1} x, {1} y, {1} radius)", Name, Type);
+            WriteLine("/// <param name=\"points\">Points to define this polygon.</param>");
+            WriteLine("private {0}({1}[] points)", Name, Point);
             WriteLine("{");
             Indent();
-            WriteLine("Contract.Requires(0 <= radius);");
-            WriteLine("X = x;");
-            WriteLine("Y = y;");
-            WriteLine("Radius = radius;");
+            WriteLine("Contract.Requires(points != null);");
+            WriteLine("Points = points;");
             Dedent();
             WriteLine("}");
 
             WriteLine("/// <summary>");
-            WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified location and radius.", Name);
+            WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified values.", Name);
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"center\">The center of the circle.</param>");
-            WriteLine("/// <param name=\"radius\">The radius of the circle.</param>");
-            WriteLine("public {0}(Point2{1} center, {2} radius)", Name, Type.Suffix, Type);
+            WriteLine("/// <param name=\"points\">Points to define this polygon.</param>");
+            WriteLine("public {0}(IEnumerable<{1}> points)", Name, Point);
             WriteLine("{");
             Indent();
-            WriteLine("Contract.Requires(0 <= radius);");
-            WriteLine("X = center.X;");
-            WriteLine("Y = center.Y;");
-            WriteLine("Radius = radius;");
+            WriteLine("Contract.Requires(points != null);");
+            WriteLine("Points = points.ToArray();");
             Dedent();
             WriteLine("}");
 
@@ -180,10 +228,7 @@ namespace Numerics_Generator
             foreach (var type in Shapes.Types.Where(t => t != Type))
             {
                 string imex = type.IsImplicitlyConvertibleTo(Type) ? "implicit" : "explicit";
-
-                Circle other = new Circle(type);
-
-                var casts = string.Format("({0})value.X, ({0})value.Y, ({0})value.Radius", Type);
+                Polygon other = new Polygon(type, Dimension);
 
                 WriteLine("/// <summary>");
                 WriteLine("/// Defines an {0} conversion of a {1} value to a {2}.", imex, other, Name);
@@ -197,7 +242,14 @@ namespace Numerics_Generator
                 WriteLine("public static {0} operator {1}({2} value)", imex, Name, other);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", Name, casts);
+                WriteLine("var points = new {0}[value.Count];", Point);
+                WriteLine("for (int i=0; i<points.Length; ++i)");
+                WriteLine("{");
+                Indent();
+                WriteLine("points[i] = ({0})value[i];", Point);
+                Dedent();
+                WriteLine("}");
+                WriteLine("return new {0}(points);", Name);
                 Dedent();
                 WriteLine("}");
             }
@@ -216,7 +268,7 @@ namespace Numerics_Generator
             WriteLine("public override int GetHashCode()");
             WriteLine("{");
             Indent();
-            WriteLine("return X.GetHashCode() + Y.GetHashCode() + Radius.GetHashCode();");
+            WriteLine("return Points.Sum(point => point.GetHashCode());");
             Dedent();
             WriteLine("}");
 
@@ -238,10 +290,10 @@ namespace Numerics_Generator
 
             WriteLine("/// <summary>");
             WriteLine("/// Returns a value that indicates whether the current instance and a specified");
-            WriteLine("/// circle have the same value.");
+            WriteLine("/// polygon have the same value.");
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"other\">The circle to compare.</param>");
-            WriteLine("/// <returns>true if this circle and value have the same value; otherwise, false.</returns>");
+            WriteLine("/// <param name=\"other\">The polygon to compare.</param>");
+            WriteLine("/// <returns>true if this polygon and value have the same value; otherwise, false.</returns>");
             WriteLine("public bool Equals({0} other)", Name);
             WriteLine("{");
             Indent();
@@ -250,28 +302,46 @@ namespace Numerics_Generator
             WriteLine("}");
 
             WriteLine("/// <summary>");
-            WriteLine("/// Returns a value that indicates whether two circles are equal.");
+            WriteLine("/// Returns a value that indicates whether two polygons are equal.");
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"left\">The first circle to compare.</param>");
-            WriteLine("/// <param name=\"right\">The second circle to compare.</param>");
+            WriteLine("/// <param name=\"left\">The first polygon to compare.</param>");
+            WriteLine("/// <param name=\"right\">The second polygon to compare.</param>");
             WriteLine("/// <returns>true if the left and right are equal; otherwise, false.</returns>");
             WriteLine("public static bool operator ==({0} left, {0} right)", Name);
             WriteLine("{");
             Indent();
-            WriteLine("return left.X == right.X & left.Y == right.Y & left.Radius == right.Radius;");
+            WriteLine("if (left.Points.Length != right.Points.Length) { return false; }");
+            WriteLine("var left_points = left.Points.GetEnumerator();");
+            WriteLine("var right_points = right.Points.GetEnumerator();");
+            WriteLine("while (left_points.MoveNext() && right_points.MoveNext())");
+            WriteLine("{");
+            Indent();
+            WriteLine("if (left_points.Current != right_points.Current) { return false; }");
+            Dedent();
+            WriteLine("}");
+            WriteLine("return true;");
             Dedent();
             WriteLine("}");
 
             WriteLine("/// <summary>");
-            WriteLine("/// Returns a value that indicates whether two circles are not equal.");
+            WriteLine("/// Returns a value that indicates whether two polygons are not equal.");
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"left\">The first circle to compare.</param>");
-            WriteLine("/// <param name=\"right\">The second circle to compare.</param>");
+            WriteLine("/// <param name=\"left\">The first polygon to compare.</param>");
+            WriteLine("/// <param name=\"right\">The second polygon to compare.</param>");
             WriteLine("/// <returns>true if left and right are not equal; otherwise, false.</returns>");
             WriteLine("public static bool operator !=({0} left, {0} right)", Name);
             WriteLine("{");
             Indent();
-            WriteLine("return left.X != right.X | left.Y != right.Y | left.Radius != right.Radius;");
+            WriteLine("if (left.Points.Length != right.Points.Length) { return true; }");
+            WriteLine("var left_points = left.Points.GetEnumerator();");
+            WriteLine("var right_points = right.Points.GetEnumerator();");
+            WriteLine("while (left_points.MoveNext() && right_points.MoveNext())");
+            WriteLine("{");
+            Indent();
+            WriteLine("if (left_points.Current != right_points.Current) { return true; }");
+            Dedent();
+            WriteLine("}");
+            WriteLine("return false;");
             Dedent();
             WriteLine("}");
 
@@ -283,7 +353,7 @@ namespace Numerics_Generator
             WriteLine("#region ToString");
 
             WriteLine("/// <summary>");
-            WriteLine("/// Converts the value of the current circle to its equivalent string");
+            WriteLine("/// Converts the value of the current polygon to its equivalent string");
             WriteLine("/// representation.");
             WriteLine("/// </summary>");
             WriteLine("/// <returns>The string representation of the current instance.</returns>");
@@ -295,7 +365,7 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
-            WriteLine("/// Converts the value of the current circle to its equivalent string");
+            WriteLine("/// Converts the value of the current polygon to its equivalent string");
             WriteLine("/// representation by using the specified culture-specific");
             WriteLine("/// formatting information.");
             WriteLine("/// </summary>");
@@ -310,7 +380,7 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
-            WriteLine("/// Converts the value of the current circle to its equivalent string");
+            WriteLine("/// Converts the value of the current polygon to its equivalent string");
             WriteLine("/// representation by using the specified format for its components.");
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"format\">A standard or custom numeric format string.</param>");
@@ -324,7 +394,7 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
-            WriteLine("/// Converts the value of the current circle to its equivalent string");
+            WriteLine("/// Converts the value of the current polygon to its equivalent string");
             WriteLine("/// representation by using the specified format and culture-specific");
             WriteLine("/// format information for its components.");
             WriteLine("/// </summary>");
@@ -337,7 +407,7 @@ namespace Numerics_Generator
             WriteLine("{");
             Indent();
             WriteLine("Contract.Ensures(Contract.Result<string>() != null);");
-            WriteLine("return String.Format(\"({0}, {1})\", Center.ToString(format, provider), Radius.ToString(format, provider));");
+            WriteLine("return \"Polygon\";");
             Dedent();
             WriteLine("}");
 
@@ -347,9 +417,9 @@ namespace Numerics_Generator
         void Functions()
         {
             WriteLine("/// <summary>");
-            WriteLine("/// Provides static methods for circle functions.");
+            WriteLine("/// Provides static methods for polygon functions.");
             WriteLine("/// </summary>");
-            WriteLine("public static partial class Circle");
+            WriteLine("public static partial class Polygon");
             WriteLine("{");
             Indent();
 
@@ -358,12 +428,17 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Writes the given <see cref=\"{0}\"/> to an <see cref=\"Ibasa.IO.BinaryWriter\">.", Name);
             WriteLine("/// </summary>");
-            WriteLine("public static void Write(this Ibasa.IO.BinaryWriter writer, {0} circle)", Name);
+            WriteLine("public static void Write(this Ibasa.IO.BinaryWriter writer, {0} polygon)", Name);
             WriteLine("{");
             Indent();
-            WriteLine("writer.Write(circle.X);");
-            WriteLine("writer.Write(circle.Y);");
-            WriteLine("writer.Write(circle.Radius);");
+            WriteLine("var array = polygon.ToArray();");
+            WriteLine("writer.Write(array.Length);");
+            WriteLine("foreach(var point in array)");
+            WriteLine("{");
+            Indent();
+            WriteLine("writer.Write(point);");
+            Dedent();
+            WriteLine("}");
             Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
@@ -372,7 +447,15 @@ namespace Numerics_Generator
             WriteLine("public static {0} Read{0}(this Ibasa.IO.BinaryReader reader)", Name);
             WriteLine("{");
             Indent();
-            WriteLine("return new {0}({1}, {1}, {1});", Name, string.Format("reader.Read{0}()", Type.CLRName));
+            WriteLine("var length = reader.ReadInt32();");
+            WriteLine("var array = new {0}[length];", Point);
+            WriteLine("for (int i=0; i<length; ++i)");
+            WriteLine("{");
+            Indent();
+            WriteLine("array[i] = reader.Read{0}();", Point);
+            Dedent();
+            WriteLine("}");
+            WriteLine("return new {0}(array);", Name);
             Dedent();
             WriteLine("}");
             WriteLine("#endregion");
@@ -381,10 +464,10 @@ namespace Numerics_Generator
             #region Equatable
             WriteLine("#region Equatable");
             WriteLine("/// <summary>");
-            WriteLine("/// Returns a value that indicates whether two circlees are equal.");
+            WriteLine("/// Returns a value that indicates whether two polygones are equal.");
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"left\">The first circle to compare.</param>");
-            WriteLine("/// <param name=\"right\">The second circle to compare.</param>");
+            WriteLine("/// <param name=\"left\">The first polygon to compare.</param>");
+            WriteLine("/// <param name=\"right\">The second polygon to compare.</param>");
             WriteLine("/// <returns>true if the left and right are equal; otherwise, false.</returns>");
             WriteLine("public static bool Equals({0} left, {0} right)", Name);
             WriteLine("{");
@@ -395,7 +478,7 @@ namespace Numerics_Generator
             WriteLine("#endregion");
             #endregion
 
-            //public static circle Intersect(circle value1, circle value2)
+            //public static polygon Intersect(polygon value1, polygon value2)
             //{
             //    int l = Functions.Max(value1.Left, value2.Left);
             //    int r = Functions.Min(value1.Right, value2.Right);
@@ -405,12 +488,12 @@ namespace Numerics_Generator
             //    int bk = Functions.Min(value1.Back, value2.Back);
             //    if ((r >= l) && (t >= b) && (bk >= fr))
             //    {
-            //        return new circle(l, b, fr, r - l, t - b, bk - fr);
+            //        return new polygon(l, b, fr, r - l, t - b, bk - fr);
             //    }
             //    return Empty;
 
             //}
-            //public static circle Union(circle value1, circle value2)
+            //public static polygon Union(polygon value1, polygon value2)
             //{
             //    int l = Functions.Max(value1.Left, value2.Left);
             //    int r = Functions.Min(value1.Right, value2.Right);
@@ -418,55 +501,55 @@ namespace Numerics_Generator
             //    int t = Functions.Min(value1.Top, value2.Top);
             //    int fr = Functions.Max(value1.Front, value2.Front);
             //    int bk = Functions.Min(value1.Back, value2.Back);
-            //    return new circle(l, b, fr, r - l, t - b, bk - fr);
+            //    return new polygon(l, b, fr, r - l, t - b, bk - fr);
             //}
 
-            //public static circle Inflate(circle circle, Size3D amount)
+            //public static polygon Inflate(polygon polygon, Size3D amount)
             //{
-            //    return new circle(
-            //        circle.X - amount.Width,
-            //        circle.Y - amount.Height,
-            //        circle.Z - amount.Depth,
-            //        circle.Width + (amount.Width * 2),
-            //        circle.Height + (amount.Height * 2),
-            //        circle.Depth + (amount.Depth * 2));
+            //    return new polygon(
+            //        polygon.X - amount.Width,
+            //        polygon.Y - amount.Height,
+            //        polygon.Z - amount.Depth,
+            //        polygon.Width + (amount.Width * 2),
+            //        polygon.Height + (amount.Height * 2),
+            //        polygon.Depth + (amount.Depth * 2));
             //}
-            //public static circle Offset(circle circle, Point3D amount)
+            //public static polygon Offset(polygon polygon, Point3D amount)
             //{
-            //    return new circle(
-            //        circle.Location + amount,
-            //        circle.Size);
+            //    return new polygon(
+            //        polygon.Location + amount,
+            //        polygon.Size);
             //}
 
-            WriteLine("#region Contains");
-            WriteLine("public static bool Contains({0} circle, {1} point)", Name, new Point(Type, 2));
-            WriteLine("{");
-            Indent();
-            WriteLine("return Vector.AbsoluteSquared(circle.Center - point) <= circle.Radius * circle.Radius;");
-            Dedent();
-            WriteLine("}");
-            WriteLine("#endregion");
-            //public bool Contains(circle circle)
+            //WriteLine("#region Contains");
+            //WriteLine("public static bool Contains({0} polygon, {1} point)", Name, new Point(Type, 2));
+            //WriteLine("{");
+            //Indent();
+            //WriteLine("return Vector.AbsoluteSquared(polygon.Center - point) <= polygon.Radius * polygon.Radius;");
+            //Dedent();
+            //WriteLine("}");
+            //WriteLine("#endregion");
+            //public bool Contains(polygon polygon)
             //{
-            //    return (Left <= circle.Left) && (Right >= circle.Right) &&
-            //        (Bottom <= circle.Bottom) && (Top >= circle.Top) &&
-            //        (Front <= circle.Front) && (Back >= circle.Back);
+            //    return (Left <= polygon.Left) && (Right >= polygon.Right) &&
+            //        (Bottom <= polygon.Bottom) && (Top >= polygon.Top) &&
+            //        (Front <= polygon.Front) && (Back >= polygon.Back);
             //}
-            //public bool Intersects(circle circle)
+            //public bool Intersects(polygon polygon)
             //{
-            //    return (Right > circle.Left) && (Left < circle.Right) &&
-            //        (Top < circle.Bottom) && (Bottom < circle.Top) &&
-            //        (Back < circle.Front) && (Front < circle.Back);
+            //    return (Right > polygon.Left) && (Left < polygon.Right) &&
+            //        (Top < polygon.Bottom) && (Bottom < polygon.Top) &&
+            //        (Back < polygon.Front) && (Front < polygon.Back);
             //}
 
 
             ///// <summary>
-            ///// Returns a value that indicates whether two circles are equal.
+            ///// Returns a value that indicates whether two polygons are equal.
             ///// </summary>
-            ///// <param name="left">The first circle to compare.</param>
-            ///// <param name="right">The second circle to compare.</param>
+            ///// <param name="left">The first polygon to compare.</param>
+            ///// <param name="right">The second polygon to compare.</param>
             ///// <returns>true if the left and right are equal; otherwise, false.</returns>
-            //public static bool Equals(circle left, circle right)
+            //public static bool Equals(polygon left, polygon right)
             //{
             //    return left == right;
             //}

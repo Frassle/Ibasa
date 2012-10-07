@@ -63,6 +63,11 @@ namespace Numerics_Generator
                     size.Generate();
                     System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, size.Name + ".cs"), size.Text);
                     Console.WriteLine("Done - " + size.Name);
+
+                    var polygon = new Polygon(type, dimension);
+                    polygon.Generate();
+                    System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, polygon.Name + ".cs"), polygon.Text);
+                    Console.WriteLine("Done - " + polygon.Name);
                 }
 
                 var rectangle = new Rectangle(type);
