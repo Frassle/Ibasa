@@ -215,6 +215,7 @@
     <Compile Include="Geometry\Vectors\Vector8ui.cs" />
     <Compile Include="Geometry\Vectors\Vector8ul.cs" />
     <Compile Include="Geometry\Vectors\Vector8us.cs" />
+    <Compile Include="GJK.cs" />
     <Compile Include="Half.cs" />
     <Compile Include="Morton.cs" />
     <Compile Include="Random\Cauchy.cs" />
