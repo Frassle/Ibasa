@@ -12,7 +12,7 @@ namespace Ibasa.Collections.Immutable
     /// </summary>
     /// <typeparam name="T">The type of elements in the array.</typeparam>
     [Serializable]
-    [System.Diagnostics.DebuggerDisplay("Length = {Length}")]
+    [System.Diagnostics.DebuggerDisplay("Count = {Count}")]
     public sealed class ImmutableArray<T> : IEnumerable<T>
     {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.RootHidden)]
@@ -22,7 +22,7 @@ namespace Ibasa.Collections.Immutable
         private void InvariantMethod()
         {
             Contract.Invariant(_array != null);
-            Contract.Invariant(_array.Length == Length);
+            Contract.Invariant(_array.Length == Count);
         }
         
         /// <summary>
@@ -45,12 +45,12 @@ namespace Ibasa.Collections.Immutable
         /// Initializes a new instance of the ImmutableArray{T} class with the specified length.
         /// </summary>
         /// <param name="length">The number of elements that the new ImmutableArray{T} can store.</param>
-        public ImmutableArray(int length)
+        public ImmutableArray(int count)
         {
-            Contract.Requires(0 <= length);
-            Contract.Ensures(Length == length);
+            Contract.Requires(0 <= count);
+            Contract.Ensures(Count == count);
 
-            _array = new T[length];
+            _array = new T[count];
         }
         /// <summary>
         /// Initializes a new instance of the ImmutableArray{T} class that contains elements 
@@ -61,7 +61,7 @@ namespace Ibasa.Collections.Immutable
             : this(array, 0, array.Length)
         {
             Contract.Requires(array != null);
-            Contract.Ensures(Length == array.Length);
+            Contract.Ensures(Count == array.Length);
         }
         /// <summary>
         /// Initializes a new instance of the ImmutableArray{T} class that contains elements 
@@ -75,7 +75,7 @@ namespace Ibasa.Collections.Immutable
             Contract.Requires(array != null);
             Contract.Requires(0 <= index);
             Contract.Requires(index <= array.Length);
-            Contract.Ensures(Length == (array.Length - index));
+            Contract.Ensures(Count == (array.Length - index));
         }
         /// <summary>
         /// Initializes a new instance of the ImmutableArray{T} class that contains the 
@@ -91,7 +91,7 @@ namespace Ibasa.Collections.Immutable
             Contract.Requires(index <= array.Length);
             Contract.Requires(0 <= count);
             Contract.Requires(index + count <= array.Length);
-            Contract.Ensures(Length == count);
+            Contract.Ensures(Count == count);
 
             _array = new T[count];
             Array.Copy(array, index, _array, 0, count);
@@ -121,9 +121,9 @@ namespace Ibasa.Collections.Immutable
         public void CopyTo(T[] array)
         {
             Contract.Requires(array != null);
-            Contract.Requires(Length <= array.Length);
+            Contract.Requires(Count <= array.Length);
 
-            Array.Copy(_array, array, Length);
+            Array.Copy(_array, array, Count);
         }
         /// <summary>
         /// Copies the entire ImmutableArray{T} to a compatible one-dimensional
@@ -142,9 +142,9 @@ namespace Ibasa.Collections.Immutable
             Contract.Requires(array != null);
             Contract.Requires(0 <= index);
             Contract.Requires(index <= array.Length);
-            Contract.Requires(index + Length <= array.Length);
+            Contract.Requires(index + Count <= array.Length);
 
-            Array.Copy(_array, 0, array, index, Length);
+            Array.Copy(_array, 0, array, index, Count);
         }
         //
         // Summary:
@@ -191,8 +191,8 @@ namespace Ibasa.Collections.Immutable
             Contract.Requires(0 <= count);
             Contract.Requires(index + count <= array.Length);
             Contract.Requires(0 <= sourceIndex);
-            Contract.Requires(sourceIndex <= Length);
-            Contract.Requires(sourceIndex + count <= Length);
+            Contract.Requires(sourceIndex <= Count);
+            Contract.Requires(sourceIndex + count <= Count);
 
             Array.Copy(_array, sourceIndex, array, index, count);
         }
@@ -200,22 +200,22 @@ namespace Ibasa.Collections.Immutable
         [Pure]
         public ImmutableArray<T> Copy()
         {
-            return Copy(0, Length);
+            return Copy(0, Count);
         }
         [Pure]
         public ImmutableArray<T> Copy(int index)
         {
             Contract.Requires(0 <= index);
-            Contract.Requires(index <= Length);
-            return Copy(index, Length - index);
+            Contract.Requires(index <= Count);
+            return Copy(index, Count - index);
         }
         [Pure]
         public ImmutableArray<T> Copy(int index, int count)
         {
             Contract.Requires(0 <= index);
-            Contract.Requires(index <= Length);
+            Contract.Requires(index <= Count);
             Contract.Requires(0 <= count);
-            Contract.Requires(index + count <= Length);
+            Contract.Requires(index + count <= Count);
 
             ImmutableArray<T> array = new ImmutableArray<T>(count);
             Array.Copy(_array, index, array._array, 0, count);
@@ -231,8 +231,8 @@ namespace Ibasa.Collections.Immutable
         [Pure]
         public T[] ToArray()
         {
-            T[] array = new T[Length];
-            Array.Copy(_array, array, Length);
+            T[] array = new T[Count];
+            Array.Copy(_array, array, Count);
             return array;
         }
 
@@ -266,9 +266,9 @@ namespace Ibasa.Collections.Immutable
         {
             Contract.Requires(converter != null);
 
-            ImmutableArray<TOutput> output = new ImmutableArray<TOutput>(Length);
+            ImmutableArray<TOutput> output = new ImmutableArray<TOutput>(Count);
 
-            for (int i = 0; i < Length; ++i)
+            for (int i = 0; i < Count; ++i)
             {
                 output._array[i] = converter(_array[i]);
             }
@@ -286,7 +286,7 @@ namespace Ibasa.Collections.Immutable
         /// </returns>
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         [Pure]
-        public int Length
+        public int Count
         {
             get
             {
@@ -304,7 +304,7 @@ namespace Ibasa.Collections.Immutable
         {
             get
             {
-                if (index >= Length || index < 0)
+                if (index >= Count || index < 0)
                     throw new ArgumentOutOfRangeException(
                         "Index was out of range. Must be non-negative and less than the size of the collection.", "index");
                 return _array[index];
@@ -347,7 +347,7 @@ namespace Ibasa.Collections.Immutable
         public ImmutableArray<T> SetValue(T value, int index)
         {
             Contract.Requires(0 <= index);
-            Contract.Requires(index < Length);
+            Contract.Requires(index < Count);
 
             ImmutableArray<T> immutableArray = new ImmutableArray<T>(_array);
             immutableArray._array[index] = value;
@@ -360,7 +360,7 @@ namespace Ibasa.Collections.Immutable
         [Pure]
         public ImmutableArray<T> Reverse()
         {
-            return Reverse(0, Length);
+            return Reverse(0, Count);
         }
         /// <summary>
         /// Reverses the order of the elements in the specified range.
@@ -372,9 +372,9 @@ namespace Ibasa.Collections.Immutable
         public ImmutableArray<T> Reverse(int index, int count)
         {
             Contract.Requires(0 <= index);
-            Contract.Requires(index <= Length);
+            Contract.Requires(index <= Count);
             Contract.Requires(0 <= count);
-            Contract.Requires(index + count <= Length);
+            Contract.Requires(index + count <= Count);
 
             ImmutableArray<T> array = new ImmutableArray<T>(_array);
             Array.Reverse(array._array, index, count);
@@ -482,9 +482,9 @@ namespace Ibasa.Collections.Immutable
         [Pure]
         public ImmutableArray<T> Sort(int index, int count, IComparer<T> comparer)
         {
-            Contract.Requires(0 <= index && index < Length);
+            Contract.Requires(0 <= index && index < Count);
             Contract.Requires(0 <= count);
-            Contract.Requires(index + count <= Length);
+            Contract.Requires(index + count <= Count);
             Contract.Requires(comparer != null);
 
             ImmutableArray<T> array = new ImmutableArray<T>(_array);
@@ -1190,7 +1190,7 @@ namespace Ibasa.Collections.Immutable
             {
                 Contract.Invariant(_array != null);
                 Contract.Invariant(-1 <= index);
-                Contract.Invariant(index <= _array.Length);
+                Contract.Invariant(index <= _array.Count);
             }
 
             internal Enumerator(ImmutableArray<T> array)
@@ -1221,11 +1221,11 @@ namespace Ibasa.Collections.Immutable
             /// </returns>
             public bool MoveNext()
             {
-                if (index == _array.Length)
+                if (index == _array.Count)
                     return false;
 
                 ++index;
-                return index == _array.Length;
+                return index == _array.Count;
             }
 
             object System.Collections.IEnumerator.Current
