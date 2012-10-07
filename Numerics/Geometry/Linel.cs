@@ -244,7 +244,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <param name="left">The first line.</param>
 		/// <param name="right">The second line.</param>
 		/// <returns>true if the left and right are equal; otherwise, false.</returns>
-		public static Linel Intersect(Linel left, Linel right)
+		public static Linel? Intersect(Linel left, Linel right)
 		{
 			var left_min = Functions.Min(left.Start, left.End);
 			var left_max = Functions.Max(left.Start, left.End);
@@ -252,7 +252,7 @@ namespace Ibasa.Numerics.Geometry
 			var right_max = Functions.Max(right.Start, right.End);
 			var min = Functions.Max(left_min, right_min);
 			var max = Functions.Min(left_max, right_max);
-			return min <= max ? new Linel(min, max) : Linel.Empty;
+			return min <= max ? new Linel?(new Linel(min, max)) : null;
 		}
 		#endregion
 	}

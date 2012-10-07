@@ -434,7 +434,6 @@ namespace Numerics_Generator
             #endregion
 
             #region Intersect
-
             WriteLine("#region Intersect");
             if (Dimension == 1)
             {
@@ -444,7 +443,7 @@ namespace Numerics_Generator
                 WriteLine("/// <param name=\"left\">The first line.</param>");
                 WriteLine("/// <param name=\"right\">The second line.</param>");
                 WriteLine("/// <returns>true if the left and right are equal; otherwise, false.</returns>");
-                WriteLine("public static {0} Intersect({0} left, {0} right)", Name);
+                WriteLine("public static {0}? Intersect({0} left, {0} right)", Name);
                 WriteLine("{");
                 Indent();
                 WriteLine("var left_min = Functions.Min(left.Start, left.End);");
@@ -453,7 +452,7 @@ namespace Numerics_Generator
                 WriteLine("var right_max = Functions.Max(right.Start, right.End);");
                 WriteLine("var min = Functions.Max(left_min, right_min);");
                 WriteLine("var max = Functions.Min(left_max, right_max);");
-                WriteLine("return min <= max ? new {0}(min, max) : {0}.Empty;", Name);
+                WriteLine("return min <= max ? new {0}?(new {0}(min, max)) : null;", Name);
                 Dedent();
                 WriteLine("}");
             }
