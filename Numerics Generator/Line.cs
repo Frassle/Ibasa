@@ -453,7 +453,7 @@ namespace Numerics_Generator
                 WriteLine("var right_max = Functions.Max(right.Start, right.End);");
                 WriteLine("var min = Functions.Max(left_min, right_min);");
                 WriteLine("var max = Functions.Min(left_max, right_max);");
-                WriteLine("return min < max ? new {0}(min, max) : {0}.Empty;", Name);
+                WriteLine("return min <= max ? new {0}(min, max) : {0}.Empty;", Name);
                 Dedent();
                 WriteLine("}");
             }

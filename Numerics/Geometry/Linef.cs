@@ -252,7 +252,7 @@ namespace Ibasa.Numerics.Geometry
 			var right_max = Functions.Max(right.Start, right.End);
 			var min = Functions.Max(left_min, right_min);
 			var max = Functions.Min(left_max, right_max);
-			return min < max ? new Linef(min, max) : Linef.Empty;
+			return min <= max ? new Linef(min, max) : Linef.Empty;
 		}
 		#endregion
 	}
