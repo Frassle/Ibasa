@@ -464,7 +464,7 @@ namespace Numerics_Generator
             #region Equatable
             WriteLine("#region Equatable");
             WriteLine("/// <summary>");
-            WriteLine("/// Returns a value that indicates whether two polygones are equal.");
+            WriteLine("/// Returns a value that indicates whether two polygons are equal.");
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"left\">The first polygon to compare.</param>");
             WriteLine("/// <param name=\"right\">The second polygon to compare.</param>");

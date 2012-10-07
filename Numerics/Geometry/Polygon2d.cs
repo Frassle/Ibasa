@@ -291,7 +291,7 @@ namespace Ibasa.Numerics.Geometry
 		#endregion
 		#region Equatable
 		/// <summary>
-		/// Returns a value that indicates whether two polygones are equal.
+		/// Returns a value that indicates whether two polygons are equal.
 		/// </summary>
 		/// <param name="left">The first polygon to compare.</param>
 		/// <param name="right">The second polygon to compare.</param>
