@@ -301,5 +301,25 @@ namespace Ibasa.Numerics.Geometry
 			return left == right;
 		}
 		#endregion
+		#region Projection
+		/// <summary>
+		/// Projects a polygon onto an axis.
+		/// </summary>
+		/// <param name="polygon">The polygon to project.</param>
+		/// <param name="axis">The axis to project onto.</param>
+		/// <returns>The interval on the axis that the polygon projects onto.</returns>
+		public static Linef Project(Polygon2f polygon, Vector2f axis)
+		{
+			var min = float.MaxValue;
+			var max = float.MinValue;
+			for (int i=0; i < polygon.Count; ++i)
+			{
+				var proj = Vector.Dot((Vector2f)polygon[i], axis);
+				min = Functions.Min(min, proj);
+				max = Functions.Max(max, proj);
+			}
+			return new Linef(min, max);
+		}
+		#endregion
 	}
 }

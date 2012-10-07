@@ -301,5 +301,25 @@ namespace Ibasa.Numerics.Geometry
 			return left == right;
 		}
 		#endregion
+		#region Projection
+		/// <summary>
+		/// Projects a polygon onto an axis.
+		/// </summary>
+		/// <param name="polygon">The polygon to project.</param>
+		/// <param name="axis">The axis to project onto.</param>
+		/// <returns>The interval on the axis that the polygon projects onto.</returns>
+		public static Linel Project(Polygon2l polygon, Vector2l axis)
+		{
+			var min = long.MaxValue;
+			var max = long.MinValue;
+			for (int i=0; i < polygon.Count; ++i)
+			{
+				var proj = Vector.Dot((Vector2l)polygon[i], axis);
+				min = Functions.Min(min, proj);
+				max = Functions.Max(max, proj);
+			}
+			return new Linel(min, max);
+		}
+		#endregion
 	}
 }

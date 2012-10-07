@@ -478,6 +478,68 @@ namespace Numerics_Generator
             WriteLine("#endregion");
             #endregion
 
+            #region Project
+            WriteLine("#region Projection");
+            if (Dimension == 2)
+            {
+                var line = new Line(Type, 1);
+                var vector = new Vector(Type, 2);
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Projects a polygon onto an axis.");
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"polygon\">The polygon to project.</param>");
+                WriteLine("/// <param name=\"axis\">The axis to project onto.</param>");
+                WriteLine("/// <returns>The interval on the axis that the polygon projects onto.</returns>");
+                WriteLine("public static {0} Project({1} polygon, {2} axis)", line, Name, vector);
+                WriteLine("{");
+                Indent();
+                WriteLine("var min = {0}.MaxValue;", Type);
+                WriteLine("var max = {0}.MinValue;", Type);
+                WriteLine("for (int i=0; i < polygon.Count; ++i)");
+                WriteLine("{");
+                Indent();
+                WriteLine("var proj = Vector.Dot(({0})polygon[i], axis);", vector);
+                WriteLine("min = Functions.Min(min, proj);");
+                WriteLine("max = Functions.Max(max, proj);");
+                Dedent();
+                WriteLine("}");
+                WriteLine("return new {0}(min, max);", line);
+                Dedent();
+                WriteLine("}");
+            }
+            //if (Dimension == 3)
+            //{
+            //    var proj = new Polygon(Type, 2);
+            //    var plane = new Plane(Type);
+
+            //    WriteLine("/// <summary>");
+            //    WriteLine("/// Projects a polygon onto an plane.");
+            //    WriteLine("/// </summary>");
+            //    WriteLine("/// <param name=\"polygon\">The polygon to project.</param>");
+            //    WriteLine("/// <param name=\"plane\">The plane to project onto.</param>");
+            //    WriteLine("/// <returns>The interval on the axis that the polygon projects onto.</returns>");
+            //    WriteLine("public static {0} Project({1} polygon, {2} plane)", proj, Name, plane);
+            //    WriteLine("{");
+            //    Indent();
+            //    WriteLine("var min = {0}.MaxValue;", Type);
+            //    WriteLine("var max = {0}.MinValue;", Type);
+            //    WriteLine("for (int i=0; i < polygon.Count; ++i)");
+            //    WriteLine("{");
+            //    Indent();
+            //    WriteLine("var proj = Vector.Dot(({0})polygon[i], axis);", plane);
+            //    WriteLine("min = Functions.Min(min, proj);");
+            //    WriteLine("max = Functions.Max(max, proj);");
+            //    Dedent();
+            //    WriteLine("}");
+            //    WriteLine("return new {0}(min, max);", proj);
+            //    Dedent();
+            //    WriteLine("}");
+            //}
+
+            WriteLine("#endregion");
+            #endregion
+
             //public static polygon Intersect(polygon value1, polygon value2)
             //{
             //    int l = Functions.Max(value1.Left, value2.Left);

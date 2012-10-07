@@ -301,5 +301,7 @@ namespace Ibasa.Numerics.Geometry
 			return left == right;
 		}
 		#endregion
+		#region Projection
+		#endregion
 	}
 }
