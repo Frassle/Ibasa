@@ -106,6 +106,18 @@
     <Compile Include="Geometry\Circlef.cs" />
     <Compile Include="Geometry\Circlei.cs" />
     <Compile Include="Geometry\Circlel.cs" />
+    <Compile Include="Geometry\Line2d.cs" />
+    <Compile Include="Geometry\Line2f.cs" />
+    <Compile Include="Geometry\Line2i.cs" />
+    <Compile Include="Geometry\Line2l.cs" />
+    <Compile Include="Geometry\Line3d.cs" />
+    <Compile Include="Geometry\Line3f.cs" />
+    <Compile Include="Geometry\Line3i.cs" />
+    <Compile Include="Geometry\Line3l.cs" />
+    <Compile Include="Geometry\Lined.cs" />
+    <Compile Include="Geometry\Linef.cs" />
+    <Compile Include="Geometry\Linei.cs" />
+    <Compile Include="Geometry\Linel.cs" />
     <Compile Include="Geometry\Matrices\Matrix2x2d.cs" />
     <Compile Include="Geometry\Matrices\Matrix2x2f.cs" />
     <Compile Include="Geometry\Matrices\Matrix2x3d.cs" />
@@ -233,6 +245,9 @@
     <Compile Include="Random\MersenneTwister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rational.cs" />
+    <Compile Include="SAT.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">

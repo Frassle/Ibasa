@@ -51,6 +51,7 @@
     <Compile Include="Component.cs" />
     <Compile Include="Box.cs" />
     <Compile Include="Circle.cs" />
+    <Compile Include="Line.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Sphere.cs" />
