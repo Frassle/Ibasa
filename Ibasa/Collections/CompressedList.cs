@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
 
-namespace Ibasa
+namespace Ibasa.Collections
 {
     public sealed class CompressedList<T> : IEnumerable<T> where T : IEquatable<T>
     {

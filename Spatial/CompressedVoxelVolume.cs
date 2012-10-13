@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Ibasa.Numerics.Geometry;
 using System.Diagnostics.Contracts;
+using Ibasa.Collections;
 
 namespace Ibasa.Spatial
 {
