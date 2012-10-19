@@ -46,7 +46,7 @@ namespace Numerics_Generator
         void Declaration()
         {
             WriteLine("/// <summary>");
-            WriteLine("/// Represents an ordered tuple of integer x, y, width, and height components that defines a");
+            WriteLine("/// Represents an ordered tuple of integer x, y, z, width, height and depth components that defines a");
             WriteLine("/// location and size in a three-dimensional space.");
             WriteLine("/// </summary>");
             WriteLine("[Serializable]");

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace Ibasa.Numerics.Geometry
 {
 	/// <summary>
-	/// Represents an ordered tuple of integer x, y, width, and height components that defines a
+	/// Represents an ordered tuple of integer x, y, z, width, height and depth components that defines a
 	/// location and size in a three-dimensional space.
 	/// </summary>
 	[Serializable]
