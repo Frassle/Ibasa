@@ -57,7 +57,7 @@ namespace Ibasa.Collections.Immutable
         /// copied from the specified array.
         /// </summary>
         /// <param name="array">The array whose elements are copied to the new ImmutableArray{T}.</param>
-        public ImmutableArray(T[] array)
+        public ImmutableArray(params T[] array)
             : this(array, 0, array.Length)
         {
             Contract.Requires(array != null);
