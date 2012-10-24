@@ -44,7 +44,7 @@ namespace Ibasa.Collections.Immutable
         /// <summary>
         /// Initializes a new instance of the ImmutableArray{T} class with the specified length.
         /// </summary>
-        /// <param name="length">The number of elements that the new ImmutableArray{T} can store.</param>
+        /// <param name="count">The number of elements that the new ImmutableArray{T} can store.</param>
         public ImmutableArray(int count)
         {
             Contract.Requires(0 <= count);
