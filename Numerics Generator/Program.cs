@@ -91,6 +91,11 @@ namespace Numerics_Generator
                 System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, box.Name + ".cs"), box.Text);
                 Console.WriteLine("Done - " + box.Name);
 
+                var ellipse = new Ellipse(type);
+                ellipse.Generate();
+                System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, ellipse.Name + ".cs"), ellipse.Text);
+                Console.WriteLine("Done - " + ellipse.Name);
+
                 var circle = new Circle(type);
                 circle.Generate();
                 System.IO.File.WriteAllText(System.IO.Path.Combine(rpath, circle.Name + ".cs"), circle.Text);

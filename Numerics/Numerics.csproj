@@ -106,6 +106,10 @@
     <Compile Include="Geometry\Circlef.cs" />
     <Compile Include="Geometry\Circlei.cs" />
     <Compile Include="Geometry\Circlel.cs" />
+    <Compile Include="Geometry\Ellipsed.cs" />
+    <Compile Include="Geometry\Ellipsef.cs" />
+    <Compile Include="Geometry\Ellipsei.cs" />
+    <Compile Include="Geometry\Ellipsel.cs" />
     <Compile Include="Geometry\Line2d.cs" />
     <Compile Include="Geometry\Line2f.cs" />
     <Compile Include="Geometry\Line2i.cs" />
