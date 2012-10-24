@@ -65,6 +65,20 @@ namespace Ibasa.Numerics.Geometry
 			Start = start;
 			End = end;
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Line3i"/> using the specified values.
+		/// </summary>
+		/// <param name="startX">X coordinate of the start point of the line.</param>
+		/// <param name="startY">Y coordinate of the start point of the line.</param>
+		/// <param name="startZ">Z coordinate of the start point of the line.</param>
+		/// <param name="endX">X coordinate of the end point of the line.</param>
+		/// <param name="endY">Y coordinate of the end point of the line.</param>
+		/// <param name="endZ">Z coordinate of the end point of the line.</param>
+		public Line3i(int startX, int startY, int startZ, int endX, int endY, int endZ)
+		{
+			Start = new Point3i(startX, startY, startZ);
+			End = new Point3i(endX, endY, endZ);
+		}
 		#endregion
 		#region Operations
 		#endregion

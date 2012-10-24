@@ -65,6 +65,18 @@ namespace Ibasa.Numerics.Geometry
 			Start = start;
 			End = end;
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Line2d"/> using the specified values.
+		/// </summary>
+		/// <param name="startX">X coordinate of the start point of the line.</param>
+		/// <param name="startY">Y coordinate of the start point of the line.</param>
+		/// <param name="endX">X coordinate of the end point of the line.</param>
+		/// <param name="endY">Y coordinate of the end point of the line.</param>
+		public Line2d(double startX, double startY, double endX, double endY)
+		{
+			Start = new Point2d(startX, startY);
+			End = new Point2d(endX, endY);
+		}
 		#endregion
 		#region Operations
 		#endregion

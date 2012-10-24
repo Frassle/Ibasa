@@ -198,6 +198,42 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
 
+            if (Dimension == 2)
+            {
+                WriteLine("/// <summary>");
+                WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified values.", Name);
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"startX\">X coordinate of the start point of the line.</param>");
+                WriteLine("/// <param name=\"startY\">Y coordinate of the start point of the line.</param>");
+                WriteLine("/// <param name=\"endX\">X coordinate of the end point of the line.</param>");
+                WriteLine("/// <param name=\"endY\">Y coordinate of the end point of the line.</param>");
+                WriteLine("public {0}({1} startX, {1} startY, {1} endX, {1} endY)", Name, Type);
+                WriteLine("{");
+                Indent();
+                WriteLine("Start = new {0}(startX, startY);", Point);
+                WriteLine("End = new {0}(endX, endY);", Point);
+                Dedent();
+                WriteLine("}");
+            }
+            if (Dimension == 3)
+            {
+                WriteLine("/// <summary>");
+                WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified values.", Name);
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"startX\">X coordinate of the start point of the line.</param>");
+                WriteLine("/// <param name=\"startY\">Y coordinate of the start point of the line.</param>");
+                WriteLine("/// <param name=\"startZ\">Z coordinate of the start point of the line.</param>");
+                WriteLine("/// <param name=\"endX\">X coordinate of the end point of the line.</param>");
+                WriteLine("/// <param name=\"endY\">Y coordinate of the end point of the line.</param>");
+                WriteLine("/// <param name=\"endZ\">Z coordinate of the end point of the line.</param>");
+                WriteLine("public {0}({1} startX, {1} startY, {1} startZ, {1} endX, {1} endY, {1} endZ)", Name, Type);
+                WriteLine("{");
+                Indent();
+                WriteLine("Start = new {0}(startX, startY, startZ);", Point);
+                WriteLine("End = new {0}(endX, endY, endZ);", Point);
+                Dedent();
+                WriteLine("}");
+            }
             WriteLine("#endregion");
         }
 
