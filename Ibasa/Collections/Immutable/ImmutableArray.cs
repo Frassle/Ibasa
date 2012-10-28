@@ -97,6 +97,18 @@ namespace Ibasa.Collections.Immutable
             Array.Copy(array, index, _array, 0, count);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the ImmutableArray{T} class that contains the 
+        /// elements from the specified collection.
+        /// </summary>
+        /// <param name="collection">The collection whose elements are copied to the new ImmutableArray{T}.</param>
+        public ImmutableArray(IEnumerable<T> collection)
+        {
+            Contract.Requires(collection != null);
+
+            _array = collection.ToArray();
+        }
+
         #region Copy
         //
         // Summary:
