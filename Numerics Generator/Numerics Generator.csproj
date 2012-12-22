@@ -54,6 +54,7 @@
     <Compile Include="Ellipse.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Polygon.cs" />
+    <Compile Include="Quaternion.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Sphere.cs" />
     <Compile Include="Rectangle.cs" />

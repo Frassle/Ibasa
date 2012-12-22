@@ -16,29 +16,39 @@ namespace Numerics_Generator
             Index = index;
         }
 
-        public static Component[] Components(int dimensions)
+        public static Component[] Components(int dimensions, bool axis=true)
         {
+            string[] names;
+            if (axis)
+            {
+                names = new string[] { "X", "Y", "Z", "W" };
+            }
+            else
+            {
+                names = new string[] { "A", "B", "C", "D" };
+            }
+
             if (dimensions == 1)
                 return new Component[] {
-                    new Component("X", 0)
+                    new Component(names[0], 0)
                 };
             if (dimensions == 2)
                 return new Component[] {
-                    new Component("X", 0),
-                    new Component("Y", 1)
+                    new Component(names[0], 0),
+                    new Component(names[1], 1)
                 };
             if (dimensions == 3)
                 return new Component[] {
-                    new Component("X", 0),
-                    new Component("Y", 1),
-                    new Component("Z", 2)
+                    new Component(names[0], 0),
+                    new Component(names[1], 1),
+                    new Component(names[2], 2)
                 };
             if (dimensions == 4)
                 return new Component[] {
-                    new Component("X", 0),
-                    new Component("Y", 1),
-                    new Component("Z", 2),
-                    new Component("W", 3)
+                    new Component(names[0], 0),
+                    new Component(names[1], 1),
+                    new Component(names[2], 2),
+                    new Component(names[3], 3)
                 };
             if (dimensions == 8)
                 return new Component[] {
