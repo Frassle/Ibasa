@@ -730,5 +730,17 @@ namespace Ibasa.Numerics.Geometry
 			return new Point2i(Functions.Clamp(value.X, min.X, max.X), Functions.Clamp(value.Y, min.Y, max.Y));
 		}
 		#endregion
+		#region Project
+		/// <summary>
+		/// Projects a point onto a vector, returns the distance of the projection from the origin.
+		/// </summary>
+		/// <param name="vector">The vector to project onto.</param>
+		/// <param name="point">The point to project.</param>
+		/// <returns>The distance from the origin of the projection.</returns>
+		public static int Project(Point2i point, Vector2i vector)
+		{
+			return vector.X * point.X + vector.Y * point.Y;
+		}
+		#endregion
 	}
 }

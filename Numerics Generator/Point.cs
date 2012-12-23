@@ -1145,6 +1145,27 @@ namespace Numerics_Generator
             //}
             #endregion
 
+            #region Project
+
+            WriteLine("#region Project");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Projects a point onto a vector, returns the distance of the projection from the origin.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"vector\">The vector to project onto.</param>");
+            WriteLine("/// <param name=\"point\">The point to project.</param>");
+            WriteLine("/// <returns>The distance from the origin of the projection.</returns>");
+            if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+            WriteLine("public static {0} Project({1} point, {2} vector)", result.Type, Name, new Vector(Type, Dimension));
+            WriteLine("{");
+            Indent();
+            WriteLine("return {0};", string.Join(" + ", Components.Select(component => string.Format("vector.{0} * point.{0}", component))));
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("#endregion");
+            #endregion
+
             #region Interpolation
             if (Type.IsReal)
             {

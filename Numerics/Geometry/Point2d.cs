@@ -826,6 +826,18 @@ namespace Ibasa.Numerics.Geometry
 			return new Point2d(1 / value.X, 1 / value.Y);
 		}
 		#endregion
+		#region Project
+		/// <summary>
+		/// Projects a point onto a vector, returns the distance of the projection from the origin.
+		/// </summary>
+		/// <param name="vector">The vector to project onto.</param>
+		/// <param name="point">The point to project.</param>
+		/// <returns>The distance from the origin of the projection.</returns>
+		public static double Project(Point2d point, Vector2d vector)
+		{
+			return vector.X * point.X + vector.Y * point.Y;
+		}
+		#endregion
 		#region Interpolation
 		/// <summary>
 		/// Performs a linear interpolation between two points.

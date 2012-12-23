@@ -1092,6 +1092,18 @@ namespace Ibasa.Numerics.Geometry
 			return new Point3f(1 / value.X, 1 / value.Y, 1 / value.Z);
 		}
 		#endregion
+		#region Project
+		/// <summary>
+		/// Projects a point onto a vector, returns the distance of the projection from the origin.
+		/// </summary>
+		/// <param name="vector">The vector to project onto.</param>
+		/// <param name="point">The point to project.</param>
+		/// <returns>The distance from the origin of the projection.</returns>
+		public static float Project(Point3f point, Vector3f vector)
+		{
+			return vector.X * point.X + vector.Y * point.Y + vector.Z * point.Z;
+		}
+		#endregion
 		#region Interpolation
 		/// <summary>
 		/// Performs a linear interpolation between two points.

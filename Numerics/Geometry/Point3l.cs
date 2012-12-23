@@ -996,5 +996,17 @@ namespace Ibasa.Numerics.Geometry
 			return new Point3l(Functions.Clamp(value.X, min.X, max.X), Functions.Clamp(value.Y, min.Y, max.Y), Functions.Clamp(value.Z, min.Z, max.Z));
 		}
 		#endregion
+		#region Project
+		/// <summary>
+		/// Projects a point onto a vector, returns the distance of the projection from the origin.
+		/// </summary>
+		/// <param name="vector">The vector to project onto.</param>
+		/// <param name="point">The point to project.</param>
+		/// <returns>The distance from the origin of the projection.</returns>
+		public static long Project(Point3l point, Vector3l vector)
+		{
+			return vector.X * point.X + vector.Y * point.Y + vector.Z * point.Z;
+		}
+		#endregion
 	}
 }
