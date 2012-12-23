@@ -565,5 +565,17 @@ namespace Ibasa.Numerics.Geometry
 				return Functions.Atan2(Absolute(Imaginary(value)), value.A);
 			}
 			#endregion
+			#region Transform
+			public static Vector4f Transform(Vector4f vector, Quaternionf rotation)
+			{
+				var v = rotation * new Quaternionf(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);
+				return new Vector4f(v.A, v.B, v.C, vector.W);
+			}
+			public static Vector3f Transform(Vector3f vector, Quaternionf rotation)
+			{
+				var v = rotation * new Quaternionf(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);
+				return new Vector3f(v.A, v.B, v.C);
+			}
+			#endregion
 		}
 	}

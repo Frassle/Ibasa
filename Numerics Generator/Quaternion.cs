@@ -863,6 +863,28 @@ namespace Numerics_Generator
             WriteLine("#endregion");
             #endregion
 
+            #region Transform
+            WriteLine("#region Transform");
+
+            var vector4 = new Vector(Type, 4);
+
+            WriteLine("public static {0} Transform({0} vector, {1} rotation)", vector4, Name);
+            Indent("{");
+            WriteLine("var v = rotation * new {0}(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);", Name);
+            WriteLine("return new {0}(v.A, v.B, v.C, vector.W);", vector4);
+            Dedent("}");
+            
+            var vector3 = new Vector(Type, 3);
+
+            WriteLine("public static {0} Transform({0} vector, {1} rotation)", vector3, Name);
+            Indent("{");
+            WriteLine("var v = rotation * new {0}(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);", Name);
+            WriteLine("return new {0}(v.A, v.B, v.C);", vector3);
+            Dedent("}");
+
+            WriteLine("#endregion");
+            #endregion
+
             #region Old
             //#region Per component
             //WriteLine("#region Per component");
