@@ -53,6 +53,7 @@
     <Compile Include="Circle.cs" />
     <Compile Include="Ellipse.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="Plane.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Quaternion.cs" />
     <Compile Include="Ray.cs" />
