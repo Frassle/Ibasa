@@ -1355,7 +1355,7 @@ namespace Numerics_Generator
             #endregion
 
             #region Interpolation
-            if(Type.IsReal)
+            if (Type.IsReal)
             {
                 WriteLine("#region Interpolation");
                 //WriteLine("/// <summary>");
