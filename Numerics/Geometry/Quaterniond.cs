@@ -483,6 +483,18 @@ namespace Ibasa.Numerics.Geometry
 		#endregion
 		#region Properties
 		/// <summary>
+		/// Return the axis angle representation of a unit quaternion.
+		/// </summary>
+		/// <param name="value">A unit quaternion.</param>
+		/// <returns>The axis angle of a quaternion.</returns>
+		public static Tuple<Vector3d, double> AxisAngle(Quaterniond value)
+		{
+			var s = Functions.Sqrt(1 - value.A - value.A);
+			return Tuple.Create(
+				new Vector3d(value.B / s, value.C / s, value.D / s),
+				2 * Functions.Acos(value.A));
+		}
+		/// <summary>
 		/// Return real part of a quaternion.
 		/// </summary>
 		/// <param name="value">A quaternion.</param>

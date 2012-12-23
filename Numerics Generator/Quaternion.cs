@@ -761,6 +761,43 @@ namespace Numerics_Generator
             #region Properties
             
             WriteLine("#region Properties");
+            /// <summary>
+            //    /// Gets the angle of the quaternion.
+            //    /// </summary>
+            //    public double Angle
+            //    {
+            //        get
+            //        {
+            //            return 2.0 * Math.Acos(A);
+            //        }
+            //    }
+            //    /// <summary>
+            //    /// Gets the axis components of the quaternion.
+            //    /// </summary>
+            //    public Double3 Axis
+            //    {
+            //        get
+            //        {
+            //            double s = Math.Sqrt(1.0 - A - A);
+            //            return new Double3(B / s, C / s, D / s);
+            //        }
+            //    }
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Return the axis angle representation of a unit quaternion.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">A unit quaternion.</param>");
+            WriteLine("/// <returns>The axis angle of a quaternion.</returns>");
+            WriteLine("public static Tuple<{0}, {1}> AxisAngle({2} value)", new Vector(Type, 3), Type, Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("var s = Functions.Sqrt(1 - value.A - value.A);");
+            WriteLine("return Tuple.Create(");
+            WriteLine("\tnew {0}(value.B / s, value.C / s, value.D / s),", new Vector(Type, 3));
+            WriteLine("\t2 * Functions.Acos(value.A));");
+            Dedent();
+            WriteLine("}");
+
             WriteLine("/// <summary>");
             WriteLine("/// Return real part of a quaternion.");
             WriteLine("/// </summary>");
