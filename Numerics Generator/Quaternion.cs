@@ -30,7 +30,7 @@ namespace Numerics_Generator
         {
             get
             {
-                return string.Format("Quaternion{0}", Type.Suffix == "d" ? "" : Type.Suffix);
+                return string.Format("Quaternion{0}", Type.Suffix);
             }
         }
 
@@ -319,28 +319,47 @@ namespace Numerics_Generator
         {
             WriteLine("#region Conversions");
 
-            foreach (var type in Types.Where(t => t != Type))
+            foreach (var type in Types)
             {
                 string imex = type.IsImplicitlyConvertibleTo(Type) ? "implicit" : "explicit";
 
-                Quaternion other = new Quaternion(type);
+                if (type != Type)
+                {
+                    Quaternion other = new Quaternion(type);
 
-                var casts = string.Join(", ",
-                    Components.Select(component => string.Format("({0})value.{1}", Type, component)));
+                    var casts = string.Join(", ",
+                        Components.Select(component => string.Format("({0})value.{1}", Type, component)));
+
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Defines an {0} conversion of a {1} value to a {2}.", imex, other, Name);
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"value\">The value to convert to a {0}.</param>", Name);
+                    WriteLine("/// <returns>A {0} that has all components equal to value.</returns>", Name);
+                    if (Type.IsCLSCompliant && !type.IsCLSCompliant)
+                    {
+                        WriteLine("[CLSCompliant(false)]");
+                    }
+                    WriteLine("public static {0} operator {1}({2} value)", imex, Name, other);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("return new {0}({1});", Name, casts);
+                    Dedent();
+                    WriteLine("}");
+                }
 
                 WriteLine("/// <summary>");
-                WriteLine("/// Defines an {0} conversion of a {1} value to a {2}.", imex, other, Name);
+                WriteLine("/// Defines an {0} conversion of a {1} value to a {2}.", imex, type, Name);
                 WriteLine("/// </summary>");
                 WriteLine("/// <param name=\"value\">The value to convert to a {0}.</param>", Name);
-                WriteLine("/// <returns>A {0} that has all components equal to value.</returns>", Name);
+                WriteLine("/// <returns>A {0} that has all a real component equal to value.</returns>", Name);
                 if (Type.IsCLSCompliant && !type.IsCLSCompliant)
                 {
                     WriteLine("[CLSCompliant(false)]");
                 }
-                WriteLine("public static {0} operator {1}({2} value)", imex, Name, other);
+                WriteLine("public static {0} operator {1}({2} value)", imex, Name, type);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", Name, casts);
+                WriteLine("return new {0}(({1})value, 0, 0, 0);", Name, Type);
                 Dedent();
                 WriteLine("}");
             }
@@ -503,6 +522,53 @@ namespace Numerics_Generator
             Indent();
 
             var result = new Quaternion(Type.PositiveType);
+
+            #region Factory
+
+            WriteLine("#region Factory");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> structure given a rotation and an axis.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"axis\">The axis of rotation.</param>");
+            WriteLine("/// <param name=\"angle\">The angle of rotation.</param>");
+            WriteLine("/// <returns>The newly created quaternion.</returns>");
+            WriteLine("public static {0} FromRotationAxis({1} axis, {2} angle)", Name, new Vector(Type, 3), Type);
+            Indent("{");
+            WriteLine("axis = Vector.Normalize(axis);");
+            WriteLine("var half = angle * 0.5f;");
+            WriteLine("var sin =  Functions.Sin(half);");
+            WriteLine("var cos =  Functions.Cos(half);");
+            WriteLine("return new {0}(cos, axis.X * sin, axis.Y * sin, axis.Z * sin);", Name);
+            Dedent("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> structure given a yaw, pitch, and roll value.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"yaw\">The yaw of rotation.</param>");
+            WriteLine("/// <param name=\"pitch\">The pitch of rotation.</param>");
+            WriteLine("/// <param name=\"roll\">The roll of rotation.</param>");
+            WriteLine("/// <returns>The newly created quaternion.</returns>");
+            WriteLine("public static {0} FromRotationAngles({1} yaw, {1} pitch, {1} roll)", Name, Type);
+            Indent("{");
+            WriteLine("var halfRoll = roll * 0.5f;");
+            WriteLine("var sinRoll = Functions.Sin(halfRoll);");
+            WriteLine("var cosRoll = Functions.Cos(halfRoll);");
+            WriteLine("var halfPitch = pitch * 0.5f;");
+            WriteLine("var sinPitch = Functions.Sin(halfPitch);");
+            WriteLine("var cosPitch = Functions.Cos(halfPitch);");
+            WriteLine("var halfYaw = yaw * 0.5f;");
+            WriteLine("var sinYaw = Functions.Sin(halfYaw);");
+            WriteLine("var cosYaw = Functions.Cos(halfYaw);");
+            WriteLine("return new {0}(", Name);
+            WriteLine("\t(cosYaw * cosPitch * cosRoll) + (sinYaw * sinPitch * sinRoll),");
+            WriteLine("\t(cosYaw * sinPitch * cosRoll) + (sinYaw * cosPitch * sinRoll),");
+            WriteLine("\t(sinYaw * cosPitch * cosRoll) - (cosYaw * sinPitch * sinRoll),");
+            WriteLine("\t(cosYaw * cosPitch * sinRoll) - (sinYaw * sinPitch * cosRoll));");
+            Dedent("}");
+
+            WriteLine("#endregion");
+            #endregion
 
             #region Binary
             WriteLine("#region Binary");
@@ -687,6 +753,8 @@ namespace Numerics_Generator
             Indent();
             WriteLine("return {0};",
                 string.Join(" || ", Components.Select(component => string.Format("predicate(value.{0})", component))));
+            Dedent();
+            WriteLine("}");
             WriteLine("#endregion");
             #endregion
 
@@ -752,6 +820,7 @@ namespace Numerics_Generator
             WriteLine("return {0}.Zero;", Name);
             Dedent();
             WriteLine("}");
+            WriteLine("return value / absolute;");
             WriteLine("}");
             WriteLine("/// <summary>");
             WriteLine("/// Returns the multiplicative inverse of a quaternion.");
@@ -794,6 +863,7 @@ namespace Numerics_Generator
             WriteLine("#endregion");
             #endregion
 
+            #region Old
             //#region Per component
             //WriteLine("#region Per component");
 
@@ -1214,6 +1284,7 @@ namespace Numerics_Generator
             //    WriteLine("#endregion");
             //}
             //#endregion
+            #endregion
 
             Dedent();
             WriteLine("}");

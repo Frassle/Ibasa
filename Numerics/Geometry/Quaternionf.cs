@@ -175,13 +175,31 @@ namespace Ibasa.Numerics.Geometry
 		#endregion
 		#region Conversions
 		/// <summary>
-		/// Defines an explicit conversion of a Quaternion value to a Quaternionf.
+		/// Defines an explicit conversion of a Quaterniond value to a Quaternionf.
 		/// </summary>
 		/// <param name="value">The value to convert to a Quaternionf.</param>
 		/// <returns>A Quaternionf that has all components equal to value.</returns>
-		public static explicit operator Quaternionf(Quaternion value)
+		public static explicit operator Quaternionf(Quaterniond value)
 		{
 			return new Quaternionf((float)value.A, (float)value.B, (float)value.C, (float)value.D);
+		}
+		/// <summary>
+		/// Defines an explicit conversion of a double value to a Quaternionf.
+		/// </summary>
+		/// <param name="value">The value to convert to a Quaternionf.</param>
+		/// <returns>A Quaternionf that has all a real component equal to value.</returns>
+		public static explicit operator Quaternionf(double value)
+		{
+			return new Quaternionf((float)value, 0, 0, 0);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a float value to a Quaternionf.
+		/// </summary>
+		/// <param name="value">The value to convert to a Quaternionf.</param>
+		/// <returns>A Quaternionf that has all a real component equal to value.</returns>
+		public static implicit operator Quaternionf(float value)
+		{
+			return new Quaternionf((float)value, 0, 0, 0);
 		}
 		#endregion
 		#region Equatable
@@ -291,6 +309,46 @@ namespace Ibasa.Numerics.Geometry
 	/// </summary>
 	public static partial class Quaternion
 	{
+		#region Factory
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Quaternionf"/> structure given a rotation and an axis.
+		/// </summary>
+		/// <param name="axis">The axis of rotation.</param>
+		/// <param name="angle">The angle of rotation.</param>
+		/// <returns>The newly created quaternion.</returns>
+		public static Quaternionf FromRotationAxis(Vector3f axis, float angle)
+		{
+			axis = Vector.Normalize(axis);
+			var half = angle * 0.5f;
+			var sin =  Functions.Sin(half);
+			var cos =  Functions.Cos(half);
+			return new Quaternionf(cos, axis.X * sin, axis.Y * sin, axis.Z * sin);
+		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Quaternionf"/> structure given a yaw, pitch, and roll value.
+		/// </summary>
+		/// <param name="yaw">The yaw of rotation.</param>
+		/// <param name="pitch">The pitch of rotation.</param>
+		/// <param name="roll">The roll of rotation.</param>
+		/// <returns>The newly created quaternion.</returns>
+		public static Quaternionf FromRotationAngles(float yaw, float pitch, float roll)
+		{
+			var halfRoll = roll * 0.5f;
+			var sinRoll = Functions.Sin(halfRoll);
+			var cosRoll = Functions.Cos(halfRoll);
+			var halfPitch = pitch * 0.5f;
+			var sinPitch = Functions.Sin(halfPitch);
+			var cosPitch = Functions.Cos(halfPitch);
+			var halfYaw = yaw * 0.5f;
+			var sinYaw = Functions.Sin(halfYaw);
+			var cosYaw = Functions.Cos(halfYaw);
+			return new Quaternionf(
+				(cosYaw * cosPitch * cosRoll) + (sinYaw * sinPitch * sinRoll),
+				(cosYaw * sinPitch * cosRoll) + (sinYaw * cosPitch * sinRoll),
+				(sinYaw * cosPitch * cosRoll) - (cosYaw * sinPitch * sinRoll),
+				(cosYaw * cosPitch * sinRoll) - (sinYaw * sinPitch * cosRoll));
+		}
+		#endregion
 		#region Binary
 		/// <summary>
 		/// Writes the given <see cref="Quaternionf"/> to an <see cref="Ibasa.IO.BinaryWriter">.
@@ -421,89 +479,91 @@ namespace Ibasa.Numerics.Geometry
 		public static bool Any(Quaternionf value, Predicate<float> predicate)
 		{
 			return predicate(value.A) || predicate(value.B) || predicate(value.C) || predicate(value.D);
-			#endregion
-			#region Properties
-			/// <summary>
-			/// Return real part of a quaternion.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The real part of a quaternion.</returns>
-			public static Quaternionf Real(Quaternionf value)
-			{
-				return new Quaternionf(value.A, 0, 0, 0);
-			}
-			/// <summary>
-			/// Return imaginary part of a quaternion.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The imaginary part of a quaternion.</returns>
-			public static Quaternionf Imaginary(Quaternionf value)
-			{
-				return new Quaternionf(0, value.B, value.C, value.D);
-			}
-			/// <summary>
-			/// Computes the absolute squared value of a quaternion and returns the result.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The absolute squared value of value.</returns>
-			public static float AbsoluteSquared(Quaternionf value)
-			{
-				return (value.A * value.A + value.B * value.B + value.C * value.C + value.D * value.D);
-			}
-			/// <summary>
-			/// Computes the absolute value (or modulus or magnitude) of a quaternion and returns the result.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The absolute value of value.</returns>
-			public static float Absolute(Quaternionf value)
-			{
-				return Functions.Sqrt(value.A * value.A + value.B * value.B + value.C * value.C + value.D * value.D);
-			}
-			/// <summary>
-			/// Computes the normalized value (or unit) of a quaternion.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The normalized value of value.</returns>
-			public static Quaternionf Normalize(Quaternionf value)
-			{
-				var absolute = Absolute(value);
-				if(absolute <= float.Epsilon)
-				{
-					return Quaternionf.Zero;
-				}
-				}
-				/// <summary>
-				/// Returns the multiplicative inverse of a quaternion.
-				/// </summary>
-				/// <param name="value">A quaternion.</param>
-				/// <returns>The reciprocal of value.</returns>
-				public static Quaternionf Reciprocal(Quaternionf value)
-				{
-					var absoluteSquared = AbsoluteSquared(value);
-					return new Quaternionf(
-						value.A / absoluteSquared,
-						-value.B / absoluteSquared,
-						-value.C / absoluteSquared,
-						-value.D / absoluteSquared);
-				}
-				/// <summary>
-				/// Computes the conjugate of a quaternion and returns the result.
-				/// </summary>
-				/// <param name="value">A quaternion.</param>
-				/// <returns>The conjugate of value.</returns>
-				public static Quaternionf Conjugate(Quaternionf value)
-				{
-					return new Quaternionf(value.A, -value.B, -value.C, -value.D);
-				}
-				/// <summary>
-				/// Computes the argument of a quaternion and returns the result.
-				/// </summary>
-				/// <param name="value">A quaternion.</param>
-				/// <returns>The argument of value.</returns>
-				public static float Argument(Quaternionf value)
-				{
-					return Functions.Atan2(Absolute(Imaginary(value)), value.A);
-				}
-				#endregion
-			}
 		}
+		#endregion
+		#region Properties
+		/// <summary>
+		/// Return real part of a quaternion.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The real part of a quaternion.</returns>
+		public static Quaternionf Real(Quaternionf value)
+		{
+			return new Quaternionf(value.A, 0, 0, 0);
+		}
+		/// <summary>
+		/// Return imaginary part of a quaternion.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The imaginary part of a quaternion.</returns>
+		public static Quaternionf Imaginary(Quaternionf value)
+		{
+			return new Quaternionf(0, value.B, value.C, value.D);
+		}
+		/// <summary>
+		/// Computes the absolute squared value of a quaternion and returns the result.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The absolute squared value of value.</returns>
+		public static float AbsoluteSquared(Quaternionf value)
+		{
+			return (value.A * value.A + value.B * value.B + value.C * value.C + value.D * value.D);
+		}
+		/// <summary>
+		/// Computes the absolute value (or modulus or magnitude) of a quaternion and returns the result.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The absolute value of value.</returns>
+		public static float Absolute(Quaternionf value)
+		{
+			return Functions.Sqrt(value.A * value.A + value.B * value.B + value.C * value.C + value.D * value.D);
+		}
+		/// <summary>
+		/// Computes the normalized value (or unit) of a quaternion.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The normalized value of value.</returns>
+		public static Quaternionf Normalize(Quaternionf value)
+		{
+			var absolute = Absolute(value);
+			if(absolute <= float.Epsilon)
+			{
+				return Quaternionf.Zero;
+			}
+			return value / absolute;
+			}
+			/// <summary>
+			/// Returns the multiplicative inverse of a quaternion.
+			/// </summary>
+			/// <param name="value">A quaternion.</param>
+			/// <returns>The reciprocal of value.</returns>
+			public static Quaternionf Reciprocal(Quaternionf value)
+			{
+				var absoluteSquared = AbsoluteSquared(value);
+				return new Quaternionf(
+					value.A / absoluteSquared,
+					-value.B / absoluteSquared,
+					-value.C / absoluteSquared,
+					-value.D / absoluteSquared);
+			}
+			/// <summary>
+			/// Computes the conjugate of a quaternion and returns the result.
+			/// </summary>
+			/// <param name="value">A quaternion.</param>
+			/// <returns>The conjugate of value.</returns>
+			public static Quaternionf Conjugate(Quaternionf value)
+			{
+				return new Quaternionf(value.A, -value.B, -value.C, -value.D);
+			}
+			/// <summary>
+			/// Computes the argument of a quaternion and returns the result.
+			/// </summary>
+			/// <param name="value">A quaternion.</param>
+			/// <returns>The argument of value.</returns>
+			public static float Argument(Quaternionf value)
+			{
+				return Functions.Atan2(Absolute(Imaginary(value)), value.A);
+			}
+			#endregion
+		}
+	}

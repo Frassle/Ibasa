@@ -158,7 +158,7 @@
     <Compile Include="Geometry\Polygon3f.cs" />
     <Compile Include="Geometry\Polygon3i.cs" />
     <Compile Include="Geometry\Polygon3l.cs" />
-    <Compile Include="Geometry\Quaternion.cs" />
+    <Compile Include="Geometry\Quaterniond.cs" />
     <Compile Include="Geometry\Quaternionf.cs" />
     <Compile Include="Geometry\Rayd.cs" />
     <Compile Include="Geometry\Rayf.cs" />
