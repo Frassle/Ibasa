@@ -142,6 +142,8 @@
     <Compile Include="Geometry\Matrices\Matrix4x4f.cs" />
     <Compile Include="Geometry\Patches\Bezier.cs" />
     <Compile Include="Geometry\Patches\PatchPoint.cs" />
+    <Compile Include="Geometry\Planed.cs" />
+    <Compile Include="Geometry\Planef.cs" />
     <Compile Include="Geometry\Point2d.cs" />
     <Compile Include="Geometry\Point2f.cs" />
     <Compile Include="Geometry\Point2i.cs" />

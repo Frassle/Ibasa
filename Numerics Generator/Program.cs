@@ -29,6 +29,16 @@ namespace Numerics_Generator
                 var path = System.IO.Path.Combine(root, "Geometry", quaternion.Name + ".cs");
                 System.IO.File.WriteAllText(path, quaternion.Text);
                 Console.WriteLine("Done - " + quaternion.Name);
+            } 
+            
+            foreach (var type in Plane.Types)
+            {
+                var plane = new Plane(type);
+                plane.Generate();
+
+                var path = System.IO.Path.Combine(root, "Geometry", plane.Name + ".cs");
+                System.IO.File.WriteAllText(path, plane.Text);
+                Console.WriteLine("Done - " + plane.Name);
             }
 
             foreach (int dimension in Vector.Sizes)
