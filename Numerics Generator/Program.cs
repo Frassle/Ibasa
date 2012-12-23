@@ -21,6 +21,16 @@ namespace Numerics_Generator
                 Console.WriteLine("Done - " + color.Name);
             }
 
+            foreach (var type in Quaternion.Types)
+            {
+                var quaternion = new Quaternion(type);
+                quaternion.Generate();
+
+                var path = System.IO.Path.Combine(root, "Geometry", quaternion.Name + ".cs");
+                System.IO.File.WriteAllText(path, quaternion.Text);
+                Console.WriteLine("Done - " + quaternion.Name);
+            }
+
             foreach (int dimension in Vector.Sizes)
             {
                 foreach (var type in Vector.Types)
