@@ -71,14 +71,22 @@ namespace Numerics_Generator
             Builder.AppendLine();
         }
 
-        protected void Indent(string indent = "\t")
+        protected void Indent(string pre = "", string indent = "\t", string post = "")
         {
+            if (pre != string.Empty)
+                WriteLine(pre);
             Indents.Add(indent);
+            if (post != string.Empty)
+                WriteLine(post);
         }
 
-        protected void Dedent()
+        protected void Dedent(string post = "", string pre = "")
         {
+            if (pre != string.Empty)
+                WriteLine(pre);
             Indents.RemoveAt(Indents.Count - 1);
+            if (post != string.Empty)
+                WriteLine(post);
         }
 
         public string Text { get { return Builder.ToString(); } }
