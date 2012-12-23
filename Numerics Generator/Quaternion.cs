@@ -862,6 +862,70 @@ namespace Numerics_Generator
             WriteLine("}");
             WriteLine("#endregion");
             #endregion
+            
+            #region Product
+            WriteLine("#region Product");
+            WriteLine("/// <summary>");
+            WriteLine("/// Calculates the dot product (inner product) of two quaternions.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"left\">First source quaternion.</param>");
+            WriteLine("/// <param name=\"right\">Second source quaternion.</param>");
+            WriteLine("/// <returns>The dot product of the two quaternions.</returns>");
+            WriteLine("public static {0} Dot({1} left, {1} right)", Type, Name);
+            Indent("{");
+            WriteLine("return left.A * right.A + left.B * right.B + left.C * right.C + left.D * right.D;");
+            Dedent("}");
+            WriteLine("#endregion");
+            #endregion
+
+            #region Interpolation
+            WriteLine("#region Interpolation");
+            WriteLine("/// <summary>");
+            WriteLine("/// Performs a linear interpolation between two quaternions.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"start\">Start quaternion.</param>");
+            WriteLine("/// <param name=\"end\">End quaternion.</param>");
+            WriteLine("/// <param name=\"amount\">Value between 0 and 1 indicating the weight of <paramref name=\"end\"/>.</param>");
+            WriteLine("/// <returns>The linear interpolation of the two quaternions.</returns>");
+            WriteLine("/// <remarks>");
+            WriteLine("/// This method performs the linear interpolation based on the following formula.");
+            WriteLine("/// <code>start + (end - start) * amount</code>");
+            WriteLine("/// Passing <paramref name=\"amount\"/> a value of 0 will cause <paramref name=\"start\"/> to be returned; a value of 1 will cause <paramref name=\"end\"/> to be returned. ");
+            WriteLine("/// </remarks>");
+            WriteLine("public static {0} Lerp({0} start, {0} end, {1} amount)", Name, Type);
+            Indent("{");
+            WriteLine("return new {0}(", Name);
+            WriteLine("\tFunctions.Lerp(start.A, end.A, amount),");
+            WriteLine("\tFunctions.Lerp(start.B, end.B, amount),");
+            WriteLine("\tFunctions.Lerp(start.C, end.C, amount),");
+            WriteLine("\tFunctions.Lerp(start.D, end.D, amount));");
+            Dedent("}");
+            WriteLine("/// <summary>");
+            WriteLine("/// Interpolates between two unit quaternions, using spherical linear interpolation.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"start\">Start quaternion.</param>");
+            WriteLine("/// <param name=\"end\">End quaternion.</param>");
+            WriteLine("/// <param name=\"amount\">Value between 0 and 1 indicating the weight of <paramref name=\"end\"/>.</param>");
+            WriteLine("/// <returns>The spherical linear interpolation of the two quaternions.</returns>");
+            WriteLine("///  <remarks>");
+            WriteLine("/// Passing <paramref name=\"amount\"/> a value of 0 will cause <paramref name=\"start\"/> to be returned; a value of 1 will cause <paramref name=\"end\"/> to be returned. ");
+            WriteLine("/// </remarks>");
+            WriteLine("public static {0} Slerp({0} start, {0} end, {1} amount)", Name, Type);
+            Indent("{");
+            WriteLine("var cosTheta = Dot(start, end);");
+            WriteLine("//Cannot use slerp, use lerp instead");
+            WriteLine("if (Functions.Abs(cosTheta) - 1 < {0}.Epsilon)", Type);
+            Indent("{");
+            WriteLine("return Lerp(start, end, amount);");
+            Dedent("}");
+            WriteLine("var theta = Functions.Acos(cosTheta);");
+            WriteLine("var sinTheta = Functions.Sin(theta);");
+            WriteLine("var t0 = Functions.Sin((1 - amount) * theta) / sinTheta;");
+            WriteLine("var t1 = Functions.Sin(amount * theta) / sinTheta;");
+            WriteLine("return t0 * start + t1 * end;");
+            Dedent("}");
+            WriteLine("#endregion");
+            #endregion
 
             #region Transform
             WriteLine("#region Transform");

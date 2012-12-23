@@ -565,6 +565,64 @@ namespace Ibasa.Numerics.Geometry
 				return Functions.Atan2(Absolute(Imaginary(value)), value.A);
 			}
 			#endregion
+			#region Product
+			/// <summary>
+			/// Calculates the dot product (inner product) of two quaternions.
+			/// </summary>
+			/// <param name="left">First source quaternion.</param>
+			/// <param name="right">Second source quaternion.</param>
+			/// <returns>The dot product of the two quaternions.</returns>
+			public static double Dot(Quaterniond left, Quaterniond right)
+			{
+				return left.A * right.A + left.B * right.B + left.C * right.C + left.D * right.D;
+			}
+			#endregion
+			#region Interpolation
+			/// <summary>
+			/// Performs a linear interpolation between two quaternions.
+			/// </summary>
+			/// <param name="start">Start quaternion.</param>
+			/// <param name="end">End quaternion.</param>
+			/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+			/// <returns>The linear interpolation of the two quaternions.</returns>
+			/// <remarks>
+			/// This method performs the linear interpolation based on the following formula.
+			/// <code>start + (end - start) * amount</code>
+			/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+			/// </remarks>
+			public static Quaterniond Lerp(Quaterniond start, Quaterniond end, double amount)
+			{
+				return new Quaterniond(
+					Functions.Lerp(start.A, end.A, amount),
+					Functions.Lerp(start.B, end.B, amount),
+					Functions.Lerp(start.C, end.C, amount),
+					Functions.Lerp(start.D, end.D, amount));
+			}
+			/// <summary>
+			/// Interpolates between two unit quaternions, using spherical linear interpolation.
+			/// </summary>
+			/// <param name="start">Start quaternion.</param>
+			/// <param name="end">End quaternion.</param>
+			/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+			/// <returns>The spherical linear interpolation of the two quaternions.</returns>
+			///  <remarks>
+			/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+			/// </remarks>
+			public static Quaterniond Slerp(Quaterniond start, Quaterniond end, double amount)
+			{
+				var cosTheta = Dot(start, end);
+				//Cannot use slerp, use lerp instead
+				if (Functions.Abs(cosTheta) - 1 < double.Epsilon)
+				{
+					return Lerp(start, end, amount);
+				}
+				var theta = Functions.Acos(cosTheta);
+				var sinTheta = Functions.Sin(theta);
+				var t0 = Functions.Sin((1 - amount) * theta) / sinTheta;
+				var t1 = Functions.Sin(amount * theta) / sinTheta;
+				return t0 * start + t1 * end;
+			}
+			#endregion
 			#region Transform
 			public static Vector4d Transform(Vector4d vector, Quaterniond rotation)
 			{
