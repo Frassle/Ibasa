@@ -2974,6 +2974,20 @@ namespace Ibasa.Numerics
             return ((1 - amount1 - amount2) * value1) + (amount1 * value2) + (amount2 * value3);
         }
 
+
+        /// <summary>
+        /// Performs a linear interpolation between two values.
+        /// </summary>
+        /// <param name="value1">First value.</param>
+        /// <param name="value2">Second value.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="value2"/>.</param>
+        /// <returns>The linear interpolation of the two values.</returns>
+        [Pure]
+        public static float Lerp(float value1, float value2, float amount)
+        {
+            return (1 - amount) * value1 + amount * value2;
+        }
+
         /// <summary>
         /// Performs a linear interpolation between two values.
         /// </summary>
