@@ -50,11 +50,11 @@ namespace Ibasa.Numerics.Geometry
 				switch (index)
 				{
 					case 0:
-						return normal.X;
+						return Normal.X;
 					case 1:
-						return normal.Y;
+						return Normal.Y;
 					case 2:
-						return normal.Z;
+						return Normal.Z;
 					case 3:
 						return D;
 					default:
@@ -66,7 +66,7 @@ namespace Ibasa.Numerics.Geometry
 		{
 			return new float[]
 			{
-				normal.X, normal.Y, normal.Z, D
+				Normal.X, Normal.Y, Normal.Z, D
 			};
 		}
 		#endregion
@@ -101,7 +101,7 @@ namespace Ibasa.Numerics.Geometry
 		public Planef(Point3f point, Vector3f normal)
 		{
 			Normal = normal;
-			D = -Vector.Dot(normal, point);
+			D = -Point.Project(point, normal);
 		}
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Planef"/> class.
@@ -112,7 +112,7 @@ namespace Ibasa.Numerics.Geometry
 		public Planef(Point3f point1, Point3f point2, Point3f point3)
 		{
 			Normal = Vector.Normalize(Vector.Cross(point2 - point1, point3 - point1));
-			D = -Vector.Dot(Normal, point1);
+			D = -Point.Project(point1, Normal);
 		}
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Planef"/> class.
@@ -295,7 +295,7 @@ namespace Ibasa.Numerics.Geometry
 		/// <returns>The product of the left and right parameters.</returns>
 		public static Planef Multiply(Planef plane, float scalar)
 		{
-			return new Planef(vector.Normal.X * scalar, vector.Normal.Y * scalar, vector.Normal.Z * scalar, vector.D * scalar);
+			return new Planef(plane.Normal.X * scalar, plane.Normal.Y * scalar, plane.Normal.Z * scalar, plane.D * scalar);
 		}
 		#endregion
 		#region Equatable
@@ -325,11 +325,11 @@ namespace Ibasa.Numerics.Geometry
 		/// Calculates the dot product of a specified vector and the normal of the plane plus the distance value of the plane.
 		/// </summary>
 		/// <param name="plane">The source plane.</param>
-		/// <param name="vector">The source vector.</param>
+		/// <param name="point">The source point.</param>
 		/// <returns>The dot product of a specified vector and the normal of the Plane plus the distance value of the plane.</returns>
-		public static float DotCoordinate(Planef plane, Vector3f vector)
+		public static float DotCoordinate(Planef plane, Point3f point)
 		{
-			return (plane.Normal.X * vector.X) + (plane.Normal.Y * vector.Y) + (plane.Normal.Z * vector.Z) + plane.D;
+			return (plane.Normal.X * point.X) + (plane.Normal.Y * point.Y) + (plane.Normal.Z * point.Z) + plane.D;
 		}
 		/// <summary>
 		/// Calculates the dot product of the specified vector and the normal of the plane.

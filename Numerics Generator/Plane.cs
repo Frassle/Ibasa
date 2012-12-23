@@ -139,21 +139,21 @@ namespace Numerics_Generator
             Indent();
             WriteLine("case 0:");
             Indent();
-            WriteLine("return normal.X;");
+            WriteLine("return Normal.X;");
             Dedent();
             Dedent();
 
             Indent();
             WriteLine("case 1:");
             Indent();
-            WriteLine("return normal.Y;");
+            WriteLine("return Normal.Y;");
             Dedent();
             Dedent();
 
             Indent();
             WriteLine("case 2:");
             Indent();
-            WriteLine("return normal.Z;");
+            WriteLine("return Normal.Z;");
             Dedent();
             Dedent();
 
@@ -183,7 +183,7 @@ namespace Numerics_Generator
             WriteLine("return new {0}[]", Type);
             WriteLine("{");
             Indent();
-            WriteLine("normal.X, normal.Y, normal.Z, D");
+            WriteLine("Normal.X, Normal.Y, Normal.Z, D");
             Dedent();
             WriteLine("};");
             Dedent();
@@ -225,7 +225,7 @@ namespace Numerics_Generator
             WriteLine("public {0}({1} point, {2} normal)", Name, new Point(Type, 3), new Vector(Type, 3));
             Indent("{");
             WriteLine("Normal = normal;");
-            WriteLine("D = -Vector.Dot(normal, point);");
+            WriteLine("D = -Point.Project(point, normal);");
             Dedent("}");
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> class.", Name);
@@ -236,7 +236,7 @@ namespace Numerics_Generator
             WriteLine("public {0}({1} point1, {1} point2, {1} point3)", Name, new Point(Type, 3));
             Indent("{");
             WriteLine("Normal = Vector.Normalize(Vector.Cross(point2 - point1, point3 - point1));");
-            WriteLine("D = -Vector.Dot(Normal, point1);");
+            WriteLine("D = -Point.Project(point1, Normal);");
             Dedent("}");
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> class.", Name);
@@ -506,7 +506,7 @@ namespace Numerics_Generator
             WriteLine("public static {0} Multiply({1} plane, {2} scalar)", result, Name, result.Type);
             WriteLine("{");
             Indent();
-            WriteLine("return new {0}(vector.Normal.X * scalar, vector.Normal.Y * scalar, vector.Normal.Z * scalar, vector.D * scalar);", result);
+            WriteLine("return new {0}(plane.Normal.X * scalar, plane.Normal.Y * scalar, plane.Normal.Z * scalar, plane.D * scalar);", result);
             Dedent();
             WriteLine("}");
 
@@ -547,11 +547,11 @@ namespace Numerics_Generator
             WriteLine("/// Calculates the dot product of a specified vector and the normal of the plane plus the distance value of the plane.");
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"plane\">The source plane.</param>");
-            WriteLine("/// <param name=\"vector\">The source vector.</param>");
+            WriteLine("/// <param name=\"point\">The source point.</param>");
             WriteLine("/// <returns>The dot product of a specified vector and the normal of the Plane plus the distance value of the plane.</returns>");
-            WriteLine("public static {0} DotCoordinate({1} plane, {2} vector)", Type, Name, new Vector(Type, 3));
+            WriteLine("public static {0} DotCoordinate({1} plane, {2} point)", Type, Name, new Point(Type, 3));
             Indent("{");
-            WriteLine("return (plane.Normal.X * vector.X) + (plane.Normal.Y * vector.Y) + (plane.Normal.Z * vector.Z) + plane.D;");
+            WriteLine("return (plane.Normal.X * point.X) + (plane.Normal.Y * point.Y) + (plane.Normal.Z * point.Z) + plane.D;");
 	        Dedent("}");
             WriteLine("/// <summary>");
             WriteLine("/// Calculates the dot product of the specified vector and the normal of the plane.");
