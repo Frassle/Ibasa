@@ -342,5 +342,16 @@ namespace Ibasa.Numerics.Geometry
 			return (plane.Normal.X * normal.X) + (plane.Normal.Y * normal.Y) + (plane.Normal.Z * normal.Z);
 		}
 		#endregion
+		#region Normalize
+		/// <summary>
+		/// Changes the coefficients of the normal vector of a plane to make it of unit length.
+		/// </summary>
+		/// <param name="plane">The plane to normalize.</param>
+		/// <returns>A new plane with a normal having unit length.</returns>
+		public static Planed Normalize(Planed plane)
+		{
+			return new Planed(Vector.Normalize(plane.Normal), plane.D);
+		}
+		#endregion
 	}
 }

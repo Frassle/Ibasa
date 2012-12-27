@@ -566,6 +566,23 @@ namespace Numerics_Generator
 
             WriteLine("#endregion");      
             #endregion
+
+            #region Normalize
+            WriteLine("#region Normalize");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Changes the coefficients of the normal vector of a plane to make it of unit length.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"plane\">The plane to normalize.</param>");
+            WriteLine("/// <returns>A new plane with a normal having unit length.</returns>");
+            WriteLine("public static {0} Normalize({0} plane)", Name);
+            Indent("{");
+            WriteLine("return new {0}(Vector.Normalize(plane.Normal), plane.D);", Name);
+            Dedent("}");
+
+            WriteLine("#endregion");
+            #endregion
+
             Dedent();
             WriteLine("}");
         }
