@@ -1237,7 +1237,7 @@ namespace Ibasa.Collections.Immutable
                     return false;
 
                 ++index;
-                return index == _array.Count;
+                return index < _array.Count;
             }
 
             object System.Collections.IEnumerator.Current
