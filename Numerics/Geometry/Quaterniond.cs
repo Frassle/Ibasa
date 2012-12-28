@@ -364,6 +364,26 @@ namespace Ibasa.Numerics.Geometry
 			d *= Functions.Sign(d * (matrix[1, 0] - matrix[0, 1]));
 			return new Quaterniond(a, b, c, d);
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Quaterniond"/> structure given a direction and up axis.
+		/// </summary>
+		/// <param name="direction">The direction vector.</param>
+		/// <param name="up">The up axis.</param>
+		/// <returns>The newly created quaternion.</returns>
+		public static Quaterniond FromOrientation(Vector3d direction, Vector3d up)
+		{
+			var zaxis = Vector.Normalize(direction);
+			var xaxis = Vector.Normalize(Vector.Cross(up, zaxis));
+			var yaxis = Vector.Cross(zaxis, xaxis);
+			var a = Functions.Sqrt(Functions.Max(0, 1 + xaxis.X + yaxis.Y + zaxis.Z)) / 2;
+			var b = Functions.Sqrt(Functions.Max(0, 1 + xaxis.X - yaxis.Y - zaxis.Z)) / 2;
+			var c = Functions.Sqrt(Functions.Max(0, 1 - xaxis.X + yaxis.Y - zaxis.Z)) / 2;
+			var d = Functions.Sqrt(Functions.Max(0, 1 - xaxis.X - yaxis.Y + zaxis.Z)) / 2;
+			b *= Functions.Sign(b * (yaxis.Z - zaxis.Y));
+			c *= Functions.Sign(c * (zaxis.X - xaxis.Z));
+			d *= Functions.Sign(d * (xaxis.Y - yaxis.X));
+			return new Quaterniond(a, b, c, d);
+		}
 		#endregion
 		#region Binary
 		/// <summary>

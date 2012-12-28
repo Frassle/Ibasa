@@ -584,6 +584,27 @@ namespace Numerics_Generator
             WriteLine("return new {0}(a, b, c, d);", Name);
 		    Dedent("}");
 
+            WriteLine("/// <summary>");
+            WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> structure given a direction and up axis.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"direction\">The direction vector.</param>");
+            WriteLine("/// <param name=\"up\">The up axis.</param>");
+            WriteLine("/// <returns>The newly created quaternion.</returns>");
+            WriteLine("public static {0} FromOrientation({1} direction, {1} up)", Name, new Vector(Type, 3));
+            Indent("{");
+            WriteLine("var zaxis = Vector.Normalize(direction);");
+            WriteLine("var xaxis = Vector.Normalize(Vector.Cross(up, zaxis));");
+            WriteLine("var yaxis = Vector.Cross(zaxis, xaxis);");
+            WriteLine("var a = Functions.Sqrt(Functions.Max(0, 1 + xaxis.X + yaxis.Y + zaxis.Z)) / 2;");
+            WriteLine("var b = Functions.Sqrt(Functions.Max(0, 1 + xaxis.X - yaxis.Y - zaxis.Z)) / 2;");
+            WriteLine("var c = Functions.Sqrt(Functions.Max(0, 1 - xaxis.X + yaxis.Y - zaxis.Z)) / 2;");
+            WriteLine("var d = Functions.Sqrt(Functions.Max(0, 1 - xaxis.X - yaxis.Y + zaxis.Z)) / 2;");
+            WriteLine("b *= Functions.Sign(b * (yaxis.Z - zaxis.Y));");
+            WriteLine("c *= Functions.Sign(c * (zaxis.X - xaxis.Z));");
+            WriteLine("d *= Functions.Sign(d * (xaxis.Y - yaxis.X));");
+            WriteLine("return new {0}(a, b, c, d);", Name);
+            Dedent("}");
+
             WriteLine("#endregion");
             #endregion
 
