@@ -348,6 +348,22 @@ namespace Ibasa.Numerics.Geometry
 				(sinYaw * cosPitch * cosRoll) - (cosYaw * sinPitch * sinRoll),
 				(cosYaw * cosPitch * sinRoll) - (sinYaw * sinPitch * cosRoll));
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Quaternionf"/> structure given a rotation matrix.
+		/// </summary>
+		/// <param name="matrix">The rotation matrix.</param>
+		/// <returns>The newly created quaternion.</returns>
+		public static Quaternionf FromMatrix(Matrix3x3f matrix)
+		{
+			var a = Functions.Sqrt(Functions.Max(0, 1 + matrix[0, 0] + matrix[1, 1] + matrix[2, 2])) / 2;
+			var b = Functions.Sqrt(Functions.Max(0, 1 + matrix[0, 0] - matrix[1, 1] - matrix[2, 2])) / 2;
+			var c = Functions.Sqrt(Functions.Max(0, 1 - matrix[0, 0] + matrix[1, 1] - matrix[2, 2])) / 2;
+			var d = Functions.Sqrt(Functions.Max(0, 1 - matrix[0, 0] - matrix[1, 1] + matrix[2, 2])) / 2;
+			b *= Functions.Sign(b * (matrix[2, 1] - matrix[1, 2]));
+			c *= Functions.Sign(c * (matrix[0, 2] - matrix[2, 0]));
+			d *= Functions.Sign(d * (matrix[1, 0] - matrix[0, 1]));
+			return new Quaternionf(a, b, c, d);
+		}
 		#endregion
 		#region Binary
 		/// <summary>
@@ -543,109 +559,109 @@ namespace Ibasa.Numerics.Geometry
 				return Quaternionf.Zero;
 			}
 			return value / absolute;
-			}
-			/// <summary>
-			/// Returns the multiplicative inverse of a quaternion.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The reciprocal of value.</returns>
-			public static Quaternionf Reciprocal(Quaternionf value)
-			{
-				var absoluteSquared = AbsoluteSquared(value);
-				return new Quaternionf(
-					value.A / absoluteSquared,
-					-value.B / absoluteSquared,
-					-value.C / absoluteSquared,
-					-value.D / absoluteSquared);
-			}
-			/// <summary>
-			/// Computes the conjugate of a quaternion and returns the result.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The conjugate of value.</returns>
-			public static Quaternionf Conjugate(Quaternionf value)
-			{
-				return new Quaternionf(value.A, -value.B, -value.C, -value.D);
-			}
-			/// <summary>
-			/// Computes the argument of a quaternion and returns the result.
-			/// </summary>
-			/// <param name="value">A quaternion.</param>
-			/// <returns>The argument of value.</returns>
-			public static float Argument(Quaternionf value)
-			{
-				return Functions.Atan2(Absolute(Imaginary(value)), value.A);
-			}
-			#endregion
-			#region Product
-			/// <summary>
-			/// Calculates the dot product (inner product) of two quaternions.
-			/// </summary>
-			/// <param name="left">First source quaternion.</param>
-			/// <param name="right">Second source quaternion.</param>
-			/// <returns>The dot product of the two quaternions.</returns>
-			public static float Dot(Quaternionf left, Quaternionf right)
-			{
-				return left.A * right.A + left.B * right.B + left.C * right.C + left.D * right.D;
-			}
-			#endregion
-			#region Interpolation
-			/// <summary>
-			/// Performs a linear interpolation between two quaternions.
-			/// </summary>
-			/// <param name="start">Start quaternion.</param>
-			/// <param name="end">End quaternion.</param>
-			/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
-			/// <returns>The linear interpolation of the two quaternions.</returns>
-			/// <remarks>
-			/// This method performs the linear interpolation based on the following formula.
-			/// <code>start + (end - start) * amount</code>
-			/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
-			/// </remarks>
-			public static Quaternionf Lerp(Quaternionf start, Quaternionf end, float amount)
-			{
-				return new Quaternionf(
-					Functions.Lerp(start.A, end.A, amount),
-					Functions.Lerp(start.B, end.B, amount),
-					Functions.Lerp(start.C, end.C, amount),
-					Functions.Lerp(start.D, end.D, amount));
-			}
-			/// <summary>
-			/// Interpolates between two unit quaternions, using spherical linear interpolation.
-			/// </summary>
-			/// <param name="start">Start quaternion.</param>
-			/// <param name="end">End quaternion.</param>
-			/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
-			/// <returns>The spherical linear interpolation of the two quaternions.</returns>
-			///  <remarks>
-			/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
-			/// </remarks>
-			public static Quaternionf Slerp(Quaternionf start, Quaternionf end, float amount)
-			{
-				var cosTheta = Dot(start, end);
-				//Cannot use slerp, use lerp instead
-				if (Functions.Abs(cosTheta) - 1 < float.Epsilon)
-				{
-					return Lerp(start, end, amount);
-				}
-				var theta = Functions.Acos(cosTheta);
-				var sinTheta = Functions.Sin(theta);
-				var t0 = Functions.Sin((1 - amount) * theta) / sinTheta;
-				var t1 = Functions.Sin(amount * theta) / sinTheta;
-				return t0 * start + t1 * end;
-			}
-			#endregion
-			#region Transform
-			public static Vector4f Transform(Vector4f vector, Quaternionf rotation)
-			{
-				var v = rotation * new Quaternionf(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);
-				return new Vector4f(v.A, v.B, v.C, vector.W);
-			}
-			public static Vector3f Transform(Vector3f vector, Quaternionf rotation)
-			{
-				var v = rotation * new Quaternionf(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);
-				return new Vector3f(v.A, v.B, v.C);
-			}
-			#endregion
 		}
+		/// <summary>
+		/// Returns the multiplicative inverse of a quaternion.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The reciprocal of value.</returns>
+		public static Quaternionf Reciprocal(Quaternionf value)
+		{
+			var absoluteSquared = AbsoluteSquared(value);
+			return new Quaternionf(
+				value.A / absoluteSquared,
+				-value.B / absoluteSquared,
+				-value.C / absoluteSquared,
+				-value.D / absoluteSquared);
+		}
+		/// <summary>
+		/// Computes the conjugate of a quaternion and returns the result.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The conjugate of value.</returns>
+		public static Quaternionf Conjugate(Quaternionf value)
+		{
+			return new Quaternionf(value.A, -value.B, -value.C, -value.D);
+		}
+		/// <summary>
+		/// Computes the argument of a quaternion and returns the result.
+		/// </summary>
+		/// <param name="value">A quaternion.</param>
+		/// <returns>The argument of value.</returns>
+		public static float Argument(Quaternionf value)
+		{
+			return Functions.Atan2(Absolute(Imaginary(value)), value.A);
+		}
+		#endregion
+		#region Product
+		/// <summary>
+		/// Calculates the dot product (inner product) of two quaternions.
+		/// </summary>
+		/// <param name="left">First source quaternion.</param>
+		/// <param name="right">Second source quaternion.</param>
+		/// <returns>The dot product of the two quaternions.</returns>
+		public static float Dot(Quaternionf left, Quaternionf right)
+		{
+			return left.A * right.A + left.B * right.B + left.C * right.C + left.D * right.D;
+		}
+		#endregion
+		#region Interpolation
+		/// <summary>
+		/// Performs a linear interpolation between two quaternions.
+		/// </summary>
+		/// <param name="start">Start quaternion.</param>
+		/// <param name="end">End quaternion.</param>
+		/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+		/// <returns>The linear interpolation of the two quaternions.</returns>
+		/// <remarks>
+		/// This method performs the linear interpolation based on the following formula.
+		/// <code>start + (end - start) * amount</code>
+		/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+		/// </remarks>
+		public static Quaternionf Lerp(Quaternionf start, Quaternionf end, float amount)
+		{
+			return new Quaternionf(
+				Functions.Lerp(start.A, end.A, amount),
+				Functions.Lerp(start.B, end.B, amount),
+				Functions.Lerp(start.C, end.C, amount),
+				Functions.Lerp(start.D, end.D, amount));
+		}
+		/// <summary>
+		/// Interpolates between two unit quaternions, using spherical linear interpolation.
+		/// </summary>
+		/// <param name="start">Start quaternion.</param>
+		/// <param name="end">End quaternion.</param>
+		/// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>.</param>
+		/// <returns>The spherical linear interpolation of the two quaternions.</returns>
+		///  <remarks>
+		/// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned. 
+		/// </remarks>
+		public static Quaternionf Slerp(Quaternionf start, Quaternionf end, float amount)
+		{
+			var cosTheta = Dot(start, end);
+			//Cannot use slerp, use lerp instead
+			if (Functions.Abs(cosTheta) - 1 < float.Epsilon)
+			{
+				return Lerp(start, end, amount);
+			}
+			var theta = Functions.Acos(cosTheta);
+			var sinTheta = Functions.Sin(theta);
+			var t0 = Functions.Sin((1 - amount) * theta) / sinTheta;
+			var t1 = Functions.Sin(amount * theta) / sinTheta;
+			return t0 * start + t1 * end;
+		}
+		#endregion
+		#region Transform
+		public static Vector4f Transform(Vector4f vector, Quaternionf rotation)
+		{
+			var v = rotation * new Quaternionf(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);
+			return new Vector4f(v.A, v.B, v.C, vector.W);
+		}
+		public static Vector3f Transform(Vector3f vector, Quaternionf rotation)
+		{
+			var v = rotation * new Quaternionf(vector.X, vector.Y, vector.Z, 0) * Conjugate(rotation);
+			return new Vector3f(v.A, v.B, v.C);
+		}
+		#endregion
 	}
+}

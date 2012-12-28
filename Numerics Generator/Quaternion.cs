@@ -567,6 +567,23 @@ namespace Numerics_Generator
             WriteLine("\t(cosYaw * cosPitch * sinRoll) - (sinYaw * sinPitch * cosRoll));");
             Dedent("}");
 
+            WriteLine("/// <summary>");
+		    WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> structure given a rotation matrix.", Name);
+		    WriteLine("/// </summary>");
+		    WriteLine("/// <param name=\"matrix\">The rotation matrix.</param>");
+		    WriteLine("/// <returns>The newly created quaternion.</returns>");
+		    WriteLine("public static {0} FromMatrix({1} matrix)", Name, new Matrix(Type, 3,3));
+		    Indent("{");
+            WriteLine("var a = Functions.Sqrt(Functions.Max(0, 1 + matrix[0, 0] + matrix[1, 1] + matrix[2, 2])) / 2;");
+            WriteLine("var b = Functions.Sqrt(Functions.Max(0, 1 + matrix[0, 0] - matrix[1, 1] - matrix[2, 2])) / 2;");
+            WriteLine("var c = Functions.Sqrt(Functions.Max(0, 1 - matrix[0, 0] + matrix[1, 1] - matrix[2, 2])) / 2;");
+            WriteLine("var d = Functions.Sqrt(Functions.Max(0, 1 - matrix[0, 0] - matrix[1, 1] + matrix[2, 2])) / 2;");
+            WriteLine("b *= Functions.Sign(b * (matrix[2, 1] - matrix[1, 2]));");
+            WriteLine("c *= Functions.Sign(c * (matrix[0, 2] - matrix[2, 0]));");
+            WriteLine("d *= Functions.Sign(d * (matrix[1, 0] - matrix[0, 1]));");
+            WriteLine("return new {0}(a, b, c, d);", Name);
+		    Dedent("}");
+
             WriteLine("#endregion");
             #endregion
 
@@ -761,27 +778,6 @@ namespace Numerics_Generator
             #region Properties
             
             WriteLine("#region Properties");
-            /// <summary>
-            //    /// Gets the angle of the quaternion.
-            //    /// </summary>
-            //    public double Angle
-            //    {
-            //        get
-            //        {
-            //            return 2.0 * Math.Acos(A);
-            //        }
-            //    }
-            //    /// <summary>
-            //    /// Gets the axis components of the quaternion.
-            //    /// </summary>
-            //    public Double3 Axis
-            //    {
-            //        get
-            //        {
-            //            double s = Math.Sqrt(1.0 - A - A);
-            //            return new Double3(B / s, C / s, D / s);
-            //        }
-            //    }
 
             WriteLine("/// <summary>");
             WriteLine("/// Return the axis angle representation of a unit quaternion.");
@@ -858,6 +854,7 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
             WriteLine("return value / absolute;");
+            Dedent();
             WriteLine("}");
             WriteLine("/// <summary>");
             WriteLine("/// Returns the multiplicative inverse of a quaternion.");
