@@ -5,45 +5,52 @@ using System.Text;
 
 namespace Ibasa.Audio
 {
-    public sealed class Buffer
+    public sealed class Buffer : ALObject
     {
-        internal readonly int Bid;
-
-        private Buffer(int bid)
+        private Buffer(int bid) : base(bid)
         {
-            Bid = bid;
         }
 
-        public Buffer()
+        public Buffer() : base(OpenTK.Audio.OpenAL.AL.GenBuffer())
         {
-            Bid = OpenTK.Audio.OpenAL.AL.GenSource();
         }
 
-        ~Buffer()
+        public override void Delete()
         {
-            Dispose();
+            OpenTK.Audio.OpenAL.AL.DeleteSource(Id);
+            Context.ThrowIfError();
         }
 
-        public void Dispose()
+        private static OpenTK.Audio.OpenAL.ALFormat Cast(Ibasa.SharpAL.Format format)
         {
-            OpenTK.Audio.OpenAL.AL.DeleteSource(Bid);
-            GC.SuppressFinalize(this);
-        }
-
-        Buffer[] Create(int count)
-        {
-            var names = OpenTK.Audio.OpenAL.AL.GenBuffers(count);
-            Buffer[] buffers = new Buffer[count];
-            for (int i = 0; i < count; ++i)
+            if (format is Ibasa.SharpAL.Formats.PCM8)
             {
-                buffers[i] = new Buffer(names[i]);
+                switch (format.Channels)
+                {
+                    case 1:
+                        return OpenTK.Audio.OpenAL.ALFormat.Mono8;
+                    case 2:
+                        return OpenTK.Audio.OpenAL.ALFormat.Stereo8;
+                    case 4:
+                        return OpenTK.Audio.OpenAL.ALFormat.MultiQuad8Ext;
+                    case 6:
+                        return OpenTK.Audio.OpenAL.ALFormat.Multi51Chn8Ext;
+                    case 7:
+                        return OpenTK.Audio.OpenAL.ALFormat.Multi61Chn8Ext;
+                    case 8:
+                        return OpenTK.Audio.OpenAL.ALFormat.Multi71Chn8Ext;
+                    default:
+                        throw new ArgumentException(string.Format("{0} channel 8 bit PCM not supported.", format.Channels), "format");
+                }
             }
-            return buffers;
+
+            throw new ArgumentException(string.Format("{0} not supported", format), "format");
         }
 
-        public void BufferData(byte[] data, int size, int frequency)
+        public void BufferData(Ibasa.SharpAL.Format format, byte[] data, int count, int frequency)
         {
-            OpenTK.Audio.OpenAL.AL.BufferData(Bid, OpenTK.Audio.OpenAL.ALFormat.Mono8, data, size, frequency);
+            OpenTK.Audio.OpenAL.AL.BufferData(Id, Cast(format), data, count, frequency);
+            Context.ThrowIfError();
         }
 
         public int Bits
@@ -51,7 +58,7 @@ namespace Ibasa.Audio
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Bid, OpenTK.Audio.OpenAL.ALGetBufferi.Bits, out value);
+                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Bits, out value);
                 return value;
             }
         }
@@ -61,7 +68,7 @@ namespace Ibasa.Audio
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Bid, OpenTK.Audio.OpenAL.ALGetBufferi.Channels, out value);
+                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Channels, out value);
                 return value;
             }
         }
@@ -71,7 +78,7 @@ namespace Ibasa.Audio
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Bid, OpenTK.Audio.OpenAL.ALGetBufferi.Frequency, out value);
+                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Frequency, out value);
                 return value;
             }
         }
@@ -81,7 +88,7 @@ namespace Ibasa.Audio
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Bid, OpenTK.Audio.OpenAL.ALGetBufferi.Size, out value);
+                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Size, out value);
                 return value;
             }
         }

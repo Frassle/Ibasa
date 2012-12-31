@@ -5,45 +5,33 @@ using System.Text;
 
 namespace Ibasa.Audio
 {
-    public sealed class Context : IDisposable
+    public static class Context
     {
-        public Device Device { get; private set; }
+        public static Device Device { get; private set; }
 
-        OpenTK.ContextHandle Handle;
+        static OpenTK.ContextHandle Handle;
 
-        public Context(Device device)
+        public static void Create(Device device)
         {
             int[] attriblist = null;
 
             Device = device;
             Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(Device.Handle, attriblist);
-            Device.GetError();
+            OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(Handle);
+            ThrowIfError();
         }
 
-        ~Context()
+        public static void Destroy()
         {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
+            OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(OpenTK.ContextHandle.Zero);
             OpenTK.Audio.OpenAL.Alc.DestroyContext(Handle);
-            GC.SuppressFinalize(this);
+            Handle = OpenTK.ContextHandle.Zero;
+            Device = null;
         }
 
-        public static void MakeContextCurrent(Context context)
+        internal static void ThrowIfError()
         {
-            if (context == null)
-            {
-                OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(OpenTK.ContextHandle.Zero);
-            }
-            else
-            {
-                if (OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(context.Handle))
-                {
-                    context.Device.GetError();
-                }
-            }
+            Device.ThrowIfError();
         }
 
         public static float DopplerFactor

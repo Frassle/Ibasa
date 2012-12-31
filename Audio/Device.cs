@@ -156,7 +156,7 @@ namespace Ibasa.Audio
             }
         }
 
-        internal void GetError()
+        internal void ThrowIfError()
         {
             var error = OpenTK.Audio.OpenAL.Alc.GetError(Handle);
 
