@@ -35,6 +35,22 @@ namespace Test
             return data;
         }
 
+        static byte[] Interleave(byte[] fl, byte[] fr, byte[] rl, byte[] rr)
+        {
+            byte[] interleaved = new byte[fl.Length * 4];
+
+            int i;
+            for (i = 0; i < fl.Length; ++i)
+            {
+                interleaved[i * 4] = fl[i];
+                interleaved[i * 4 + 1] = fr[i];
+                interleaved[i * 4 + 2] = rl[i];
+                interleaved[i * 4 + 3] = rr[i];
+            }
+
+            return interleaved;
+        }
+
         static byte[] Interleave(byte[] left, byte[] right)
         {
             byte[] interleaved = new byte[left.Length + right.Length];
@@ -107,7 +123,12 @@ namespace Test
             var sample_frequency = 44100;
             var time = 1;
 
-            var data = SinWave(sample_frequency, time, 200);
+            var fl = SinWave(sample_frequency, time, 100);
+            var fr = SinWave(sample_frequency, time, 200);
+            var rl = SinWave(sample_frequency, time, 300);
+            var rr = SinWave(sample_frequency, time, 400);
+
+            var data = Interleave(fl, fr, rl, rr);
 
             Ibasa.Audio.Buffer buffer1 = new Ibasa.Audio.Buffer();
             buffer1.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, sample_frequency);
@@ -118,6 +139,7 @@ namespace Test
             source.Queue(buffer1);
             source.Queue(buffer2);
             source.Play();
+            source.Gain = 2;
 
             source.Position = new Ibasa.Numerics.Geometry.Point3f(0, 0, 5);
 
