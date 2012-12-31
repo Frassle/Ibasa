@@ -237,6 +237,48 @@ namespace Ibasa.Audio
             }
         }
 
+        public float EfxAirAbsorptionFactor
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxAirAbsorptionFactor, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxAirAbsorptionFactor, value);
+            }
+        }
+
+        public float EfxConeOuterGainHighFrequency
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxConeOuterGainHighFrequency, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxConeOuterGainHighFrequency, value);
+            }
+        }
+
+        public float EfxRoomRolloffFactor
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxRoomRolloffFactor, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxRoomRolloffFactor, value);
+            }
+        }
+
         public float Gain
         {
             get
