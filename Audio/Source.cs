@@ -195,6 +195,48 @@ namespace Ibasa.Audio
             }
         }
 
+        public float ConeInnerAngle
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeInnerAngle, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeInnerAngle, value);
+            }
+        }
+
+        public float ConeOuterAngle
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterAngle, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterAngle, value);
+            }
+        }
+
+        public float ConeOuterGain
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterGain, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterGain, value);
+            }
+        }
+
         public float Gain
         {
             get
@@ -209,6 +251,48 @@ namespace Ibasa.Audio
             }
         }
 
+        public float MaxDistance
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxDistance, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxDistance, value);
+            }
+        }
+
+        public float MaxGain
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxGain, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxGain, value);
+            }
+        }
+
+        public float MinGain
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.MinGain, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.MinGain, value);
+            }
+        }
+
         public float Pitch
         {
             get
@@ -220,6 +304,48 @@ namespace Ibasa.Audio
             set
             {
                 OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.Pitch, value);
+            }
+        }
+
+        public float ReferenceDistance
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ReferenceDistance, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ReferenceDistance, value);
+            }
+        }
+
+        public float RolloffFactor
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.RolloffFactor, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.RolloffFactor, value);
+            }
+        }
+
+        public float SecOffset
+        {
+            get
+            {
+                float value;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.SecOffset, out value);
+                return value;
+            }
+            set
+            {
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.SecOffset, value);
             }
         }
 
