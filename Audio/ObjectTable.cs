@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ibasa.Audio
 {
-    public static class ObjectTable
+    internal static class ObjectTable
     {
         private static Dictionary<int, ALObject> Objects = new Dictionary<int, ALObject>();
 
