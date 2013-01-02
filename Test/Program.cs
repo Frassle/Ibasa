@@ -81,7 +81,6 @@ namespace Test
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", dev.Name);
-                Console.WriteLine("Capture Samples: {0}", dev.CaptureSamples);
                 Console.WriteLine("Frequency: {0}", dev.Frequency);
                 Console.WriteLine("Refresh: {0}", dev.Refresh);
                 Console.WriteLine("Mono Sources: {0}", dev.MonoSources);
@@ -94,10 +93,26 @@ namespace Test
                 dev.Dispose();
             }
 
+            var format = new Ibasa.SharpAL.Formats.PCM8(1);
+            var frequency = 44100;
+
+            foreach (var dev in Ibasa.Audio.OpenAL.CaptureDevices(frequency, format, frequency))
+            {
+                Console.WriteLine("------------");
+                Console.WriteLine("Name: {0}", dev.Name);
+                Console.WriteLine("Capture Samples: {0}", dev.CaptureSamples);
+
+                dev.Dispose();
+            }
+
+            Console.ReadLine();
+
             var device = Ibasa.Audio.OpenAL.DefaultDevice;
+            var capdevice = Ibasa.Audio.OpenAL.DefaultCaptureDevice(frequency, format, frequency);
 
             Console.WriteLine("------------");
             Console.WriteLine(device.Name);
+            Console.WriteLine(capdevice.Name);
             Console.WriteLine("------------");
 
             Ibasa.Audio.Context.Create(device);
@@ -120,63 +135,65 @@ namespace Test
             Ibasa.Audio.Source source = new Ibasa.Audio.Source();
             source.Gain = 1;
 
-            var sample_frequency = 44100;
-            var time = 1;
+            byte[] sin = SinWave(frequency, 1, 300);
+            byte[] data = SinWave(frequency, 1, 300);
 
-            var fl = SinWave(sample_frequency, time, 100);
-            var fr = SinWave(sample_frequency, time, 200);
-            var rl = SinWave(sample_frequency, time, 300);
-            var rr = SinWave(sample_frequency, time, 400);
+            System.Runtime.InteropServices.GCHandle handle =
+                System.Runtime.InteropServices.GCHandle.Alloc(data, System.Runtime.InteropServices.GCHandleType.Pinned);
 
-            var data = Interleave(fl, fr, rl, rr);
+            IntPtr data_ptr = handle.AddrOfPinnedObject();
 
             Ibasa.Audio.Buffer buffer1 = new Ibasa.Audio.Buffer();
-            buffer1.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, sample_frequency);
+            buffer1.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, frequency);
 
             Ibasa.Audio.Buffer buffer2 = new Ibasa.Audio.Buffer();
-            buffer2.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, sample_frequency);
+            buffer2.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, frequency);
 
             source.Queue(buffer1);
             source.Queue(buffer2);
             source.Play();
             source.Gain = 2;
 
-            source.Position = new Ibasa.Numerics.Geometry.Point3f(0, 0, 5);
+            capdevice.Start();
 
-            Console.WriteLine("Playing");
-            for (int step = 1; step < 360; ++step)
+            while (!Console.KeyAvailable)
             {
                 while (source.BuffersProcessed == 0)
                 {
-                    System.Threading.Thread.Sleep(1);
+                    System.Threading.Thread.Sleep(0);
                 }
 
+                Console.WriteLine(source.State);
+                Console.WriteLine("Buffers Queued   : {0}", source.BuffersQueued);
+                Console.WriteLine("Buffers Processed: {0}", source.BuffersProcessed);
+
+                var samples = capdevice.CaptureSamples;
+                Console.WriteLine(samples);
                 var buffer = source.Unqueue();
-                buffer.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, sample_frequency);
+                capdevice.Read(data, samples);
+                //for (int i = 0; i < data.Length; ++i)
+                //{
+                //    data[i] += sin[i];
+                //}
+                buffer.BufferData(format, data, samples, frequency);
                 source.Queue(buffer);
-
-                var x = Ibasa.Numerics.Functions.Sin((float)Ibasa.Numerics.Functions.ToRadians(step) * 24);
-                var y = Ibasa.Numerics.Functions.Cos((float)Ibasa.Numerics.Functions.ToRadians(step) * 24);
-
-                x *= 5;
-                y *= 5;
-
-                var position = new Ibasa.Numerics.Geometry.Point3f(x, 0, y);
-                Console.WriteLine(position);
-                source.Position = position;
             }
 
             while (source.BuffersProcessed != 2)
             {
-                System.Threading.Thread.Sleep(1);
+                System.Threading.Thread.Sleep(0);
             }
 
             source.Unqueue(2);
+
+            capdevice.Stop();
 
             buffer1.Delete();
             buffer2.Delete();
             source.Delete();
             Ibasa.Audio.Context.Destroy();
+            capdevice.Dispose();
+            device.Dispose();
 
             Console.ReadLine();
         }
