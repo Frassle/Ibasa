@@ -98,7 +98,7 @@ namespace Ibasa.Audio
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.ByteOffset, out value);
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.BuffersQueued, out value);
                 return value;
             }
         }
