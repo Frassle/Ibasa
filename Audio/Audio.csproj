@@ -44,6 +44,7 @@
     <Compile Include="ALObject.cs" />
     <Compile Include="AudioException.cs" />
     <Compile Include="Buffer.cs" />
+    <Compile Include="CaptureDevice.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Listener.cs" />
