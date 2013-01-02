@@ -72,10 +72,6 @@ namespace Ibasa.Audio
 
             UnknownAttributes = new Collections.Immutable.ImmutableArray<int>(unknownAttributes);
 
-            int captureSamples;
-            OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.CaptureSamples, 1, out captureSamples);
-            CaptureSamples = captureSamples;
-
             Extensions = new Collections.Immutable.ImmutableArray<string>(
                 OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions).Split());
         }
@@ -134,12 +130,6 @@ namespace Ibasa.Audio
         }
 
         public Ibasa.Collections.Immutable.ImmutableArray<string> Extensions
-        {
-            get;
-            private set;
-        }
-
-        public int CaptureSamples
         {
             get;
             private set;
