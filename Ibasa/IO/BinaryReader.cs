@@ -35,8 +35,9 @@ namespace Ibasa.IO
             Contract.Requires(0 <= count);
             Contract.Requires(count <= Buffer.Length);
 
-            if (ReadBytes(Buffer, 0, count) != count)
-                throw new EndOfStreamException();
+            var read = ReadBytes(Buffer, 0, count);
+            if (read != count)
+                throw new EndOfStreamException(string.Format("Tried to read {0} bytes, could only read {1} bytes.", count, read));
         }
 
         /// <summary>
