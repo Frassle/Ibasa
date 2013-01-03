@@ -17,17 +17,48 @@ namespace Ibasa.Media
             Code = code;
         }
 
-        public FourCC(char a, char b, char c, char d)
+        public FourCC(byte a, byte b, byte c, byte d)
         {
-            Code = (((byte)a << 0) | ((byte)b << 8) | ((byte)c << 16) | ((byte)d << 24));
+            Code = ((a << 0) | (b << 8) | (c << 16) | (d << 24));
+        }
+
+        public FourCC(byte[] bytes)
+            : this(bytes[0], bytes[1], bytes[2], bytes[3])
+        {
+        }
+
+        public FourCC(byte[] bytes, int index)
+            : this(bytes[index + 0], bytes[index + 1], bytes[index + 2], bytes[index + 3])
+        {
+        }
+
+        public FourCC(char a, char b, char c, char d)
+            : this((byte)a, (byte)b, (byte)c, (byte)d)
+        {
+        }
+
+        public FourCC(char[] chars)
+            : this(chars[0], chars[1], chars[2], chars[3])
+        {
+        }
+
+        public FourCC(char[] chars, int index)
+            : this(chars[index + 0], chars[index + 1], chars[index + 2], chars[index + 3])
+        {
         }
 
         public FourCC(string code)
+            : this(code[0], code[1], code[1], code[1])
         {
             Contract.Requires(code != null, "code cannot be null.");
-            Contract.Requires(code.Length == 4, "code must have a length of 4.");
+            Contract.Requires(code.Length >= 4, "code must have a length of at least 4.");
+        }
 
-            Code = (((byte)code[0] << 0) | ((byte)code[1] << 8) | ((byte)code[2] << 16) | ((byte)code[3] << 24));
+        public FourCC(string code, int index)
+            : this(code[index + 0], code[index + 1], code[index + 2], code[index + 3])
+        {
+            Contract.Requires(code != null, "code cannot be null.");
+            Contract.Requires(code.Length >= index + 4, "code must have a length of at least index + 4.");
         }
 
         public override int GetHashCode()
