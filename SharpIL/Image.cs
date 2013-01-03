@@ -191,7 +191,7 @@ namespace Ibasa.SharpIL
 
             Size = source.Size;
 
-            Pixels = new Colord[source.Pixels.Length]; ;
+            Pixels = new Colord[source.Pixels.Length];
             Array.Copy(source.Pixels, Pixels, Pixels.Length);
 
             AddressX = source.AddressX;
