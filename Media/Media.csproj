@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\Wav.cs" />
+    <Compile Include="Riff\RiffReader.cs" />
+    <Compile Include="Riff\RiffWriter.cs" />
     <Compile Include="Visual\Bitmap.cs" />
     <Compile Include="Visual\DirectDrawSurface.cs" />
     <Compile Include="Visual\DxgiFormat.cs" />
