@@ -142,12 +142,15 @@ namespace Ibasa.Media
 
         public override string ToString()
         {
-            char a = (char)((Code >> 0) & 0xFF);
-            char b = (char)((Code >> 8) & 0xFF);
-            char c = (char)((Code >> 16) & 0xFF);
-            char d = (char)((Code >> 24) & 0xFF);
+            var chars = new char[]
+            {
+                (char)((Code >> 0) & 0xFF),
+                (char)((Code >> 8) & 0xFF),
+                (char)((Code >> 16) & 0xFF),
+                (char)((Code >> 24) & 0xFF)
+            };
 
-            return string.Concat(a.ToString(), b.ToString(), c.ToString(), d.ToString());
+            return new string(chars);
         }
 
         public static explicit operator int(FourCC fourCC)
