@@ -153,6 +153,11 @@ namespace Ibasa.Media
             return new string(chars);
         }
 
+        public static explicit operator FourCC(int code)
+        {
+            return new FourCC(code);
+        }
+
         public static explicit operator int(FourCC fourCC)
         {
             return fourCC.Code;
