@@ -30,6 +30,10 @@ namespace Ibasa.IO
         /// </summary>
         protected byte[] Buffer;
 
+        /// <summary>
+        /// Fills the internal buffer by reading count bytes.
+        /// </summary>
+        /// <param name="bytes">The number of bytes to read, must be less than the size of the internal buffer.</param>
         protected void FillBuffer(int count)
         {
             Contract.Requires(0 <= count);
@@ -38,6 +42,16 @@ namespace Ibasa.IO
             var read = ReadBytes(Buffer, 0, count);
             if (read != count)
                 throw new EndOfStreamException(string.Format("Tried to read {0} bytes, could only read {1} bytes.", count, read));
+        }
+
+        /// <summary>
+        /// Sets the size of the internal buffer.
+        /// </summary>
+        /// <param name="bytes">The number of bytes in the buffer, must be at least 16.</param>
+        protected void SetBufferSize(int bytes)
+        {
+            Contract.Requires(bytes >= 16);
+            Buffer = bytes == Buffer.Length ? Buffer : new byte[bytes];
         }
 
         /// <summary>
@@ -214,16 +228,6 @@ namespace Ibasa.IO
         public long Seek(long offset, SeekOrigin origin)
         {
             return BaseStream.Seek(offset, origin);
-        }
-
-        /// <summary>
-        /// Sets the size of the internal buffer.
-        /// </summary>
-        /// <param name="bytes">The number of bytes in the buffer, must be at least 16.</param>
-        public void SetBufferSize(int bytes)
-        {
-            Contract.Requires(bytes >= 16);
-            Buffer = bytes == Buffer.Length ? Buffer : new byte[bytes];
         }
 
         public int Read(byte[] buffer, int index, int count)
