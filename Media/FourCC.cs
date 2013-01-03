@@ -8,6 +8,8 @@ namespace Ibasa.Media
 {
     public struct FourCC : IEquatable<FourCC>, IEquatable<string>, IEquatable<int>
     {
+        public readonly FourCC Zero = new FourCC(0);
+
         int Code;
 
         public FourCC(int code)
