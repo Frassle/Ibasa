@@ -7,12 +7,15 @@ namespace Ibasa.IO
 {
     public sealed class SeekableStream : System.IO.Stream
     {
-        public SeekableStream(System.IO.Stream stream, bool autoCommit = false)
+        public SeekableStream(System.IO.Stream stream, bool autoCommit = false, bool force = false)
         {
             BaseStream = stream;
             AutoCommit = autoCommit;
-            Buffer = new System.IO.MemoryStream();
-            DiscardPosition = BaseStream.Position;
+            if (!BaseStream.CanSeek || force)
+            {
+                Buffer = new System.IO.MemoryStream();
+                DiscardPosition = BaseStream.Position;
+            }
         }
 
         private System.IO.MemoryStream Buffer;
@@ -27,7 +30,7 @@ namespace Ibasa.IO
 
         public long CommitPosition
         {
-            get { return BaseStream.Position; }
+            get { return Buffer == null ? 0 : BaseStream.Position; }
         }
 
         public long DiscardPosition
@@ -66,9 +69,12 @@ namespace Ibasa.IO
 
         public void Discard()
         {
-            Commit();
-            DiscardPosition = CommitPosition;
-            Buffer.SetLength(0);
+            if (Buffer != null)
+            {
+                Commit();
+                DiscardPosition = CommitPosition;
+                Buffer.SetLength(0);
+            }
         }
 
         public override void Flush()
@@ -81,7 +87,14 @@ namespace Ibasa.IO
         {
             get
             {
-                throw new NotSupportedException("Cannot get stream length.");
+                if (Buffer == null)
+                {
+                    return BaseStream.Length;
+                }
+                else
+                {
+                    throw new NotSupportedException("Cannot get stream length.");
+                }
             }
         }
 
@@ -97,7 +110,14 @@ namespace Ibasa.IO
         {
             get
             {
-                return DiscardPosition + Buffer.Position;
+                if (Buffer == null)
+                {
+                    return BaseStream.Position;
+                }
+                else
+                {
+                    return DiscardPosition + Buffer.Position;
+                }
             }
             set
             {
@@ -107,58 +127,86 @@ namespace Ibasa.IO
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            int buffered = (int)Math.Min(count, BufferLength - Position);
-
-            int read = Buffer.Read(buffer, offset, buffered);
-
-            if (read == buffered && read != count && (!Dirty || AutoCommit))
+            if (Buffer == null)
             {
-                Commit();
-
-                int streamed = count - read;
-                read += BaseStream.Read(buffer, offset + read, streamed);
+                return BaseStream.Read(buffer, offset, count);
             }
+            else
+            {
+                int buffered = (int)Math.Min(count, BufferLength - Position);
 
-            return read;
+                int read = Buffer.Read(buffer, offset, buffered);
+
+                if (read == buffered && read != count && (!Dirty || AutoCommit))
+                {
+                    Commit();
+
+                    int streamed = count - read;
+                    read += BaseStream.Read(buffer, offset + read, streamed);
+                }
+
+                return read;
+            }
         }
 
         public override long Seek(long offset, System.IO.SeekOrigin origin)
         {
-            if (origin == System.IO.SeekOrigin.Begin)
+            if (Buffer == null)
             {
-                if (offset < DiscardPosition)
+                return BaseStream.Seek(offset, origin);
+            }
+            else
+            {
+                if (origin == System.IO.SeekOrigin.Begin)
                 {
-                    throw new ArgumentException("Cannot seek to before discard position.", "offset");
+                    if (offset < DiscardPosition)
+                    {
+                        throw new ArgumentException("Cannot seek to before discard position.", "offset");
+                    }
+
+                    Buffer.Position = offset - DiscardPosition;
+                }
+                else if (origin == System.IO.SeekOrigin.Current)
+                {
+                    Seek(Position + offset, System.IO.SeekOrigin.Begin);
+                }
+                else if (origin == System.IO.SeekOrigin.End)
+                {
+                    throw new ArgumentException("Cannot seek relative to end of stream.", "origin");
                 }
 
-                Buffer.Position = offset - DiscardPosition;
+                return Buffer.Position;
             }
-            else if (origin == System.IO.SeekOrigin.Current)
-            {
-                Seek(Position + offset, System.IO.SeekOrigin.Begin);
-            }
-            else if (origin == System.IO.SeekOrigin.End)
-            {
-                throw new ArgumentException("Cannot seek relative to end of stream.", "origin");
-            }
-
-            return Buffer.Position;
         }
 
         public override void SetLength(long value)
         {
-            throw new NotSupportedException("Cannot set stream length.");
+            if (Buffer == null)
+            {
+                BaseStream.SetLength(value);
+            }
+            else
+            {
+                throw new NotSupportedException("Cannot set stream length.");
+            }
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (Position < CommitPosition)
+            if (Buffer == null)
             {
-                throw new InvalidOperationException("Cannot write before commit position.");
+                BaseStream.Write(buffer, offset, count);
             }
+            else
+            {
+                if (Position < CommitPosition)
+                {
+                    throw new InvalidOperationException("Cannot write before commit position.");
+                }
 
-            Buffer.Write(buffer, offset, count);
-            Dirty = true;
+                Buffer.Write(buffer, offset, count);
+                Dirty = true;
+            }
         }
     }
 }
