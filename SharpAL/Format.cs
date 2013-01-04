@@ -21,30 +21,30 @@ namespace Ibasa.SharpAL
         {
         }
 
-        public abstract void GetBytes(
+        public abstract void GetDataBytes(
             T[] source, int index, int samples,
             Stream destination, int offset);
 
-        public virtual void GetBytes(
+        public virtual void GetDataBytes(
             T[] source, int index, int samples,
             byte[] destination, int offset)
         {
-            GetBytes(
+            GetDataBytes(
                 source, index, samples,
                 new MemoryStream(destination), offset);
         }
 
         public abstract void GetData(
-            Stream source, int offset,
-            T[] destination, int index, int samples);
+            Stream source, int offset, int samples,
+            T[] destination, int index);
 
         public virtual void GetData(
-            byte[] source, int offset,
-            T[] destination, int index, int samples)
+            byte[] source, int offset, int samples,
+            T[] destination, int index)
         {
             GetData(
-                new MemoryStream(source), offset,
-                destination, index, samples);
+                new MemoryStream(source), offset, samples,
+                destination, index);
         }
     }
 
@@ -52,8 +52,8 @@ namespace Ibasa.SharpAL
     public abstract class Format
     {
         public static void Convert(Format sourceFormat, Format destinationFormat,
-            Stream source, int sourceOffset,
-            Stream destination, int destinationOffset, int samples)
+            Stream source, int sourceOffset, int samples,
+            Stream destination, int destinationOffset)
         {
             Contract.Requires(sourceFormat != null);
             Contract.Requires(destinationFormat != null);
@@ -70,12 +70,12 @@ namespace Ibasa.SharpAL
         }
 
         public static void Convert(Format sourceFormat, Format destinationFormat,
-            byte[] source, int sourceOffset,
-            byte[] destination, int destinationOffset, int samples)
+            byte[] source, int sourceOffset, int samples,
+            byte[] destination, int destinationOffset)
         {
             Convert(sourceFormat, destinationFormat,
-                new MemoryStream(source), sourceOffset,
-                new MemoryStream(destination), destinationOffset, samples);
+                new MemoryStream(source), sourceOffset, samples,
+                new MemoryStream(destination), destinationOffset);
         }
 
         public Format(string name, int channels)

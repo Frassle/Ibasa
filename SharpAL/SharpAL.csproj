@@ -41,9 +41,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Format.cs" />
-    <Compile Include="Formats\PCM.cs" />
+    <Compile Include="Formats\Float.cs" />
+    <Compile Include="Formats\Pcm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sound.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
+      <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
+      <Name>Ibasa</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
