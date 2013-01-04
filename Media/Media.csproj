@@ -63,6 +63,10 @@
       <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
       <Name>Numerics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpAL\SharpAL.csproj">
+      <Project>{C015A134-9EE4-4691-9E1B-D0256AF9FAF7}</Project>
+      <Name>SharpAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpIL\SharpIL.csproj">
       <Project>{55ACA20C-0204-4A40-B274-5BC258CEC87F}</Project>
       <Name>SharpIL</Name>
