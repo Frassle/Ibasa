@@ -71,6 +71,26 @@ namespace Ibasa.Audio
                         throw new ArgumentException(string.Format("{0} channel 8 bit PCM not supported.", format.Channels), "format");
                 }
             }
+            if (format is Ibasa.SharpAL.Formats.PCM16)
+            {
+                switch (format.Channels)
+                {
+                    case 1:
+                        return OpenTK.Audio.OpenAL.ALFormat.Mono16;
+                    case 2:
+                        return OpenTK.Audio.OpenAL.ALFormat.Stereo16;
+                    case 4:
+                        return OpenTK.Audio.OpenAL.ALFormat.MultiQuad16Ext;
+                    case 6:
+                        return OpenTK.Audio.OpenAL.ALFormat.Multi51Chn16Ext;
+                    case 7:
+                        return OpenTK.Audio.OpenAL.ALFormat.Multi61Chn16Ext;
+                    case 8:
+                        return OpenTK.Audio.OpenAL.ALFormat.Multi71Chn16Ext;
+                    default:
+                        throw new ArgumentException(string.Format("{0} channel 16 bit PCM not supported.", format.Channels), "format");
+                }
+            }
 
             throw new ArgumentException(string.Format("{0} not supported", format), "format");
         }
