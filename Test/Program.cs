@@ -75,6 +75,15 @@ namespace Test
 
         static void Main(string[] args)
         {
+            string path = @"C:\Program Files (x86)\Steam\steamapps\common\Stronghold\fx\speech\Act1_1.wav";
+
+            Ibasa.Media.Audio.Wav wav = new Ibasa.Media.Audio.Wav(
+                System.IO.File.OpenRead(path));
+
+            Console.WriteLine(wav.Format);
+            Console.WriteLine(wav.Frequency);
+            Console.WriteLine(wav.Data.Length);
+
             Console.WriteLine(Ibasa.Audio.OpenAL.Version);
 
             foreach (var dev in Ibasa.Audio.OpenAL.Devices)
@@ -93,8 +102,8 @@ namespace Test
                 dev.Dispose();
             }
 
-            var format = new Ibasa.SharpAL.Formats.PCM8(1);
-            var frequency = 44100;
+            var format = wav.Format;
+            var frequency = wav.Frequency;
 
             foreach (var dev in Ibasa.Audio.OpenAL.CaptureDevices(frequency, format, frequency))
             {
@@ -135,61 +144,18 @@ namespace Test
             Ibasa.Audio.Source source = new Ibasa.Audio.Source();
             source.Gain = 1;
 
-            byte[] sin = SinWave(frequency, 1, 300);
-            byte[] data = SinWave(frequency, 1, 300);
+            Ibasa.Audio.Buffer buffer = new Ibasa.Audio.Buffer();
+            buffer.BufferData(format, wav.Data, wav.Data.Length, frequency);
 
-            System.Runtime.InteropServices.GCHandle handle =
-                System.Runtime.InteropServices.GCHandle.Alloc(data, System.Runtime.InteropServices.GCHandleType.Pinned);
-
-            IntPtr data_ptr = handle.AddrOfPinnedObject();
-
-            Ibasa.Audio.Buffer buffer1 = new Ibasa.Audio.Buffer();
-            buffer1.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, frequency);
-
-            Ibasa.Audio.Buffer buffer2 = new Ibasa.Audio.Buffer();
-            buffer2.BufferData(new Ibasa.SharpAL.Formats.PCM8(1), data, data.Length, frequency);
-
-            source.Queue(buffer1);
-            source.Queue(buffer2);
+            source.Buffer = buffer;
             source.Play();
-            source.Gain = 2;
 
-            capdevice.Start();
-
-            while (!Console.KeyAvailable)
+            while (source.State == Ibasa.Audio.SourceState.Playing)
             {
-                while (source.BuffersProcessed == 0)
-                {
-                    System.Threading.Thread.Sleep(0);
-                }
-
-                Console.WriteLine(source.State);
-                Console.WriteLine("Buffers Queued   : {0}", source.BuffersQueued);
-                Console.WriteLine("Buffers Processed: {0}", source.BuffersProcessed);
-
-                var samples = capdevice.CaptureSamples;
-                Console.WriteLine(samples);
-                var buffer = source.Unqueue();
-                capdevice.Read(data, samples);
-                //for (int i = 0; i < data.Length; ++i)
-                //{
-                //    data[i] += sin[i];
-                //}
-                buffer.BufferData(format, data, samples, frequency);
-                source.Queue(buffer);
+                System.Threading.Thread.Sleep(1);
             }
 
-            while (source.BuffersProcessed != 2)
-            {
-                System.Threading.Thread.Sleep(0);
-            }
-
-            source.Unqueue(2);
-
-            capdevice.Stop();
-
-            buffer1.Delete();
-            buffer2.Delete();
+            buffer.Delete();
             source.Delete();
             Ibasa.Audio.Context.Destroy();
             capdevice.Dispose();
