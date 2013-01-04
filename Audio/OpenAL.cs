@@ -51,7 +51,7 @@ namespace Ibasa.Audio
 
         internal static OpenTK.Audio.OpenAL.ALFormat Format(Ibasa.SharpAL.Format format)
         {
-            if (format is Ibasa.SharpAL.Formats.PCM8)
+            if (format is Ibasa.SharpAL.Formats.Pcm8)
             {
                 switch (format.Channels)
                 {
@@ -71,7 +71,7 @@ namespace Ibasa.Audio
                         throw new ArgumentException(string.Format("{0} channel 8 bit PCM not supported.", format.Channels), "format");
                 }
             }
-            if (format is Ibasa.SharpAL.Formats.PCM16)
+            if (format is Ibasa.SharpAL.Formats.Pcm16)
             {
                 switch (format.Channels)
                 {
@@ -89,6 +89,30 @@ namespace Ibasa.Audio
                         return OpenTK.Audio.OpenAL.ALFormat.Multi71Chn16Ext;
                     default:
                         throw new ArgumentException(string.Format("{0} channel 16 bit PCM not supported.", format.Channels), "format");
+                }
+            }
+            if (format is Ibasa.SharpAL.Formats.Float32)
+            {
+                switch (format.Channels)
+                {
+                    case 1:
+                        return OpenTK.Audio.OpenAL.ALFormat.MonoFloat32Ext;
+                    case 2:
+                        return OpenTK.Audio.OpenAL.ALFormat.StereoFloat32Ext;
+                    default:
+                        throw new ArgumentException(string.Format("{0} channel 32 bit float PCM not supported.", format.Channels), "format");
+                }
+            }
+            if (format is Ibasa.SharpAL.Formats.Float64)
+            {
+                switch (format.Channels)
+                {
+                    case 1:
+                        return OpenTK.Audio.OpenAL.ALFormat.MonoDoubleExt;
+                    case 2:
+                        return OpenTK.Audio.OpenAL.ALFormat.StereoDoubleExt;
+                    default:
+                        throw new ArgumentException(string.Format("{0} channel 64 bit float PCM not supported.", format.Channels), "format");
                 }
             }
 

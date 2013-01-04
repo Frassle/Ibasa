@@ -135,11 +135,11 @@ namespace Ibasa.Media.Audio
             {
                 if (bitsPerSample == 8)
                 {
-                    Format = new Ibasa.SharpAL.Formats.PCM8(channels);
+                    Format = new Ibasa.SharpAL.Formats.Pcm8(channels);
                 }
                 else if (bitsPerSample == 16)
                 {
-                    Format = new Ibasa.SharpAL.Formats.PCM16(channels);
+                    Format = new Ibasa.SharpAL.Formats.Pcm16(channels);
                 }
                 else
                 {
