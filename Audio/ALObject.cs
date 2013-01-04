@@ -7,7 +7,7 @@ namespace Ibasa.Audio
 {
     public abstract class ALObject
     {
-        public int Id { get; private set; }
+        internal int Id { get; private set; }
 
         public ALObject(int id)
         {
