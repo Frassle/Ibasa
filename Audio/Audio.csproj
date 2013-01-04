@@ -51,6 +51,8 @@
     <Compile Include="ObjectTable.cs" />
     <Compile Include="OpenAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sound.cs" />
+    <Compile Include="SoundStream.cs" />
     <Compile Include="Source.cs" />
   </ItemGroup>
   <ItemGroup>
