@@ -148,9 +148,10 @@ namespace Ibasa.Valve.Package
 
         Ibasa.IO.BinaryReader Reader;
 
-        public Gcf(string path) :
-            this(File.OpenRead(path))
-        { }
+        public Gcf(string path, FileShare share) :
+            this(File.Open(path, FileMode.Open, FileAccess.Read, share))
+        {
+        }
         public Gcf(Stream stream)
         {
             Reader = new Ibasa.IO.BinaryReader(stream, Encoding.ASCII);
