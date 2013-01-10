@@ -63,9 +63,17 @@
       <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
       <Name>Numerics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Packaging\Packaging.csproj">
+      <Project>{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}</Project>
+      <Name>Packaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpAL\SharpAL.csproj">
       <Project>{C015A134-9EE4-4691-9E1B-D0256AF9FAF7}</Project>
       <Name>SharpAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Valve\Valve.csproj">
+      <Project>{4AA2EC27-4E8D-4812-820E-00C23534B054}</Project>
+      <Name>Valve</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

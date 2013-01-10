@@ -75,14 +75,32 @@ namespace Test
 
         static void Main(string[] args)
         {
-            string path = @"C:\Program Files (x86)\Steam\steamapps\common\Stronghold\fx\speech\Act1_1.wav";
+            string half_life = @"D:\Steam\steamapps\half-life.gcf";
+
+            var gcf = new Ibasa.Valve.Package.Gcf(half_life, System.IO.FileShare.ReadWrite);
+
+            Console.WriteLine("GCF Version: {0}", gcf.GCFVersion);
+            Console.WriteLine("Application ID: {0}", gcf.ApplicationID);
+            Console.WriteLine("Application Version: {0}", gcf.ApplicationVersion);
+            Console.ReadLine();
+
+            foreach(var path in gcf.Root) 
+            {
+                Console.WriteLine(path.FullName);
+            }
+            Console.ReadLine();
+            
+            string path1 = @"D:\Steam\steamapps\common\Stronghold\fx\speech\Act1_1.wav";
+            string path2 = @"D:\Steam\steamapps\common\left 4 dead\left4dead\sound\ambient\Ambience\crucial_InsidePlaneAmb_loop.wav";
 
             Ibasa.Media.Audio.Wav wav = new Ibasa.Media.Audio.Wav(
-                System.IO.File.OpenRead(path));
+                System.IO.File.OpenRead(path2));
 
             Console.WriteLine(wav.Format);
             Console.WriteLine(wav.Frequency);
             Console.WriteLine(wav.Data.Length);
+
+            Console.ReadLine();
 
             Console.WriteLine(Ibasa.Audio.OpenAL.Version);
 
@@ -98,7 +116,7 @@ namespace Test
                 Console.WriteLine(string.Join(", ", dev.UnknownAttributes));
                 Console.WriteLine(string.Join(", ", dev.Extensions));
                 Console.WriteLine(dev.EfxVersion);
-
+                
                 dev.Dispose();
             }
 
@@ -143,6 +161,7 @@ namespace Test
 
             Ibasa.Audio.Source source = new Ibasa.Audio.Source();
             source.Gain = 1;
+            source.Looping = true;
 
             Ibasa.Audio.Buffer buffer = new Ibasa.Audio.Buffer();
             buffer.BufferData(format, wav.Data, wav.Data.Length, frequency);
@@ -150,10 +169,12 @@ namespace Test
             source.Buffer = buffer;
             source.Play();
 
-            while (source.State == Ibasa.Audio.SourceState.Playing)
+            while (source.State == Ibasa.Audio.SourceState.Playing && !Console.KeyAvailable)
             {
                 System.Threading.Thread.Sleep(1);
             }
+
+            source.Stop();
 
             buffer.Delete();
             source.Delete();
