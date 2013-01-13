@@ -71,6 +71,11 @@ namespace Ibasa.SharpAL.Formats
         {
             return byteCount / Channels;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} channels", Name, Channels);
+        }
     }
 
     public sealed class Pcm16 : Format<short>
@@ -146,6 +151,11 @@ namespace Ibasa.SharpAL.Formats
         public override int GetSampleCount(int byteCount)
         {
             return byteCount / (2 * Channels);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} channels", Name, Channels);
         }
     }
 }

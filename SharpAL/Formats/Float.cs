@@ -79,6 +79,11 @@ namespace Ibasa.SharpAL.Formats
         {
             return byteCount / (4 * Channels);
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} channels", Name, Channels);
+        }
     }
 
     public sealed class Float64 : Format<double>
@@ -154,6 +159,11 @@ namespace Ibasa.SharpAL.Formats
         public override int GetSampleCount(int byteCount)
         {
             return byteCount / (8 * Channels);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} channels", Name, Channels);
         }
     }
 }
