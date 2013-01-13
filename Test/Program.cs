@@ -80,21 +80,23 @@ namespace Test
             var gcf = new Ibasa.Valve.Package.Gcf(half_life, System.IO.FileShare.ReadWrite);
 
             Console.WriteLine("GCF Version: {0}", gcf.GCFVersion);
-            Console.WriteLine("Application ID: {0}", gcf.ApplicationID);
-            Console.WriteLine("Application Version: {0}", gcf.ApplicationVersion);
+            Console.WriteLine("Cache ID: {0}", gcf.CacheID);
             Console.ReadLine();
 
-            foreach(var path in gcf.Root) 
+            foreach(var path in gcf.Root.EnumerateFiles(searchOption: System.IO.SearchOption.AllDirectories))
             {
                 Console.WriteLine(path.FullName);
             }
-            Console.ReadLine();
+
+            var sounds = gcf.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories);
+            
+            var sound = sounds.First();
             
             string path1 = @"D:\Steam\steamapps\common\Stronghold\fx\speech\Act1_1.wav";
             string path2 = @"D:\Steam\steamapps\common\left 4 dead\left4dead\sound\ambient\Ambience\crucial_InsidePlaneAmb_loop.wav";
 
             Ibasa.Media.Audio.Wav wav = new Ibasa.Media.Audio.Wav(
-                System.IO.File.OpenRead(path2));
+                sound.OpenRead());
 
             Console.WriteLine(wav.Format);
             Console.WriteLine(wav.Frequency);
@@ -166,6 +168,7 @@ namespace Test
             Ibasa.Audio.Buffer buffer = new Ibasa.Audio.Buffer();
             buffer.BufferData(format, wav.Data, wav.Data.Length, frequency);
 
+            source.Looping = true;
             source.Buffer = buffer;
             source.Play();
 
