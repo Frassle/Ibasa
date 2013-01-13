@@ -91,12 +91,17 @@ namespace Test
             var sounds = gcf.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories);
             
             var sound = sounds.First();
-            
-            string path1 = @"D:\Steam\steamapps\common\Stronghold\fx\speech\Act1_1.wav";
-            string path2 = @"D:\Steam\steamapps\common\left 4 dead\left4dead\sound\ambient\Ambience\crucial_InsidePlaneAmb_loop.wav";
 
             Ibasa.Media.Audio.Wav wav = new Ibasa.Media.Audio.Wav(
                 sound.OpenRead());
+
+            var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
+            
+            foreach (var file in natural_selection.Root.EnumerateFiles(searchOption: System.IO.SearchOption.AllDirectories)) 
+            {
+                Console.WriteLine(file.FullName);
+            }
+            Console.ReadLine();
 
             Console.WriteLine(wav.Format);
             Console.WriteLine(wav.Frequency);
