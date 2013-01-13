@@ -74,7 +74,7 @@ namespace Ibasa.SharpAL.Formats
 
         public override string ToString()
         {
-            return string.Format("{0} {1} channels", Name, Channels);
+            return string.Format("{0} {1} {2}", Name, Channels, Channels == 1 ? "channel" : "channels");
         }
     }
 
@@ -155,7 +155,7 @@ namespace Ibasa.SharpAL.Formats
 
         public override string ToString()
         {
-            return string.Format("{0} {1} channels", Name, Channels);
+            return string.Format("{0} {1} {2}", Name, Channels, Channels == 1 ? "channel" : "channels");
         }
     }
 }
