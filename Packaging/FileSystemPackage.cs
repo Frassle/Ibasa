@@ -10,25 +10,40 @@ namespace Ibasa.Packaging
         sealed class FileSystemDirectoryInfo : DirectoryInfo
         {
             System.IO.DirectoryInfo Info;
+            string PathRoot;
 
-            public FileSystemDirectoryInfo(string path)
+            public FileSystemDirectoryInfo(string root, string path)
             {
-                Info = new System.IO.DirectoryInfo(path);
+                PathRoot = root;
+                Info = new System.IO.DirectoryInfo(System.IO.Path.Combine(root, path));
             }
 
-            public FileSystemDirectoryInfo(System.IO.DirectoryInfo info)
+            public FileSystemDirectoryInfo(string root, System.IO.DirectoryInfo info)
             {
+                PathRoot = root;
                 Info = info;
             }
 
             public override DirectoryInfo Root
             {
-                get { return new FileSystemDirectoryInfo(Info.Root); }
+                get
+                {
+                    if (PathRoot == Info.FullName)
+                        return this;
+
+                    return new FileSystemDirectoryInfo(PathRoot, Info.Root);
+                }
             }
 
             public override DirectoryInfo Parent
             {
-                get { return new FileSystemDirectoryInfo(Info.Parent); }
+                get
+                {
+                    if (PathRoot == Info.FullName)
+                        return null;
+                    
+                    return new FileSystemDirectoryInfo(PathRoot, Info.Parent);
+                }
             }
 
             public override void Create()
@@ -38,7 +53,7 @@ namespace Ibasa.Packaging
 
             public override DirectoryInfo CreateSubdirectory(string path)
             {
-                return new FileSystemDirectoryInfo(Info.CreateSubdirectory(path));
+                return new FileSystemDirectoryInfo(PathRoot, Info.CreateSubdirectory(path));
             }
 
             public override void Delete(bool recursive = false)
@@ -51,21 +66,27 @@ namespace Ibasa.Packaging
                 foreach (var item in Info.EnumerateFileSystemInfos())
                 {
                     if (item is System.IO.FileInfo)
-                        yield return new FileSystemFileInfo(item as System.IO.FileInfo);
+                        yield return new FileSystemFileInfo(PathRoot, item as System.IO.FileInfo);
 
                     if (item is System.IO.DirectoryInfo)
-                        yield return new FileSystemDirectoryInfo(item as System.IO.DirectoryInfo);
+                        yield return new FileSystemDirectoryInfo(PathRoot, item as System.IO.DirectoryInfo);
                 }
             }
 
             public override string Name
             {
-                get { return Info.Name; }
+                get
+                {
+                    if (PathRoot == Info.FullName)
+                        return "";
+
+                    return Info.Name;
+                }
             }
 
             public override string FullName
             {
-                get { return Info.FullName; }
+                get { return Info.FullName.Substring(PathRoot.Length); }
             }
 
             public override string Extension
@@ -82,14 +103,17 @@ namespace Ibasa.Packaging
         sealed class FileSystemFileInfo : FileInfo
         {
             System.IO.FileInfo Info;
+            string PathRoot;
 
-            public FileSystemFileInfo(string path)
+            public FileSystemFileInfo(string root, string path)
             {
-                Info = new System.IO.FileInfo(path);
+                PathRoot = root;
+                Info = new System.IO.FileInfo(System.IO.Path.Combine(root, path));
             }
 
-            public FileSystemFileInfo(System.IO.FileInfo info)
+            public FileSystemFileInfo(string root, System.IO.FileInfo info)
             {
+                PathRoot = root;
                 Info = info;
             }
 
@@ -100,7 +124,7 @@ namespace Ibasa.Packaging
 
             public override DirectoryInfo Directory
             {
-                get { return new FileSystemDirectoryInfo(Info.Directory); }
+                get { return new FileSystemDirectoryInfo(PathRoot, Info.Directory); }
             }
 
             public override System.IO.Stream Create()
@@ -120,7 +144,7 @@ namespace Ibasa.Packaging
 
             public override string FullName
             {
-                get { return Info.FullName; }
+                get { return Info.FullName.Substring(PathRoot.Length); }
             }
 
             public override string Extension
@@ -202,6 +226,9 @@ namespace Ibasa.Packaging
 
         public FileSystemPackage(string root)
         {
+            if (root[root.Length - 1] != System.IO.Path.DirectorySeparatorChar)
+                root += System.IO.Path.DirectorySeparatorChar;
+
             _Root = root;
         }
 
@@ -209,7 +236,7 @@ namespace Ibasa.Packaging
 
         public override DirectoryInfo Root
         {
-            get { return new FileSystemDirectoryInfo(_Root); }
+            get { return new FileSystemDirectoryInfo(_Root, ""); }
         }
 
         public override Path Path
@@ -219,12 +246,12 @@ namespace Ibasa.Packaging
 
         public override DirectoryInfo GetDirectoryInfo(string path)
         {
-            return new FileSystemDirectoryInfo(path);
+            return new FileSystemDirectoryInfo(_Root, path);
         }
 
         public override FileInfo GetFileInfo(string path)
         {
-            return new FileSystemFileInfo(path);
+            return new FileSystemFileInfo(_Root, path);
         }
     }
 }
