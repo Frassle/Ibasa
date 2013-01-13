@@ -155,7 +155,20 @@ namespace Ibasa.Media.Audio
         private void ParseData(Riff.RiffReader reader)
         {
             Data = new byte[reader.Length];
-            reader.Data.Read(Data, 0, Data.Length);
+
+            int count = Data.Length;
+            int offset = 0;
+            do
+            {
+                int read = reader.Data.Read(Data, offset, count);
+                if (read == 0)
+                    break;
+                offset += read;
+                count -= read;
+            } while (count > 0);
+
+            if (count != 0)
+                throw new System.IO.EndOfStreamException("Could not read wav data.");
         }
     }
 }
