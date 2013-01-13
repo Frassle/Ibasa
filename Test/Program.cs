@@ -75,9 +75,8 @@ namespace Test
 
         static void Main(string[] args)
         {
-            string half_life = @"D:\Steam\steamapps\half-life.gcf";
-
-            var gcf = new Ibasa.Valve.Package.Gcf(half_life, System.IO.FileShare.ReadWrite);
+            var source_sounds = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\source sounds.gcf", System.IO.FileShare.ReadWrite);
+            var half_life = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\half-life.gcf", System.IO.FileShare.ReadWrite);
 
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
          
@@ -131,7 +130,7 @@ namespace Test
 
             Ibasa.Audio.Buffer buffer = new Ibasa.Audio.Buffer();
 
-            foreach (var item in natural_selection.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories))
+            foreach (var item in source_sounds.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories))
             {
                 var wav = new Ibasa.Media.Audio.Wav(item.OpenRead());
 
@@ -144,11 +143,15 @@ namespace Test
                 source.Buffer = buffer;
                 source.Play();
 
-                while (source.State == Ibasa.Audio.SourceState.Playing)
+                while (source.State == Ibasa.Audio.SourceState.Playing && !Console.KeyAvailable)
                 {
                     System.Threading.Thread.Sleep(0);
                 }
 
+                if (Console.KeyAvailable)
+                    Console.ReadKey(true);
+
+                source.Stop();
                 source.Buffer = null;
             }
 
