@@ -79,35 +79,8 @@ namespace Test
 
             var gcf = new Ibasa.Valve.Package.Gcf(half_life, System.IO.FileShare.ReadWrite);
 
-            Console.WriteLine("GCF Version: {0}", gcf.GCFVersion);
-            Console.WriteLine("Cache ID: {0}", gcf.CacheID);
-            Console.ReadLine();
-
-            foreach(var path in gcf.Root.EnumerateFiles(searchOption: System.IO.SearchOption.AllDirectories))
-            {
-                Console.WriteLine(path.FullName);
-            }
-
-            var sounds = gcf.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories);
-            
-            var sound = sounds.First();
-
-            Ibasa.Media.Audio.Wav wav = new Ibasa.Media.Audio.Wav(
-                sound.OpenRead());
-
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
-            
-            foreach (var file in natural_selection.Root.EnumerateFiles(searchOption: System.IO.SearchOption.AllDirectories)) 
-            {
-                Console.WriteLine(file.FullName);
-            }
-            Console.ReadLine();
-
-            Console.WriteLine(wav.Format);
-            Console.WriteLine(wav.Frequency);
-            Console.WriteLine(wav.Data.Length);
-
-            Console.ReadLine();
+         
 
             Console.WriteLine(Ibasa.Audio.OpenAL.Version);
 
@@ -127,26 +100,12 @@ namespace Test
                 dev.Dispose();
             }
 
-            var format = wav.Format;
-            var frequency = wav.Frequency;
-
-            foreach (var dev in Ibasa.Audio.OpenAL.CaptureDevices(frequency, format, frequency))
-            {
-                Console.WriteLine("------------");
-                Console.WriteLine("Name: {0}", dev.Name);
-                Console.WriteLine("Capture Samples: {0}", dev.CaptureSamples);
-
-                dev.Dispose();
-            }
-
             Console.ReadLine();
 
             var device = Ibasa.Audio.OpenAL.DefaultDevice;
-            var capdevice = Ibasa.Audio.OpenAL.DefaultCaptureDevice(frequency, format, frequency);
 
             Console.WriteLine("------------");
             Console.WriteLine(device.Name);
-            Console.WriteLine(capdevice.Name);
             Console.WriteLine("------------");
 
             Ibasa.Audio.Context.Create(device);
@@ -168,26 +127,34 @@ namespace Test
 
             Ibasa.Audio.Source source = new Ibasa.Audio.Source();
             source.Gain = 1;
-            source.Looping = true;
+            source.Looping = false;
 
             Ibasa.Audio.Buffer buffer = new Ibasa.Audio.Buffer();
-            buffer.BufferData(format, wav.Data, wav.Data.Length, frequency);
 
-            source.Looping = true;
-            source.Buffer = buffer;
-            source.Play();
-
-            while (source.State == Ibasa.Audio.SourceState.Playing && !Console.KeyAvailable)
+            foreach (var item in natural_selection.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories))
             {
-                System.Threading.Thread.Sleep(1);
-            }
+                var wav = new Ibasa.Media.Audio.Wav(item.OpenRead());
 
-            source.Stop();
+                Console.WriteLine(item.Name);
+                Console.WriteLine("Format   : {0}", wav.Format);
+                Console.WriteLine("Frequency: {0}", wav.Frequency);
+
+                buffer.BufferData(wav.Format, wav.Data, wav.Data.Length, wav.Frequency);
+
+                source.Buffer = buffer;
+                source.Play();
+
+                while (source.State == Ibasa.Audio.SourceState.Playing)
+                {
+                    System.Threading.Thread.Sleep(0);
+                }
+
+                source.Buffer = null;
+            }
 
             buffer.Delete();
             source.Delete();
             Ibasa.Audio.Context.Destroy();
-            capdevice.Dispose();
             device.Dispose();
 
             Console.ReadLine();
