@@ -9,9 +9,9 @@ namespace Ibasa.Valve.Package
 {
     public sealed class Gcf : Ibasa.Packaging.Package
     {
-        public uint GCFVersion { get; private set; }
-        public uint ApplicationID { get; private set; }
-        public uint ApplicationVersion { get; private set; }
+        public int CacheID { get; private set; }
+        public Version GCFVersion { get; private set; }
+        int LastVersionPlayed; // GCF file version.
         uint FileSize;		// Total size of GCF file in bytes.
         uint SectorSize;	    // represents how many bytes are in each sector in the cache.
         uint SectorCount;    // represents how many total sectors are stored in the cache.
@@ -36,7 +36,7 @@ namespace Ibasa.Valve.Package
         }
 
         uint FirstUnusedEntry;
-        uint IsLongTerminator;
+        uint Terminator;
 
         long FragmentationMapEntryOffset;
 
@@ -157,64 +157,80 @@ namespace Ibasa.Valve.Package
             Reader = new Ibasa.IO.BinaryReader(stream, Encoding.ASCII);
 
             {
-                Reader.Seek(0, SeekOrigin.Begin);
-                uint checksum = Reader.ReadBytes(40).Aggregate(0U, (sum, value) => sum + value);
-                Reader.Seek(0, SeekOrigin.Begin);
+                long seek = Reader.Position;
+                uint checksum = Reader.ReadBytes(10 * 4).Aggregate(0U, (sum, value) => sum + value);
+                Reader.Position = seek;
 
                 if (Reader.ReadUInt32() != 0x00000001) // HeaderVersion Always 0x00000001
+                {
                     throw new InvalidDataException("Header version mismatch.");
-                if (Reader.ReadUInt32() != 0x00000001) // CacheType Always 0x00000001
-                    throw new InvalidDataException("Cache type mismatch. Maybe NCF?");
+                }
+                if (Reader.ReadUInt32() != 0x00000001) // MajorVersion Always 0x00000001
+                {
+                    throw new InvalidDataException("Major version mismatch.");
+                }
+                var minor = Reader.ReadInt32();
+                if (minor != 3 && minor != 5 && minor != 6)
+                {
+                    throw new InvalidDataException(string.Format("Minor version mismatch, read {0} expected 3, 5 or 6.", minor));
+                }
 
-                GCFVersion = Reader.ReadUInt32(); //public uint GCFVersion;
-                ApplicationID = Reader.ReadUInt32(); //public uint ApplicationID;
-                ApplicationVersion = Reader.ReadUInt32(); //public uint ApplicationVersion;
+                GCFVersion = new Version(1, minor);
+                CacheID = Reader.ReadInt32();
+                LastVersionPlayed = Reader.ReadInt32();
 
-                Reader.ReadUInt32();
-                Reader.ReadUInt32();
+                var dummy0 = Reader.ReadUInt32();
+                var dummy1 = Reader.ReadUInt32();
 
-                FileSize = Reader.ReadUInt32(); //public uint FileSize;		// Total size of GCF file in bytes.
-                SectorSize = Reader.ReadUInt32(); //public uint BlockSize;	// Size of each data block in bytes.
-                SectorCount = Reader.ReadUInt32(); //public uint BlockCount;	// Number of data blocks.
+                FileSize = Reader.ReadUInt32(); // Total size of GCF file in bytes.
+                SectorSize = Reader.ReadUInt32(); // Size of each data block in bytes.
+                SectorCount = Reader.ReadUInt32(); // Number of data blocks.
                 
-                if (checksum != Reader.ReadUInt32()) //public uint Checksum;		// Header checksum.
+                if (checksum != Reader.ReadUInt32())// Header checksum.
                     throw new InvalidDataException("Checksum mismatch.");
             }
 
             {
-                long checksum = 0;
-                checksum += (BlockCount = Reader.ReadUInt32()); //public int BlockCount;	// Number of data blocks.
+                long seek = Reader.Position;
+                uint checksum = Reader.Read<uint>(7).Aggregate(0U, (sum, value) => sum + value);
+                Reader.Position = seek;
+
+                BlockCount = Reader.ReadUInt32(); // Number of data blocks.
                 if (BlockCount != SectorCount)
+                {
                     throw new InvalidDataException("BlockCount does not match SectorCount.");
+                }
 
-                checksum += (BlocksUsed = Reader.ReadUInt32()); //public uint BlocksUsed;	// Number of data blocks that point to data.
-                checksum += (LastUsedBlock = Reader.ReadUInt32()); //public uint LastUsedBlock;	//is the index of the last used block.
-                
-                checksum += Reader.ReadUInt32(); //public uint Dummy0;
-                checksum += Reader.ReadUInt32(); //public uint Dummy1;
-                checksum += Reader.ReadUInt32(); //public uint Dummy2;
-                checksum += Reader.ReadUInt32(); //public uint Dummy3;
+                BlocksUsed = Reader.ReadUInt32(); // Number of data blocks that point to data.
 
-                if (checksum != Reader.ReadUInt32()) //public uint Checksum;		// Header checksum.
+                var dummy0 = Reader.ReadUInt32();
+                var dummy1 = Reader.ReadUInt32();
+                var dummy2 = Reader.ReadUInt32();
+                var dummy3 = Reader.ReadUInt32();
+                var dummy4 = Reader.ReadUInt32();
+
+                if (checksum != Reader.ReadUInt32()) // Header checksum.
                     throw new InvalidDataException("Checksum mismatch.");
             }
 
-            BlockEntryOffset = Reader.BaseStream.Position;
+            BlockEntryOffset = Reader.Position;
             //Seek past block entries
             Reader.Seek(BlockCount * BlockEntry.Size, SeekOrigin.Current);
 
             { //FragmentationMapHeader
-                long checksum = 0;
+                long seek = Reader.Position;
+                uint checksum = Reader.Read<uint>(3).Aggregate(0U, (sum, value) => sum + value);
+                Reader.Position = seek;
+
                 uint sectorCount = Reader.ReadUInt32();
-                checksum += sectorCount;
                 if (SectorCount != sectorCount)
                     throw new InvalidDataException();
 
-                checksum += (FirstUnusedEntry = Reader.ReadUInt32());
-                checksum += (IsLongTerminator = Reader.ReadUInt32());
+                FirstUnusedEntry = Reader.ReadUInt32();
+                Terminator = Reader.ReadUInt32() == 0 ? 0x0000ffff : 0xffffffff; 
 
-                if (checksum != Reader.ReadUInt32()) //public uint Checksum;		// Header checksum.
-                    throw new InvalidDataException();
+                if (checksum != Reader.ReadUInt32()) // Header checksum.
+                    throw new InvalidDataException("Checksum mismatch.");
             }
 
             FragmentationMapEntryOffset = Reader.BaseStream.Position;
@@ -222,7 +238,7 @@ namespace Ibasa.Valve.Package
             Reader.Seek(BlockCount * 4, SeekOrigin.Current);
 
             { //BlockMapHeader
-                if (GCFVersion <= 5)
+                if (GCFVersion.Minor <= 5)
                 {
                     uint blockCount = Reader.ReadUInt32();
                     uint firstBlockEntryIndex = Reader.ReadUInt32();
@@ -241,28 +257,26 @@ namespace Ibasa.Valve.Package
             }
 
             { //DirectoryHeader
-                long checksum = 0;
 
                 if (Reader.ReadUInt32() != 0x00000004) // HeaderVersion Always 0x00000004
                     throw new InvalidDataException("Header version mismatch.");
-                if (Reader.ReadUInt32() != ApplicationID) // ApplicationID
-                    throw new InvalidDataException("ApplicationID mismatch.");
-                if (Reader.ReadUInt32() != ApplicationVersion) // ApplicationVersion
-                    throw new InvalidDataException("ApplicationVersion mismatch.");
+                if (Reader.ReadUInt32() != CacheID) // CacheID
+                    throw new InvalidDataException("CacheID mismatch.");
+                if (Reader.ReadUInt32() != LastVersionPlayed) // LastVersionPlayed
+                    throw new InvalidDataException("LastVersionPlayed mismatch.");
 
                 ItemCount = Reader.ReadUInt32(); //public uint ItemCount;	// Number of items in the directory.	
                 FileCount = Reader.ReadUInt32(); //public uint FileCount;	// Number of files in the directory.
-                CompressionBlockSize = Reader.ReadUInt32(); //public uint CompressionBlockSize;   // defines how many bytes are used per checksum/compressed block for each file.
+                var dummy0 = Reader.ReadUInt32(); 
                 DirectorySize = Reader.ReadUInt32(); //public uint DirectorySize;	// Size of lpGCFDirectoryEntries & lpGCFDirectoryNames & lpGCFDirectoryInfo1Entries & lpGCFDirectoryInfo2Entries & lpGCFDirectoryCopyEntries & lpGCFDirectoryLocalEntries in bytes.
                 NameSize = Reader.ReadUInt32(); //public uint NameSize;		// Size of the directory names in bytes.
                 HashTableKeyCount = Reader.ReadUInt32(); //public uint HashTableKeyCount;	// Number of Info1 entires.
                 CopyCount = Reader.ReadUInt32(); //public uint CopyCount;	// Number of files to copy.
                 LocalCount = Reader.ReadUInt32(); //public uint LocalCount;	// Number of files to keep local.
-                DepotInfo = Reader.ReadUInt32();
-                Fingerprint = Reader.ReadUInt32();
+                var dummy1 = Reader.ReadUInt32(); 
+                var dummy2 = Reader.ReadUInt32();
 
-                if (checksum != Reader.ReadUInt32()) //public uint Checksum;		// Header checksum.
-                { } //throw new InvalidDataException();
+                var checksum = Reader.ReadUInt32(); // Header checksum never computes
             }
 
             DirectoryEntryOffset = Reader.BaseStream.Position;
@@ -316,8 +330,8 @@ namespace Ibasa.Valve.Package
             //Skip past signature
             Reader.Seek(0x80, SeekOrigin.Current);
 
-            if (Reader.ReadUInt32() != ApplicationVersion) // ApplicationVersion
-                throw new InvalidDataException("ApplicationVersions do not match.");
+            if (Reader.ReadUInt32() != LastVersionPlayed) // LastVersionPlayed
+                throw new InvalidDataException("LastVersionPlayed mismatch.");
 
             { //DataHeader
                 uint checksum = 0;
@@ -520,7 +534,7 @@ namespace Ibasa.Valve.Package
                 throw new NotSupportedException("GCFs are readonly.");
             }
 
-            public override void Delete(bool recursive)
+            public override void Delete(bool recursive = false)
             {
                 throw new NotSupportedException("GCFs are readonly.");
             }
@@ -717,8 +731,8 @@ namespace Ibasa.Valve.Package
 
                 var block = Gcf.GetBlockEntry(Gcf.GetDirectoryMapEntry(Index));
                 uint data = block.FirstDataBlockIndex;
-                
-                while(data != (Gcf.IsLongTerminator == 0 ? 0x0000ffff : 0xffffffff))
+
+                while (data != Gcf.Terminator)
                 {
                     FAT.Add(data);
                     data = Gcf.GetFragmentationMapEntry(data);
