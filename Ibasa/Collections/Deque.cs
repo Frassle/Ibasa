@@ -21,7 +21,7 @@ namespace Ibasa.Collections
 
         const int BlockSize = 16;
 
-        struct Block
+        class Block
         {
             T Item0;
             T Item1;
@@ -39,12 +39,6 @@ namespace Ibasa.Collections
             T ItemD;
             T ItemE;
             T ItemF;
-
-            public void Clear()
-            {
-                Item0 = Item1 = Item2 = Item3 = Item4 = Item5 = Item6 = Item7 =
-                    Item8 = Item9 = ItemA = ItemB = ItemC = ItemD = ItemE = ItemF = default(T);
-            }
 
             public T this[int index]
             {
@@ -348,6 +342,16 @@ namespace Ibasa.Collections
             _list = newList;
             _front += offset * BlockSize;
         }
+        Block SafeGet(int block_index)
+        {
+            var block = _list[block_index];
+            if (block == null)
+            {
+                block = new Block();
+                _list[block_index] = block;
+            }
+            return block;
+        }
 
         #region Add/Remove
         /// <summary>
@@ -365,7 +369,7 @@ namespace Ibasa.Collections
             int block, offset;
             Translate(-1, out block, out offset);
 
-            _list[block][offset] = value;
+            SafeGet(block)[offset] = value;
             --_front;
             ++_count;
             ++_version;
@@ -384,8 +388,8 @@ namespace Ibasa.Collections
             {
                 GrowBack((int)(Capacity == 0 ? BlockSize : Capacity * 1.5));
             }
-            
-            _list[block][offset] = value;
+
+            SafeGet(block)[offset] = value;
             ++_count;
             ++_version;
         }
