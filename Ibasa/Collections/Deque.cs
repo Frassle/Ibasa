@@ -17,11 +17,12 @@ namespace Ibasa.Collections
     public sealed class Deque<T> : IList<T>
     {
         // Stores items in Blocks, each block holds 16 items.
-        // Blocks are structs so cheep on GC, keeps _list items close in memory.
+        // Blocks are classes so _list is cheep to realloc but items still have
+        // fairly good locality.
 
         const int BlockSize = 16;
 
-        struct Block
+        class Block
         {
             T Item0;
             T Item1;
@@ -39,12 +40,6 @@ namespace Ibasa.Collections
             T ItemD;
             T ItemE;
             T ItemF;
-
-            public void Clear()
-            {
-                Item0 = Item1 = Item2 = Item3 = Item4 = Item5 = Item6 = Item7 =
-                    Item8 = Item9 = ItemA = ItemB = ItemC = ItemD = ItemE = ItemF = default(T);
-            }
 
             public T this[int index]
             {
