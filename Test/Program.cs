@@ -75,30 +75,6 @@ namespace Test
 
         static void Main(string[] args)
         {
-            Ibasa.Collections.Deque<int> deque = new Ibasa.Collections.Deque<int>();
-
-            deque.AddLast(1);
-            deque.AddLast(2);
-
-            for (int i = 0; i < 32; ++i)
-            {
-                deque.AddLast(i + 3);
-            }
-
-            deque.AddFirst(-1);
-            deque.AddFirst(-2);
-
-            for (int i = 0; i < 32; ++i)
-            {
-                deque.AddFirst(-i - 3);
-            }
-
-            foreach (var i in deque)
-            {
-                Console.WriteLine(i);
-            }
-
-
             var source_sounds = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\source sounds.gcf", System.IO.FileShare.ReadWrite);
             var half_life = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\half-life.gcf", System.IO.FileShare.ReadWrite);
 
