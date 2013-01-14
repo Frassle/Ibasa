@@ -18,6 +18,9 @@ namespace Ibasa.Audio
         internal bool IsBuffer { get { return OpenTK.Audio.OpenAL.AL.IsBuffer(Id); } }
         internal bool IsSource { get { return OpenTK.Audio.OpenAL.AL.IsSource(Id); } }
 
-        public abstract void Delete();
+        public virtual void Delete()
+        {
+            ObjectTable.Remove(this);
+        }
     }
 }

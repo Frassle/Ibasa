@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Concurrent;
 
 namespace Ibasa.Audio
 {
     internal static class ObjectTable
     {
-        private static Dictionary<int, ALObject> Objects = new Dictionary<int, ALObject>();
+        private static ConcurrentDictionary<int, ALObject> Objects = new ConcurrentDictionary<int, ALObject>();
 
         public static ALObject Get(int id)
         {
@@ -34,12 +35,12 @@ namespace Ibasa.Audio
 
         public static void Add(ALObject obj)
         {
-            Objects.Add(obj.Id, obj);
+            Objects.TryAdd(obj.Id, obj);
         }
 
         public static void Remove(ALObject obj)
         {
-            Objects.Remove(obj.Id);
+            Objects.TryRemove(obj.Id, out obj);
         }
     }
 }

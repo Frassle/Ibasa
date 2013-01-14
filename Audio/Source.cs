@@ -34,7 +34,9 @@ namespace Ibasa.Audio
 
         public override void Delete()
         {
+            base.Delete();
             OpenTK.Audio.OpenAL.AL.DeleteSource(Id);
+            Context.ThrowIfError();
         }
 
         public SourceType Type
