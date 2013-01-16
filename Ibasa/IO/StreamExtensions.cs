@@ -7,20 +7,20 @@ namespace Ibasa.IO
 {
     public static class StreamExtensions
     {
-        public static byte[] ReadBytes(this System.IO.Stream stream, int count)
+        public static byte[] ReadBytes(this System.IO.Stream stream, long count)
         {
             var buffer = new byte[count];
             ReadBytes(stream, buffer, 0, count);
             return buffer;
         }
 
-        public static void ReadBytes(this System.IO.Stream stream, byte[] buffer, int offset, int count)
+        public static void ReadBytes(this System.IO.Stream stream, byte[] buffer, int offset, long count)
         {
-            int bytes_left = count;
+            long bytes_left = count;
 
             do
             {
-                int read = stream.Read(buffer, offset, bytes_left);
+                int read = stream.Read(buffer, offset, (int)bytes_left);
                 if (read == 0)
                     break;
                 offset += read;
