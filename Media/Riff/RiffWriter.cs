@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Ibasa.Media.Riff
 {
@@ -96,13 +97,16 @@ namespace Ibasa.Media.Riff
             }
         }
 
-        Ibasa.IO.SeekableStream BaseStream;
+        System.IO.Stream BaseStream;
 
         Stack<long> Offsets = new Stack<long>();
 
         public RiffWriter(System.IO.Stream output)
         {
-            BaseStream = new Ibasa.IO.SeekableStream(output);
+            Contract.Requires(output.CanSeek);
+            Contract.Requires(output.CanRead);
+
+            BaseStream = output;
         }
 
         static long PadByte(long position)
@@ -127,7 +131,6 @@ namespace Ibasa.Media.Riff
             BaseStream.Write(BitConverter.GetBytes(length), 0, 4);
 
             BaseStream.Position = position + PadByte(position);
-            BaseStream.Commit();
         }
 
         public void WriteStartList(FourCC type)

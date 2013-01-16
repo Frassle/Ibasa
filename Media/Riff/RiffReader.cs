@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Ibasa.Media.Riff
 {
@@ -97,11 +98,14 @@ namespace Ibasa.Media.Riff
             }
         }
 
-        Ibasa.IO.SeekableStream BaseStream;
+        System.IO.Stream BaseStream;
 
         public RiffReader(System.IO.Stream input)
         {
-            BaseStream = new Ibasa.IO.SeekableStream(input);
+            Contract.Requires(input.CanSeek);
+            Contract.Requires(input.CanRead);
+
+            BaseStream = input;
         }
 
         public FourCC Id { get; private set; }
@@ -127,17 +131,13 @@ namespace Ibasa.Media.Riff
         {
             if (Lengths.Count != 0)
             {
-                if (Type.HasValue)
-                {
-                }
-                else
+                if (!Type.HasValue)
                 {
                     var length = Lengths.Pop();
                     var offset = Offsets.Pop();
 
                     var position = offset + length;
                     BaseStream.Position = position + PadByte(position);
-                    BaseStream.Discard();
                 }
 
                 if (BaseStream.Position == Offset + Length)
@@ -147,7 +147,6 @@ namespace Ibasa.Media.Riff
 
                     var position = offset + length;
                     BaseStream.Position = position + PadByte(position);
-                    BaseStream.Discard();
                 }
 
                 if (Lengths.Count == 0)
