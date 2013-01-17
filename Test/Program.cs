@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ibasa.IO;
 
 namespace Test
 {
@@ -138,7 +139,10 @@ namespace Test
                 Console.WriteLine("Format   : {0}", wav.Format);
                 Console.WriteLine("Frequency: {0}", wav.Frequency);
 
-                buffer.BufferData(wav.Format, wav.Data, wav.Data.Length, wav.Frequency);
+                wav.Stream.Seek(wav.DataOffset, System.IO.SeekOrigin.Begin);
+                var data = wav.Stream.ReadBytes(wav.DataLength);
+
+                buffer.BufferData(wav.Format, data, data.Length, wav.Frequency);
 
                 source.Buffer = buffer;
                 source.Play();

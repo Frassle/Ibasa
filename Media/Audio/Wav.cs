@@ -81,6 +81,7 @@ namespace Ibasa.Media.Audio
 
         public Wav(System.IO.Stream stream)
         {
+            Stream = stream;
             Riff.RiffReader reader = new Riff.RiffReader(stream);
 
             if (!reader.Read() || !reader.Type.HasValue || reader.Type.Value != "WAVE")
@@ -102,7 +103,9 @@ namespace Ibasa.Media.Audio
         }
 
         public Ibasa.SharpAL.Format Format { get; private set; }
-        public byte[] Data { get; private set; }
+        public System.IO.Stream Stream { get; private set; }
+        public long DataOffset { get; private set; }
+        public long DataLength { get; private set; }
 
         public int Frequency { get; private set; }
 
@@ -154,21 +157,8 @@ namespace Ibasa.Media.Audio
 
         private void ParseData(Riff.RiffReader reader)
         {
-            Data = new byte[reader.Length];
-
-            int count = Data.Length;
-            int offset = 0;
-            do
-            {
-                int read = reader.Data.Read(Data, offset, count);
-                if (read == 0)
-                    break;
-                offset += read;
-                count -= read;
-            } while (count > 0);
-
-            if (count != 0)
-                throw new System.IO.EndOfStreamException("Could not read wav data.");
+            DataOffset = reader.Offset;
+            DataLength = reader.Length;
         }
     }
 }
