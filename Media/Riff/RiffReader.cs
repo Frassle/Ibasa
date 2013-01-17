@@ -112,7 +112,7 @@ namespace Ibasa.Media.Riff
         public FourCC? Type { get; private set; }
 
         public long Length { get { return Lengths.Peek(); } }
-        long Offset { get { return Offsets.Peek(); } }
+        public long Offset { get { return Offsets.Peek(); } }
 
         public int Depth { get { return Lengths.Count; } }
 
