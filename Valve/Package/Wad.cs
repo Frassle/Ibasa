@@ -23,6 +23,22 @@ namespace Ibasa.Valve.Package
             public string Name;
         }
 
+        public class Font
+        {
+            internal Font(int rows, int rowHeight, int[] offsets, int[] widths)
+            {
+                Rows = rows;
+                RowHeight = rowHeight;
+                Offsets = new Collections.Immutable.ImmutableArray<int>(offsets);
+                Widths = new Collections.Immutable.ImmutableArray<int>(widths);
+            }
+
+            public readonly int Rows;
+            public readonly int RowHeight;
+            public readonly Ibasa.Collections.Immutable.ImmutableArray<int> Offsets;
+            public readonly Ibasa.Collections.Immutable.ImmutableArray<int> Widths;
+        }
+
         Ibasa.IO.BinaryReader Reader;
 
         public long Count { get; private set; }
@@ -70,38 +86,70 @@ namespace Ibasa.Valve.Package
             return lump;
         }
 
-        Resource GetResource(Lump lump)
+        Tuple<Resource, Font> GetResource(Lump lump)
         {
             Reader.Seek(lump.Offset, SeekOrigin.Begin);
 
             if (lump.Type == 0x40 || lump.Type == 0x43)
             {
                 string name = Trim(Encoding.ASCII.GetString(Reader.ReadBytes(16)));
+
+                Contract.Assert(name == lump.Name);
             }
 
             int width = Reader.ReadInt32();
             int height = Reader.ReadInt32();
 
+            Font font = null;
+
+            if (lump.Type == 0x46)
+            {
+                int rows = Reader.ReadInt32();
+                int rowheight = Reader.ReadInt32();
+
+                int[] offsets = new int[256];
+                int[] widths = new int[256];
+
+                for (int i = 0; i < 256; ++i)
+                {
+                    offsets[i] = Reader.ReadByte();
+                    widths[i] = Reader.ReadByte();
+                }
+
+                font = new Font(rows, rowheight, offsets, widths);
+            }
+
             int mips = lump.Type == 0x40 || lump.Type == 0x43 ? 4 : 1;
 
             Resource resource = new Resource(new Size3i(width, height, 1), mips, 1, Format.R8G8B8A8UNorm);
-                
-            if(lump.Type == 0x40 || lump.Type == 0x43)
+
+            byte[][] images = new byte[mips][];
+
+            if (lump.Type == 0x40 || lump.Type == 0x43)
             {
                 long offset0 = Reader.ReadUInt32();
                 long offset1 = Reader.ReadUInt32();
                 long offset2 = Reader.ReadUInt32();
                 long offset3 = Reader.ReadUInt32();
-            }
 
-            byte[][] images = new byte[mips][];
-            images[0] = Reader.ReadBytes(width * height); 
-                
-            if (lump.Type == 0x40 || lump.Type == 0x43)
-            {
+                Reader.Seek(lump.Offset + offset0, SeekOrigin.Begin);
+                images[0] = Reader.ReadBytes(width * height);
+
+                Reader.Seek(lump.Offset + offset1, SeekOrigin.Begin);
                 images[1] = Reader.ReadBytes((width / 2) * (height / 2));
+
+                Reader.Seek(lump.Offset + offset2, SeekOrigin.Begin);
                 images[2] = Reader.ReadBytes((width / 4) * (height / 4));
+
+                Reader.Seek(lump.Offset + offset3, SeekOrigin.Begin);
                 images[3] = Reader.ReadBytes((width / 8) * (height / 8));
+            }
+            else
+            {
+                long offset0 = Reader.ReadUInt32();
+
+                Reader.Seek(lump.Offset + offset0, SeekOrigin.Begin);
+                images[0] = Reader.ReadBytes(width * height);
             }
 
             Reader.Seek(2, SeekOrigin.Current);
@@ -137,7 +185,23 @@ namespace Ibasa.Valve.Package
                 }
             }
 
-            return resource;
+            return Tuple.Create(resource, font);
+        }
+
+        public Tuple<Resource, Font> GetFont(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException("name");
+
+            for (long i = 0; i < Count; ++i)
+            {
+                Lump lump = GetLump(i);
+
+                if (string.Equals(lump.Name, name, StringComparison.OrdinalIgnoreCase))
+                    return GetResource(lump);
+            }
+
+            return null;
         }
 
         public Resource this[string name]
@@ -152,7 +216,7 @@ namespace Ibasa.Valve.Package
                     Lump lump = GetLump(i);
 
                     if (string.Equals(lump.Name, name, StringComparison.OrdinalIgnoreCase))
-                        return GetResource(lump);
+                        return GetResource(lump).Item1;
                 }
 
                 return null;
@@ -168,7 +232,7 @@ namespace Ibasa.Valve.Package
 
                 Lump lump = GetLump(index);
 
-                return new KeyValuePair<string,Resource>(lump.Name, GetResource(lump));
+                return new KeyValuePair<string,Resource>(lump.Name, GetResource(lump).Item1);
             }
         }
 
