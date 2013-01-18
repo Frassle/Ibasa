@@ -9,7 +9,7 @@ namespace Ibasa.Audio
     {
         public static Device Device { get; private set; }
 
-        static OpenTK.ContextHandle Handle;
+        static IntPtr Handle;
 
         public static void Create(Device device)
         {
@@ -23,9 +23,9 @@ namespace Ibasa.Audio
 
         public static void Destroy()
         {
-            OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(OpenTK.ContextHandle.Zero);
+            OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(IntPtr.Zero);
             OpenTK.Audio.OpenAL.Alc.DestroyContext(Handle);
-            Handle = OpenTK.ContextHandle.Zero;
+            Handle = IntPtr.Zero;
             Device = null;
         }
 

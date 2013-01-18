@@ -68,7 +68,7 @@ namespace Ibasa.Audio
         {
             get
             {
-                OpenTK.Vector3 at, up;
+                Vector3f at, up;
                 OpenTK.Audio.OpenAL.AL.GetListener(OpenTK.Audio.OpenAL.ALListenerfv.Orientation, out at, out up);
                 return Quaternion.FromOrientation(new Vector3f(at.X, at.Y, at.Z), new Vector3f(up.X, up.Y, up.Z));
             }
@@ -77,10 +77,7 @@ namespace Ibasa.Audio
                 Vector3f at = Quaternion.Transform(Vector3f.UnitZ, value);
                 Vector3f up = Quaternion.Transform(Vector3f.UnitY, value);
 
-                OpenTK.Vector3 tk_at = new OpenTK.Vector3(at.X, at.Y, at.Z);
-                OpenTK.Vector3 tk_up = new OpenTK.Vector3(up.X, up.Y, up.Z);
-
-                OpenTK.Audio.OpenAL.AL.Listener(OpenTK.Audio.OpenAL.ALListenerfv.Orientation, ref tk_at, ref tk_up);
+                OpenTK.Audio.OpenAL.AL.Listener(OpenTK.Audio.OpenAL.ALListenerfv.Orientation, ref at, ref up);
             }
         }
     }
