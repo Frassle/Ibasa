@@ -5,27 +5,10 @@ using System.Text;
 
 namespace Ibasa.Audio
 {
-    public sealed class Device : IDisposable
+    public sealed class DeviceAttributes
     {
-        public string Name { get; private set; }
-        public IntPtr Handle { get; private set; }
-
-        internal Device(string name)
+        internal DeviceAttributes(int[] attributes)
         {
-            Handle = OpenTK.Audio.OpenAL.Alc.OpenDevice(name);
-            if (Handle == IntPtr.Zero)
-            {
-                throw new AudioException(string.Format("OpenDevice({0}) failed.", name));
-            }
-
-            Name = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.DeviceSpecifier);
-
-            int attributes_size;
-            OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AttributesSize, 1, out attributes_size);
-
-            int[] attributes = new int[attributes_size];
-            OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AllAttributes, attributes_size, attributes);
-
             var unknownAttributes = new List<int>();
 
             for (int i = 0; i < attributes.Length; ++i)
@@ -68,80 +51,85 @@ namespace Ibasa.Audio
                             break;
                         }
                 }
-            }
 
-            UnknownAttributes = new Collections.Immutable.ImmutableArray<int>(unknownAttributes);
-
-            Extensions = new Collections.Immutable.ImmutableArray<string>(
-                OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions).Split());
-        }
-
-        ~Device()
-        {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            if (!OpenTK.Audio.OpenAL.Alc.CloseDevice(Handle))
-            {
-                throw new AudioException(string.Format("CloseDevice({0}) failed.", Name));
-            }
-            else
-            {
-                GC.SuppressFinalize(this);
+                UnknownAttributes = new Collections.Immutable.ImmutableArray<int>(unknownAttributes);
             }
         }
         
-        public int Frequency
+        public readonly int Frequency;
+
+        public readonly int Refresh;
+
+        public readonly int MonoSources;
+
+        public readonly int StereoSources;
+
+        public readonly bool Sync;
+
+        public readonly Ibasa.Collections.Immutable.ImmutableArray<int> UnknownAttributes;
+    }
+
+    public struct Device
+    {
+        internal IntPtr Handle { get; private set; }
+
+        internal Device(IntPtr handle) : this()
         {
-            get;
-            private set;
+            Handle = handle;
         }
 
-        public int Refresh
+        public static Device OpenDevice(string name)
         {
-            get;
-            private set;
+            var handle = OpenTK.Audio.OpenAL.Alc.OpenDevice(name);
+            if (handle == IntPtr.Zero)
+            {
+                throw new AudioException(string.Format("OpenDevice({0}) failed.", name));
+            }
+            return new Device(handle);
         }
 
-        public int MonoSources
+        public static bool CloseDevice(Device device)
         {
-            get;
-            private set;
+            return OpenTK.Audio.OpenAL.Alc.CloseDevice(device.Handle);
         }
 
-        public int StereoSources
+        public string Name
         {
-            get;
-            private set;
+            get
+            {
+                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.DeviceSpecifier);
+            }
         }
 
-        public bool Sync
+        public DeviceAttributes Attributes
         {
-            get;
-            private set;
+            get
+            {
+                int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
+                    Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AttributesSize);
+
+                int[] attributes = new int[attributes_size];
+                OpenTK.Audio.OpenAL.Alc.GetInteger(
+                    Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AllAttributes, attributes_size, attributes);
+
+                return new DeviceAttributes(attributes);
+            }
         }
 
-        public Ibasa.Collections.Immutable.ImmutableArray<int> UnknownAttributes
+        public string[] Extensions
         {
-            get;
-            private set;
-        }
-
-        public Ibasa.Collections.Immutable.ImmutableArray<string> Extensions
-        {
-            get;
-            private set;
+            get
+            {
+                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions).Split();
+            }
         }
 
         public Version EfxVersion
         {
             get
             {
-                int major, minor;
-                OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.EfxMajorVersion, 1, out major);
-                OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.EfxMinorVersion, 1, out minor);
+                var major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.EfxMajorVersion);
+                var minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.EfxMinorVersion);
                 return new Version(major, minor);
             }
         }

@@ -5,33 +5,55 @@ using System.Text;
 
 namespace Ibasa.Audio
 {
-    public static class Context
+    public struct Context
     {
-        public static Device Device { get; private set; }
+        internal IntPtr Handle { get; private set; }
 
-        static IntPtr Handle;
+        public static readonly Context Null = new Context(IntPtr.Zero);
 
-        public static void Create(Device device)
+        private Context(IntPtr handle) : this()
+        {
+            Handle = handle;
+        }
+
+        public static Context Create(Device device)
         {
             int[] attriblist = null;
 
-            Device = device;
-            Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(Device.Handle, attriblist);
-            OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(Handle);
+            var handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attriblist);
             ThrowIfError();
+            return new Context(handle);
         }
 
-        public static void Destroy()
+        public static bool MakeContextCurrent(Context context)
         {
-            OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(IntPtr.Zero);
-            OpenTK.Audio.OpenAL.Alc.DestroyContext(Handle);
-            Handle = IntPtr.Zero;
-            Device = null;
+            return OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(context.Handle);
+        }
+
+        public static void Destroy(Context context)
+        {
+            OpenTK.Audio.OpenAL.Alc.DestroyContext(context.Handle);
         }
 
         internal static void ThrowIfError()
         {
-            Device.ThrowIfError();
+            //Device.ThrowIfError();
+        }
+
+        public static Context CurrentContext
+        {
+            get
+            {
+                return new Context(OpenTK.Audio.OpenAL.Alc.GetCurrentContext());
+            }
+        }
+
+        public static IntPtr Device
+        {
+            get
+            {
+                return OpenTK.Audio.OpenAL.Alc.GetContextsDevice(OpenTK.Audio.OpenAL.Alc.GetCurrentContext());
+            }
         }
 
         public static float DopplerFactor

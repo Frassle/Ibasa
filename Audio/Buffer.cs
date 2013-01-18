@@ -2,23 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Ibasa.Audio
 {
-    public sealed class Buffer : ALObject
+    public struct Buffer
     {
-        private Buffer(int bid) : base(bid)
+        internal int Id { get; private set; }
+
+        public static readonly Buffer Null = new Buffer(0);
+
+        internal Buffer(int bid) : this()
         {
+            Id = bid;
+            Contract.Assert(OpenTK.Audio.OpenAL.AL.IsBuffer(Id));
         }
 
-        public Buffer() : base(OpenTK.Audio.OpenAL.AL.GenBuffer())
+        public static Buffer Gen()
         {
+            return new Buffer(OpenTK.Audio.OpenAL.AL.GenBuffer());
         }
 
-        public override void Delete()
+        public void Delete()
         {
-            base.Delete();
-            OpenTK.Audio.OpenAL.AL.DeleteSource(Id);
+            OpenTK.Audio.OpenAL.AL.DeleteBuffer(Id);
             Context.ThrowIfError();
         }
 

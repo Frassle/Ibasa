@@ -13,7 +13,7 @@ namespace Ibasa.Audio
             get
             {
                 var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.AllDevicesSpecifier);
-                return devices.Select(name => new Device(name));
+                return devices.Select(name => Device.OpenDevice(name));
             }
         }
 
@@ -21,7 +21,7 @@ namespace Ibasa.Audio
         {
             get
             {
-                return new Device(null);
+                return new Device(IntPtr.Zero);
             }
         }
 
@@ -42,9 +42,8 @@ namespace Ibasa.Audio
         {
             get
             {
-                int major, minor;
-                OpenTK.Audio.OpenAL.Alc.GetInteger(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetInteger.MajorVersion, 1, out major);
-                OpenTK.Audio.OpenAL.Alc.GetInteger(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetInteger.MinorVersion, 1, out minor);
+                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetInteger.MajorVersion);
+                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetInteger.MinorVersion);
                 return new Version(major, minor);
             }
         }

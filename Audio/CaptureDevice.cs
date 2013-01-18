@@ -42,9 +42,7 @@ namespace Ibasa.Audio
         {
             get
             {
-                int value;
-                OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.CaptureSamples, 1, out value);
-                return value;
+                return OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.CaptureSamples);
             }
         }
 

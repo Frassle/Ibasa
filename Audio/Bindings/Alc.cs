@@ -271,14 +271,13 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="param">an attribute to be retrieved: ALC_MAJOR_VERSION, ALC_MINOR_VERSION, ALC_ATTRIBUTES_SIZE, ALC_ALL_ATTRIBUTES</param>
         /// <param name="size">the size of the destination buffer provided, in number of integers.</param>
         /// <param name="data">a pointer to the buffer to be returned</param>
-        public static void GetInteger(IntPtr device, AlcGetInteger param, int size, out int data)
+        public static int GetInteger(IntPtr device, AlcGetInteger param)
         {
             unsafe
             {
-                fixed (int* data_ptr = &data)
-                {
-                    GetInteger(device, param, size, data_ptr);
-                }
+                int data = 0;
+                GetInteger(device, param, 1, &data);
+                return data;
             }
         }
 

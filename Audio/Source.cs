@@ -21,20 +21,25 @@ namespace Ibasa.Audio
         Stopped = OpenTK.Audio.OpenAL.ALSourceState.Stopped,
     }
 
-    public sealed class Source : ALObject
+    public struct Source
     {
-        private Source(int sid)
-            : base(sid)
+        internal int Id { get; private set; }
+
+        public static readonly Source Null = new Source(0);
+
+        internal Source(int sid) : this()
         {
+            Id = sid;
+            OpenTK.Audio.OpenAL.AL.IsSource(Id);
         }
 
-        public Source() : base(OpenTK.Audio.OpenAL.AL.GenSource())
+        public static Source Gen()
         {
+            return new Source(OpenTK.Audio.OpenAL.AL.GenSource());
         }
 
-        public override void Delete()
+        public void Delete()
         {
-            base.Delete();
             OpenTK.Audio.OpenAL.AL.DeleteSource(Id);
             Context.ThrowIfError();
         }
@@ -111,18 +116,11 @@ namespace Ibasa.Audio
             {
                 int id;
                 OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.Buffer, out id);
-                return id == 0 ? null : ObjectTable.GetBuffer(id);
+                return new Buffer(id);
             }
             set
             {
-                if (value == null)
-                {
-                    OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.Buffer, 0);
-                }
-                else
-                {
-                    OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.Buffer, value.Id);
-                }
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.Buffer, value.Id);
                 Context.ThrowIfError();
             }
         }
@@ -437,7 +435,7 @@ namespace Ibasa.Audio
         {
             var bid = OpenTK.Audio.OpenAL.AL.SourceUnqueueBuffer(Id);
             Context.ThrowIfError();
-            return ObjectTable.GetBuffer(bid);
+            return new Buffer(bid);
         }
 
         public Buffer[] Unqueue(int count)
@@ -447,7 +445,7 @@ namespace Ibasa.Audio
             var buffers = new Buffer[count];
             for (int i = 0; i < count; ++i)
             {
-                buffers[i] = ObjectTable.GetBuffer(bids[i]);
+                buffers[i] = new Buffer(bids[i]);
             }
             return buffers;
         }
