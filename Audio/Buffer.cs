@@ -16,7 +16,7 @@ namespace Ibasa.Audio
             : this()
         {
             Id = bid;
-            Contract.Assert(OpenTK.Audio.OpenAL.AL.IsBuffer(Id));
+            Contract.Assert(Id == 0 || OpenTK.Audio.OpenAL.AL.IsBuffer(Id));
         }
 
         public static Buffer Gen()

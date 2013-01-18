@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ibasa.Numerics.Geometry;
+using System.Diagnostics.Contracts;
 
 namespace Ibasa.Audio
 {
@@ -31,7 +32,7 @@ namespace Ibasa.Audio
             : this()
         {
             Id = sid;
-            OpenTK.Audio.OpenAL.AL.IsSource(Id);
+            Contract.Assert(Id == 0 || OpenTK.Audio.OpenAL.AL.IsSource(Id));
         }
 
         public static Source Gen()
