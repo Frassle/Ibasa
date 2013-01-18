@@ -307,7 +307,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="format">the requested capture buffer format.</param>
         /// <param name="buffersize">the size of the capture buffer in samples, not bytes.</param>
         /// <returns>Returns the capture device pointer, or NULL on failure.</returns>
-        [CLSCompliant(false), DllImport(Alc.Lib, EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = Alc.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        [DllImport(Alc.Lib, EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = Alc.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
         public static extern IntPtr CaptureOpenDevice(string devicename, uint frequency, ALFormat format, int buffersize);
 
         /// <summary>This function opens a capture device by name. </summary>
