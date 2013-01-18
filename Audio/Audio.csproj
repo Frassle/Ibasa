@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ALObject.cs" />
     <Compile Include="AudioException.cs" />
     <Compile Include="Bindings\AL.cs" />
     <Compile Include="Bindings\Alc.cs" />

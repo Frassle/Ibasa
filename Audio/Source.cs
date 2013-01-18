@@ -23,11 +23,12 @@ namespace Ibasa.Audio
 
     public struct Source
     {
-        internal int Id { get; private set; }
+        internal uint Id { get; private set; }
 
         public static readonly Source Null = new Source(0);
 
-        internal Source(int sid) : this()
+        internal Source(uint sid)
+            : this()
         {
             Id = sid;
             OpenTK.Audio.OpenAL.AL.IsSource(Id);
@@ -48,7 +49,8 @@ namespace Ibasa.Audio
         {
             get
             {
-                var type = OpenTK.Audio.OpenAL.AL.GetSourceType(Id);
+                int type;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.SourceType, out type);
                 return (SourceType)type;
             }
         }
@@ -57,7 +59,8 @@ namespace Ibasa.Audio
         {
             get
             {
-                var state = OpenTK.Audio.OpenAL.AL.GetSourceState(Id);
+                int state;
+                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.SourceState, out state);
                 return (SourceState)state;
             }
         }
@@ -116,11 +119,11 @@ namespace Ibasa.Audio
             {
                 int id;
                 OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.Buffer, out id);
-                return new Buffer(id);
+                return new Buffer((uint)id);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.Buffer, value.Id);
+                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.Buffer, (int)value.Id);
                 Context.ThrowIfError();
             }
         }
@@ -422,7 +425,7 @@ namespace Ibasa.Audio
 
         public void Queue(Buffer[] buffers)
         {
-            int[] bids = new int[buffers.Length];
+            uint[] bids = new uint[buffers.Length];
             for (int i = 0; i < bids.Length; ++i)
             {
                 bids[i] = buffers[i].Id;
@@ -440,7 +443,8 @@ namespace Ibasa.Audio
 
         public Buffer[] Unqueue(int count)
         {
-            var bids = OpenTK.Audio.OpenAL.AL.SourceUnqueueBuffers(Id, count);
+            uint[] bids = new uint[count];
+            OpenTK.Audio.OpenAL.AL.SourceUnqueueBuffers(Id, count, bids);
             Context.ThrowIfError();
             var buffers = new Buffer[count];
             for (int i = 0; i < count; ++i)

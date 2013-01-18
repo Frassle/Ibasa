@@ -8,11 +8,12 @@ namespace Ibasa.Audio
 {
     public struct Buffer
     {
-        internal int Id { get; private set; }
+        internal uint Id { get; private set; }
 
         public static readonly Buffer Null = new Buffer(0);
 
-        internal Buffer(int bid) : this()
+        internal Buffer(uint bid)
+            : this()
         {
             Id = bid;
             Contract.Assert(OpenTK.Audio.OpenAL.AL.IsBuffer(Id));
