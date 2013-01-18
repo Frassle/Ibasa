@@ -80,7 +80,7 @@ namespace Test
             var half_life = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\half-life.gcf", System.IO.FileShare.ReadWrite);
 
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
-         
+
 
             Console.WriteLine(Ibasa.Audio.OpenAL.Version);
 
@@ -88,27 +88,40 @@ namespace Test
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", dev.Name);
-                Console.WriteLine("Frequency: {0}", dev.Frequency);
-                Console.WriteLine("Refresh: {0}", dev.Refresh);
-                Console.WriteLine("Mono Sources: {0}", dev.MonoSources);
-                Console.WriteLine("Stereo Sources: {0}", dev.StereoSources);
-                Console.WriteLine("Sync: {0}", dev.Sync);
-                Console.WriteLine(string.Join(", ", dev.UnknownAttributes));
+                var attributes = dev.Attributes;
+
+                Console.WriteLine("Frequency: {0}", attributes.Frequency);
+                Console.WriteLine("Refresh: {0}", attributes.Refresh);
+                Console.WriteLine("Mono Sources: {0}", attributes.MonoSources);
+                Console.WriteLine("Stereo Sources: {0}", attributes.StereoSources);
+                Console.WriteLine("Sync: {0}", attributes.Sync);
+                Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
                 Console.WriteLine(string.Join(", ", dev.Extensions));
                 Console.WriteLine(dev.EfxVersion);
-                
-                dev.Dispose();
+
+                dev.Close();
             }
 
             Console.ReadLine();
 
             var device = Ibasa.Audio.OpenAL.DefaultDevice;
+            {
+                Console.WriteLine("------------");
+                Console.WriteLine("Name: {0}", device.Name);
+                var attributes = device.Attributes;
 
-            Console.WriteLine("------------");
-            Console.WriteLine(device.Name);
-            Console.WriteLine("------------");
+                Console.WriteLine("Frequency: {0}", attributes.Frequency);
+                Console.WriteLine("Refresh: {0}", attributes.Refresh);
+                Console.WriteLine("Mono Sources: {0}", attributes.MonoSources);
+                Console.WriteLine("Stereo Sources: {0}", attributes.StereoSources);
+                Console.WriteLine("Sync: {0}", attributes.Sync);
+                Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
+                Console.WriteLine(string.Join(", ", device.Extensions));
+                Console.WriteLine(device.EfxVersion);
+            }
 
-            Ibasa.Audio.Context.Create(device);
+            var context = Ibasa.Audio.Context.Create(device);
+            Ibasa.Audio.Context.MakeContextCurrent(context);
 
             Console.WriteLine("Version: {0}", Ibasa.Audio.Context.Version);
             Console.WriteLine("Vendor: {0}", Ibasa.Audio.Context.Vendor);
@@ -125,11 +138,11 @@ namespace Test
             Console.WriteLine("Gain: {0}", Ibasa.Audio.Listener.Gain);
             Console.WriteLine("EfxMetersPerUnit: {0}", Ibasa.Audio.Listener.EfxMetersPerUnit);
 
-            Ibasa.Audio.Source source = new Ibasa.Audio.Source();
+            Ibasa.Audio.Source source = Ibasa.Audio.Source.Gen();
             source.Gain = 1;
             source.Looping = false;
 
-            Ibasa.Audio.Buffer buffer = new Ibasa.Audio.Buffer();
+            Ibasa.Audio.Buffer buffer = Ibasa.Audio.Buffer.Gen();
 
             foreach (var item in source_sounds.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories))
             {
@@ -156,13 +169,13 @@ namespace Test
                     Console.ReadKey(true);
 
                 source.Stop();
-                source.Buffer = null;
+                source.Buffer = Ibasa.Audio.Buffer.Null;
             }
 
             buffer.Delete();
             source.Delete();
-            Ibasa.Audio.Context.Destroy();
-            device.Dispose();
+            Ibasa.Audio.Context.Destroy(context);
+            device.Close();
 
             Console.ReadLine();
         }
