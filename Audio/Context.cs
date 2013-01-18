@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Ibasa.Audio
 {
@@ -18,10 +19,12 @@ namespace Ibasa.Audio
 
         public static Context Create(Device device)
         {
+            Contract.Requires(device.Handle != IntPtr.Zero);
+
             int[] attriblist = null;
 
             var handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attriblist);
-            ThrowIfError();
+            Device.ThrowIfError();
             return new Context(handle);
         }
 
@@ -35,11 +38,6 @@ namespace Ibasa.Audio
             OpenTK.Audio.OpenAL.Alc.DestroyContext(context.Handle);
         }
 
-        internal static void ThrowIfError()
-        {
-            //Device.ThrowIfError();
-        }
-
         public static Context CurrentContext
         {
             get
@@ -48,11 +46,11 @@ namespace Ibasa.Audio
             }
         }
 
-        public static IntPtr Device
+        public static Device Device
         {
             get
             {
-                return OpenTK.Audio.OpenAL.Alc.GetContextsDevice(OpenTK.Audio.OpenAL.Alc.GetCurrentContext());
+                return new Device(OpenTK.Audio.OpenAL.Alc.GetContextsDevice(OpenTK.Audio.OpenAL.Alc.GetCurrentContext()));
             }
         }
 

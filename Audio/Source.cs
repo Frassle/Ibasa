@@ -43,7 +43,6 @@ namespace Ibasa.Audio
         public void Delete()
         {
             OpenTK.Audio.OpenAL.AL.DeleteSource(Id);
-            Context.ThrowIfError();
         }
 
         public SourceType Type
@@ -125,7 +124,6 @@ namespace Ibasa.Audio
             set
             {
                 OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.Buffer, (int)value.Id);
-                Context.ThrowIfError();
             }
         }
 
@@ -403,25 +401,21 @@ namespace Ibasa.Audio
         public void Play()
         {
             OpenTK.Audio.OpenAL.AL.SourcePlay(Id);
-            Context.ThrowIfError();
         }
 
         public void Rewind()
         {
             OpenTK.Audio.OpenAL.AL.SourceRewind(Id);
-            Context.ThrowIfError();
         }
 
         public void Stop()
         {
             OpenTK.Audio.OpenAL.AL.SourceStop(Id);
-            Context.ThrowIfError();
         }
 
         public void Queue(Buffer buffer)
         {
             OpenTK.Audio.OpenAL.AL.SourceQueueBuffer(Id, buffer.Id);
-            Context.ThrowIfError();
         }
 
         public void Queue(Buffer[] buffers)
@@ -432,13 +426,11 @@ namespace Ibasa.Audio
                 bids[i] = buffers[i].Id;
             }
             OpenTK.Audio.OpenAL.AL.SourceQueueBuffers(Id, buffers.Length, bids);
-            Context.ThrowIfError();
         }
 
         public Buffer Unqueue()
         {
             var bid = OpenTK.Audio.OpenAL.AL.SourceUnqueueBuffer(Id);
-            Context.ThrowIfError();
             return new Buffer(bid);
         }
 
@@ -446,7 +438,6 @@ namespace Ibasa.Audio
         {
             uint[] bids = new uint[count];
             OpenTK.Audio.OpenAL.AL.SourceUnqueueBuffers(Id, count, bids);
-            Context.ThrowIfError();
             var buffers = new Buffer[count];
             for (int i = 0; i < count; ++i)
             {

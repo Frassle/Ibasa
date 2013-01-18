@@ -27,13 +27,11 @@ namespace Ibasa.Audio
         public void Delete()
         {
             OpenTK.Audio.OpenAL.AL.DeleteBuffer(Id);
-            Context.ThrowIfError();
         }
 
         public void BufferData(Ibasa.SharpAL.Format format, byte[] data, int count, int frequency)
         {
             OpenTK.Audio.OpenAL.AL.BufferData(Id, OpenAL.Format(format), data, count, frequency);
-            Context.ThrowIfError();
         }
 
         public int Bits
