@@ -21,7 +21,7 @@ namespace Ibasa.Audio
         {
             get
             {
-                return new Device(IntPtr.Zero);
+                return Device.Open(null);
             }
         }
 
