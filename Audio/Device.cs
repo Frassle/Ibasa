@@ -78,7 +78,7 @@ namespace Ibasa.Audio
             Handle = handle;
         }
 
-        public static Device OpenDevice(string name)
+        public static Device Open(string name)
         {
             var handle = OpenTK.Audio.OpenAL.Alc.OpenDevice(name);
             if (handle == IntPtr.Zero)
@@ -88,9 +88,9 @@ namespace Ibasa.Audio
             return new Device(handle);
         }
 
-        public static bool CloseDevice(Device device)
+        public bool Close()
         {
-            return OpenTK.Audio.OpenAL.Alc.CloseDevice(device.Handle);
+            return OpenTK.Audio.OpenAL.Alc.CloseDevice(Handle);
         }
 
         public string Name

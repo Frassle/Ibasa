@@ -13,7 +13,7 @@ namespace Ibasa.Audio
             get
             {
                 var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.AllDevicesSpecifier);
-                return devices.Select(name => Device.OpenDevice(name));
+                return devices.Select(name => Device.Open(name));
             }
         }
 
