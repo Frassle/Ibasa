@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +48,10 @@
     <ProjectReference Include="..\Numerics\Numerics.csproj">
       <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
       <Name>Numerics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpIL\SharpIL.csproj">
+      <Project>{55ACA20C-0204-4A40-B274-5BC258CEC87F}</Project>
+      <Name>SharpIL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
