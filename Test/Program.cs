@@ -116,7 +116,7 @@ namespace Test
                 Console.WriteLine(string.Join(", ", device.Extensions));
             }
 
-            var context = Ibasa.Audio.OpenAL.Context.Create(device);
+            var context = new Ibasa.Audio.OpenAL.Context(device);
             Ibasa.Audio.OpenAL.Context.MakeContextCurrent(context);
 
             Console.WriteLine("Version: {0}", Ibasa.Audio.OpenAL.Context.Version);

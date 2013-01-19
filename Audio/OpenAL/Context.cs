@@ -6,7 +6,7 @@ using System.Diagnostics.Contracts;
 
 namespace Ibasa.Audio.OpenAL
 {
-    public struct Context
+    public struct Context : IEquatable<Context>
     {
         internal IntPtr Handle { get; private set; }
 
@@ -18,15 +18,30 @@ namespace Ibasa.Audio.OpenAL
             Handle = handle;
         }
 
-        public static Context Create(Device device)
+        public Context(Device device)
+            : this()
         {
-            Contract.Requires(device.Handle != IntPtr.Zero);
+            if (device == default(Device))
+            {
+                throw new ArgumentNullException("device");
+            }
 
             int[] attriblist = null;
 
-            var handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attriblist);
-            Device.ThrowIfError();
-            return new Context(handle);
+            Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attriblist);
+            Device.ThrowError();
+        }
+
+        public void Process()
+        {
+            OpenAL.ThrowNullException(Handle);
+            OpenTK.Audio.OpenAL.Alc.ProcessContext(Handle);
+        }
+
+        public void Suspend()
+        {
+            OpenAL.ThrowNullException(Handle);
+            OpenTK.Audio.OpenAL.Alc.SuspendContext(Handle);
         }
 
         public static bool MakeContextCurrent(Context context)
@@ -117,6 +132,44 @@ namespace Ibasa.Audio.OpenAL
                     return value.Split();
                 }
             }
+        }
+
+        public override int GetHashCode()
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Handle.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            OpenAL.ThrowNullException(Handle);
+            if (obj is Context)
+            {
+                return Equals((Context)obj);
+            }
+            return false;
+        }
+
+        public bool Equals(Context other)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Handle == other.Handle;
+        }
+
+        public static bool operator ==(Context left, Context right)
+        {
+            return left.Handle == right.Handle;
+        }
+
+        public static bool operator !=(Context left, Context right)
+        {
+            return left.Handle != right.Handle;
+        }
+
+        public override string ToString()
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Handle.ToString();
         }
     }
 }

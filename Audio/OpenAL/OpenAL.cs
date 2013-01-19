@@ -8,6 +8,13 @@ namespace Ibasa.Audio.OpenAL
 {
     public static class OpenAL
     {
+        internal static void ThrowNullException(IntPtr ptr)
+        {
+            if (ptr == IntPtr.Zero)
+            {
+                throw new NullReferenceException();
+            }
+        }
 
         internal static OpenTK.Audio.OpenAL.ALFormat Format(Ibasa.SharpAL.Format format)
         {

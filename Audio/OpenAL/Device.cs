@@ -108,7 +108,7 @@ namespace Ibasa.Audio.OpenAL
 
         public bool Close()
         {
-            ThrowNullException();
+            OpenAL.ThrowNullException(Handle);
             return OpenTK.Audio.OpenAL.Alc.CloseDevice(Handle);
         }
 
@@ -116,7 +116,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                ThrowNullException();
+                OpenAL.ThrowNullException(Handle);
                 return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.DeviceSpecifier);
             }
         }
@@ -125,7 +125,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                ThrowNullException();
+                OpenAL.ThrowNullException(Handle);
                 int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MajorVersion);
                 int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MinorVersion);
                 return new Version(major, minor);
@@ -136,7 +136,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                ThrowNullException();
+                OpenAL.ThrowNullException(Handle);
                 int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
                     Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AttributesSize);
 
@@ -152,7 +152,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                ThrowNullException();
+                OpenAL.ThrowNullException(Handle);
                 var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions);
                 if (value == null)
                 {
@@ -167,19 +167,11 @@ namespace Ibasa.Audio.OpenAL
 
         public bool IsExtensionPresent(string extension)
         {
-            ThrowNullException();
+            OpenAL.ThrowNullException(Handle);
             return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(Handle, extension);
         }
 
-        private void ThrowNullException()
-        {
-            if (Handle == IntPtr.Zero)
-            {
-                throw new NullReferenceException();
-            }
-        }
-
-        internal void ThrowIfError()
+        internal void ThrowError()
         {
             var error = OpenTK.Audio.OpenAL.Alc.GetError(Handle);
 
@@ -204,13 +196,13 @@ namespace Ibasa.Audio.OpenAL
 
         public override int GetHashCode()
         {
-            ThrowNullException();
+            OpenAL.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            ThrowNullException();
+            OpenAL.ThrowNullException(Handle);
             if (obj is Device)
             {
                 return Equals((Device)obj);
@@ -220,7 +212,7 @@ namespace Ibasa.Audio.OpenAL
 
         public bool Equals(Device other)
         {
-            ThrowNullException();
+            OpenAL.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -236,7 +228,7 @@ namespace Ibasa.Audio.OpenAL
 
         public override string ToString()
         {
-            ThrowNullException();
+            OpenAL.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }
