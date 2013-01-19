@@ -13,12 +13,12 @@ namespace Ibasa.Audio.OpenAL
             {
                 if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_ALL_EXT"))
                 {
-                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.GetString.AllDevicesSpecifier);
+                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.Alc.ALC_ALL_DEVICES_SPECIFIER);
                     return devices.Select(name => new Device(name));
                 }
                 else if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_EXT"))
                 {
-                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.GetString.DeviceSpecifier);
+                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.Alc.ALC_DEVICE_SPECIFIER);
                     return devices.Select(name => new Device(name));
                 }
                 else
@@ -65,7 +65,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.GetString.DeviceSpecifier);
+                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.Alc.ALC_DEVICE_SPECIFIER);
             }
         }
 
@@ -74,8 +74,8 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.GetInteger.MajorVersion);
-                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.GetInteger.MinorVersion);
+                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.Alc.ALC_MAJOR_VERSION);
+                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.Alc.ALC_MINOR_VERSION);
                 return new Version(major, minor);
             }
         }
@@ -89,11 +89,11 @@ namespace Ibasa.Audio.OpenAL
                 unsafe
                 {
                     int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
-                       Handle, OpenTK.Audio.OpenAL.GetInteger.AttributesSize);
+                       Handle, OpenTK.Audio.OpenAL.Alc.ALC_ATTRIBUTES_SIZE);
 
                     int* attributes = stackalloc int[attributes_size];
                     OpenTK.Audio.OpenAL.Alc.GetInteger(
-                        Handle, OpenTK.Audio.OpenAL.GetInteger.AllAttributes, attributes_size, attributes);
+                        Handle, OpenTK.Audio.OpenAL.Alc.ALC_ALL_ATTRIBUTES, attributes_size, attributes);
 
                     var dictionary = new Dictionary<int, int>();
 
@@ -115,7 +115,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.GetString.Extensions);
+                var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.Alc.ALC_EXTENSIONS);
                 if (value == null)
                 {
                     return null;
@@ -149,22 +149,33 @@ namespace Ibasa.Audio.OpenAL
         {
             var error = OpenTK.Audio.OpenAL.Alc.GetError(Handle);
 
-            switch (error)
+            if(error == OpenTK.Audio.OpenAL.Alc.ALC_NO_ERROR)
             {
-                case OpenTK.Audio.OpenAL.AlcError.NoError:
-                    return;
-                case OpenTK.Audio.OpenAL.AlcError.InvalidDevice:
-                    throw new AudioException("No Device. The device handle or specifier names an inaccessible driver/server.");
-                case OpenTK.Audio.OpenAL.AlcError.InvalidContext:
-                    throw new AudioException("Invalid context ID. The Context argument does not name a valid context.");
-                case OpenTK.Audio.OpenAL.AlcError.InvalidEnum:
-                    throw new AudioException("Bad enum. A token used is not valid, or not applicable.");
-                case OpenTK.Audio.OpenAL.AlcError.InvalidValue:
-                    throw new AudioException("Bad value. A value (e.g. Attribute) is not valid, or not applicable.");
-                case OpenTK.Audio.OpenAL.AlcError.OutOfMemory:
-                    throw new AudioException("Out of memory. Unable to allocate memory.");
-                default:
-                    throw new AudioException(string.Format("Unknown OpenAL error: {0}", error));
+                return;
+            }
+            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_DEVICE)
+            {
+                throw new AudioException("No Device. The device handle or specifier names an inaccessible driver/server.");
+            }
+            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_CONTEXT)
+            {
+                throw new AudioException("Invalid context ID. The Context argument does not name a valid context.");
+            }
+            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_ENUM)
+            {
+                throw new AudioException("Bad enum. A token used is not valid, or not applicable.");
+            }
+            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_VALUE)
+            {
+                throw new AudioException("Bad value. A value (e.g. Attribute) is not valid, or not applicable.");
+            }
+            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_OUT_OF_MEMORY)
+            {
+                throw new AudioException("Out of memory. Unable to allocate memory.");
+            }
+            else 
+            {
+                throw new AudioException(string.Format("Unknown OpenAL error: {0}", error));
             }
         }
 

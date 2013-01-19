@@ -45,7 +45,6 @@
     <Compile Include="AudioException.cs" />
     <Compile Include="OpenAL\Bindings\AL.cs" />
     <Compile Include="OpenAL\Bindings\Alc.cs" />
-    <Compile Include="OpenAL\Bindings\AlcEnums.cs" />
     <Compile Include="OpenAL\Bindings\ALEnums.cs" />
     <Compile Include="OpenAL\Bindings\EffectsExtension.cs" />
     <Compile Include="OpenAL\Bindings\EffectsExtensionEnums.cs" />

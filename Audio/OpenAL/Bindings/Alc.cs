@@ -71,7 +71,95 @@ namespace OpenTK.Audio.OpenAL
     /// <summary>Alc = Audio Library Context</summary>
     public static class Alc
     {
+        #region Constants
+        
+        /**
+        * followed by <int> Hz
+        */
+        public const int ALC_FREQUENCY = 0x1007;
 
+        /**
+        * followed by <int> Hz
+        */
+        public const int ALC_REFRESH = 0x1008;
+
+        /**
+        * followed by AL_TRUE, AL_FALSE
+        */
+        public const int ALC_SYNC = 0x1009;
+
+        /**
+        * followed by <int> Num of requested Mono (3D) Sources
+        */
+        public const int ALC_MONO_SOURCES = 0x1010;
+
+        /**
+        * followed by <int> Num of requested Stereo Sources
+        */
+        public const int ALC_STEREO_SOURCES = 0x1011;
+
+        /**
+        * errors
+        */
+
+        /**
+        * No error
+        */
+        public const int ALC_NO_ERROR = 0;
+
+        /**
+        * No device
+        */
+        public const int ALC_INVALID_DEVICE = 0xA001;
+
+        /**
+        * invalid context ID
+        */
+        public const int ALC_INVALID_CONTEXT = 0xA002;
+
+        /**
+        * bad enum
+        */
+        public const int ALC_INVALID_ENUM = 0xA003;
+
+        /**
+        * bad value
+        */
+        public const int ALC_INVALID_VALUE = 0xA004;
+
+        /**
+        * Out of memory.
+        */
+        public const int ALC_OUT_OF_MEMORY = 0xA005;
+
+
+        /**
+        * The Specifier string for default device
+        */
+        public const int ALC_DEFAULT_DEVICE_SPECIFIER = 0x1004;
+        public const int ALC_DEVICE_SPECIFIER = 0x1005;
+        public const int ALC_EXTENSIONS = 0x1006;
+
+        public const int ALC_MAJOR_VERSION = 0x1000;
+        public const int ALC_MINOR_VERSION = 0x1001;
+
+        public const int ALC_ATTRIBUTES_SIZE = 0x1002;
+        public const int ALC_ALL_ATTRIBUTES = 0x1003;
+
+        /**
+        * ALC_ENUMERATE_ALL_EXT enums
+        */
+        public const int ALC_DEFAULT_ALL_DEVICES_SPECIFIER = 0x1012;
+        public const int ALC_ALL_DEVICES_SPECIFIER = 0x1013;
+
+        /**
+        * Capture extension
+        */
+        public const int ALC_CAPTURE_DEVICE_SPECIFIER = 0x310;
+        public const int ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER = 0x311;
+        public const int ALC_CAPTURE_SAMPLES = 0x312;
+
+        #endregion
 
 
         #region Context Management
@@ -148,7 +236,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="device">a pointer to the device to retrieve the error state from</param>
         /// <returns>Errorcode Int32.</returns>
         [DllImport("openal32.dll", EntryPoint = "alcGetError", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern AlcError GetError([In] IntPtr device);
+        public static extern int GetError([In] IntPtr device);
         // ALC_API ALCenum         ALC_APIENTRY alcGetError( ALCdevice *device );
 
         #endregion Error support.
