@@ -8,9 +8,8 @@ namespace Ibasa.Audio.OpenAL
 {
     public struct CaptureDevice : IEquatable<CaptureDevice>
     {
-        public static IEnumerable<CaptureDevice> CaptureDevices(int frequency, Format format, int buffersize)
+        public static IEnumerable<CaptureDevice> CaptureDevices(uint frequency, int format, int buffersize)
         {
-            var oal_format = OpenAL.Format(format);
             if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
             {
                 var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.Alc.ALC_CAPTURE_DEVICE_SPECIFIER);
@@ -22,7 +21,7 @@ namespace Ibasa.Audio.OpenAL
             }
         }
 
-        public static CaptureDevice DefaultCaptureDevice(int frequency, Format format, int buffersize)
+        public static CaptureDevice DefaultCaptureDevice(uint frequency, int format, int buffersize)
         {
             if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
             {
@@ -42,15 +41,14 @@ namespace Ibasa.Audio.OpenAL
             Handle = handle;
         }
 
-        internal CaptureDevice(string name, int frequency, Format format, int buffersize)
+        internal CaptureDevice(string name, uint frequency, int format, int buffersize)
             : this()
         {
-            var oal_format = OpenAL.Format(format);
-            Handle = OpenTK.Audio.OpenAL.Alc.CaptureOpenDevice(name, frequency, oal_format, buffersize);
+            Handle = OpenTK.Audio.OpenAL.Alc.CaptureOpenDevice(name, frequency, format, buffersize);
             if (Handle == IntPtr.Zero)
             {
                 throw new AudioException(
-                    string.Format("CaptureOpenDevice({0}, {1}, {2}, {3}) failed.", name, frequency, oal_format, buffersize));
+                    string.Format("CaptureOpenDevice({0}, {1}, {2}, {3}) failed.", name, frequency, format, buffersize));
             }
         }
 

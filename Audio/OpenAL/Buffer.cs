@@ -29,9 +29,9 @@ namespace Ibasa.Audio.OpenAL
             OpenTK.Audio.OpenAL.AL.DeleteBuffer(Id);
         }
 
-        public void BufferData(Ibasa.SharpAL.Format format, byte[] data, int count, int frequency)
+        public void BufferData(int format, byte[] data, int count, int frequency)
         {
-            OpenTK.Audio.OpenAL.AL.BufferData(Id, OpenAL.Format(format), data, count, frequency);
+            OpenTK.Audio.OpenAL.AL.BufferData(Id, format, data, count, frequency);
         }
 
         public int Bits

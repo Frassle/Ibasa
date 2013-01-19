@@ -956,7 +956,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="size">The size of the audio buffer in bytes.</param>
         /// <param name="freq">The frequency of the audio buffer.</param>
         [DllImport(AL.Lib, EntryPoint = "alBufferData", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void BufferData(uint bid, ALFormat format, IntPtr buffer, int size, int freq);
+        public static extern void BufferData(uint bid, int format, IntPtr buffer, int size, int freq);
         // AL_API void AL_APIENTRY alBufferData( ALuint bid, ALenum format, const ALvoid* buffer, ALsizei size, ALsizei freq );
 
         /// <summary>This function fills a buffer with audio buffer. All the pre-defined formats are PCM buffer, but this function may be used by extensions to load other buffer types as well.</summary>
@@ -965,7 +965,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="buffer">The audio buffer.</param>
         /// <param name="size">The size of the audio buffer in bytes.</param>
         /// <param name="freq">The frequency of the audio buffer.</param>
-        public static void BufferData<TBuffer>(uint bid, ALFormat format, TBuffer[] buffer, int size, int freq)
+        public static void BufferData<TBuffer>(uint bid, int format, TBuffer[] buffer, int size, int freq)
             where TBuffer : struct
         {
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);

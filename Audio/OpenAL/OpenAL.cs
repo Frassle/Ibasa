@@ -31,24 +31,24 @@ namespace Ibasa.Audio.OpenAL
             }
         }
 
-        internal static OpenTK.Audio.OpenAL.ALFormat Format(Ibasa.SharpAL.Format format)
+        public static int Format(Ibasa.SharpAL.Format format)
         {
             if (format is Ibasa.SharpAL.Formats.Pcm8)
             {
                 switch (format.Channels)
                 {
                     case 1:
-                        return OpenTK.Audio.OpenAL.ALFormat.Mono8;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Mono8;
                     case 2:
-                        return OpenTK.Audio.OpenAL.ALFormat.Stereo8;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Stereo8;
                     case 4:
-                        return OpenTK.Audio.OpenAL.ALFormat.MultiQuad8Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.MultiQuad8Ext;
                     case 6:
-                        return OpenTK.Audio.OpenAL.ALFormat.Multi51Chn8Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Multi51Chn8Ext;
                     case 7:
-                        return OpenTK.Audio.OpenAL.ALFormat.Multi61Chn8Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Multi61Chn8Ext;
                     case 8:
-                        return OpenTK.Audio.OpenAL.ALFormat.Multi71Chn8Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Multi71Chn8Ext;
                     default:
                         throw new ArgumentException(string.Format("{0} channel 8 bit PCM not supported.", format.Channels), "format");
                 }
@@ -58,17 +58,17 @@ namespace Ibasa.Audio.OpenAL
                 switch (format.Channels)
                 {
                     case 1:
-                        return OpenTK.Audio.OpenAL.ALFormat.Mono16;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Mono16;
                     case 2:
-                        return OpenTK.Audio.OpenAL.ALFormat.Stereo16;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Stereo16;
                     case 4:
-                        return OpenTK.Audio.OpenAL.ALFormat.MultiQuad16Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.MultiQuad16Ext;
                     case 6:
-                        return OpenTK.Audio.OpenAL.ALFormat.Multi51Chn16Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Multi51Chn16Ext;
                     case 7:
-                        return OpenTK.Audio.OpenAL.ALFormat.Multi61Chn16Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Multi61Chn16Ext;
                     case 8:
-                        return OpenTK.Audio.OpenAL.ALFormat.Multi71Chn16Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.Multi71Chn16Ext;
                     default:
                         throw new ArgumentException(string.Format("{0} channel 16 bit PCM not supported.", format.Channels), "format");
                 }
@@ -78,9 +78,9 @@ namespace Ibasa.Audio.OpenAL
                 switch (format.Channels)
                 {
                     case 1:
-                        return OpenTK.Audio.OpenAL.ALFormat.MonoFloat32Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.MonoFloat32Ext;
                     case 2:
-                        return OpenTK.Audio.OpenAL.ALFormat.StereoFloat32Ext;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.StereoFloat32Ext;
                     default:
                         throw new ArgumentException(string.Format("{0} channel 32 bit float PCM not supported.", format.Channels), "format");
                 }
@@ -90,9 +90,9 @@ namespace Ibasa.Audio.OpenAL
                 switch (format.Channels)
                 {
                     case 1:
-                        return OpenTK.Audio.OpenAL.ALFormat.MonoDoubleExt;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.MonoDoubleExt;
                     case 2:
-                        return OpenTK.Audio.OpenAL.ALFormat.StereoDoubleExt;
+                        return (int)OpenTK.Audio.OpenAL.ALFormat.StereoDoubleExt;
                     default:
                         throw new ArgumentException(string.Format("{0} channel 64 bit float PCM not supported.", format.Channels), "format");
                 }

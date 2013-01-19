@@ -167,7 +167,7 @@ namespace Test
                 wav.Stream.Seek(wav.DataOffset, System.IO.SeekOrigin.Begin);
                 var data = wav.Stream.ReadBytes(wav.DataLength);
 
-                buffer.BufferData(wav.Format, data, data.Length, wav.Frequency);
+                buffer.BufferData(Ibasa.Audio.OpenAL.OpenAL.Format(wav.Format), data, data.Length, wav.Frequency);
 
                 source.Buffer = buffer;
                 source.Play();
