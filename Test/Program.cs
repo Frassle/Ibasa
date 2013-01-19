@@ -90,7 +90,7 @@ namespace Test
             var half_life = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\half-life.gcf", System.IO.FileShare.ReadWrite);
 
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
-
+            
             Extension("ALC_ENUMERATION_EXT");
             Extension("ALC_EXT_CAPTURE");
             Extension("AL_EXT_MP3");
@@ -108,16 +108,8 @@ namespace Test
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", dev.Name);
                 Console.WriteLine("Version: {0}", dev.Version);
-                var attributes = dev.Attributes;
-
-                Console.WriteLine("Frequency: {0}", attributes.Frequency);
-                Console.WriteLine("Refresh: {0}", attributes.Refresh);
-                Console.WriteLine("Mono Sources: {0}", attributes.MonoSources);
-                Console.WriteLine("Stereo Sources: {0}", attributes.StereoSources);
-                Console.WriteLine("Sync: {0}", attributes.Sync);
-                Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
+                Console.WriteLine(string.Join(", ", dev.Attributes));
                 Console.WriteLine(string.Join(", ", dev.Extensions));
-                Console.WriteLine(string.Join(", ", dev.Extensions.Select(ex => dev.IsExtensionPresent(ex))));
 
                 Extension(dev, "AL_EXT_MP3");
                 Extension(dev, "EAX2.0");
@@ -136,14 +128,7 @@ namespace Test
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", device.Name);
-                var attributes = device.Attributes;
-
-                Console.WriteLine("Frequency: {0}", attributes.Frequency);
-                Console.WriteLine("Refresh: {0}", attributes.Refresh);
-                Console.WriteLine("Mono Sources: {0}", attributes.MonoSources);
-                Console.WriteLine("Stereo Sources: {0}", attributes.StereoSources);
-                Console.WriteLine("Sync: {0}", attributes.Sync);
-                Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
+                Console.WriteLine(string.Join(", ", device.Attributes));
                 Console.WriteLine(string.Join(", ", device.Extensions));
             }
 

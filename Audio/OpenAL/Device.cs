@@ -5,65 +5,6 @@ using System.Text;
 
 namespace Ibasa.Audio.OpenAL
 {
-    public sealed class DeviceAttributes
-    {
-        internal DeviceAttributes(int[] attributes)
-        {
-            var unknownAttributes = new List<KeyValuePair<int, int>>();
-
-            for (int i = 0; i < attributes.Length - 1; i += 2)
-            {
-                switch (attributes[i])
-                {
-                    case OpenTK.Audio.OpenAL.AlcContextAttributes.Frequency:
-                        {
-                            Frequency = attributes[i + 1];
-                            break;
-                        }
-                    case OpenTK.Audio.OpenAL.AlcContextAttributes.Refresh:
-                        {
-                            Refresh = attributes[i + 1];
-                            break;
-                        }
-                    case OpenTK.Audio.OpenAL.AlcContextAttributes.MonoSources:
-                        {
-                            MonoSources = attributes[i + 1];
-                            break;
-                        }
-                    case OpenTK.Audio.OpenAL.AlcContextAttributes.StereoSources:
-                        {
-                            StereoSources = attributes[i + 1];
-                            break;
-                        }
-                    case OpenTK.Audio.OpenAL.AlcContextAttributes.Sync:
-                        {
-                            Sync = attributes[i + 1] != 0;
-                            break;
-                        }
-                    default:
-                        {
-                            unknownAttributes.Add(new KeyValuePair<int, int>(attributes[i], attributes[i + 1]));
-                            break;
-                        }
-                }
-
-                UnknownAttributes = new Collections.Immutable.ImmutableArray<KeyValuePair<int, int>>(unknownAttributes);
-            }
-        }
-
-        public readonly int Frequency;
-
-        public readonly int Refresh;
-
-        public readonly int MonoSources;
-
-        public readonly int StereoSources;
-
-        public readonly bool Sync;
-
-        public readonly Ibasa.Collections.Immutable.ImmutableArray<KeyValuePair<int,int>> UnknownAttributes;
-    }
-
     public struct Device : IEquatable<Device>
     {
         public static IEnumerable<Device> Devices
@@ -139,19 +80,33 @@ namespace Ibasa.Audio.OpenAL
             }
         }
 
-        public DeviceAttributes Attributes
+        public Dictionary<int, int> Attributes
         {
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
-                    Handle, OpenTK.Audio.OpenAL.GetInteger.AttributesSize);
 
-                int[] attributes = new int[attributes_size];
-                OpenTK.Audio.OpenAL.Alc.GetInteger(
-                    Handle, OpenTK.Audio.OpenAL.GetInteger.AllAttributes, attributes_size, attributes);
+                unsafe
+                {
+                    int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
+                       Handle, OpenTK.Audio.OpenAL.GetInteger.AttributesSize);
 
-                return new DeviceAttributes(attributes);
+                    int* attributes = stackalloc int[attributes_size];
+                    OpenTK.Audio.OpenAL.Alc.GetInteger(
+                        Handle, OpenTK.Audio.OpenAL.GetInteger.AllAttributes, attributes_size, attributes);
+
+                    var dictionary = new Dictionary<int, int>();
+
+                    int index = 0;
+                    while(attributes[index] != 0)
+                    {
+                        var key = attributes[index++];
+                        var value = attributes[index++];
+                        dictionary.Add(key, value);
+                    }
+
+                    return dictionary;
+                }
             }
         }
 

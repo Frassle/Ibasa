@@ -235,7 +235,7 @@ namespace OpenTK.Audio.OpenAL
         }
 
         [DllImport("openal32.dll", EntryPoint = "alcGetIntegerv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        unsafe static extern void GetInteger(IntPtr device, int param, int size, int* data);
+        public unsafe static extern void GetInteger(IntPtr device, int param, int size, int* data);
         // ALC_API void            ALC_APIENTRY alcGetIntegerv( ALCdevice *device, ALCenum param, ALCsizei size, ALCint *buffer );
 
         /// <summary>This function returns integers related to the context.</summary>
