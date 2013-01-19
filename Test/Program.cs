@@ -79,6 +79,11 @@ namespace Test
             Console.WriteLine("{0}: {1}", name, Ibasa.Audio.OpenAL.Device.IsContextExtensionPresent(name));
         }
 
+        static void Extension(Ibasa.Audio.OpenAL.Device dev, string name)
+        {
+            Console.WriteLine("{0}: {1}", name, dev.IsExtensionPresent(name));
+        }
+
         static void Main(string[] args)
         {
             var source_sounds = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\source sounds.gcf", System.IO.FileShare.ReadWrite);
@@ -113,6 +118,14 @@ namespace Test
                 Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
                 Console.WriteLine(string.Join(", ", dev.Extensions));
                 Console.WriteLine(string.Join(", ", dev.Extensions.Select(ex => dev.IsExtensionPresent(ex))));
+
+                Extension(dev, "AL_EXT_MP3");
+                Extension(dev, "EAX2.0");
+                Extension(dev, "EAX3.0");
+                Extension(dev, "EAX4.0");
+                Extension(dev, "EAX5.0");
+                Extension(dev, "ALC_EXT_EFX");
+                Extension(dev, "EAX_RAM");
 
                 dev.Close();
             }
