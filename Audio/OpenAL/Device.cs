@@ -126,8 +126,8 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MajorVersion);
-                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MinorVersion);
+                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.GetInteger.MajorVersion);
+                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.GetInteger.MinorVersion);
                 return new Version(major, minor);
             }
         }
@@ -138,11 +138,11 @@ namespace Ibasa.Audio.OpenAL
             {
                 OpenAL.ThrowNullException(Handle);
                 int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
-                    Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AttributesSize);
+                    Handle, OpenTK.Audio.OpenAL.GetInteger.AttributesSize);
 
                 int[] attributes = new int[attributes_size];
                 OpenTK.Audio.OpenAL.Alc.GetInteger(
-                    Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AllAttributes, attributes_size, attributes);
+                    Handle, OpenTK.Audio.OpenAL.GetInteger.AllAttributes, attributes_size, attributes);
 
                 return new DeviceAttributes(attributes);
             }

@@ -57,7 +57,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.CaptureSamples);
+                return OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.GetInteger.CaptureSamples);
             }
         }
 

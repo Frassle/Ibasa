@@ -263,7 +263,7 @@ namespace OpenTK.Audio.OpenAL
         }
 
         [DllImport(Alc.Lib, EntryPoint = "alcGetIntegerv", ExactSpelling = true, CallingConvention = Alc.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        unsafe static extern void GetInteger(IntPtr device, AlcGetInteger param, int size, int* data);
+        unsafe static extern void GetInteger(IntPtr device, int param, int size, int* data);
         // ALC_API void            ALC_APIENTRY alcGetIntegerv( ALCdevice *device, ALCenum param, ALCsizei size, ALCint *buffer );
 
         /// <summary>This function returns integers related to the context.</summary>
@@ -271,7 +271,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="param">an attribute to be retrieved: ALC_MAJOR_VERSION, ALC_MINOR_VERSION, ALC_ATTRIBUTES_SIZE, ALC_ALL_ATTRIBUTES</param>
         /// <param name="size">the size of the destination buffer provided, in number of integers.</param>
         /// <param name="data">a pointer to the buffer to be returned</param>
-        public static int GetInteger(IntPtr device, AlcGetInteger param)
+        public static int GetInteger(IntPtr device, int param)
         {
             unsafe
             {
@@ -286,7 +286,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="param">an attribute to be retrieved: ALC_MAJOR_VERSION, ALC_MINOR_VERSION, ALC_ATTRIBUTES_SIZE, ALC_ALL_ATTRIBUTES</param>
         /// <param name="size">the size of the destination buffer provided, in number of integers.</param>
         /// <param name="data">a pointer to the buffer to be returned</param>
-        public static void GetInteger(IntPtr device, AlcGetInteger param, int size, int[] data)
+        public static void GetInteger(IntPtr device, int param, int size, int[] data)
         {
             unsafe
             {
