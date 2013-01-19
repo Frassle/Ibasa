@@ -71,6 +71,9 @@ namespace OpenTK.Audio.OpenAL
     /// <summary>Alc = Audio Library Context</summary>
     public static class Alc
     {
+
+
+
         #region Context Management
 
         /// <summary>This function creates a context using a specified device.</summary>
@@ -308,55 +311,22 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="buffer">a pointer to a buffer, which must be large enough to accommodate the number of samples.</param>
         /// <param name="samples">the number of samples to be retrieved.</param>
         [DllImport("openal32.dll", EntryPoint = "alcCaptureSamples", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void CaptureSamples(IntPtr device, IntPtr buffer, int samples);
+        public static unsafe extern void CaptureSamples(IntPtr device, void* buffer, int samples);
         // ALC_API void            ALC_APIENTRY alcCaptureSamples( ALCdevice *device, ALCvoid *buffer, ALCsizei samples );
 
         /// <summary>This function completes a capture operation, and does not block.</summary>
         /// <param name="device">a pointer to a capture device.</param>
         /// <param name="buffer">a reference to a buffer, which must be large enough to accommodate the number of samples.</param>
         /// <param name="samples">the number of samples to be retrieved.</param>
-        public static void CaptureSamples<T>(IntPtr device, ref T buffer, int samples)
-            where T : struct
+        public static void CaptureSamples(IntPtr device, byte[] buffer, int samples)
         {
-            GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            try
+            unsafe
             {
-                CaptureSamples(device, handle.AddrOfPinnedObject(), samples);
+                fixed (byte* ptr = buffer)
+                {
+                    CaptureSamples(device, ptr, samples);
+                }
             }
-            finally
-            {
-                handle.Free();
-            }
-        }
-
-        /// <summary>This function completes a capture operation, and does not block.</summary>
-        /// <param name="device">a pointer to a capture device.</param>
-        /// <param name="buffer">a buffer, which must be large enough to accommodate the number of samples.</param>
-        /// <param name="samples">the number of samples to be retrieved.</param>
-        public static void CaptureSamples<T>(IntPtr device, T[] buffer, int samples)
-            where T : struct
-        {
-            CaptureSamples(device, ref buffer[0], samples);
-        }
-
-        /// <summary>This function completes a capture operation, and does not block.</summary>
-        /// <param name="device">a pointer to a capture device.</param>
-        /// <param name="buffer">a buffer, which must be large enough to accommodate the number of samples.</param>
-        /// <param name="samples">the number of samples to be retrieved.</param>
-        public static void CaptureSamples<T>(IntPtr device, T[,] buffer, int samples)
-            where T : struct
-        {
-            CaptureSamples(device, ref buffer[0, 0], samples);
-        }
-
-        /// <summary>This function completes a capture operation, and does not block.</summary>
-        /// <param name="device">a pointer to a capture device.</param>
-        /// <param name="buffer">a buffer, which must be large enough to accommodate the number of samples.</param>
-        /// <param name="samples">the number of samples to be retrieved.</param>
-        public static void CaptureSamples<T>(IntPtr device, T[, ,] buffer, int samples)
-            where T : struct
-        {
-            CaptureSamples(device, ref buffer[0, 0, 0], samples);
         }
 
         #endregion Capture functions

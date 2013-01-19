@@ -6,7 +6,7 @@ using Ibasa.SharpAL;
 
 namespace Ibasa.Audio.OpenAL
 {
-    public struct CaptureDevice
+    public struct CaptureDevice : IEquatable<CaptureDevice>
     {
         public static IEnumerable<CaptureDevice> CaptureDevices(int frequency, Format format, int buffersize)
         {
@@ -85,14 +85,47 @@ namespace Ibasa.Audio.OpenAL
             OpenTK.Audio.OpenAL.Alc.CaptureStop(Handle);
         }
 
-        public void Read<T>(T[] buffer, int samples) where T : struct
-        {
-            OpenTK.Audio.OpenAL.Alc.CaptureSamples<T>(Handle, buffer, samples);
-        }
-
-        public void Read(IntPtr buffer, int samples)
+        public void Read(byte[] buffer, int samples)
         {
             OpenTK.Audio.OpenAL.Alc.CaptureSamples(Handle, buffer, samples);
+        }
+
+        public override int GetHashCode()
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Handle.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            OpenAL.ThrowNullException(Handle);
+            if (obj is CaptureDevice)
+            {
+                return Equals((CaptureDevice)obj);
+            }
+            return false;
+        }
+
+        public bool Equals(CaptureDevice other)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Handle == other.Handle;
+        }
+
+        public static bool operator ==(CaptureDevice left, CaptureDevice right)
+        {
+            return left.Handle == right.Handle;
+        }
+
+        public static bool operator !=(CaptureDevice left, CaptureDevice right)
+        {
+            return left.Handle != right.Handle;
+        }
+
+        public override string ToString()
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Handle.ToString();
         }
     }
 }
