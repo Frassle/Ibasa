@@ -8,6 +8,11 @@ namespace Ibasa.Audio.OpenAL
 {
     public static class OpenAL
     {
+        public static int GetEnumValue(string enumname)
+        {
+            return OpenTK.Audio.OpenAL.Alc.GetEnumValue(IntPtr.Zero, enumname);
+        }
+
         public static bool IsExtensionPresent(string extension)
         {
             return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(IntPtr.Zero, extension);
