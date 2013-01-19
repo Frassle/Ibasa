@@ -9,50 +9,45 @@ namespace Ibasa.Audio.OpenAL
     {
         internal DeviceAttributes(int[] attributes)
         {
-            var unknownAttributes = new List<int>();
+            var unknownAttributes = new List<KeyValuePair<int, int>>();
 
-            for (int i = 0; i < attributes.Length; ++i)
+            for (int i = 0; i < attributes.Length - 1; i += 2)
             {
                 switch (attributes[i])
                 {
                     case OpenTK.Audio.OpenAL.AlcContextAttributes.Frequency:
                         {
-                            ++i;
-                            Frequency = attributes[i];
+                            Frequency = attributes[i + 1];
                             break;
                         }
                     case OpenTK.Audio.OpenAL.AlcContextAttributes.Refresh:
                         {
-                            ++i;
-                            Refresh = attributes[i];
+                            Refresh = attributes[i + 1];
                             break;
                         }
                     case OpenTK.Audio.OpenAL.AlcContextAttributes.MonoSources:
                         {
-                            ++i;
-                            MonoSources = attributes[i];
+                            MonoSources = attributes[i + 1];
                             break;
                         }
                     case OpenTK.Audio.OpenAL.AlcContextAttributes.StereoSources:
                         {
-                            ++i;
-                            StereoSources = attributes[i];
+                            StereoSources = attributes[i + 1];
                             break;
                         }
                     case OpenTK.Audio.OpenAL.AlcContextAttributes.Sync:
                         {
-                            ++i;
-                            Sync = attributes[i] != 0;
+                            Sync = attributes[i + 1] != 0;
                             break;
                         }
                     default:
                         {
-                            unknownAttributes.Add(attributes[i]);
+                            unknownAttributes.Add(new KeyValuePair<int, int>(attributes[i], attributes[i + 1]));
                             break;
                         }
                 }
 
-                UnknownAttributes = new Collections.Immutable.ImmutableArray<int>(unknownAttributes);
+                UnknownAttributes = new Collections.Immutable.ImmutableArray<KeyValuePair<int, int>>(unknownAttributes);
             }
         }
 
@@ -66,7 +61,7 @@ namespace Ibasa.Audio.OpenAL
 
         public readonly bool Sync;
 
-        public readonly Ibasa.Collections.Immutable.ImmutableArray<int> UnknownAttributes;
+        public readonly Ibasa.Collections.Immutable.ImmutableArray<KeyValuePair<int,int>> UnknownAttributes;
     }
 
     public struct Device : IEquatable<Device>
