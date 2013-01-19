@@ -81,16 +81,6 @@ namespace Test
 
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
 
-
-            //Console.WriteLine(Ibasa.Audio.OpenAL.OpenAL.Version);
-
-            var null_device = new Ibasa.Audio.OpenAL.Device();
-
-            Console.WriteLine("------------");
-            Console.WriteLine("Version: {0}", null_device.Version);
-            Console.WriteLine(null_device.EfxVersion);
-
-
             foreach (var dev in Ibasa.Audio.OpenAL.Device.Devices)
             {
                 Console.WriteLine("------------");
@@ -105,7 +95,6 @@ namespace Test
                 Console.WriteLine("Sync: {0}", attributes.Sync);
                 Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
                 Console.WriteLine(string.Join(", ", dev.Extensions));
-                Console.WriteLine(dev.EfxVersion);
 
                 dev.Close();
             }
@@ -125,7 +114,6 @@ namespace Test
                 Console.WriteLine("Sync: {0}", attributes.Sync);
                 Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
                 Console.WriteLine(string.Join(", ", device.Extensions));
-                Console.WriteLine(device.EfxVersion);
             }
 
             var context = Ibasa.Audio.OpenAL.Context.Create(device);

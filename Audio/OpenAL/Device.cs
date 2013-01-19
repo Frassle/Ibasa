@@ -160,16 +160,6 @@ namespace Ibasa.Audio.OpenAL
             }
         }
 
-        public Version EfxVersion
-        {
-            get
-            {
-                var major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.EfxMajorVersion);
-                var minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.EfxMinorVersion);
-                return new Version(major, minor);
-            }
-        }
-
         internal void ThrowIfError()
         {
             var error = OpenTK.Audio.OpenAL.Alc.GetError(Handle);
