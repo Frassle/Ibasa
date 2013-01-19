@@ -56,6 +56,7 @@ namespace Ibasa.Audio.OpenAL
 
         public bool Close()
         {
+            OpenAL.ThrowNullException(Handle);
             return OpenTK.Audio.OpenAL.Alc.CaptureCloseDevice(Handle);
         }
 
@@ -63,6 +64,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
+                OpenAL.ThrowNullException(Handle);
                 return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.GetString.CaptureDeviceSpecifier);
             }
         }
@@ -71,22 +73,26 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
+                OpenAL.ThrowNullException(Handle);
                 return OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.GetInteger.CaptureSamples);
             }
         }
 
         public void Start()
         {
+            OpenAL.ThrowNullException(Handle);
             OpenTK.Audio.OpenAL.Alc.CaptureStart(Handle);
         }
 
         public void Stop()
         {
+            OpenAL.ThrowNullException(Handle);
             OpenTK.Audio.OpenAL.Alc.CaptureStop(Handle);
         }
 
         public void Read(byte[] buffer, int samples)
         {
+            OpenAL.ThrowNullException(Handle);
             OpenTK.Audio.OpenAL.Alc.CaptureSamples(Handle, buffer, samples);
         }
 
