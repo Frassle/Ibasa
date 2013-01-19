@@ -212,24 +212,14 @@ namespace OpenTK.Audio.OpenAL
         public static List<string> GetStringList(IntPtr device, int param)
         {
             List<string> result = new List<string>();
-            IntPtr t = GetStringPrivate(device, param);
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            byte b;
-            int offset = 0;
-            do
+            IntPtr ptr = GetStringPrivate(device, param);
+
+            while (Marshal.ReadByte(ptr) != 0)
             {
-                b = Marshal.ReadByte(t, offset++);
-                if (b != 0)
-                    sb.Append((char)b);
-                if (b == 0)
-                {
-                    result.Add(sb.ToString());
-                    if (Marshal.ReadByte(t, offset) == 0) // offset already properly increased through ++
-                        break; // 2x null
-                    else
-                        sb.Remove(0, sb.Length); // 1x null
-                }
-            } while (true);
+                var str = Marshal.PtrToStringAnsi(ptr);
+                result.Add(str);
+                ptr += str.Length + 1;
+            }
 
             return result;
         }
