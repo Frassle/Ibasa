@@ -76,7 +76,7 @@ namespace Test
 
         static void Extension(string name)
         {
-            Console.WriteLine("{0}: {1}", name, Ibasa.Audio.OpenAL.Device.IsContextExtensionPresent(name));
+            Console.WriteLine("{0}: {1}", name, Ibasa.Audio.OpenAL.OpenAL.IsExtensionPresent(name));
         }
 
         static void Extension(Ibasa.Audio.OpenAL.Device dev, string name)

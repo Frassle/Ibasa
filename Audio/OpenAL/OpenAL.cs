@@ -8,6 +8,16 @@ namespace Ibasa.Audio.OpenAL
 {
     public static class OpenAL
     {
+        public static bool IsExtensionPresent(string extension)
+        {
+            return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(IntPtr.Zero, extension);
+        }
+
+        public static IntPtr GetProcAddress(string funcname)
+        {
+            return OpenTK.Audio.OpenAL.Alc.GetProcAddress(IntPtr.Zero, funcname);
+        }
+
         internal static void ThrowNullException(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)

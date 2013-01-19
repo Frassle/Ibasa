@@ -75,8 +75,20 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.GetString.AllDevicesSpecifier);
-                return devices.Select(name => new Device(name));
+                if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_ALL_EXT"))
+                {
+                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.GetString.AllDevicesSpecifier);
+                    return devices.Select(name => new Device(name));
+                }
+                else if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_EXT"))
+                {
+                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.GetString.DeviceSpecifier);
+                    return devices.Select(name => new Device(name));
+                }
+                else
+                {
+                    return new Device[] { new Device(null) };
+                }
             }
         }
 
@@ -181,16 +193,6 @@ namespace Ibasa.Audio.OpenAL
         {
             OpenAL.ThrowNullException(Handle);
             return OpenTK.Audio.OpenAL.Alc.GetProcAddress(Handle, funcname);
-        }
-
-        public static bool IsContextExtensionPresent(string extension)
-        {
-            return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(IntPtr.Zero, extension);
-        }
-
-        public static IntPtr GetContextProcAddress(string funcname)
-        {
-            return OpenTK.Audio.OpenAL.Alc.GetProcAddress(IntPtr.Zero, funcname);
         }
 
         internal void ThrowError()
