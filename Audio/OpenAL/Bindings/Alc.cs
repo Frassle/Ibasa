@@ -398,7 +398,5 @@ namespace OpenTK.Audio.OpenAL
         }
 
         #endregion Capture functions
-
     }
-
 }

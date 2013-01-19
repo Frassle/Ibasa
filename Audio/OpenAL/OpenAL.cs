@@ -8,15 +8,6 @@ namespace Ibasa.Audio.OpenAL
 {
     public static class OpenAL
     {
-        public static Version Version
-        {
-            get
-            {
-                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetInteger.MajorVersion);
-                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetInteger.MinorVersion);
-                return new Version(major, minor);
-            }
-        }
 
         internal static OpenTK.Audio.OpenAL.ALFormat Format(Ibasa.SharpAL.Format format)
         {

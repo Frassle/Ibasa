@@ -82,12 +82,20 @@ namespace Test
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
 
 
-            Console.WriteLine(Ibasa.Audio.OpenAL.OpenAL.Version);
+            //Console.WriteLine(Ibasa.Audio.OpenAL.OpenAL.Version);
+
+            var null_device = new Ibasa.Audio.OpenAL.Device();
+
+            Console.WriteLine("------------");
+            Console.WriteLine("Version: {0}", null_device.Version);
+            Console.WriteLine(null_device.EfxVersion);
+
 
             foreach (var dev in Ibasa.Audio.OpenAL.Device.Devices)
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", dev.Name);
+                Console.WriteLine("Version: {0}", dev.Version);
                 var attributes = dev.Attributes;
 
                 Console.WriteLine("Frequency: {0}", attributes.Frequency);

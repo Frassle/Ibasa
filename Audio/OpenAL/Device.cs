@@ -119,6 +119,16 @@ namespace Ibasa.Audio.OpenAL
             }
         }
 
+        public Version Version
+        {
+            get
+            {
+                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MajorVersion);
+                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MinorVersion);
+                return new Version(major, minor);
+            }
+        }
+
         public DeviceAttributes Attributes
         {
             get
@@ -138,7 +148,15 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions).Split();
+                var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions);
+                if (value == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return value.Split();
+                }
             }
         }
 
