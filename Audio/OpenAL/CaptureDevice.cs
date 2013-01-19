@@ -11,7 +11,7 @@ namespace Ibasa.Audio.OpenAL
         public static IEnumerable<CaptureDevice> CaptureDevices(int frequency, Format format, int buffersize)
         {
             var oal_format = OpenAL.Format(format);
-            var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.CaptureDeviceSpecifier);
+            var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.GetString.CaptureDeviceSpecifier);
             return devices.Select(name => new CaptureDevice(name, frequency, format, buffersize));
         }
 
@@ -49,7 +49,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.CaptureDeviceSpecifier);
+                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.GetString.CaptureDeviceSpecifier);
             }
         }
 

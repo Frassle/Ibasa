@@ -74,12 +74,29 @@ namespace Test
             return interleaved;
         }
 
+        static void Extension(string name)
+        {
+            Console.WriteLine("{0}: {1}", name, Ibasa.Audio.OpenAL.Device.IsContextExtensionPresent(name));
+        }
+
         static void Main(string[] args)
         {
             var source_sounds = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\source sounds.gcf", System.IO.FileShare.ReadWrite);
             var half_life = new Ibasa.Valve.Package.Gcf(@"D:\Steam\steamapps\half-life.gcf", System.IO.FileShare.ReadWrite);
 
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
+
+            Extension("ALC_ENUMERATION_EXT");
+            Extension("ALC_EXT_CAPTURE");
+            Extension("AL_EXT_MP3");
+            Extension("EAX2.0");
+            Extension("EAX3.0");
+            Extension("EAX4.0");
+            Extension("EAX5.0");
+            Extension("ALC_EXT_EFX");
+            Extension("EAX_RAM");
+
+            Console.ReadLine();
 
             foreach (var dev in Ibasa.Audio.OpenAL.Device.Devices)
             {
@@ -95,6 +112,7 @@ namespace Test
                 Console.WriteLine("Sync: {0}", attributes.Sync);
                 Console.WriteLine(string.Join(", ", attributes.UnknownAttributes));
                 Console.WriteLine(string.Join(", ", dev.Extensions));
+                Console.WriteLine(string.Join(", ", dev.Extensions.Select(ex => dev.IsExtensionPresent(ex))));
 
                 dev.Close();
             }

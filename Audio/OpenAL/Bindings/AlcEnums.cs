@@ -60,47 +60,30 @@ namespace OpenTK.Audio.OpenAL
     }
 
     /// <summary>
-    /// Defines available parameters for <see cref="OpenTK.Audio.OpenAL.Alc.GetString(IntPtr, AlcGetString)"/>.
-    /// </summary>
-    public enum AlcGetString : int
-    {
-        ///<summary>The specifier string for the default device.</summary>
-        DefaultDeviceSpecifier = 0x1004,
-
-        ///<summary>A list of available context extensions separated by spaces.</summary>
-        Extensions = 0x1006,
-
-        ///<summary>The name of the default capture device</summary>
-        CaptureDefaultDeviceSpecifier = 0x311, // ALC_EXT_CAPTURE extension.
-
-        /// <summary>a list of the default devices.</summary>
-        DefaultAllDevicesSpecifier = 0x1012,
-
-        // duplicates from AlcGetStringList:
-
-        ///<summary>Will only return the first Device, not a list. Use AlcGetStringList.CaptureDeviceSpecifier. ALC_EXT_CAPTURE_EXT </summary>
-        CaptureDeviceSpecifier = 0x310,
-
-        ///<summary>Will only return the first Device, not a list. Use AlcGetStringList.DeviceSpecifier</summary>
-        DeviceSpecifier = 0x1005,
-
-        /// <summary>Will only return the first Device, not a list. Use AlcGetStringList.AllDevicesSpecifier</summary>
-        AllDevicesSpecifier = 0x1013,
-    }
-
-    /// <summary>
     /// Defines available parameters for <see cref="Alc.GetString(IntPtr, AlcGetStringList)"/>.
     /// </summary>
-    public enum AlcGetStringList : int
+    public static class GetString
     {
+        ///<summary>The specifier string for the default device.</summary>
+        public const int DefaultDeviceSpecifier = 0x1004;
+
+        ///<summary>A list of available context extensions separated by spaces.</summary>
+        public const int Extensions = 0x1006;
+
+        ///<summary>The name of the default capture device</summary>
+        public const int CaptureDefaultDeviceSpecifier = 0x311; // ALC_EXT_CAPTURE extension.
+
+        /// <summary>a list of the default devices.</summary>
+        public const int DefaultAllDevicesSpecifier = 0x1012;
+
         ///<summary>The name of the specified capture device, or a list of all available capture devices if no capture device is specified. ALC_EXT_CAPTURE_EXT </summary>
-        CaptureDeviceSpecifier = 0x310,
+        public const int CaptureDeviceSpecifier = 0x310;
 
         ///<summary>The specifier strings for all available devices. ALC_ENUMERATION_EXT</summary>
-        DeviceSpecifier = 0x1005,
+        public const int DeviceSpecifier = 0x1005;
 
         /// <summary>The specifier strings for all available devices. ALC_ENUMERATE_ALL_EXT</summary>
-        AllDevicesSpecifier = 0x1013,
+        public const int AllDevicesSpecifier = 0x1013;
     }
 
     /// <summary>

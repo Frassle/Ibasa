@@ -75,7 +75,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.AllDevicesSpecifier);
+                var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.GetString.AllDevicesSpecifier);
                 return devices.Select(name => new Device(name));
             }
         }
@@ -117,7 +117,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.DeviceSpecifier);
+                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.GetString.DeviceSpecifier);
             }
         }
 
@@ -153,7 +153,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions);
+                var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.GetString.Extensions);
                 if (value == null)
                 {
                     return null;
@@ -165,10 +165,32 @@ namespace Ibasa.Audio.OpenAL
             }
         }
 
+        public int GetEnumValue(string enumname)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return OpenTK.Audio.OpenAL.Alc.GetEnumValue(Handle, enumname);
+        }
+
         public bool IsExtensionPresent(string extension)
         {
             OpenAL.ThrowNullException(Handle);
             return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(Handle, extension);
+        }
+
+        public IntPtr GetProcAddress(string funcname)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return OpenTK.Audio.OpenAL.Alc.GetProcAddress(Handle, funcname);
+        }
+
+        public static bool IsContextExtensionPresent(string extension)
+        {
+            return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(IntPtr.Zero, extension);
+        }
+
+        public static IntPtr GetContextProcAddress(string funcname)
+        {
+            return OpenTK.Audio.OpenAL.Alc.GetProcAddress(IntPtr.Zero, funcname);
         }
 
         internal void ThrowError()

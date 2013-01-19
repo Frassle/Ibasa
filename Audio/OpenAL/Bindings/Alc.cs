@@ -209,7 +209,7 @@ namespace OpenTK.Audio.OpenAL
         #region Query functions
 
         [DllImport(Alc.Lib, EntryPoint = "alcGetString", ExactSpelling = true, CallingConvention = Alc.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        private static extern IntPtr GetStringPrivate([In] IntPtr device, AlcGetString param);
+        private static extern IntPtr GetStringPrivate([In] IntPtr device, int param);
         // ALC_API const ALCchar * ALC_APIENTRY alcGetString( ALCdevice *device, ALCenum param );
 
         /// <summary>This function returns pointers to strings related to the context.</summary>
@@ -223,7 +223,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="device">a pointer to the device to be queried.</param>
         /// <param name="param">an attribute to be retrieved: ALC_DEFAULT_DEVICE_SPECIFIER, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER, ALC_DEVICE_SPECIFIER, ALC_CAPTURE_DEVICE_SPECIFIER, ALC_EXTENSIONS</param>
         /// <returns>A string containing the name of the Device.</returns>
-        public static string GetString(IntPtr device, AlcGetString param)
+        public static string GetString(IntPtr device, int param)
         {
             return Marshal.PtrToStringAnsi(GetStringPrivate(device, param));
         }
@@ -237,10 +237,10 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="device">a pointer to the device to be queried.</param>
         /// <param name="param">an attribute to be retrieved: ALC_DEVICE_SPECIFIER, ALC_CAPTURE_DEVICE_SPECIFIER, ALC_ALL_DEVICES_SPECIFIER</param>
         /// <returns>A List of strings containing the names of the Devices.</returns>
-        public static IList<string> GetString(IntPtr device, AlcGetStringList param)
+        public static List<string> GetStringList(IntPtr device, int param)
         {
             List<string> result = new List<string>();
-            IntPtr t = GetStringPrivate(IntPtr.Zero, (AlcGetString)param);
+            IntPtr t = GetStringPrivate(device, param);
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             byte b;
             int offset = 0;
@@ -259,7 +259,7 @@ namespace OpenTK.Audio.OpenAL
                 }
             } while (true);
 
-            return (IList<string>)result;
+            return result;
         }
 
         [DllImport(Alc.Lib, EntryPoint = "alcGetIntegerv", ExactSpelling = true, CallingConvention = Alc.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
