@@ -4,40 +4,10 @@ using System.Linq;
 using System.Text;
 using Ibasa.SharpAL;
 
-namespace Ibasa.Audio
+namespace Ibasa.Audio.OpenAL
 {
     public static class OpenAL
     {
-        public static IEnumerable<Device> Devices
-        {
-            get
-            {
-                var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.AllDevicesSpecifier);
-                return devices.Select(name => Device.Open(name));
-            }
-        }
-
-        public static Device DefaultDevice
-        {
-            get
-            {
-                return Device.Open(null);
-            }
-        }
-
-        public static IEnumerable<CaptureDevice> CaptureDevices(int frequency, Format format, int buffersize)
-        {
-            var oal_format = OpenAL.Format(format);
-            var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.CaptureDeviceSpecifier);
-            return devices.Select(name => new CaptureDevice(name, frequency, oal_format, buffersize));
-        }
-
-        public static CaptureDevice DefaultCaptureDevice(int frequency, Format format, int buffersize)
-        {
-            var oal_format = OpenAL.Format(format);
-            return new CaptureDevice(null, frequency, oal_format, buffersize);
-        }
-
         public static Version Version
         {
             get

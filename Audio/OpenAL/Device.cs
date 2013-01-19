@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ibasa.Audio
+namespace Ibasa.Audio.OpenAL
 {
     public sealed class DeviceAttributes
     {
@@ -55,7 +55,7 @@ namespace Ibasa.Audio
                 UnknownAttributes = new Collections.Immutable.ImmutableArray<int>(unknownAttributes);
             }
         }
-        
+
         public readonly int Frequency;
 
         public readonly int Refresh;
@@ -71,9 +71,27 @@ namespace Ibasa.Audio
 
     public struct Device
     {
+        public static IEnumerable<Device> Devices
+        {
+            get
+            {
+                var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.AllDevicesSpecifier);
+                return devices.Select(name => Open(name));
+            }
+        }
+
+        public static Device DefaultDevice
+        {
+            get
+            {
+                return Open(null);
+            }
+        }
+
         internal IntPtr Handle { get; private set; }
 
-        internal Device(IntPtr handle) : this()
+        internal Device(IntPtr handle)
+            : this()
         {
             Handle = handle;
         }

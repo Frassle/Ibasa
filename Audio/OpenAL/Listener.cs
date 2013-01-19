@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Ibasa.Numerics.Geometry;
 
-namespace Ibasa.Audio
+namespace Ibasa.Audio.OpenAL
 {
     public static class Listener
     {

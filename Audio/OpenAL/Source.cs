@@ -5,7 +5,7 @@ using System.Text;
 using Ibasa.Numerics.Geometry;
 using System.Diagnostics.Contracts;
 
-namespace Ibasa.Audio
+namespace Ibasa.Audio.OpenAL
 {
     public enum SourceType
     {

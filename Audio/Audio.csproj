@@ -43,23 +43,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioException.cs" />
-    <Compile Include="Bindings\AL.cs" />
-    <Compile Include="Bindings\Alc.cs" />
-    <Compile Include="Bindings\AlcEnums.cs" />
-    <Compile Include="Bindings\ALEnums.cs" />
-    <Compile Include="Bindings\EffectsExtension.cs" />
-    <Compile Include="Bindings\EffectsExtensionEnums.cs" />
-    <Compile Include="Bindings\EffectsExtensionPresets.cs" />
-    <Compile Include="Bindings\XRamExtension.cs" />
-    <Compile Include="Buffer.cs" />
-    <Compile Include="CaptureDevice.cs" />
-    <Compile Include="Context.cs" />
-    <Compile Include="Device.cs" />
-    <Compile Include="Listener.cs" />
-    <Compile Include="Audio.cs" />
+    <Compile Include="OpenAL\Bindings\AL.cs" />
+    <Compile Include="OpenAL\Bindings\Alc.cs" />
+    <Compile Include="OpenAL\Bindings\AlcEnums.cs" />
+    <Compile Include="OpenAL\Bindings\ALEnums.cs" />
+    <Compile Include="OpenAL\Bindings\EffectsExtension.cs" />
+    <Compile Include="OpenAL\Bindings\EffectsExtensionEnums.cs" />
+    <Compile Include="OpenAL\Bindings\EffectsExtensionPresets.cs" />
+    <Compile Include="OpenAL\Bindings\XRamExtension.cs" />
+    <Compile Include="OpenAL\Buffer.cs" />
+    <Compile Include="OpenAL\CaptureDevice.cs" />
+    <Compile Include="OpenAL\Context.cs" />
+    <Compile Include="OpenAL\Device.cs" />
+    <Compile Include="OpenAL\Listener.cs" />
+    <Compile Include="OpenAL\OpenAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundStream.cs" />
-    <Compile Include="Source.cs" />
+    <Compile Include="OpenAL\Source.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">

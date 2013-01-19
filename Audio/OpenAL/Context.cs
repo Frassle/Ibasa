@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
 
-namespace Ibasa.Audio
+namespace Ibasa.Audio.OpenAL
 {
     public struct Context
     {
@@ -12,7 +12,8 @@ namespace Ibasa.Audio
 
         public static readonly Context Null = new Context(IntPtr.Zero);
 
-        private Context(IntPtr handle) : this()
+        private Context(IntPtr handle)
+            : this()
         {
             Handle = handle;
         }

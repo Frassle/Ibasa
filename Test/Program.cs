@@ -82,9 +82,9 @@ namespace Test
             var natural_selection = new Ibasa.Packaging.FileSystemPackage(@"D:\Steam\steamapps\frassle@hotmail.com\half-life\ns");
 
 
-            Console.WriteLine(Ibasa.Audio.OpenAL.Version);
+            Console.WriteLine(Ibasa.Audio.OpenAL.OpenAL.Version);
 
-            foreach (var dev in Ibasa.Audio.OpenAL.Devices)
+            foreach (var dev in Ibasa.Audio.OpenAL.Device.Devices)
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", dev.Name);
@@ -104,7 +104,7 @@ namespace Test
 
             Console.ReadLine();
 
-            var device = Ibasa.Audio.OpenAL.DefaultDevice;
+            var device = Ibasa.Audio.OpenAL.Device.DefaultDevice;
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", device.Name);
@@ -120,29 +120,29 @@ namespace Test
                 Console.WriteLine(device.EfxVersion);
             }
 
-            var context = Ibasa.Audio.Context.Create(device);
-            Ibasa.Audio.Context.MakeContextCurrent(context);
+            var context = Ibasa.Audio.OpenAL.Context.Create(device);
+            Ibasa.Audio.OpenAL.Context.MakeContextCurrent(context);
 
-            Console.WriteLine("Version: {0}", Ibasa.Audio.Context.Version);
-            Console.WriteLine("Vendor: {0}", Ibasa.Audio.Context.Vendor);
-            Console.WriteLine("Renderer: {0}", Ibasa.Audio.Context.Renderer);
-            Console.WriteLine("Extensions: {0}", Ibasa.Audio.Context.Extensions);
-            Console.WriteLine("Doppler Factor: {0}", Ibasa.Audio.Context.DopplerFactor);
-            Console.WriteLine("Speed Of Sound: {0}", Ibasa.Audio.Context.SpeedOfSound);
+            Console.WriteLine("Version: {0}", Ibasa.Audio.OpenAL.Context.Version);
+            Console.WriteLine("Vendor: {0}", Ibasa.Audio.OpenAL.Context.Vendor);
+            Console.WriteLine("Renderer: {0}", Ibasa.Audio.OpenAL.Context.Renderer);
+            Console.WriteLine("Extensions: {0}", Ibasa.Audio.OpenAL.Context.Extensions);
+            Console.WriteLine("Doppler Factor: {0}", Ibasa.Audio.OpenAL.Context.DopplerFactor);
+            Console.WriteLine("Speed Of Sound: {0}", Ibasa.Audio.OpenAL.Context.SpeedOfSound);
 
             Console.WriteLine("------------");
 
-            Console.WriteLine("Position: {0}", Ibasa.Audio.Listener.Position);
-            Console.WriteLine("Orientation: {0}", Ibasa.Audio.Listener.Orientation);
-            Console.WriteLine("Velocity: {0}", Ibasa.Audio.Listener.Velocity);
-            Console.WriteLine("Gain: {0}", Ibasa.Audio.Listener.Gain);
-            Console.WriteLine("EfxMetersPerUnit: {0}", Ibasa.Audio.Listener.EfxMetersPerUnit);
+            Console.WriteLine("Position: {0}", Ibasa.Audio.OpenAL.Listener.Position);
+            Console.WriteLine("Orientation: {0}", Ibasa.Audio.OpenAL.Listener.Orientation);
+            Console.WriteLine("Velocity: {0}", Ibasa.Audio.OpenAL.Listener.Velocity);
+            Console.WriteLine("Gain: {0}", Ibasa.Audio.OpenAL.Listener.Gain);
+            Console.WriteLine("EfxMetersPerUnit: {0}", Ibasa.Audio.OpenAL.Listener.EfxMetersPerUnit);
 
-            Ibasa.Audio.Source source = Ibasa.Audio.Source.Gen();
+            Ibasa.Audio.OpenAL.Source source = Ibasa.Audio.OpenAL.Source.Gen();
             source.Gain = 1;
             source.Looping = false;
 
-            Ibasa.Audio.Buffer buffer = Ibasa.Audio.Buffer.Gen();
+            Ibasa.Audio.OpenAL.Buffer buffer = Ibasa.Audio.OpenAL.Buffer.Gen();
 
             foreach (var item in source_sounds.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories))
             {
@@ -160,7 +160,7 @@ namespace Test
                 source.Buffer = buffer;
                 source.Play();
 
-                while (source.State == Ibasa.Audio.SourceState.Playing && !Console.KeyAvailable)
+                while (source.State == Ibasa.Audio.OpenAL.SourceState.Playing && !Console.KeyAvailable)
                 {
                     System.Threading.Thread.Sleep(0);
                 }
@@ -169,12 +169,12 @@ namespace Test
                     Console.ReadKey(true);
 
                 source.Stop();
-                source.Buffer = Ibasa.Audio.Buffer.Null;
+                source.Buffer = Ibasa.Audio.OpenAL.Buffer.Null;
             }
 
             buffer.Delete();
             source.Delete();
-            Ibasa.Audio.Context.Destroy(context);
+            Ibasa.Audio.OpenAL.Context.Destroy(context);
             device.Close();
 
             Console.ReadLine();
