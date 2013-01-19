@@ -69,7 +69,7 @@ namespace Ibasa.Audio.OpenAL
         public readonly Ibasa.Collections.Immutable.ImmutableArray<int> UnknownAttributes;
     }
 
-    public struct Device
+    public struct Device : IEquatable<Device>
     {
         public static IEnumerable<Device> Devices
         {
@@ -108,6 +108,7 @@ namespace Ibasa.Audio.OpenAL
 
         public bool Close()
         {
+            ThrowNullException();
             return OpenTK.Audio.OpenAL.Alc.CloseDevice(Handle);
         }
 
@@ -115,6 +116,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
+                ThrowNullException();
                 return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.DeviceSpecifier);
             }
         }
@@ -123,6 +125,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
+                ThrowNullException();
                 int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MajorVersion);
                 int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.AlcGetInteger.MinorVersion);
                 return new Version(major, minor);
@@ -133,6 +136,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
+                ThrowNullException();
                 int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
                     Handle, OpenTK.Audio.OpenAL.AlcGetInteger.AttributesSize);
 
@@ -148,6 +152,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
+                ThrowNullException();
                 var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.AlcGetString.Extensions);
                 if (value == null)
                 {
@@ -157,6 +162,20 @@ namespace Ibasa.Audio.OpenAL
                 {
                     return value.Split();
                 }
+            }
+        }
+
+        public bool IsExtensionPresent(string extension)
+        {
+            ThrowNullException();
+            return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(Handle, extension);
+        }
+
+        private void ThrowNullException()
+        {
+            if (Handle == IntPtr.Zero)
+            {
+                throw new NullReferenceException();
             }
         }
 
@@ -181,6 +200,44 @@ namespace Ibasa.Audio.OpenAL
                 default:
                     throw new AudioException(string.Format("Unknown OpenAL error: {0}", error));
             }
+        }
+
+        public override int GetHashCode()
+        {
+            ThrowNullException();
+            return Handle.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            ThrowNullException();
+            if (obj is Device)
+            {
+                return Equals((Device)obj);
+            }
+            return false;
+        }
+
+        public bool Equals(Device other)
+        {
+            ThrowNullException();
+            return Handle == other.Handle;
+        }
+
+        public static bool operator ==(Device left, Device right)
+        {
+            return left.Handle == right.Handle;
+        }
+
+        public static bool operator !=(Device left, Device right)
+        {
+            return left.Handle != right.Handle;
+        }
+
+        public override string ToString()
+        {
+            ThrowNullException();
+            return Handle.ToString();
         }
     }
 }
