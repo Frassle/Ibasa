@@ -68,13 +68,10 @@ typedef void ALCvoid;
 
 namespace OpenTK.Audio.OpenAL
 {
-
     /// <summary>Alc = Audio Library Context</summary>
     public static class Alc
     {
         #region Context Management
-
-        #region CreateContext
 
         /// <summary>This function creates a context using a specified device.</summary>
         /// <param name="device">a pointer to a device</param>
@@ -83,24 +80,6 @@ namespace OpenTK.Audio.OpenAL
         [DllImport("openal32.dll", EntryPoint = "alcCreateContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         public unsafe static extern IntPtr CreateContext([In] IntPtr device, [In] int* attrlist);
         // ALC_API ALCcontext *    ALC_APIENTRY alcCreateContext( ALCdevice *device, const ALCint* attrlist );
-
-        /// <summary>This function creates a context using a specified device.</summary>
-        /// <param name="device">a pointer to a device</param>
-        /// <param name="attriblist">an array of a set of attributes: ALC_FREQUENCY, ALC_MONO_SOURCES, ALC_REFRESH, ALC_STEREO_SOURCES, ALC_SYNC</param>
-        /// <returns>Returns a pointer to the new context (NULL on failure).</returns>
-        /// <remarks>The attribute list can be NULL, or a zero terminated list of integer pairs composed of valid ALC attribute tokens and requested values.</remarks>
-        public static IntPtr CreateContext(IntPtr device, int[] attriblist)
-        {
-            unsafe
-            {
-                fixed (int* attriblist_ptr = attriblist)
-                {
-                    return CreateContext(device, attriblist_ptr);
-                }
-            }
-        }
-
-        #endregion
 
         /// <summary>This function makes a specified context the current context.</summary>
         /// <param name="context">A pointer to the new context.</param>

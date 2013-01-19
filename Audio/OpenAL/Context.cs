@@ -28,8 +28,14 @@ namespace Ibasa.Audio.OpenAL
 
             int[] attriblist = null;
 
-            Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attriblist);
-            Device.ThrowError();
+            unsafe
+            {
+                fixed (int* attribs = attriblist)
+                {
+                    Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attribs);
+                    Device.ThrowError();
+                }
+            }
         }
 
         public void Process()
