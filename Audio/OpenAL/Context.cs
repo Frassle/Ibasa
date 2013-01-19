@@ -26,15 +26,34 @@ namespace Ibasa.Audio.OpenAL
                 throw new ArgumentNullException("device");
             }
 
-            int[] attriblist = null;
+            unsafe
+            {
+                Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, null);
+                Device.ThrowError();
+            }
+        }
+
+        public Context(Device device, Dictionary<int, int> attributes)
+            : this()
+        {
+            if (device == default(Device))
+            {
+                throw new ArgumentNullException("device");
+            }
 
             unsafe
             {
-                fixed (int* attribs = attriblist)
+                int* attribs = stackalloc int[attributes.Count * 2];
+
+                int index = 0;
+                foreach(var pair in attributes)
                 {
-                    Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attribs);
-                    Device.ThrowError();
+                    attribs[index++] = pair.Key;
+                    attribs[index++] = pair.Value;
                 }
+
+                Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attribs);
+                Device.ThrowError();
             }
         }
 
