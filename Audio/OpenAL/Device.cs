@@ -76,7 +76,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 var devices = OpenTK.Audio.OpenAL.Alc.GetString(IntPtr.Zero, OpenTK.Audio.OpenAL.AlcGetStringList.AllDevicesSpecifier);
-                return devices.Select(name => Open(name));
+                return devices.Select(name => new Device(name));
             }
         }
 
@@ -84,7 +84,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                return Open(null);
+                return new Device(null);
             }
         }
 
@@ -96,14 +96,14 @@ namespace Ibasa.Audio.OpenAL
             Handle = handle;
         }
 
-        public static Device Open(string name)
+        internal Device(string name)
+            : this()
         {
-            var handle = OpenTK.Audio.OpenAL.Alc.OpenDevice(name);
-            if (handle == IntPtr.Zero)
+            Handle = OpenTK.Audio.OpenAL.Alc.OpenDevice(name);
+            if (Handle == IntPtr.Zero)
             {
                 throw new AudioException(string.Format("OpenDevice({0}) failed.", name));
             }
-            return new Device(handle);
         }
 
         public bool Close()
