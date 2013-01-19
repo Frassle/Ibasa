@@ -13,7 +13,7 @@ namespace Ibasa.Audio.OpenAL
 
             for (int i = 0; i < attributes.Length; ++i)
             {
-                switch ((OpenTK.Audio.OpenAL.AlcContextAttributes)attributes[i])
+                switch (attributes[i])
                 {
                     case OpenTK.Audio.OpenAL.AlcContextAttributes.Frequency:
                         {
