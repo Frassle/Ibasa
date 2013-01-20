@@ -8,8 +8,8 @@
     <ProjectGuid>{39B5D464-05B2-4DCE-80C2-E74AC543494C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ibasa.Audio</RootNamespace>
-    <AssemblyName>Ibasa.Audio</AssemblyName>
+    <RootNamespace>Ibasa.OpenAL</RootNamespace>
+    <AssemblyName>Ibasa.OpenAL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -54,6 +54,7 @@
     <Compile Include="OpenAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source.cs" />
+    <Compile Include="XRam.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">
