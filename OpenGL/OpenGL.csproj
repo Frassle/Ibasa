@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{005CDA62-BC5A-49DF-A9A1-835070AE06B4}</ProjectGuid>
+    <ProjectGuid>{205373FB-D70A-4571-92C2-56340C729A35}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ibasa.Graphics</RootNamespace>
-    <AssemblyName>Ibasa.Graphics</AssemblyName>
+    <RootNamespace>Ibasa.OpenGL</RootNamespace>
+    <AssemblyName>Ibasa.OpenGL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,7 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,20 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Voxel.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Numerics\Numerics.csproj">
-      <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
-      <Name>Numerics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpIL\SharpIL.csproj">
-      <Project>{55ACA20C-0204-4A40-B274-5BC258CEC87F}</Project>
-      <Name>SharpIL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
