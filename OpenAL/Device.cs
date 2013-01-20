@@ -177,25 +177,25 @@ namespace Ibasa.OpenAL
         public int GetEnumValue(string enumname)
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.GetEnumValue(Handle, enumname);
+            return OpenAL.GetEnumValue(Handle, enumname);
         }
 
         public bool IsExtensionPresent(string extension)
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.IsExtensionPresent(Handle, extension);
+            return OpenAL.IsExtensionPresent(Handle, extension);
         }
 
         public IntPtr GetProcAddress(string funcname)
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.GetProcAddress(Handle, funcname);
+            return OpenAL.GetProcAddress(Handle, funcname);
         }
 
         internal void ThrowError()
         {
             OpenAL.ThrowNullException(Handle);
-            Alc.ThrowError(Handle);
+            OpenAL.GetError(Handle);
         }
 
         public override int GetHashCode()
