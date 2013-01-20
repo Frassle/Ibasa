@@ -180,7 +180,7 @@ namespace Test
                 wav.Stream.Seek(wav.DataOffset, System.IO.SeekOrigin.Begin);
                 var data = wav.Stream.ReadBytes(wav.DataLength);
 
-                buffer.BufferData(Ibasa.OpenAL.OpenAL.GetEnumValue("AL_FORMAT_MONO8"), data, data.Length, wav.Frequency);
+                buffer.BufferData(Ibasa.OpenAL.Context.GetEnumValue("AL_FORMAT_MONO16"), data, data.Length, wav.Frequency);
 
                 source.Buffer = buffer;
                 source.Play();
