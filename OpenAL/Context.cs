@@ -88,6 +88,16 @@ namespace Ibasa.OpenAL
             }
         }
 
+        public static bool IsExtensionPresent(string extension)
+        {
+            return Al.IsExtensionPresent(extension);
+        }
+
+        public static int GetEnumValue(string enumname)
+        {
+            return Al.GetEnumValue(enumname);
+        }
+
         public Device Device
         {
             get
