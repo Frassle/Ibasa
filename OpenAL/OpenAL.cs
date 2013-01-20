@@ -56,5 +56,11 @@ namespace Ibasa.OpenAL
         {
             Alc.ThrowError(IntPtr.Zero);
         }
+
+        public static readonly int ALC_FREQUENCY = GetEnumValue("ALC_FREQUENCY");
+        public static readonly int ALC_REFRESH = GetEnumValue("ALC_REFRESH");
+        public static readonly int ALC_SYNC = GetEnumValue("ALC_SYNC");
+        public static readonly int ALC_MONO_SOURCES = GetEnumValue("ALC_MONO_SOURCES");
+        public static readonly int ALC_STEREO_SOURCES = GetEnumValue("ALC_STEREO_SOURCES");
     }
 }

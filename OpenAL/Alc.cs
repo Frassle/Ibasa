@@ -72,31 +72,6 @@ namespace Ibasa.OpenAL
     internal static class Alc
     {
         #region Constants
-        
-        /**
-        * followed by <int> Hz
-        */
-        public const int ALC_FREQUENCY = 0x1007;
-
-        /**
-        * followed by <int> Hz
-        */
-        public const int ALC_REFRESH = 0x1008;
-
-        /**
-        * followed by AL_TRUE, AL_FALSE
-        */
-        public const int ALC_SYNC = 0x1009;
-
-        /**
-        * followed by <int> Num of requested Mono (3D) Sources
-        */
-        public const int ALC_MONO_SOURCES = 0x1010;
-
-        /**
-        * followed by <int> Num of requested Stereo Sources
-        */
-        public const int ALC_STEREO_SOURCES = 0x1011;
 
         /**
         * errors

@@ -108,7 +108,13 @@ namespace Test
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", dev.Name);
                 Console.WriteLine("Version: {0}", dev.Version);
-                Console.WriteLine(string.Join(", ", dev.Attributes));
+                var attributes = dev.Attributes;
+                Console.WriteLine(string.Join(", ", attributes));
+                Console.WriteLine("ALC_FREQUENCY: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_FREQUENCY]);
+                Console.WriteLine("ALC_REFRESH: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_REFRESH]);
+                Console.WriteLine("ALC_SYNC: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_SYNC]);
+                Console.WriteLine("ALC_MONO_SOURCES: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_MONO_SOURCES]);
+                Console.WriteLine("ALC_STEREO_SOURCES: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_STEREO_SOURCES]);
                 Console.WriteLine(string.Join(", ", dev.Extensions));
 
                 Extension(dev, "AL_EXT_MP3");
@@ -129,7 +135,13 @@ namespace Test
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", device.Name);
                 Console.WriteLine("Version: {0}", device.Version);
-                Console.WriteLine(string.Join(", ", device.Attributes));
+                var attributes = device.Attributes;
+                Console.WriteLine(string.Join(", ", attributes));
+                Console.WriteLine("ALC_FREQUENCY: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_FREQUENCY]);
+                Console.WriteLine("ALC_REFRESH: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_REFRESH]);
+                Console.WriteLine("ALC_SYNC: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_SYNC]);
+                Console.WriteLine("ALC_MONO_SOURCES: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_MONO_SOURCES]);
+                Console.WriteLine("ALC_STEREO_SOURCES: {0}", attributes[Ibasa.OpenAL.OpenAL.ALC_STEREO_SOURCES]);
                 Console.WriteLine(string.Join(", ", device.Extensions));
             }
 
