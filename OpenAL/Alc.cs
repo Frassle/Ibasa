@@ -102,41 +102,6 @@ namespace Ibasa.OpenAL
 
         #endregion
 
-        #region Context Management
-
-        #region CreateContext
-
-        [DllImport("openal32.dll", EntryPoint = "alcCreateContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        public unsafe static extern IntPtr CreateContext([In] IntPtr device, [In] int* attrlist);
-
-        #endregion
-
-        [DllImport("openal32.dll", EntryPoint = "alcMakeContextCurrent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern bool MakeContextCurrent(IntPtr context);
-        // ALC_API ALCboolean      ALC_APIENTRY alcMakeContextCurrent( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcProcessContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void ProcessContext(IntPtr context);
-        // ALC_API void            ALC_APIENTRY alcProcessContext( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcSuspendContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void SuspendContext(IntPtr context);
-        // ALC_API void            ALC_APIENTRY alcSuspendContext( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcDestroyContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void DestroyContext(IntPtr context);
-        // ALC_API void            ALC_APIENTRY alcDestroyContext( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcGetCurrentContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr GetCurrentContext();
-        // ALC_API ALCcontext *    ALC_APIENTRY alcGetCurrentContext( void );
-
-        [DllImport("openal32.dll", EntryPoint = "alcGetContextsDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr GetContextsDevice(IntPtr context);
-        // ALC_API ALCdevice*      ALC_APIENTRY alcGetContextsDevice( ALCcontext *context );
-
-        #endregion Context Management
-
         #region Device Management
 
         /// <summary>This function opens a device by name.</summary>

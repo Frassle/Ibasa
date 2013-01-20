@@ -3,11 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
+using System.Runtime.InteropServices;
+using System.Security;
 
 namespace Ibasa.OpenAL
 {
     public struct Context : IEquatable<Context>
     {
+        #region Context Management
+
+        [DllImport("openal32.dll", EntryPoint = "alcCreateContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        public unsafe static extern IntPtr CreateContext([In] IntPtr device, [In] int* attrlist);
+
+        [DllImport("openal32.dll", EntryPoint = "alcMakeContextCurrent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        private static extern bool MakeContextCurrent(IntPtr context);
+        // ALC_API ALCboolean      ALC_APIENTRY alcMakeContextCurrent( ALCcontext *context );
+
+        [DllImport("openal32.dll", EntryPoint = "alcProcessContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        private static extern void ProcessContext(IntPtr context);
+        // ALC_API void            ALC_APIENTRY alcProcessContext( ALCcontext *context );
+
+        [DllImport("openal32.dll", EntryPoint = "alcSuspendContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        private static extern void SuspendContext(IntPtr context);
+        // ALC_API void            ALC_APIENTRY alcSuspendContext( ALCcontext *context );
+
+        [DllImport("openal32.dll", EntryPoint = "alcDestroyContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        private static extern void DestroyContext(IntPtr context);
+        // ALC_API void            ALC_APIENTRY alcDestroyContext( ALCcontext *context );
+
+        [DllImport("openal32.dll", EntryPoint = "alcGetCurrentContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        private static extern IntPtr GetCurrentContext();
+        // ALC_API ALCcontext *    ALC_APIENTRY alcGetCurrentContext( void );
+
+        [DllImport("openal32.dll", EntryPoint = "alcGetContextsDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        private static extern IntPtr GetContextsDevice(IntPtr context);
+        // ALC_API ALCdevice*      ALC_APIENTRY alcGetContextsDevice( ALCcontext *context );
+
+        #endregion Context Management
+
         internal IntPtr Handle { get; private set; }
 
         public static readonly Context Null = new Context(IntPtr.Zero);
@@ -28,7 +61,7 @@ namespace Ibasa.OpenAL
 
             unsafe
             {
-                Handle = Alc.CreateContext(device.Handle, null);
+                Handle = CreateContext(device.Handle, null);
                 device.ThrowError();
             }
         }
@@ -52,7 +85,7 @@ namespace Ibasa.OpenAL
                     attribs[index++] = pair.Value;
                 }
 
-                Handle = Alc.CreateContext(device.Handle, attribs);
+                Handle = CreateContext(device.Handle, attribs);
                 device.ThrowError();
             }
         }
@@ -60,31 +93,31 @@ namespace Ibasa.OpenAL
         public void Process()
         {
             OpenAL.ThrowNullException(Handle);
-            Alc.ProcessContext(Handle);
+            ProcessContext(Handle);
         }
 
         public void Suspend()
         {
             OpenAL.ThrowNullException(Handle);
-            Alc.SuspendContext(Handle);
+            SuspendContext(Handle);
         }
 
         public static bool MakeContextCurrent(Context context)
         {
-            return Alc.MakeContextCurrent(context.Handle);
+            return MakeContextCurrent(context.Handle);
         }
 
         public void Destroy()
         {
             OpenAL.ThrowNullException(Handle);
-            Alc.DestroyContext(Handle);
+            DestroyContext(Handle);
         }
 
         public static Context CurrentContext
         {
             get
             {
-                return new Context(Alc.GetCurrentContext());
+                return new Context(GetCurrentContext());
             }
         }
 
@@ -103,7 +136,7 @@ namespace Ibasa.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return new Device(Alc.GetContextsDevice(Handle));
+                return new Device(GetContextsDevice(Handle));
             }
         }
 
