@@ -212,6 +212,92 @@ namespace Ibasa.OpenAL
             }
         }
 
+
+        #region Renderer State management
+
+        /// <summary>This function enables a feature of the OpenAL driver. There are no capabilities defined in OpenAL 1.1 to be used with this function, but it may be used by an extension.</summary>
+        /// <param name="capability">The name of a capability to enable.</param>
+        [DllImport("openal32.dll", EntryPoint = "alEnable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Enable(int capability);
+        //AL_API void AL_APIENTRY alEnable( ALenum capability );
+
+        /// <summary>This function disables a feature of the OpenAL driver.</summary>
+        /// <param name="capability">The name of a capability to disable.</param>
+        [DllImport("openal32.dll", EntryPoint = "alDisable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Disable(int capability);
+        // AL_API void AL_APIENTRY alDisable( ALenum capability ); 
+
+        /// <summary>This function returns a boolean indicating if a specific feature is enabled in the OpenAL driver.</summary>
+        /// <param name="capability">The name of a capability to enable.</param>
+        /// <returns>True if enabled, False if disabled.</returns>
+        [DllImport("openal32.dll", EntryPoint = "alIsEnabled", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern bool IsEnabled(int capability);
+        // AL_API ALboolean AL_APIENTRY alIsEnabled( ALenum capability ); 
+
+        #endregion Renderer State management
+
+        #region State retrieval
+
+        [DllImport("openal32.dll", EntryPoint = "alGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        private static extern IntPtr alGetString(int param); // accepts the enums AlError, AlContextString
+        // AL_API const ALchar* AL_APIENTRY alGetString( ALenum param );
+
+        /// <summary>This function retrieves an OpenAL string property.</summary>
+        /// <param name="param">The property to be returned: Vendor, Version, Renderer and Extensions</param>
+        /// <returns>Returns a pointer to a null-terminated string.</returns>
+        public static string GetString(int param)
+        {
+            return OpenAL.MarshalString(alGetString(param));
+        }
+
+        /* no functions return more than 1 result ..
+        // AL_API void AL_APIENTRY alGetBooleanv( ALenum param, ALboolean* buffer );
+        // AL_API void AL_APIENTRY alGetIntegerv( ALenum param, ALint* buffer );
+        // AL_API void AL_APIENTRY alGetFloatv( ALenum param, ALfloat* buffer );
+        // AL_API void AL_APIENTRY alGetDoublev( ALenum param, ALdouble* buffer );
+        */
+
+        /* disabled due to no token using it
+        /// <summary>This function returns a boolean OpenAL state.</summary>
+        /// <param name="param">the state to be queried: AL_DOPPLER_FACTOR, AL_SPEED_OF_SOUND, AL_DISTANCE_MODEL</param>
+        /// <returns>The boolean state described by param will be returned.</returns>
+        [DllImport( "openal32.dll", EntryPoint = "alGetBoolean", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl ), SuppressUnmanagedCodeSecurity( )]
+        public static extern bool Get( ALGetBoolean param );
+        // AL_API ALboolean AL_APIENTRY alGetBoolean( ALenum param );
+        */
+
+        /// <summary>This function returns an integer OpenAL state.</summary>
+        /// <param name="param">the state to be queried: DistanceModel.</param>
+        /// <returns>The integer state described by param will be returned.</returns>
+        [DllImport("openal32.dll", EntryPoint = "alGetInteger", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern int GetInteger(int param);
+        // AL_API ALint AL_APIENTRY alGetInteger( ALenum param );
+
+        /// <summary>This function returns a floating-point OpenAL state.</summary>
+        /// <param name="param">the state to be queried: DopplerFactor, SpeedOfSound.</param>
+        /// <returns>The floating-point state described by param will be returned.</returns>
+        [DllImport("openal32.dll", EntryPoint = "alGetFloat", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern float GetFloat(int param);
+        // AL_API ALfloat AL_APIENTRY alGetFloat( ALenum param );
+
+        /* disabled due to no token using it
+        /// <summary>This function returns a double-precision floating-point OpenAL state.</summary>
+        /// <param name="param">the state to be queried: AL_DOPPLER_FACTOR, AL_SPEED_OF_SOUND, AL_DISTANCE_MODEL</param>
+        /// <returns>The double value described by param will be returned.</returns>
+        [DllImport( "openal32.dll", EntryPoint = "alGetDouble", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl ), SuppressUnmanagedCodeSecurity( )]
+        public static extern double Get( ALGetDouble param );
+        // AL_API ALdouble AL_APIENTRY alGetDouble( ALenum param );
+        */
+
+        /// <summary>Error support. Obtain the most recent error generated in the AL state machine. When an error is detected by AL, a flag is set and the error code is recorded. Further errors, if they occur, do not affect this recorded code. When alGetError is called, the code is returned and the flag is cleared, so that a further error will again record its code.</summary>
+        /// <returns>The first error that occured. can be used with AL.GetString. Returns an Alenum representing the error state. When an OpenAL error occurs, the error state is set and will not be changed until the error state is retrieved using alGetError. Whenever alGetError is called, the error state is cleared and the last state (the current state when the call was made) is returned. To isolate error detection to a specific portion of code, alGetError should be called before the isolated section to clear the current error state.</returns>
+        [DllImport("openal32.dll", EntryPoint = "alGetError", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern AlError GetError();
+        // AL_API ALenum AL_APIENTRY alGetError( void );
+
+        #endregion State retrieval
+
+
         public override int GetHashCode()
         {
             OpenAL.ThrowNullException(Handle);

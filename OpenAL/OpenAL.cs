@@ -55,28 +55,27 @@ namespace Ibasa.OpenAL
         #region Query functions
 
         [DllImport("openal32.dll", EntryPoint = "alcGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        static extern IntPtr GetString([In] IntPtr device, int param);
+        internal static extern IntPtr GetString([In] IntPtr device, int param);
         // ALC_API const ALCchar * ALC_APIENTRY alcGetString( ALCdevice *device, ALCenum param );
 
         public static string GetString(int param)
         {
-            return GetMarshaledString(IntPtr.Zero, param);
+            return MarshalString(GetString(IntPtr.Zero, param));
         }
 
-        public static List<string> GetStringList(int param)
+        public static List<string> GetStrings(int param)
         {
-            return GetMarshaledStringList(IntPtr.Zero, param);
+            return MarshalStringList(GetString(IntPtr.Zero, param));
         }
 
-        internal static string GetMarshaledString(IntPtr device, int param)
+        internal static string MarshalString(IntPtr ptr)
         {
-            return Marshal.PtrToStringAnsi(GetString(device, param));
+            return Marshal.PtrToStringAnsi(ptr);
         }
 
-        internal static List<string> GetMarshaledStringList(IntPtr device, int param)
+        internal static List<string> MarshalStringList(IntPtr ptr)
         {
             List<string> result = new List<string>();
-            IntPtr ptr = GetString(device, param);
 
             while (Marshal.ReadByte(ptr) != 0)
             {

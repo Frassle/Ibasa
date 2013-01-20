@@ -70,29 +70,6 @@ namespace Ibasa.OpenAL
     /// </summary>
     internal static class Al
     {
-        #region Renderer State management
-
-        /// <summary>This function enables a feature of the OpenAL driver. There are no capabilities defined in OpenAL 1.1 to be used with this function, but it may be used by an extension.</summary>
-        /// <param name="capability">The name of a capability to enable.</param>
-        [DllImport("openal32.dll", EntryPoint = "alEnable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void Enable(AlCapability capability);
-        //AL_API void AL_APIENTRY alEnable( ALenum capability );
-
-        /// <summary>This function disables a feature of the OpenAL driver.</summary>
-        /// <param name="capability">The name of a capability to disable.</param>
-        [DllImport("openal32.dll", EntryPoint = "alDisable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void Disable(AlCapability capability);
-        // AL_API void AL_APIENTRY alDisable( ALenum capability ); 
-
-        /// <summary>This function returns a boolean indicating if a specific feature is enabled in the OpenAL driver.</summary>
-        /// <param name="capability">The name of a capability to enable.</param>
-        /// <returns>True if enabled, False if disabled.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alIsEnabled", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern bool IsEnabled(AlCapability capability);
-        // AL_API ALboolean AL_APIENTRY alIsEnabled( ALenum capability ); 
-
-        #endregion Renderer State management
-
         #region State retrieval
 
         [DllImport("openal32.dll", EntryPoint = "alGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]

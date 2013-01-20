@@ -41,7 +41,7 @@ namespace Ibasa.OpenAL
         {
             if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
             {
-                var devices = OpenAL.GetStringList(ALC_CAPTURE_DEVICE_SPECIFIER);
+                var devices = OpenAL.GetStrings(ALC_CAPTURE_DEVICE_SPECIFIER);
                 return devices.Select(name => new CaptureDevice(name, frequency, format, buffersize));
             }
             else
@@ -90,13 +90,13 @@ namespace Ibasa.OpenAL
         public string GetString(int param)
         {
             OpenAL.ThrowNullException(Handle);
-            return OpenAL.GetMarshaledString(Handle, param);
+            return OpenAL.MarshalString(OpenAL.GetString(IntPtr.Zero, param));
         }
 
-        public List<string> GetStringList(int param)
+        public List<string> GetStrings(int param)
         {
             OpenAL.ThrowNullException(Handle);
-            return OpenAL.GetMarshaledStringList(Handle, param);
+            return OpenAL.MarshalStringList(OpenAL.GetString(IntPtr.Zero, param));
         }
 
         public int GetInteger(int param)
