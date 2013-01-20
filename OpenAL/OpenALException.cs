@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ibasa.Audio
+namespace Ibasa.OpenAL
 {
     [Serializable]
-    public class AudioException : Exception
+    public class OpenALException : Exception
     {
-        public AudioException() { }
-        public AudioException(string message) : base(message) { }
-        public AudioException(string message, Exception inner) : base(message, inner) { }
-        protected AudioException(
+        public OpenALException() { }
+        public OpenALException(string message) : base(message) { }
+        public OpenALException(string message, Exception inner) : base(message, inner) { }
+        protected OpenALException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)
             : base(info, context) { }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ibasa.Audio.OpenAL
+namespace Ibasa.OpenAL
 {
     public struct Device : IEquatable<Device>
     {
@@ -13,12 +13,12 @@ namespace Ibasa.Audio.OpenAL
             {
                 if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_ALL_EXT"))
                 {
-                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.Alc.ALC_ALL_DEVICES_SPECIFIER);
+                    var devices = OpenAL.GetStringList(Alc.ALC_ALL_DEVICES_SPECIFIER);
                     return devices.Select(name => new Device(name));
                 }
                 else if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_EXT"))
                 {
-                    var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.Alc.ALC_DEVICE_SPECIFIER);
+                    var devices = OpenAL.GetStringList(Alc.ALC_DEVICE_SPECIFIER);
                     return devices.Select(name => new Device(name));
                 }
                 else
@@ -32,7 +32,20 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                return new Device(null);
+                if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_ALL_EXT"))
+                {
+                    var device = OpenAL.GetString(Alc.ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
+                    return new Device(device);
+                }
+                else if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_EXT"))
+                {
+                    var device = OpenAL.GetString(Alc.ALC_DEFAULT_DEVICE_SPECIFIER);
+                    return new Device(device);
+                }
+                else
+                {
+                    return new Device(null);
+                }
             }
         }
 
@@ -47,17 +60,53 @@ namespace Ibasa.Audio.OpenAL
         internal Device(string name)
             : this()
         {
-            Handle = OpenTK.Audio.OpenAL.Alc.OpenDevice(name);
+            Handle = Alc.OpenDevice(name);
             if (Handle == IntPtr.Zero)
             {
-                throw new AudioException(string.Format("OpenDevice({0}) failed.", name));
+                throw new OpenALException(string.Format("OpenDevice({0}) failed.", name));
             }
         }
 
         public bool Close()
         {
             OpenAL.ThrowNullException(Handle);
-            return OpenTK.Audio.OpenAL.Alc.CloseDevice(Handle);
+            return Alc.CloseDevice(Handle);
+        }
+
+        public string GetString(int param)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Alc.GetMarshaledString(Handle, param);
+        }
+
+        public List<string> GetStringList(int param)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Alc.GetMarshaledStringList(Handle, param);
+        }
+
+        public int GetInteger(int param)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return Alc.GetInteger(Handle, param);
+        }
+
+        public void GetInteger(int param, int count, int[] values)
+        {
+            OpenAL.ThrowNullException(Handle);
+            unsafe
+            {
+                fixed (int* ptr = values)
+                {
+                    Alc.GetInteger(Handle, param, count, ptr);
+                }
+            }
+        }
+
+        unsafe void GetInteger(int param, int count, int* values)
+        {
+            OpenAL.ThrowNullException(Handle);
+            Alc.GetInteger(Handle, param, count, values);
         }
 
         public string Name
@@ -65,7 +114,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.Alc.ALC_DEVICE_SPECIFIER);
+                return GetString(Alc.ALC_DEVICE_SPECIFIER);
             }
         }
 
@@ -74,8 +123,8 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                int major = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.Alc.ALC_MAJOR_VERSION);
-                int minor = OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.Alc.ALC_MINOR_VERSION);
+                int major = GetInteger(Alc.ALC_MAJOR_VERSION);
+                int minor = GetInteger(Alc.ALC_MINOR_VERSION);
                 return new Version(major, minor);
             }
         }
@@ -88,12 +137,10 @@ namespace Ibasa.Audio.OpenAL
 
                 unsafe
                 {
-                    int attributes_size = OpenTK.Audio.OpenAL.Alc.GetInteger(
-                       Handle, OpenTK.Audio.OpenAL.Alc.ALC_ATTRIBUTES_SIZE);
+                    int attributes_size = GetInteger(Alc.ALC_ATTRIBUTES_SIZE);
 
                     int* attributes = stackalloc int[attributes_size];
-                    OpenTK.Audio.OpenAL.Alc.GetInteger(
-                        Handle, OpenTK.Audio.OpenAL.Alc.ALC_ALL_ATTRIBUTES, attributes_size, attributes);
+                    GetInteger(Alc.ALC_ALL_ATTRIBUTES, attributes_size, attributes);
 
                     var dictionary = new Dictionary<int, int>();
 
@@ -115,7 +162,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                var value = OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.Alc.ALC_EXTENSIONS);
+                var value = GetString(Alc.ALC_EXTENSIONS);
                 if (value == null)
                 {
                     return null;
@@ -130,52 +177,52 @@ namespace Ibasa.Audio.OpenAL
         public int GetEnumValue(string enumname)
         {
             OpenAL.ThrowNullException(Handle);
-            return OpenTK.Audio.OpenAL.Alc.GetEnumValue(Handle, enumname);
+            return Alc.GetEnumValue(Handle, enumname);
         }
 
         public bool IsExtensionPresent(string extension)
         {
             OpenAL.ThrowNullException(Handle);
-            return OpenTK.Audio.OpenAL.Alc.IsExtensionPresent(Handle, extension);
+            return Alc.IsExtensionPresent(Handle, extension);
         }
 
         public IntPtr GetProcAddress(string funcname)
         {
             OpenAL.ThrowNullException(Handle);
-            return OpenTK.Audio.OpenAL.Alc.GetProcAddress(Handle, funcname);
+            return Alc.GetProcAddress(Handle, funcname);
         }
 
         internal void ThrowError()
         {
-            var error = OpenTK.Audio.OpenAL.Alc.GetError(Handle);
+            var error = Alc.GetError(Handle);
 
-            if(error == OpenTK.Audio.OpenAL.Alc.ALC_NO_ERROR)
+            if(error == Alc.ALC_NO_ERROR)
             {
                 return;
             }
-            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_DEVICE)
+            else if(error == Alc.ALC_INVALID_DEVICE)
             {
-                throw new AudioException("No Device. The device handle or specifier names an inaccessible driver/server.");
+                throw new OpenALException("No Device. The device handle or specifier names an inaccessible driver/server.");
             }
-            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_CONTEXT)
+            else if(error == Alc.ALC_INVALID_CONTEXT)
             {
-                throw new AudioException("Invalid context ID. The Context argument does not name a valid context.");
+                throw new OpenALException("Invalid context ID. The Context argument does not name a valid context.");
             }
-            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_ENUM)
+            else if(error == Alc.ALC_INVALID_ENUM)
             {
-                throw new AudioException("Bad enum. A token used is not valid, or not applicable.");
+                throw new OpenALException("Bad enum. A token used is not valid, or not applicable.");
             }
-            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_INVALID_VALUE)
+            else if(error == Alc.ALC_INVALID_VALUE)
             {
-                throw new AudioException("Bad value. A value (e.g. Attribute) is not valid, or not applicable.");
+                throw new OpenALException("Bad value. A value (e.g. Attribute) is not valid, or not applicable.");
             }
-            else if(error == OpenTK.Audio.OpenAL.Alc.ALC_OUT_OF_MEMORY)
+            else if(error == Alc.ALC_OUT_OF_MEMORY)
             {
-                throw new AudioException("Out of memory. Unable to allocate memory.");
+                throw new OpenALException("Out of memory. Unable to allocate memory.");
             }
             else 
             {
-                throw new AudioException(string.Format("Unknown OpenAL error: {0}", error));
+                throw new OpenALException(string.Format("Unknown OpenAL error: {0}", error));
             }
         }
 

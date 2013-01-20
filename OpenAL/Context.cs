@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
 
-namespace Ibasa.Audio.OpenAL
+namespace Ibasa.OpenAL
 {
     public struct Context : IEquatable<Context>
     {
@@ -28,7 +28,7 @@ namespace Ibasa.Audio.OpenAL
 
             unsafe
             {
-                Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, null);
+                Handle = Alc.CreateContext(device.Handle, null);
                 Device.ThrowError();
             }
         }
@@ -52,7 +52,7 @@ namespace Ibasa.Audio.OpenAL
                     attribs[index++] = pair.Value;
                 }
 
-                Handle = OpenTK.Audio.OpenAL.Alc.CreateContext(device.Handle, attribs);
+                Handle = Alc.CreateContext(device.Handle, attribs);
                 Device.ThrowError();
             }
         }
@@ -60,30 +60,30 @@ namespace Ibasa.Audio.OpenAL
         public void Process()
         {
             OpenAL.ThrowNullException(Handle);
-            OpenTK.Audio.OpenAL.Alc.ProcessContext(Handle);
+            Alc.ProcessContext(Handle);
         }
 
         public void Suspend()
         {
             OpenAL.ThrowNullException(Handle);
-            OpenTK.Audio.OpenAL.Alc.SuspendContext(Handle);
+            Alc.SuspendContext(Handle);
         }
 
         public static bool MakeContextCurrent(Context context)
         {
-            return OpenTK.Audio.OpenAL.Alc.MakeContextCurrent(context.Handle);
+            return Alc.MakeContextCurrent(context.Handle);
         }
 
         public static void Destroy(Context context)
         {
-            OpenTK.Audio.OpenAL.Alc.DestroyContext(context.Handle);
+            Alc.DestroyContext(context.Handle);
         }
 
         public static Context CurrentContext
         {
             get
             {
-                return new Context(OpenTK.Audio.OpenAL.Alc.GetCurrentContext());
+                return new Context(Alc.GetCurrentContext());
             }
         }
 
@@ -91,7 +91,7 @@ namespace Ibasa.Audio.OpenAL
         {
             get
             {
-                return new Device(OpenTK.Audio.OpenAL.Alc.GetContextsDevice(OpenTK.Audio.OpenAL.Alc.GetCurrentContext()));
+                return new Device(Alc.GetContextsDevice(Alc.GetCurrentContext()));
             }
         }
 

@@ -47,10 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Audio\Audio.csproj">
-      <Project>{39B5D464-05B2-4DCE-80C2-E74AC543494C}</Project>
-      <Name>Audio</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">
       <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
       <Name>Ibasa</Name>
@@ -62,6 +58,10 @@
     <ProjectReference Include="..\Numerics\Numerics.csproj">
       <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
       <Name>Numerics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenAL\OpenAL.csproj">
+      <Project>{39B5D464-05B2-4DCE-80C2-E74AC543494C}</Project>
+      <Name>OpenAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Packaging\Packaging.csproj">
       <Project>{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}</Project>

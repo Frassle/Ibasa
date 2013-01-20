@@ -66,10 +66,10 @@ typedef void ALCvoid;
  * IntPtr
 */
 
-namespace OpenTK.Audio.OpenAL
+namespace Ibasa.OpenAL
 {
     /// <summary>Alc = Audio Library Context</summary>
-    public static class Alc
+    internal static class Alc
     {
         #region Constants
         
@@ -161,51 +161,35 @@ namespace OpenTK.Audio.OpenAL
 
         #endregion
 
-
         #region Context Management
 
-        /// <summary>This function creates a context using a specified device.</summary>
-        /// <param name="device">a pointer to a device</param>
-        /// <param name="attrlist">a pointer to a set of attributes: ALC_FREQUENCY, ALC_MONO_SOURCES, ALC_REFRESH, ALC_STEREO_SOURCES, ALC_SYNC</param>
-        /// <returns>Returns a pointer to the new context (NULL on failure). The attribute list can be NULL, or a zero terminated list of integer pairs composed of valid ALC attribute tokens and requested values.</returns>
+        #region CreateContext
+
         [DllImport("openal32.dll", EntryPoint = "alcCreateContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         public unsafe static extern IntPtr CreateContext([In] IntPtr device, [In] int* attrlist);
-        // ALC_API ALCcontext *    ALC_APIENTRY alcCreateContext( ALCdevice *device, const ALCint* attrlist );
 
-        /// <summary>This function makes a specified context the current context.</summary>
-        /// <param name="context">A pointer to the new context.</param>
-        /// <returns>Returns True on success, or False on failure.</returns>
+        #endregion
+
         [DllImport("openal32.dll", EntryPoint = "alcMakeContextCurrent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern bool MakeContextCurrent(IntPtr context);
         // ALC_API ALCboolean      ALC_APIENTRY alcMakeContextCurrent( ALCcontext *context );
 
-        /// <summary>This function tells a context to begin processing. When a context is suspended, changes in OpenAL state will be accepted but will not be processed. alcSuspendContext can be used to suspend a context, and then all the OpenAL state changes can be applied at once, followed by a call to alcProcessContext to apply all the state changes immediately. In some cases, this procedure may be more efficient than application of properties in a non-suspended state. In some implementations, process and suspend calls are each a NOP.</summary>
-        /// <param name="context">a pointer to the new context</param>
         [DllImport("openal32.dll", EntryPoint = "alcProcessContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void ProcessContext(IntPtr context);
         // ALC_API void            ALC_APIENTRY alcProcessContext( ALCcontext *context );
 
-        /// <summary>This function suspends processing on a specified context. When a context is suspended, changes in OpenAL state will be accepted but will not be processed. A typical use of alcSuspendContext would be to suspend a context, apply all the OpenAL state changes at once, and then call alcProcessContext to apply all the state changes at once. In some cases, this procedure may be more efficient than application of properties in a non-suspended state. In some implementations, process and suspend calls are each a NOP.</summary>
-        /// <param name="context">a pointer to the context to be suspended.</param>
         [DllImport("openal32.dll", EntryPoint = "alcSuspendContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void SuspendContext(IntPtr context);
         // ALC_API void            ALC_APIENTRY alcSuspendContext( ALCcontext *context );
 
-        /// <summary>This function destroys a context.</summary>
-        /// <param name="context">a pointer to the new context.</param>
         [DllImport("openal32.dll", EntryPoint = "alcDestroyContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void DestroyContext(IntPtr context);
         // ALC_API void            ALC_APIENTRY alcDestroyContext( ALCcontext *context );
 
-        /// <summary>This function retrieves the current context.</summary>
-        /// <returns>Returns a pointer to the current context.</returns>
         [DllImport("openal32.dll", EntryPoint = "alcGetCurrentContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern IntPtr GetCurrentContext();
         // ALC_API ALCcontext *    ALC_APIENTRY alcGetCurrentContext( void );
 
-        /// <summary>This function retrieves a context's device pointer.</summary>
-        /// <param name="context">a pointer to a context.</param>
-        /// <returns>Returns a pointer to the specified context's device.</returns>
         [DllImport("openal32.dll", EntryPoint = "alcGetContextsDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern IntPtr GetContextsDevice(IntPtr context);
         // ALC_API ALCdevice*      ALC_APIENTRY alcGetContextsDevice( ALCcontext *context );
@@ -272,38 +256,18 @@ namespace OpenTK.Audio.OpenAL
         #region Query functions
 
         [DllImport("openal32.dll", EntryPoint = "alcGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        private static extern IntPtr GetStringPrivate([In] IntPtr device, int param);
+        public static extern IntPtr GetString([In] IntPtr device, int param);
         // ALC_API const ALCchar * ALC_APIENTRY alcGetString( ALCdevice *device, ALCenum param );
 
-        /// <summary>This function returns pointers to strings related to the context.</summary>
-        /// <remarks>
-        /// ALC_DEFAULT_DEVICE_SPECIFIER will return the name of the default output device.
-        /// ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER will return the name of the default capture device.
-        /// ALC_DEVICE_SPECIFIER will return the name of the specified output device if a pointer is supplied, or will return a list of all available devices if a NULL device pointer is supplied. A list is a pointer to a series of strings separated by NULL characters, with the list terminated by two NULL characters. See Enumeration Extension for more details.
-        /// ALC_CAPTURE_DEVICE_SPECIFIER will return the name of the specified capture device if a pointer is supplied, or will return a list of all available devices if a NULL device pointer is supplied.
-        /// ALC_EXTENSIONS returns a list of available context extensions, with each extension separated by a space and the list terminated by a NULL character.
-        /// </remarks>
-        /// <param name="device">a pointer to the device to be queried.</param>
-        /// <param name="param">an attribute to be retrieved: ALC_DEFAULT_DEVICE_SPECIFIER, ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER, ALC_DEVICE_SPECIFIER, ALC_CAPTURE_DEVICE_SPECIFIER, ALC_EXTENSIONS</param>
-        /// <returns>A string containing the name of the Device.</returns>
-        public static string GetString(IntPtr device, int param)
+        public static string GetMarshaledString(IntPtr device, int param)
         {
-            return Marshal.PtrToStringAnsi(GetStringPrivate(device, param));
+            return Marshal.PtrToStringAnsi(GetString(device, param));
         }
 
-        /// <summary>This function returns a List of strings related to the context.</summary>
-        /// <remarks>
-        /// ALC_DEVICE_SPECIFIER will return the name of the specified output device if a pointer is supplied, or will return a list of all available devices if a NULL device pointer is supplied. A list is a pointer to a series of strings separated by NULL characters, with the list terminated by two NULL characters. See Enumeration Extension for more details.
-        /// ALC_CAPTURE_DEVICE_SPECIFIER will return the name of the specified capture device if a pointer is supplied, or will return a list of all available devices if a NULL device pointer is supplied.
-        /// ALC_EXTENSIONS returns a list of available context extensions, with each extension separated by a space and the list terminated by a NULL character.
-        /// </remarks>
-        /// <param name="device">a pointer to the device to be queried.</param>
-        /// <param name="param">an attribute to be retrieved: ALC_DEVICE_SPECIFIER, ALC_CAPTURE_DEVICE_SPECIFIER, ALC_ALL_DEVICES_SPECIFIER</param>
-        /// <returns>A List of strings containing the names of the Devices.</returns>
-        public static List<string> GetStringList(IntPtr device, int param)
+        public static List<string> GetMarshaledStringList(IntPtr device, int param)
         {
             List<string> result = new List<string>();
-            IntPtr ptr = GetStringPrivate(device, param);
+            IntPtr ptr = GetString(device, param);
 
             while (Marshal.ReadByte(ptr) != 0)
             {
@@ -319,11 +283,6 @@ namespace OpenTK.Audio.OpenAL
         public unsafe static extern void GetInteger(IntPtr device, int param, int size, int* data);
         // ALC_API void            ALC_APIENTRY alcGetIntegerv( ALCdevice *device, ALCenum param, ALCsizei size, ALCint *buffer );
 
-        /// <summary>This function returns integers related to the context.</summary>
-        /// <param name="device">a pointer to the device to be queried.</param>
-        /// <param name="param">an attribute to be retrieved: ALC_MAJOR_VERSION, ALC_MINOR_VERSION, ALC_ATTRIBUTES_SIZE, ALC_ALL_ATTRIBUTES</param>
-        /// <param name="size">the size of the destination buffer provided, in number of integers.</param>
-        /// <param name="data">a pointer to the buffer to be returned</param>
         public static int GetInteger(IntPtr device, int param)
         {
             unsafe
@@ -334,18 +293,13 @@ namespace OpenTK.Audio.OpenAL
             }
         }
 
-        /// <summary>This function returns integers related to the context.</summary>
-        /// <param name="device">a pointer to the device to be queried.</param>
-        /// <param name="param">an attribute to be retrieved: ALC_MAJOR_VERSION, ALC_MINOR_VERSION, ALC_ATTRIBUTES_SIZE, ALC_ALL_ATTRIBUTES</param>
-        /// <param name="size">the size of the destination buffer provided, in number of integers.</param>
-        /// <param name="data">a pointer to the buffer to be returned</param>
         public static void GetInteger(IntPtr device, int param, int size, int[] data)
         {
             unsafe
             {
-                fixed (int* data_ptr = data)
+                fixed (int* ptr = data)
                 {
-                    GetInteger(device, param, size, data_ptr);
+                    GetInteger(device, param, size, ptr);
                 }
             }
         }
@@ -360,8 +314,18 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="format">the requested capture buffer format.</param>
         /// <param name="buffersize">the size of the capture buffer in samples, not bytes.</param>
         /// <returns>Returns the capture device pointer, or NULL on failure.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        [CLSCompliant(false), DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
         public static extern IntPtr CaptureOpenDevice(string devicename, uint frequency, int format, int buffersize);
+
+        /// <summary>This function opens a capture device by name. </summary>
+        /// <param name="devicename">a pointer to a device name string.</param>
+        /// <param name="frequency">the frequency that the buffer should be captured at.</param>
+        /// <param name="format">the requested capture buffer format.</param>
+        /// <param name="buffersize">the size of the capture buffer in samples, not bytes.</param>
+        /// <returns>Returns the capture device pointer, or NULL on failure.</returns>
+        [DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        public static extern IntPtr CaptureOpenDevice(string devicename, int frequency, int format, int buffersize);
+
         // ALC_API ALCdevice*      ALC_APIENTRY alcCaptureOpenDevice( const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize );
 
         /// <summary>This function closes the specified capture device.</summary>
@@ -391,21 +355,6 @@ namespace OpenTK.Audio.OpenAL
         [DllImport("openal32.dll", EntryPoint = "alcCaptureSamples", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern void CaptureSamples(IntPtr device, void* buffer, int samples);
         // ALC_API void            ALC_APIENTRY alcCaptureSamples( ALCdevice *device, ALCvoid *buffer, ALCsizei samples );
-
-        /// <summary>This function completes a capture operation, and does not block.</summary>
-        /// <param name="device">a pointer to a capture device.</param>
-        /// <param name="buffer">a reference to a buffer, which must be large enough to accommodate the number of samples.</param>
-        /// <param name="samples">the number of samples to be retrieved.</param>
-        public static void CaptureSamples(IntPtr device, byte[] buffer, int samples)
-        {
-            unsafe
-            {
-                fixed (byte* ptr = buffer)
-                {
-                    CaptureSamples(device, ptr, samples);
-                }
-            }
-        }
 
         #endregion Capture functions
     }

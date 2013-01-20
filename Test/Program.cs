@@ -76,10 +76,10 @@ namespace Test
 
         static void Extension(string name)
         {
-            Console.WriteLine("{0}: {1}", name, Ibasa.Audio.OpenAL.OpenAL.IsExtensionPresent(name));
+            Console.WriteLine("{0}: {1}", name, Ibasa.OpenAL.OpenAL.IsExtensionPresent(name));
         }
 
-        static void Extension(Ibasa.Audio.OpenAL.Device dev, string name)
+        static void Extension(Ibasa.OpenAL.Device dev, string name)
         {
             Console.WriteLine("{0}: {1}", name, dev.IsExtensionPresent(name));
         }
@@ -103,7 +103,7 @@ namespace Test
 
             Console.ReadLine();
 
-            foreach (var dev in Ibasa.Audio.OpenAL.Device.Devices)
+            foreach (var dev in Ibasa.OpenAL.Device.Devices)
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", dev.Name);
@@ -124,37 +124,38 @@ namespace Test
 
             Console.ReadLine();
 
-            var device = Ibasa.Audio.OpenAL.Device.DefaultDevice;
+            var device = Ibasa.OpenAL.Device.DefaultDevice;
             {
                 Console.WriteLine("------------");
                 Console.WriteLine("Name: {0}", device.Name);
+                Console.WriteLine("Version: {0}", device.Version);
                 Console.WriteLine(string.Join(", ", device.Attributes));
                 Console.WriteLine(string.Join(", ", device.Extensions));
             }
 
-            var context = new Ibasa.Audio.OpenAL.Context(device);
-            Ibasa.Audio.OpenAL.Context.MakeContextCurrent(context);
+            var context = new Ibasa.OpenAL.Context(device);
+            Ibasa.OpenAL.Context.MakeContextCurrent(context);
 
-            Console.WriteLine("Version: {0}", Ibasa.Audio.OpenAL.Context.Version);
-            Console.WriteLine("Vendor: {0}", Ibasa.Audio.OpenAL.Context.Vendor);
-            Console.WriteLine("Renderer: {0}", Ibasa.Audio.OpenAL.Context.Renderer);
-            Console.WriteLine("Extensions: {0}", Ibasa.Audio.OpenAL.Context.Extensions);
-            Console.WriteLine("Doppler Factor: {0}", Ibasa.Audio.OpenAL.Context.DopplerFactor);
-            Console.WriteLine("Speed Of Sound: {0}", Ibasa.Audio.OpenAL.Context.SpeedOfSound);
+            Console.WriteLine("Version: {0}", Ibasa.OpenAL.Context.Version);
+            Console.WriteLine("Vendor: {0}", Ibasa.OpenAL.Context.Vendor);
+            Console.WriteLine("Renderer: {0}", Ibasa.OpenAL.Context.Renderer);
+            Console.WriteLine("Extensions: {0}", Ibasa.OpenAL.Context.Extensions);
+            Console.WriteLine("Doppler Factor: {0}", Ibasa.OpenAL.Context.DopplerFactor);
+            Console.WriteLine("Speed Of Sound: {0}", Ibasa.OpenAL.Context.SpeedOfSound);
 
             Console.WriteLine("------------");
 
-            Console.WriteLine("Position: {0}", Ibasa.Audio.OpenAL.Listener.Position);
-            Console.WriteLine("Orientation: {0}", Ibasa.Audio.OpenAL.Listener.Orientation);
-            Console.WriteLine("Velocity: {0}", Ibasa.Audio.OpenAL.Listener.Velocity);
-            Console.WriteLine("Gain: {0}", Ibasa.Audio.OpenAL.Listener.Gain);
-            Console.WriteLine("EfxMetersPerUnit: {0}", Ibasa.Audio.OpenAL.Listener.EfxMetersPerUnit);
+            Console.WriteLine("Position: {0}", Ibasa.OpenAL.Listener.Position);
+            Console.WriteLine("Orientation: {0}", Ibasa.OpenAL.Listener.Orientation);
+            Console.WriteLine("Velocity: {0}", Ibasa.OpenAL.Listener.Velocity);
+            Console.WriteLine("Gain: {0}", Ibasa.OpenAL.Listener.Gain);
+            Console.WriteLine("EfxMetersPerUnit: {0}", Ibasa.OpenAL.Listener.EfxMetersPerUnit);
 
-            Ibasa.Audio.OpenAL.Source source = Ibasa.Audio.OpenAL.Source.Gen();
+            Ibasa.OpenAL.Source source = Ibasa.OpenAL.Source.Gen();
             source.Gain = 1;
             source.Looping = false;
 
-            Ibasa.Audio.OpenAL.Buffer buffer = Ibasa.Audio.OpenAL.Buffer.Gen();
+            Ibasa.OpenAL.Buffer buffer = Ibasa.OpenAL.Buffer.Gen();
 
             foreach (var item in source_sounds.Root.EnumerateFiles(".*\\.wav", System.IO.SearchOption.AllDirectories))
             {
@@ -167,12 +168,12 @@ namespace Test
                 wav.Stream.Seek(wav.DataOffset, System.IO.SeekOrigin.Begin);
                 var data = wav.Stream.ReadBytes(wav.DataLength);
 
-                buffer.BufferData(Ibasa.Audio.OpenAL.OpenAL.Format(wav.Format), data, data.Length, wav.Frequency);
+                buffer.BufferData(Ibasa.OpenAL.OpenAL.GetEnumValue("AL_FORMAT_MONO8"), data, data.Length, wav.Frequency);
 
                 source.Buffer = buffer;
                 source.Play();
 
-                while (source.State == Ibasa.Audio.OpenAL.SourceState.Playing && !Console.KeyAvailable)
+                while (source.State == Ibasa.OpenAL.SourceState.Playing && !Console.KeyAvailable)
                 {
                     System.Threading.Thread.Sleep(0);
                 }
@@ -181,12 +182,12 @@ namespace Test
                     Console.ReadKey(true);
 
                 source.Stop();
-                source.Buffer = Ibasa.Audio.OpenAL.Buffer.Null;
+                source.Buffer = Ibasa.OpenAL.Buffer.Null;
             }
 
             buffer.Delete();
             source.Delete();
-            Ibasa.Audio.OpenAL.Context.Destroy(context);
+            Ibasa.OpenAL.Context.Destroy(context);
             device.Close();
 
             Console.ReadLine();

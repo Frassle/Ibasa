@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ibasa.SharpAL;
 
-namespace Ibasa.Audio.OpenAL
+namespace Ibasa.OpenAL
 {
     public struct CaptureDevice : IEquatable<CaptureDevice>
     {
@@ -12,7 +11,7 @@ namespace Ibasa.Audio.OpenAL
         {
             if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
             {
-                var devices = OpenTK.Audio.OpenAL.Alc.GetStringList(IntPtr.Zero, OpenTK.Audio.OpenAL.Alc.ALC_CAPTURE_DEVICE_SPECIFIER);
+                var devices = OpenAL.GetStringList(Alc.ALC_CAPTURE_DEVICE_SPECIFIER);
                 return devices.Select(name => new CaptureDevice(name, frequency, format, buffersize));
             }
             else
@@ -44,10 +43,10 @@ namespace Ibasa.Audio.OpenAL
         internal CaptureDevice(string name, uint frequency, int format, int buffersize)
             : this()
         {
-            Handle = OpenTK.Audio.OpenAL.Alc.CaptureOpenDevice(name, frequency, format, buffersize);
+            Handle = Alc.CaptureOpenDevice(name, frequency, format, buffersize);
             if (Handle == IntPtr.Zero)
             {
-                throw new AudioException(
+                throw new OpenALException(
                     string.Format("CaptureOpenDevice({0}, {1}, {2}, {3}) failed.", name, frequency, format, buffersize));
             }
         }
@@ -55,7 +54,7 @@ namespace Ibasa.Audio.OpenAL
         public bool Close()
         {
             OpenAL.ThrowNullException(Handle);
-            return OpenTK.Audio.OpenAL.Alc.CaptureCloseDevice(Handle);
+            return Alc.CaptureCloseDevice(Handle);
         }
 
         public string Name
@@ -63,7 +62,7 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return OpenTK.Audio.OpenAL.Alc.GetString(Handle, OpenTK.Audio.OpenAL.Alc.ALC_CAPTURE_DEVICE_SPECIFIER);
+                return Alc.GetMarshaledString(Handle, Alc.ALC_CAPTURE_DEVICE_SPECIFIER);
             }
         }
 
@@ -72,26 +71,32 @@ namespace Ibasa.Audio.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return OpenTK.Audio.OpenAL.Alc.GetInteger(Handle, OpenTK.Audio.OpenAL.Alc.ALC_CAPTURE_SAMPLES);
+                return Alc.GetInteger(Handle, Alc.ALC_CAPTURE_SAMPLES);
             }
         }
 
         public void Start()
         {
             OpenAL.ThrowNullException(Handle);
-            OpenTK.Audio.OpenAL.Alc.CaptureStart(Handle);
+            Alc.CaptureStart(Handle);
         }
 
         public void Stop()
         {
             OpenAL.ThrowNullException(Handle);
-            OpenTK.Audio.OpenAL.Alc.CaptureStop(Handle);
+            Alc.CaptureStop(Handle);
         }
 
         public void Read(byte[] buffer, int samples)
         {
             OpenAL.ThrowNullException(Handle);
-            OpenTK.Audio.OpenAL.Alc.CaptureSamples(Handle, buffer, samples);
+            unsafe
+            {
+                fixed (byte* ptr = buffer)
+                {
+                    Alc.CaptureSamples(Handle, ptr, samples);
+                }
+            }
         }
 
         public override int GetHashCode()

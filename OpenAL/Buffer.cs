@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
 
-namespace Ibasa.Audio.OpenAL
+namespace Ibasa.OpenAL
 {
     public struct Buffer
     {
