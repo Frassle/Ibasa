@@ -87,12 +87,48 @@ namespace Ibasa.OpenAL
             return CaptureCloseDevice(Handle);
         }
 
+        public string GetString(int param)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return OpenAL.GetMarshaledString(Handle, param);
+        }
+
+        public List<string> GetStringList(int param)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return OpenAL.GetMarshaledStringList(Handle, param);
+        }
+
+        public int GetInteger(int param)
+        {
+            OpenAL.ThrowNullException(Handle);
+            return OpenAL.GetInteger(Handle, param);
+        }
+
+        public unsafe void GetInteger(int param, int size, int* data)
+        {
+            OpenAL.ThrowNullException(Handle);
+            OpenAL.GetInteger(Handle, param, size, data);
+        }
+
+        public void GetInteger(int param, int count, int[] values)
+        {
+            OpenAL.ThrowNullException(Handle);
+            unsafe
+            {
+                fixed (int* ptr = values)
+                {
+                    OpenAL.GetInteger(Handle, param, count, ptr);
+                }
+            }
+        }
+
         public string Name
         {
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return OpenAL.GetMarshaledString(Handle, ALC_CAPTURE_DEVICE_SPECIFIER);
+                return GetString(ALC_CAPTURE_DEVICE_SPECIFIER);
             }
         }
 
@@ -101,7 +137,7 @@ namespace Ibasa.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return OpenAL.GetInteger(Handle, ALC_CAPTURE_SAMPLES);
+                return GetInteger(ALC_CAPTURE_SAMPLES);
             }
         }
 
@@ -127,6 +163,12 @@ namespace Ibasa.OpenAL
                     alcCaptureSamples(Handle, ptr, samples);
                 }
             }
+        }
+
+        internal void GetError()
+        {
+            OpenAL.ThrowNullException(Handle);
+            OpenAL.GetError(Handle);
         }
 
         public override int GetHashCode()

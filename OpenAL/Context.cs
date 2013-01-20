@@ -62,7 +62,7 @@ namespace Ibasa.OpenAL
             unsafe
             {
                 Handle = CreateContext(device.Handle, null);
-                device.ThrowError();
+                device.GetError();
             }
         }
 
@@ -86,7 +86,7 @@ namespace Ibasa.OpenAL
                 }
 
                 Handle = CreateContext(device.Handle, attribs);
-                device.ThrowError();
+                device.GetError();
             }
         }
 
@@ -102,15 +102,23 @@ namespace Ibasa.OpenAL
             SuspendContext(Handle);
         }
 
-        public static bool MakeContextCurrent(Context context)
+        public static void MakeContextCurrent(Context context)
         {
-            return MakeContextCurrent(context.Handle);
+            if (!MakeContextCurrent(context.Handle))
+            {
+                context.GetDeviceError();
+            }
         }
 
         public void Destroy()
         {
             OpenAL.ThrowNullException(Handle);
             DestroyContext(Handle);
+        }
+
+        internal void GetDeviceError()
+        {
+            OpenAL.GetError(GetContextsDevice(Handle));
         }
 
         public static Context CurrentContext

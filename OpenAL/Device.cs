@@ -124,6 +124,12 @@ namespace Ibasa.OpenAL
             return OpenAL.GetInteger(Handle, param);
         }
 
+        public unsafe void GetInteger(int param, int size, int* data)
+        {
+            OpenAL.ThrowNullException(Handle);
+            OpenAL.GetInteger(Handle, param, size, data);
+        }
+
         public void GetInteger(int param, int count, int[] values)
         {
             OpenAL.ThrowNullException(Handle);
@@ -134,12 +140,6 @@ namespace Ibasa.OpenAL
                     OpenAL.GetInteger(Handle, param, count, ptr);
                 }
             }
-        }
-
-        unsafe void GetInteger(int param, int count, int* values)
-        {
-            OpenAL.ThrowNullException(Handle);
-            OpenAL.GetInteger(Handle, param, count, values);
         }
 
         public string Name
@@ -225,7 +225,7 @@ namespace Ibasa.OpenAL
             return OpenAL.GetProcAddress(Handle, funcname);
         }
 
-        internal void ThrowError()
+        internal void GetError()
         {
             OpenAL.ThrowNullException(Handle);
             OpenAL.GetError(Handle);

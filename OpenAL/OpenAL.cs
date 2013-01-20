@@ -102,6 +102,11 @@ namespace Ibasa.OpenAL
             }
         }
 
+        public static unsafe void GetInteger(int param, int size, int* data)
+        {
+            GetInteger(IntPtr.Zero, param, size, data);
+        }
+
         public static void GetInteger(int param, int size, int[] data)
         {
             unsafe
