@@ -73,40 +73,6 @@ namespace Ibasa.OpenAL
     {
         #region Constants
 
-        /**
-        * errors
-        */
-
-        /**
-        * No error
-        */
-        public const int ALC_NO_ERROR = 0;
-
-        /**
-        * No device
-        */
-        public const int ALC_INVALID_DEVICE = 0xA001;
-
-        /**
-        * invalid context ID
-        */
-        public const int ALC_INVALID_CONTEXT = 0xA002;
-
-        /**
-        * bad enum
-        */
-        public const int ALC_INVALID_ENUM = 0xA003;
-
-        /**
-        * bad value
-        */
-        public const int ALC_INVALID_VALUE = 0xA004;
-
-        /**
-        * Out of memory.
-        */
-        public const int ALC_OUT_OF_MEMORY = 0xA005;
-
 
         /**
         * The Specifier string for default device
