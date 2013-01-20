@@ -33,11 +33,15 @@ namespace Ibasa.OpenAL
 
         #endregion Capture functions
 
+        static readonly int ALC_CAPTURE_DEVICE_SPECIFIER = OpenAL.GetEnumValue("ALC_CAPTURE_DEVICE_SPECIFIER");
+        static readonly int ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER = OpenAL.GetEnumValue("ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER");
+        static readonly int ALC_CAPTURE_SAMPLES = OpenAL.GetEnumValue("ALC_CAPTURE_SAMPLES");
+
         public static IEnumerable<CaptureDevice> CaptureDevices(uint frequency, int format, int buffersize)
         {
             if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
             {
-                var devices = OpenAL.GetStringList(Alc.ALC_CAPTURE_DEVICE_SPECIFIER);
+                var devices = OpenAL.GetStringList(ALC_CAPTURE_DEVICE_SPECIFIER);
                 return devices.Select(name => new CaptureDevice(name, frequency, format, buffersize));
             }
             else
@@ -88,7 +92,7 @@ namespace Ibasa.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return Alc.GetMarshaledString(Handle, Alc.ALC_CAPTURE_DEVICE_SPECIFIER);
+                return OpenAL.GetMarshaledString(Handle, ALC_CAPTURE_DEVICE_SPECIFIER);
             }
         }
 
@@ -97,7 +101,7 @@ namespace Ibasa.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return Alc.GetInteger(Handle, Alc.ALC_CAPTURE_SAMPLES);
+                return OpenAL.GetInteger(Handle, ALC_CAPTURE_SAMPLES);
             }
         }
 

@@ -9,26 +9,6 @@ namespace Ibasa.OpenAL
 {
     public static class OpenAL
     {
-        public static string GetString(int param)
-        {
-            return Alc.GetMarshaledString(IntPtr.Zero, param);
-        }
-
-        public static List<string> GetStringList(int param)
-        {
-            return Alc.GetMarshaledStringList(IntPtr.Zero, param);
-        }
-
-        public static int GetInteger(int param)
-        {
-            return Alc.GetInteger(IntPtr.Zero, param);
-        }
-
-        public static void GetInteger(int param, int size, int[] data)
-        {
-            Alc.GetInteger(IntPtr.Zero, param, size, data);
-        }
-
         #region Extension support.
 
         /// <summary>This function queries if a specified context extension is available.</summary>
@@ -72,13 +52,73 @@ namespace Ibasa.OpenAL
 
         #endregion Extension support.
 
-        internal static void ThrowNullException(IntPtr ptr)
+        #region Query functions
+
+        [DllImport("openal32.dll", EntryPoint = "alcGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        static extern IntPtr GetString([In] IntPtr device, int param);
+        // ALC_API const ALCchar * ALC_APIENTRY alcGetString( ALCdevice *device, ALCenum param );
+
+        public static string GetString(int param)
         {
-            if (ptr == IntPtr.Zero)
+            return GetMarshaledString(IntPtr.Zero, param);
+        }
+
+        public static List<string> GetStringList(int param)
+        {
+            return GetMarshaledStringList(IntPtr.Zero, param);
+        }
+
+        public static string GetMarshaledString(IntPtr device, int param)
+        {
+            return Marshal.PtrToStringAnsi(GetString(device, param));
+        }
+
+        public static List<string> GetMarshaledStringList(IntPtr device, int param)
+        {
+            List<string> result = new List<string>();
+            IntPtr ptr = GetString(device, param);
+
+            while (Marshal.ReadByte(ptr) != 0)
             {
-                throw new NullReferenceException();
+                var str = Marshal.PtrToStringAnsi(ptr);
+                result.Add(str);
+                ptr += str.Length + 1;
+            }
+
+            return result;
+        }
+
+        [DllImport("openal32.dll", EntryPoint = "alcGetIntegerv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        internal unsafe static extern void GetInteger(IntPtr device, int param, int size, int* data);
+        // ALC_API void            ALC_APIENTRY alcGetIntegerv( ALCdevice *device, ALCenum param, ALCsizei size, ALCint *buffer );
+
+        internal static int GetInteger(IntPtr device, int param)
+        {
+            unsafe
+            {
+                int data;
+                GetInteger(device, param, 1, &data);
+                return data;
             }
         }
+
+        public static int GetInteger(int param)
+        {
+            return GetInteger(IntPtr.Zero, param);
+        }
+
+        public static void GetInteger(int param, int size, int[] data)
+        {
+            unsafe
+            {
+                fixed (int* ptr = data)
+                {
+                    GetInteger(IntPtr.Zero, param, size, ptr);
+                }
+            }
+        }
+
+        #endregion Query functions
 
         #region GetError
 
@@ -127,7 +167,15 @@ namespace Ibasa.OpenAL
         internal static readonly int ALC_INVALID_VALUE = GetEnumValue("ALC_INVALID_VALUE");
         internal static readonly int ALC_OUT_OF_MEMORY = GetEnumValue("ALC_OUT_OF_MEMORY");
 
-        #endregion Error support.
+        #endregion GetError
+
+        internal static void ThrowNullException(IntPtr ptr)
+        {
+            if (ptr == IntPtr.Zero)
+            {
+                throw new NullReferenceException();
+            }
+        }
 
         public static readonly int ALC_FREQUENCY = GetEnumValue("ALC_FREQUENCY");
         public static readonly int ALC_REFRESH = GetEnumValue("ALC_REFRESH");

@@ -27,18 +27,31 @@ namespace Ibasa.OpenAL
 
         #endregion Device Management
 
+        static readonly int ALC_DEFAULT_DEVICE_SPECIFIER = OpenAL.GetEnumValue("ALC_DEFAULT_DEVICE_SPECIFIER");
+        static readonly int ALC_DEVICE_SPECIFIER = OpenAL.GetEnumValue("ALC_DEVICE_SPECIFIER");
+        static readonly int ALC_EXTENSIONS = OpenAL.GetEnumValue("ALC_EXTENSIONS");
+
+        static readonly int ALC_MAJOR_VERSION = OpenAL.GetEnumValue("ALC_MAJOR_VERSION");
+        static readonly int ALC_MINOR_VERSION = OpenAL.GetEnumValue("ALC_MINOR_VERSION");
+
+        static readonly int ALC_ATTRIBUTES_SIZE = OpenAL.GetEnumValue("ALC_ATTRIBUTES_SIZE");
+        static readonly int ALC_ALL_ATTRIBUTES = OpenAL.GetEnumValue("ALC_ALL_ATTRIBUTES");
+
+        static readonly int ALC_DEFAULT_ALL_DEVICES_SPECIFIER = OpenAL.GetEnumValue("ALC_DEFAULT_ALL_DEVICES_SPECIFIER");
+        static readonly int ALC_ALL_DEVICES_SPECIFIER = OpenAL.GetEnumValue("ALC_ALL_DEVICES_SPECIFIER");
+
         public static IEnumerable<Device> Devices
         {
             get
             {
                 if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_ALL_EXT"))
                 {
-                    var devices = OpenAL.GetStringList(Alc.ALC_ALL_DEVICES_SPECIFIER);
+                    var devices = OpenAL.GetStringList(ALC_ALL_DEVICES_SPECIFIER);
                     return devices.Select(name => new Device(name));
                 }
                 else if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_EXT"))
                 {
-                    var devices = OpenAL.GetStringList(Alc.ALC_DEVICE_SPECIFIER);
+                    var devices = OpenAL.GetStringList(ALC_DEVICE_SPECIFIER);
                     return devices.Select(name => new Device(name));
                 }
                 else
@@ -54,12 +67,12 @@ namespace Ibasa.OpenAL
             {
                 if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_ALL_EXT"))
                 {
-                    var device = OpenAL.GetString(Alc.ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
+                    var device = OpenAL.GetString(ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
                     return new Device(device);
                 }
                 else if (OpenAL.IsExtensionPresent("ALC_ENUMERATE_EXT"))
                 {
-                    var device = OpenAL.GetString(Alc.ALC_DEFAULT_DEVICE_SPECIFIER);
+                    var device = OpenAL.GetString(ALC_DEFAULT_DEVICE_SPECIFIER);
                     return new Device(device);
                 }
                 else
@@ -96,19 +109,19 @@ namespace Ibasa.OpenAL
         public string GetString(int param)
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.GetMarshaledString(Handle, param);
+            return OpenAL.GetMarshaledString(Handle, param);
         }
 
         public List<string> GetStringList(int param)
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.GetMarshaledStringList(Handle, param);
+            return OpenAL.GetMarshaledStringList(Handle, param);
         }
 
         public int GetInteger(int param)
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.GetInteger(Handle, param);
+            return OpenAL.GetInteger(Handle, param);
         }
 
         public void GetInteger(int param, int count, int[] values)
@@ -118,7 +131,7 @@ namespace Ibasa.OpenAL
             {
                 fixed (int* ptr = values)
                 {
-                    Alc.GetInteger(Handle, param, count, ptr);
+                    OpenAL.GetInteger(Handle, param, count, ptr);
                 }
             }
         }
@@ -126,7 +139,7 @@ namespace Ibasa.OpenAL
         unsafe void GetInteger(int param, int count, int* values)
         {
             OpenAL.ThrowNullException(Handle);
-            Alc.GetInteger(Handle, param, count, values);
+            OpenAL.GetInteger(Handle, param, count, values);
         }
 
         public string Name
@@ -134,7 +147,7 @@ namespace Ibasa.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                return GetString(Alc.ALC_DEVICE_SPECIFIER);
+                return GetString(ALC_DEVICE_SPECIFIER);
             }
         }
 
@@ -143,8 +156,8 @@ namespace Ibasa.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                int major = GetInteger(Alc.ALC_MAJOR_VERSION);
-                int minor = GetInteger(Alc.ALC_MINOR_VERSION);
+                int major = GetInteger(ALC_MAJOR_VERSION);
+                int minor = GetInteger(ALC_MINOR_VERSION);
                 return new Version(major, minor);
             }
         }
@@ -157,10 +170,10 @@ namespace Ibasa.OpenAL
 
                 unsafe
                 {
-                    int attributes_size = GetInteger(Alc.ALC_ATTRIBUTES_SIZE);
+                    int attributes_size = GetInteger(ALC_ATTRIBUTES_SIZE);
 
                     int* attributes = stackalloc int[attributes_size];
-                    GetInteger(Alc.ALC_ALL_ATTRIBUTES, attributes_size, attributes);
+                    GetInteger(ALC_ALL_ATTRIBUTES, attributes_size, attributes);
 
                     var dictionary = new Dictionary<int, int>();
 
@@ -182,7 +195,7 @@ namespace Ibasa.OpenAL
             get
             {
                 OpenAL.ThrowNullException(Handle);
-                var value = GetString(Alc.ALC_EXTENSIONS);
+                var value = GetString(ALC_EXTENSIONS);
                 if (value == null)
                 {
                     return null;
