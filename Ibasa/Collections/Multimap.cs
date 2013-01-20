@@ -81,7 +81,7 @@ namespace Ibasa.Collections
             }
         }
 
-        public bool TryGetValues(TKey key, out IEnumerable<TValue> values)
+        public bool TryGetValue(TKey key, out IEnumerable<TValue> values)
         {
             HashSet<TValue> set = null;
             bool result = map.TryGetValue(key, out set);
