@@ -2,11 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
+using System.Security;
 
 namespace Ibasa.OpenAL
 {
     public struct Device : IEquatable<Device>
     {
+        #region Device Management
+
+        /// <summary>This function opens a device by name.</summary>
+        /// <param name="devicename">a null-terminated string describing a device.</param>
+        /// <returns>Returns a pointer to the opened device. The return value will be NULL if there is an error.</returns>
+        [DllImport("openal32.dll", EntryPoint = "alcOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        static extern IntPtr OpenDevice([In] string devicename);
+        // ALC_API ALCdevice *     ALC_APIENTRY alcOpenDevice( const ALCchar *devicename );
+
+        /// <summary>This function closes a device by name.</summary>
+        /// <param name="device">a pointer to an opened device</param>
+        /// <returns>True will be returned on success or False on failure. Closing a device will fail if the device contains any contexts or buffers.</returns>
+        [DllImport("openal32.dll", EntryPoint = "alcCloseDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        static extern bool CloseDevice([In] IntPtr device);
+        // ALC_API ALCboolean      ALC_APIENTRY alcCloseDevice( ALCdevice *device );
+
+        #endregion Device Management
+
         public static IEnumerable<Device> Devices
         {
             get
@@ -60,7 +80,7 @@ namespace Ibasa.OpenAL
         internal Device(string name)
             : this()
         {
-            Handle = Alc.OpenDevice(name);
+            Handle = OpenDevice(name);
             if (Handle == IntPtr.Zero)
             {
                 throw new OpenALException(string.Format("OpenDevice({0}) failed.", name));
@@ -70,7 +90,7 @@ namespace Ibasa.OpenAL
         public bool Close()
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.CloseDevice(Handle);
+            return CloseDevice(Handle);
         }
 
         public string GetString(int param)
