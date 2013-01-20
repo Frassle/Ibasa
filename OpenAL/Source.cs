@@ -9,17 +9,17 @@ namespace Ibasa.OpenAL
 {
     public enum SourceType
     {
-        Static = OpenTK.Audio.OpenAL.ALSourceType.Static,
-        Streaming = OpenTK.Audio.OpenAL.ALSourceType.Streaming,
-        Undetermined = OpenTK.Audio.OpenAL.ALSourceType.Undetermined,
+        Static = AlSourceType.Static,
+        Streaming = AlSourceType.Streaming,
+        Undetermined = AlSourceType.Undetermined,
     }
 
     public enum SourceState
     {
-        Initial = OpenTK.Audio.OpenAL.ALSourceState.Initial,
-        Paused = OpenTK.Audio.OpenAL.ALSourceState.Paused,
-        Playing = OpenTK.Audio.OpenAL.ALSourceState.Playing,
-        Stopped = OpenTK.Audio.OpenAL.ALSourceState.Stopped,
+        Initial = AlSourceState.Initial,
+        Paused = AlSourceState.Paused,
+        Playing = AlSourceState.Playing,
+        Stopped = AlSourceState.Stopped,
     }
 
     public struct Source
@@ -32,17 +32,17 @@ namespace Ibasa.OpenAL
             : this()
         {
             Id = sid;
-            Contract.Assert(Id == 0 || OpenTK.Audio.OpenAL.AL.IsSource(Id));
+            Contract.Assert(Id == 0 || Al.IsSource(Id));
         }
 
         public static Source Gen()
         {
-            return new Source(OpenTK.Audio.OpenAL.AL.GenSource());
+            return new Source(Al.GenSource());
         }
 
         public void Delete()
         {
-            OpenTK.Audio.OpenAL.AL.DeleteSource(Id);
+            Al.DeleteSource(Id);
         }
 
         public SourceType Type
@@ -50,7 +50,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int type;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.SourceType, out type);
+                Al.GetSource(Id, AlGetSourcei.SourceType, out type);
                 return (SourceType)type;
             }
         }
@@ -60,7 +60,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int state;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.SourceState, out state);
+                Al.GetSource(Id, AlGetSourcei.SourceState, out state);
                 return (SourceState)state;
             }
         }
@@ -70,12 +70,12 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.ByteOffset, out value);
+                Al.GetSource(Id, AlGetSourcei.ByteOffset, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.ByteOffset, value);
+                Al.Source(Id, AlSourcei.ByteOffset, value);
             }
         }
 
@@ -84,12 +84,12 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.SampleOffset, out value);
+                Al.GetSource(Id, AlGetSourcei.SampleOffset, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.SampleOffset, value);
+                Al.Source(Id, AlSourcei.SampleOffset, value);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.BuffersProcessed, out value);
+                Al.GetSource(Id, AlGetSourcei.BuffersProcessed, out value);
                 return value;
             }
         }
@@ -108,7 +108,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.BuffersQueued, out value);
+                Al.GetSource(Id, AlGetSourcei.BuffersQueued, out value);
                 return value;
             }
         }
@@ -118,12 +118,12 @@ namespace Ibasa.OpenAL
             get
             {
                 int id;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALGetSourcei.Buffer, out id);
+                Al.GetSource(Id, AlGetSourcei.Buffer, out id);
                 return new Buffer((uint)id);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcei.Buffer, (int)value.Id);
+                Al.Source(Id, AlSourcei.Buffer, (int)value.Id);
             }
         }
 
@@ -132,12 +132,12 @@ namespace Ibasa.OpenAL
             get
             {
                 bool value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourceb.Looping, out value);
+                Al.GetSource(Id, AlSourceb.Looping, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourceb.Looping, value);
+                Al.Source(Id, AlSourceb.Looping, value);
             }
         }
 
@@ -146,12 +146,12 @@ namespace Ibasa.OpenAL
             get
             {
                 bool value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourceb.SourceRelative, out value);
+                Al.GetSource(Id, AlSourceb.SourceRelative, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourceb.SourceRelative, value);
+                Al.Source(Id, AlSourceb.SourceRelative, value);
             }
         }
 
@@ -160,12 +160,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float x, y, z;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSource3f.Direction, out x, out y, out z);
+                Al.GetSource(Id, AlSource3f.Direction, out x, out y, out z);
                 return new Vector3f(x, y, z);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSource3f.Direction, value.X, value.Y, value.Z);
+                Al.Source(Id, AlSource3f.Direction, value.X, value.Y, value.Z);
             }
         }
 
@@ -174,12 +174,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float x, y, z;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSource3f.Position, out x, out y, out z);
+                Al.GetSource(Id, AlSource3f.Position, out x, out y, out z);
                 return new Point3f(x, y, z);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSource3f.Position, value.X, value.Y, value.Z);
+                Al.Source(Id, AlSource3f.Position, value.X, value.Y, value.Z);
             }
         }
 
@@ -188,12 +188,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float x, y, z;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSource3f.Velocity, out x, out y, out z);
+                Al.GetSource(Id, AlSource3f.Velocity, out x, out y, out z);
                 return new Vector3f(x, y, z);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSource3f.Velocity, value.X, value.Y, value.Z);
+                Al.Source(Id, AlSource3f.Velocity, value.X, value.Y, value.Z);
             }
         }
 
@@ -202,12 +202,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeInnerAngle, out value);
+                Al.GetSource(Id, AlSourcef.ConeInnerAngle, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeInnerAngle, value);
+                Al.Source(Id, AlSourcef.ConeInnerAngle, value);
             }
         }
 
@@ -216,12 +216,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterAngle, out value);
+                Al.GetSource(Id, AlSourcef.ConeOuterAngle, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterAngle, value);
+                Al.Source(Id, AlSourcef.ConeOuterAngle, value);
             }
         }
 
@@ -230,12 +230,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterGain, out value);
+                Al.GetSource(Id, AlSourcef.ConeOuterGain, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ConeOuterGain, value);
+                Al.Source(Id, AlSourcef.ConeOuterGain, value);
             }
         }
 
@@ -244,12 +244,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxAirAbsorptionFactor, out value);
+                Al.GetSource(Id, AlSourcef.EfxAirAbsorptionFactor, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxAirAbsorptionFactor, value);
+                Al.Source(Id, AlSourcef.EfxAirAbsorptionFactor, value);
             }
         }
 
@@ -258,12 +258,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxConeOuterGainHighFrequency, out value);
+                Al.GetSource(Id, AlSourcef.EfxConeOuterGainHighFrequency, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxConeOuterGainHighFrequency, value);
+                Al.Source(Id, AlSourcef.EfxConeOuterGainHighFrequency, value);
             }
         }
 
@@ -272,12 +272,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxRoomRolloffFactor, out value);
+                Al.GetSource(Id, AlSourcef.EfxRoomRolloffFactor, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.EfxRoomRolloffFactor, value);
+                Al.Source(Id, AlSourcef.EfxRoomRolloffFactor, value);
             }
         }
 
@@ -286,12 +286,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.Gain, out value);
+                Al.GetSource(Id, AlSourcef.Gain, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.Gain, value);
+                Al.Source(Id, AlSourcef.Gain, value);
             }
         }
 
@@ -300,12 +300,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxDistance, out value);
+                Al.GetSource(Id, AlSourcef.MaxDistance, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxDistance, value);
+                Al.Source(Id, AlSourcef.MaxDistance, value);
             }
         }
 
@@ -314,12 +314,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxGain, out value);
+                Al.GetSource(Id, AlSourcef.MaxGain, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.MaxGain, value);
+                Al.Source(Id, AlSourcef.MaxGain, value);
             }
         }
 
@@ -328,12 +328,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.MinGain, out value);
+                Al.GetSource(Id, AlSourcef.MinGain, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.MinGain, value);
+                Al.Source(Id, AlSourcef.MinGain, value);
             }
         }
 
@@ -342,12 +342,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.Pitch, out value);
+                Al.GetSource(Id, AlSourcef.Pitch, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.Pitch, value);
+                Al.Source(Id, AlSourcef.Pitch, value);
             }
         }
 
@@ -356,12 +356,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.ReferenceDistance, out value);
+                Al.GetSource(Id, AlSourcef.ReferenceDistance, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.ReferenceDistance, value);
+                Al.Source(Id, AlSourcef.ReferenceDistance, value);
             }
         }
 
@@ -370,12 +370,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.RolloffFactor, out value);
+                Al.GetSource(Id, AlSourcef.RolloffFactor, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.RolloffFactor, value);
+                Al.Source(Id, AlSourcef.RolloffFactor, value);
             }
         }
 
@@ -384,38 +384,38 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetSource(Id, OpenTK.Audio.OpenAL.ALSourcef.SecOffset, out value);
+                Al.GetSource(Id, AlSourcef.SecOffset, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Source(Id, OpenTK.Audio.OpenAL.ALSourcef.SecOffset, value);
+                Al.Source(Id, AlSourcef.SecOffset, value);
             }
         }
 
         public void Pause()
         {
-            OpenTK.Audio.OpenAL.AL.SourcePause(Id);
+            Al.SourcePause(Id);
         }
 
         public void Play()
         {
-            OpenTK.Audio.OpenAL.AL.SourcePlay(Id);
+            Al.SourcePlay(Id);
         }
 
         public void Rewind()
         {
-            OpenTK.Audio.OpenAL.AL.SourceRewind(Id);
+            Al.SourceRewind(Id);
         }
 
         public void Stop()
         {
-            OpenTK.Audio.OpenAL.AL.SourceStop(Id);
+            Al.SourceStop(Id);
         }
 
         public void Queue(Buffer buffer)
         {
-            OpenTK.Audio.OpenAL.AL.SourceQueueBuffer(Id, buffer.Id);
+            Al.SourceQueueBuffer(Id, buffer.Id);
         }
 
         public void Queue(Buffer[] buffers)
@@ -425,19 +425,19 @@ namespace Ibasa.OpenAL
             {
                 bids[i] = buffers[i].Id;
             }
-            OpenTK.Audio.OpenAL.AL.SourceQueueBuffers(Id, buffers.Length, bids);
+            Al.SourceQueueBuffers(Id, buffers.Length, bids);
         }
 
         public Buffer Unqueue()
         {
-            var bid = OpenTK.Audio.OpenAL.AL.SourceUnqueueBuffer(Id);
+            var bid = Al.SourceUnqueueBuffer(Id);
             return new Buffer(bid);
         }
 
         public Buffer[] Unqueue(int count)
         {
             uint[] bids = new uint[count];
-            OpenTK.Audio.OpenAL.AL.SourceUnqueueBuffers(Id, count, bids);
+            Al.SourceUnqueueBuffers(Id, count, bids);
             var buffers = new Buffer[count];
             for (int i = 0; i < count; ++i)
             {

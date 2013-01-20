@@ -16,22 +16,22 @@ namespace Ibasa.OpenAL
             : this()
         {
             Id = bid;
-            Contract.Assert(Id == 0 || OpenTK.Audio.OpenAL.AL.IsBuffer(Id));
+            Contract.Assert(Id == 0 || Al.IsBuffer(Id));
         }
 
         public static Buffer Gen()
         {
-            return new Buffer(OpenTK.Audio.OpenAL.AL.GenBuffer());
+            return new Buffer(Al.GenBuffer());
         }
 
         public void Delete()
         {
-            OpenTK.Audio.OpenAL.AL.DeleteBuffer(Id);
+            Al.DeleteBuffer(Id);
         }
 
         public void BufferData(int format, byte[] data, int count, int frequency)
         {
-            OpenTK.Audio.OpenAL.AL.BufferData(Id, format, data, count, frequency);
+            Al.BufferData(Id, format, data, count, frequency);
         }
 
         public int Bits
@@ -39,7 +39,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Bits, out value);
+                Al.GetBuffer(Id, AlGetBufferi.Bits, out value);
                 return value;
             }
         }
@@ -49,7 +49,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Channels, out value);
+                Al.GetBuffer(Id, AlGetBufferi.Channels, out value);
                 return value;
             }
         }
@@ -59,7 +59,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Frequency, out value);
+                Al.GetBuffer(Id, AlGetBufferi.Frequency, out value);
                 return value;
             }
         }
@@ -69,7 +69,7 @@ namespace Ibasa.OpenAL
             get
             {
                 int value;
-                OpenTK.Audio.OpenAL.AL.GetBuffer(Id, OpenTK.Audio.OpenAL.ALGetBufferi.Size, out value);
+                Al.GetBuffer(Id, AlGetBufferi.Size, out value);
                 return value;
             }
         }

@@ -223,6 +223,40 @@ namespace Ibasa.OpenAL
         public static extern int GetError([In] IntPtr device);
         // ALC_API ALCenum         ALC_APIENTRY alcGetError( ALCdevice *device );
 
+        internal static void ThrowError(IntPtr device)
+        {
+            var error = Alc.GetError(device);
+
+            if (error == Alc.ALC_NO_ERROR)
+            {
+                return;
+            }
+            else if (error == Alc.ALC_INVALID_DEVICE)
+            {
+                throw new OpenALException("No Device. The device handle or specifier names an inaccessible driver/server.");
+            }
+            else if (error == Alc.ALC_INVALID_CONTEXT)
+            {
+                throw new OpenALException("Invalid context ID. The Context argument does not name a valid context.");
+            }
+            else if (error == Alc.ALC_INVALID_ENUM)
+            {
+                throw new OpenALException("Bad enum. A token used is not valid, or not applicable.");
+            }
+            else if (error == Alc.ALC_INVALID_VALUE)
+            {
+                throw new OpenALException("Bad value. A value (e.g. Attribute) is not valid, or not applicable.");
+            }
+            else if (error == Alc.ALC_OUT_OF_MEMORY)
+            {
+                throw new OpenALException("Out of memory. Unable to allocate memory.");
+            }
+            else
+            {
+                throw new OpenALException(string.Format("Unknown OpenAL error: {0}", error));
+            }
+        }
+
         #endregion Error support.
 
         #region Extension support.

@@ -11,7 +11,6 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-using OpenTK;
 using Ibasa.Numerics.Geometry;
 
 /* Type Mapping
@@ -64,54 +63,46 @@ typedef void ALvoid;
  * void
 */
 
-namespace OpenTK.Audio.OpenAL
+namespace Ibasa.OpenAL
 {
     /// <summary>
     /// Provides access to the OpenAL 1.1 flat API.
     /// </summary>
-    public static partial class AL
+    internal static class Al
     {
-
-        #region Constants
-
-        internal const string Lib = "openal32.dll";
-        private const CallingConvention Style = CallingConvention.Cdecl;
-
-        #endregion Constants
-
         #region Renderer State management
 
         /// <summary>This function enables a feature of the OpenAL driver. There are no capabilities defined in OpenAL 1.1 to be used with this function, but it may be used by an extension.</summary>
         /// <param name="capability">The name of a capability to enable.</param>
-        [DllImport(AL.Lib, EntryPoint = "alEnable", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Enable(ALCapability capability);
+        [DllImport("openal32.dll", EntryPoint = "alEnable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Enable(AlCapability capability);
         //AL_API void AL_APIENTRY alEnable( ALenum capability );
 
         /// <summary>This function disables a feature of the OpenAL driver.</summary>
         /// <param name="capability">The name of a capability to disable.</param>
-        [DllImport(AL.Lib, EntryPoint = "alDisable", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Disable(ALCapability capability);
+        [DllImport("openal32.dll", EntryPoint = "alDisable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Disable(AlCapability capability);
         // AL_API void AL_APIENTRY alDisable( ALenum capability ); 
 
         /// <summary>This function returns a boolean indicating if a specific feature is enabled in the OpenAL driver.</summary>
         /// <param name="capability">The name of a capability to enable.</param>
         /// <returns>True if enabled, False if disabled.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alIsEnabled", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern bool IsEnabled(ALCapability capability);
+        [DllImport("openal32.dll", EntryPoint = "alIsEnabled", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern bool IsEnabled(AlCapability capability);
         // AL_API ALboolean AL_APIENTRY alIsEnabled( ALenum capability ); 
 
         #endregion Renderer State management
 
         #region State retrieval
 
-        [DllImport(AL.Lib, EntryPoint = "alGetString", ExactSpelling = true, CallingConvention = AL.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        private static extern IntPtr GetStringPrivate(ALGetString param); // accepts the enums AlError, AlContextString
+        [DllImport("openal32.dll", EntryPoint = "alGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        private static extern IntPtr GetStringPrivate(AlGetString param); // accepts the enums AlError, AlContextString
         // AL_API const ALchar* AL_APIENTRY alGetString( ALenum param );
 
         /// <summary>This function retrieves an OpenAL string property.</summary>
         /// <param name="param">The property to be returned: Vendor, Version, Renderer and Extensions</param>
         /// <returns>Returns a pointer to a null-terminated string.</returns>
-        public static string Get(ALGetString param)
+        public static string Get(AlGetString param)
         {
             return Marshal.PtrToStringAnsi(GetStringPrivate(param));
         }
@@ -119,9 +110,9 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function retrieves an OpenAL string property.</summary>
         /// <param name="param">The human-readable errorstring to be returned.</param>
         /// <returns>Returns a pointer to a null-terminated string.</returns>
-        public static string GetErrorString(ALError param)
+        public static string GetErrorString(AlError param)
         {
-            return Marshal.PtrToStringAnsi(GetStringPrivate((ALGetString)param));
+            return Marshal.PtrToStringAnsi(GetStringPrivate((AlGetString)param));
         }
 
         /* no functions return more than 1 result ..
@@ -135,7 +126,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function returns a boolean OpenAL state.</summary>
         /// <param name="param">the state to be queried: AL_DOPPLER_FACTOR, AL_SPEED_OF_SOUND, AL_DISTANCE_MODEL</param>
         /// <returns>The boolean state described by param will be returned.</returns>
-        [DllImport( AL.Lib, EntryPoint = "alGetBoolean", ExactSpelling = true, CallingConvention = AL.Style ), SuppressUnmanagedCodeSecurity( )]
+        [DllImport( "openal32.dll", EntryPoint = "alGetBoolean", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl ), SuppressUnmanagedCodeSecurity( )]
         public static extern bool Get( ALGetBoolean param );
         // AL_API ALboolean AL_APIENTRY alGetBoolean( ALenum param );
         */
@@ -143,30 +134,30 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function returns an integer OpenAL state.</summary>
         /// <param name="param">the state to be queried: DistanceModel.</param>
         /// <returns>The integer state described by param will be returned.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alGetInteger", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern int Get(ALGetInteger param);
+        [DllImport("openal32.dll", EntryPoint = "alGetInteger", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern int Get(AlGetInteger param);
         // AL_API ALint AL_APIENTRY alGetInteger( ALenum param );
 
         /// <summary>This function returns a floating-point OpenAL state.</summary>
         /// <param name="param">the state to be queried: DopplerFactor, SpeedOfSound.</param>
         /// <returns>The floating-point state described by param will be returned.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alGetFloat", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern float Get(ALGetFloat param);
+        [DllImport("openal32.dll", EntryPoint = "alGetFloat", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern float Get(AlGetFloat param);
         // AL_API ALfloat AL_APIENTRY alGetFloat( ALenum param );
 
         /* disabled due to no token using it
         /// <summary>This function returns a double-precision floating-point OpenAL state.</summary>
         /// <param name="param">the state to be queried: AL_DOPPLER_FACTOR, AL_SPEED_OF_SOUND, AL_DISTANCE_MODEL</param>
         /// <returns>The double value described by param will be returned.</returns>
-        [DllImport( AL.Lib, EntryPoint = "alGetDouble", ExactSpelling = true, CallingConvention = AL.Style ), SuppressUnmanagedCodeSecurity( )]
+        [DllImport( "openal32.dll", EntryPoint = "alGetDouble", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl ), SuppressUnmanagedCodeSecurity( )]
         public static extern double Get( ALGetDouble param );
         // AL_API ALdouble AL_APIENTRY alGetDouble( ALenum param );
         */
 
         /// <summary>Error support. Obtain the most recent error generated in the AL state machine. When an error is detected by AL, a flag is set and the error code is recorded. Further errors, if they occur, do not affect this recorded code. When alGetError is called, the code is returned and the flag is cleared, so that a further error will again record its code.</summary>
         /// <returns>The first error that occured. can be used with AL.GetString. Returns an Alenum representing the error state. When an OpenAL error occurs, the error state is set and will not be changed until the error state is retrieved using alGetError. Whenever alGetError is called, the error state is cleared and the last state (the current state when the call was made) is returned. To isolate error detection to a specific portion of code, alGetError should be called before the isolated section to clear the current error state.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alGetError", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern ALError GetError();
+        [DllImport("openal32.dll", EntryPoint = "alGetError", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern AlError GetError();
         // AL_API ALenum AL_APIENTRY alGetError( void );
 
         #endregion State retrieval
@@ -176,21 +167,21 @@ namespace OpenTK.Audio.OpenAL
         ///<summary>This function tests if a specific Extension is available for the OpenAL driver.</summary>
         /// <param name="extname">A string naming the desired extension. Example: "EAX-RAM"</param>
         /// <returns>Returns True if the Extension is available or False if not available.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alIsExtensionPresent", ExactSpelling = true, CallingConvention = AL.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alIsExtensionPresent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
         public static extern bool IsExtensionPresent([In] string extname);
         // AL_API ALboolean AL_APIENTRY alIsExtensionPresent( const ALchar* extname );
 
         /// <summary>This function returns the address of an OpenAL extension function. Handle with care.</summary>
         /// <param name="fname">A string containing the function name.</param>
         /// <returns>The return value is a pointer to the specified function. The return value will be IntPtr.Zero if the function is not found.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alGetProcAddress", ExactSpelling = true, CallingConvention = AL.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alGetProcAddress", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
         public static extern IntPtr GetProcAddress([In] string fname);
         // AL_API void* AL_APIENTRY alGetProcAddress( const ALchar* fname );
 
         /// <summary>This function returns the enumeration value of an OpenAL token, described by a string.</summary>
         /// <param name="ename">A string describing an OpenAL token. Example "AL_DISTANCE_MODEL"</param>
         /// <returns>Returns the actual ALenum described by a string. Returns 0 if the string doesn’t describe a valid OpenAL token.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alGetEnumValue", ExactSpelling = true, CallingConvention = AL.Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alGetEnumValue", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
         public static extern int GetEnumValue([In] string ename);
         // AL_API ALenum AL_APIENTRY alGetEnumValue( const ALchar* ename );
 
@@ -211,37 +202,37 @@ namespace OpenTK.Audio.OpenAL
         #region Set Listener parameters
 
         /// <summary>This function sets a floating-point property for the listener.</summary>
-        /// <param name="param">The name of the attribute to be set: ALListenerf.Gain</param>
+        /// <param name="param">The name of the attribute to be set: AlListenerf.Gain</param>
         /// <param name="value">The float value to set the attribute to.</param>
-        [DllImport(AL.Lib, EntryPoint = "alListenerf", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Listener(ALListenerf param, float value);
+        [DllImport("openal32.dll", EntryPoint = "alListenerf", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Listener(AlListenerf param, float value);
         // AL_API void AL_APIENTRY alListenerf( ALenum param, ALfloat value );
 
         /// <summary>This function sets a floating-point property for the listener.</summary>
-        /// <param name="param">The name of the attribute to set: ALListener3f.Position, ALListener3f.Velocity</param>
+        /// <param name="param">The name of the attribute to set: AlListener3f.Position, AlListener3f.Velocity</param>
         /// <param name="value1">The value to set the attribute to.</param>
         /// <param name="value2">The value to set the attribute to.</param>
         /// <param name="value3">The value to set the attribute to.</param>
-        [DllImport(AL.Lib, EntryPoint = "alListener3f", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Listener(ALListener3f param, float value1, float value2, float value3);
+        [DllImport("openal32.dll", EntryPoint = "alListener3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Listener(AlListener3f param, float value1, float value2, float value3);
         // AL_API void AL_APIENTRY alListener3f( ALenum param, ALfloat value1, ALfloat value2, ALfloat value3 );
 
         /// <summary>This function sets a Math.Vector3 property for the listener.</summary>
-        /// <param name="param">The name of the attribute to set: ALListener3f.Position, ALListener3f.Velocity</param>
+        /// <param name="param">The name of the attribute to set: AlListener3f.Position, AlListener3f.Velocity</param>
         /// <param name="values">The Math.Vector3 to set the attribute to.</param>
-        public static void Listener(ALListener3f param, ref Vector3f values)
+        public static void Listener(AlListener3f param, ref Vector3f values)
         {
             Listener(param, values.X, values.Y, values.Z);
         }
 
-        [DllImport(AL.Lib, EntryPoint = "alListenerfv", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        unsafe private static extern void ListenerPrivate(ALListenerfv param, float* values);
+        [DllImport("openal32.dll", EntryPoint = "alListenerfv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        unsafe private static extern void ListenerPrivate(AlListenerfv param, float* values);
         // AL_API void AL_APIENTRY alListenerfv( ALenum param, const ALfloat* values );
 
         /// <summary>This function sets a floating-point vector property of the listener.</summary>
-        /// <param name="param">The name of the attribute to be set: ALListener3f.Position, ALListener3f.Velocity, ALListenerfv.Orientation</param>
+        /// <param name="param">The name of the attribute to be set: AlListener3f.Position, AlListener3f.Velocity, AlListenerfv.Orientation</param>
         /// <param name="values">Pointer to floating-point vector values.</param>
-        public static void Listener(ALListenerfv param, ref float[] values)
+        public static void Listener(AlListenerfv param, ref float[] values)
         {
             unsafe
             {
@@ -253,10 +244,10 @@ namespace OpenTK.Audio.OpenAL
         }
 
         /// <summary>This function sets two Math.Vector3 properties of the listener.</summary>
-        /// <param name="param">The name of the attribute to be set: ALListenerfv.Orientation</param>
+        /// <param name="param">The name of the attribute to be set: AlListenerfv.Orientation</param>
         /// <param name="at">A Math.Vector3 for the At-Vector.</param>
         /// <param name="up">A Math.Vector3 for the Up-Vector.</param>
-        public static void Listener(ALListenerfv param, ref Vector3f at, ref Vector3f up)
+        public static void Listener(AlListenerfv param, ref Vector3f at, ref Vector3f up)
         {
             float[] temp = new float[6];
 
@@ -287,25 +278,25 @@ namespace OpenTK.Audio.OpenAL
         #region Get Listener parameters
 
         /// <summary>This function retrieves a floating-point property of the listener.</summary>
-        /// <param name="param">the name of the attribute to be retrieved: ALListenerf.Gain</param>
+        /// <param name="param">the name of the attribute to be retrieved: AlListenerf.Gain</param>
         /// <param name="value">a pointer to the floating-point value being retrieved.</param>
-        [DllImport(AL.Lib, EntryPoint = "alGetListenerf", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void GetListener(ALListenerf param, [Out] out float value);
+        [DllImport("openal32.dll", EntryPoint = "alGetListenerf", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void GetListener(AlListenerf param, [Out] out float value);
         // AL_API void AL_APIENTRY alGetListenerf( ALenum param, ALfloat* value );
 
         /// <summary>This function retrieves a set of three floating-point values from a property of the listener.</summary>
-        /// <param name="param">The name of the attribute to be retrieved: ALListener3f.Position, ALListener3f.Velocity</param>
+        /// <param name="param">The name of the attribute to be retrieved: AlListener3f.Position, AlListener3f.Velocity</param>
         /// <param name="value1">The first floating-point value being retrieved.</param>
         /// <param name="value2">The second floating-point value  being retrieved.</param>
         /// <param name="value3">The third floating-point value  being retrieved.</param>
-        [DllImport(AL.Lib, EntryPoint = "alGetListener3f", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void GetListener(ALListener3f param, [Out] out float value1, [Out] out float value2, [Out] out float value3);
+        [DllImport("openal32.dll", EntryPoint = "alGetListener3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void GetListener(AlListener3f param, [Out] out float value1, [Out] out float value2, [Out] out float value3);
         // AL_API void AL_APIENTRY alGetListener3f( ALenum param, ALfloat *value1, ALfloat *value2, ALfloat *value3 );
 
         /// <summary>This function retrieves a Math.Vector3 from a property of the listener.</summary>
-        /// <param name="param">The name of the attribute to be retrieved: ALListener3f.Position, ALListener3f.Velocity</param>
+        /// <param name="param">The name of the attribute to be retrieved: AlListener3f.Position, AlListener3f.Velocity</param>
         /// <param name="values">A Math.Vector3 to hold the three floats being retrieved.</param>
-        public static void GetListener(ALListener3f param, out Vector3f values)
+        public static void GetListener(AlListener3f param, out Vector3f values)
         {
             float x, y, z;
             GetListener(param, out x, out y, out z);
@@ -313,17 +304,17 @@ namespace OpenTK.Audio.OpenAL
         }
 
         /// <summary>This function retrieves a floating-point vector property of the listener. You must pin it manually.</summary>
-        /// <param name="param">the name of the attribute to be retrieved: ALListener3f.Position, ALListener3f.Velocity, ALListenerfv.Orientation</param>
+        /// <param name="param">the name of the attribute to be retrieved: AlListener3f.Position, AlListener3f.Velocity, AlListenerfv.Orientation</param>
         /// <param name="values">A pointer to the floating-point vector value being retrieved.</param>
-        [DllImport(AL.Lib, EntryPoint = "alGetListenerfv", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        unsafe public static extern void GetListener(ALListenerfv param, float* values);
+        [DllImport("openal32.dll", EntryPoint = "alGetListenerfv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        unsafe public static extern void GetListener(AlListenerfv param, float* values);
         // AL_API void AL_APIENTRY alGetListenerfv( ALenum param, ALfloat* values );
 
         /// <summary>This function retrieves two Math.Vector3 properties of the listener.</summary>
-        /// <param name="param">the name of the attribute to be retrieved: ALListenerfv.Orientation</param>
+        /// <param name="param">the name of the attribute to be retrieved: AlListenerfv.Orientation</param>
         /// <param name="at">A Math.Vector3 for the At-Vector.</param>
         /// <param name="up">A Math.Vector3 for the Up-Vector.</param>
-        public static void GetListener(ALListenerfv param, out Vector3f at, out Vector3f up)
+        public static void GetListener(AlListenerfv param, out Vector3f at, out Vector3f up)
         {
             unsafe
             {
@@ -383,14 +374,14 @@ namespace OpenTK.Audio.OpenAL
 
         #region GenSources()
 
-        /// <summary>This function generates one or more sources. References to sources are uint values, which are used wherever a source reference is needed (in calls such as AL.DeleteSources and AL.Source with parameter ALSourcei).</summary>
+        /// <summary>This function generates one or more sources. References to sources are uint values, which are used wherever a source reference is needed (in calls such as AL.DeleteSources and AL.Source with parameter AlSourcei).</summary>
         /// <param name="n">The number of sources to be generated.</param>
         /// <param name="sources">Pointer to an array of uint values which will store the names of the new sources.</param>
-        [DllImport(AL.Lib, EntryPoint = "alGenSources", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alGenSources", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public unsafe static extern void GenSources(int n, [Out] uint* sources);
         // AL_API void AL_APIENTRY alGenSources( ALsizei n, ALuint* Sources );
 
-        /// <summary>This function generates one or more sources. References to sources are int values, which are used wherever a source reference is needed (in calls such as AL.DeleteSources and AL.Source with parameter ALSourcei).</summary>
+        /// <summary>This function generates one or more sources. References to sources are int values, which are used wherever a source reference is needed (in calls such as AL.DeleteSources and AL.Source with parameter AlSourcei).</summary>
         /// <param name="sources">Pointer to an array of int values which will store the names of the new sources.</param>
         public static void GenSources(uint[] sources)
         {
@@ -403,7 +394,7 @@ namespace OpenTK.Audio.OpenAL
             }
         }
 
-        /// <summary>This function generates one source only. References to sources are int values, which are used wherever a source reference is needed (in calls such as AL.DeleteSources and AL.Source with parameter ALSourcei).</summary>
+        /// <summary>This function generates one source only. References to sources are int values, which are used wherever a source reference is needed (in calls such as AL.DeleteSources and AL.Source with parameter AlSourcei).</summary>
         /// <returns>Pointer to an int value which will store the name of the new source.</returns>
         public static uint GenSource()
         {
@@ -422,7 +413,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function deletes one or more sources.</summary>
         /// <param name="n">The number of sources to be deleted.</param>
         /// <param name="sources">Pointer to an array of source names identifying the sources to be deleted.</param>
-        [DllImport(AL.Lib, EntryPoint = "alDeleteSources", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alDeleteSources", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public unsafe static extern void DeleteSources(int n, [In] uint* sources); // Delete Source objects 
         // AL_API void AL_APIENTRY alDeleteSources( ALsizei n, const ALuint* Sources );
 
@@ -456,7 +447,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function tests if a source name is valid, returning True if valid and False if not.</summary>
         /// <param name="sid">A source name to be tested for validity</param>
         /// <returns>Success.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alIsSource", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alIsSource", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern bool IsSource(uint sid);
         // AL_API ALboolean AL_APIENTRY alIsSource( ALuint sid );
 
@@ -470,10 +461,10 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function sets a floating-point property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being set</param>
-        /// <param name="param">The name of the attribute to set: ALSourcef.Pitch, Gain, MinGain, MaxGain, MaxDistance, RolloffFactor, ConeOuterGain, ConeInnerAngle, ConeOuterAngle, ReferenceDistance, EfxAirAbsorptionFactor, EfxRoomRolloffFactor, EfxConeOuterGainHighFrequency.</param>
+        /// <param name="param">The name of the attribute to set: AlSourcef.Pitch, Gain, MinGain, MaxGain, MaxDistance, RolloffFactor, ConeOuterGain, ConeInnerAngle, ConeOuterAngle, ReferenceDistance, EfxAirAbsorptionFactor, EfxRoomRolloffFactor, EfxConeOuterGainHighFrequency.</param>
         /// <param name="value">The value to set the attribute to.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourcef", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Source(uint sid, ALSourcef param, float value);
+        [DllImport("openal32.dll", EntryPoint = "alSourcef", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Source(uint sid, AlSourcef param, float value);
         // AL_API void AL_APIENTRY alSourcef( ALuint sid, ALenum param, ALfloat value );
 
         #endregion Sourcef
@@ -482,19 +473,19 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function sets a source property requiring three floating-point values.</summary>
         /// <param name="sid">Source name whose attribute is being set.</param>
-        /// <param name="param">The name of the attribute to set: ALSource3f.Position, Velocity, Direction.</param>
+        /// <param name="param">The name of the attribute to set: AlSource3f.Position, Velocity, Direction.</param>
         /// <param name="value1">The three ALfloat values which the attribute will be set to.</param>
         /// <param name="value2">The three ALfloat values which the attribute will be set to.</param>
         /// <param name="value3">The three ALfloat values which the attribute will be set to.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSource3f", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Source(uint sid, ALSource3f param, float value1, float value2, float value3);
+        [DllImport("openal32.dll", EntryPoint = "alSource3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Source(uint sid, AlSource3f param, float value1, float value2, float value3);
         // AL_API void AL_APIENTRY alSource3f( ALuint sid, ALenum param, ALfloat value1, ALfloat value2, ALfloat value3 );
 
         /// <summary>This function sets a source property requiring three floating-point values.</summary>
         /// <param name="sid">Source name whose attribute is being set.</param>
-        /// <param name="param">The name of the attribute to set: ALSource3f.Position, Velocity, Direction.</param>
+        /// <param name="param">The name of the attribute to set: AlSource3f.Position, Velocity, Direction.</param>
         /// <param name="values">A Math.Vector3 which the attribute will be set to.</param>
-        public static void Source(uint sid, ALSource3f param, ref Vector3f values)
+        public static void Source(uint sid, AlSource3f param, ref Vector3f values)
         {
             Source(sid, param, values.X, values.Y, values.Z);
         }
@@ -505,19 +496,19 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function sets an integer property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being set.</param>
-        /// <param name="param">The name of the attribute to set: ALSourcei.SourceRelative, ConeInnerAngle, ConeOuterAngle, Looping, Buffer, SourceState.</param>
+        /// <param name="param">The name of the attribute to set: AlSourcei.SourceRelative, ConeInnerAngle, ConeOuterAngle, Looping, Buffer, SourceState.</param>
         /// <param name="value">The value to set the attribute to.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourcei", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Source(uint sid, ALSourcei param, int value);
+        [DllImport("openal32.dll", EntryPoint = "alSourcei", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Source(uint sid, AlSourcei param, int value);
         // AL_API void AL_APIENTRY alSourcei( ALuint sid, ALenum param, ALint value ); 
 
         /// <summary>This function sets an bool property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being set.</param>
-        /// <param name="param">The name of the attribute to set: ALSourceb.SourceRelative, Looping.</param>
+        /// <param name="param">The name of the attribute to set: AlSourceb.SourceRelative, Looping.</param>
         /// <param name="value">The value to set the attribute to.</param>
-        public static void Source(uint sid, ALSourceb param, bool value)
+        public static void Source(uint sid, AlSourceb param, bool value)
         {
-            Source(sid, (ALSourcei)param, (value) ? 1 : 0);
+            Source(sid, (AlSourcei)param, (value) ? 1 : 0);
         }
 
         #endregion Sourcei
@@ -530,8 +521,8 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="value1">The value to set the attribute to. (EFX Extension) The destination Auxiliary Effect Slot ID</param>
         /// <param name="value2">The value to set the attribute to. (EFX Extension) The Auxiliary Send number.</param>
         ///<param name="value3">The value to set the attribute to. (EFX Extension) optional Filter ID.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSource3i", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Source(uint sid, ALSource3i param, int value1, int value2, int value3);
+        [DllImport("openal32.dll", EntryPoint = "alSource3i", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void Source(uint sid, AlSource3i param, int value1, int value2, int value3);
         // AL_API void AL_APIENTRY alSource3i( ALuint sid, ALenum param, ALint value1, ALint value2, ALint value3 );      
 
         #endregion Source3i
@@ -548,10 +539,10 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function retrieves a floating-point property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being retrieved.</param>
-        /// <param name="param">The name of the attribute to set: ALSourcef.Pitch, Gain, MinGain, MaxGain, MaxDistance, RolloffFactor, ConeOuterGain, ConeInnerAngle, ConeOuterAngle, ReferenceDistance, EfxAirAbsorptionFactor, EfxRoomRolloffFactor, EfxConeOuterGainHighFrequency.</param>
+        /// <param name="param">The name of the attribute to set: AlSourcef.Pitch, Gain, MinGain, MaxGain, MaxDistance, RolloffFactor, ConeOuterGain, ConeInnerAngle, ConeOuterAngle, ReferenceDistance, EfxAirAbsorptionFactor, EfxRoomRolloffFactor, EfxConeOuterGainHighFrequency.</param>
         /// <param name="value">A pointer to the floating-point value being retrieved</param>
-        [DllImport(AL.Lib, EntryPoint = "alGetSourcef", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void GetSource(uint sid, ALSourcef param, [Out] out float value);
+        [DllImport("openal32.dll", EntryPoint = "alGetSourcef", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void GetSource(uint sid, AlSourcef param, [Out] out float value);
         // AL_API void AL_APIENTRY alGetSourcef( ALuint sid, ALenum param, ALfloat* value );
 
         #endregion GetSourcef
@@ -560,19 +551,19 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function retrieves three floating-point values representing a property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being retrieved.</param>
-        /// <param name="param">the name of the attribute being retrieved: ALSource3f.Position, Velocity, Direction.</param>
+        /// <param name="param">the name of the attribute being retrieved: AlSource3f.Position, Velocity, Direction.</param>
         /// <param name="value1">Pointer to the value to retrieve.</param>
         /// <param name="value2">Pointer to the value to retrieve.</param>
         /// <param name="value3">Pointer to the value to retrieve.</param>
-        [DllImport(AL.Lib, EntryPoint = "alGetSource3f", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void GetSource(uint sid, ALSource3f param, [Out] out float value1, [Out] out float value2, [Out] out float value3);
+        [DllImport("openal32.dll", EntryPoint = "alGetSource3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void GetSource(uint sid, AlSource3f param, [Out] out float value1, [Out] out float value2, [Out] out float value3);
         // AL_API void AL_APIENTRY alGetSource3f( ALuint sid, ALenum param, ALfloat* value1, ALfloat* value2, ALfloat* value3);
 
         /// <summary>This function retrieves three floating-point values representing a property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being retrieved.</param>
-        /// <param name="param">the name of the attribute being retrieved: ALSource3f.Position, Velocity, Direction.</param>
+        /// <param name="param">the name of the attribute being retrieved: AlSource3f.Position, Velocity, Direction.</param>
         /// <param name="values">A Math.Vector3 to retrieve the values to.</param>
-        public static void GetSource(uint sid, ALSource3f param, out Vector3f values)
+        public static void GetSource(uint sid, AlSource3f param, out Vector3f values)
         {
             float x, y, z;
             GetSource((uint)sid, param, out x, out y, out z);
@@ -585,20 +576,20 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function retrieves an integer property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being retrieved.</param>
-        /// <param name="param">The name of the attribute to retrieve: ALSourcei.SourceRelative, Buffer, SourceState, BuffersQueued, BuffersProcessed.</param>
+        /// <param name="param">The name of the attribute to retrieve: AlSourcei.SourceRelative, Buffer, SourceState, BuffersQueued, BuffersProcessed.</param>
         /// <param name="value">A pointer to the integer value being retrieved.</param>
-        [DllImport(AL.Lib, EntryPoint = "alGetSourcei", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void GetSource(uint sid, ALGetSourcei param, [Out] out int value);
+        [DllImport("openal32.dll", EntryPoint = "alGetSourcei", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void GetSource(uint sid, AlGetSourcei param, [Out] out int value);
         // AL_API void AL_APIENTRY alGetSourcei( ALuint sid,  ALenum param, ALint* value );
         
         /// <summary>This function retrieves a bool property of a source.</summary>
         /// <param name="sid">Source name whose attribute is being retrieved.</param>
-        /// <param name="param">The name of the attribute to get: ALSourceb.SourceRelative, Looping.</param>
+        /// <param name="param">The name of the attribute to get: AlSourceb.SourceRelative, Looping.</param>
         /// <param name="value">A pointer to the bool value being retrieved.</param>
-        public static void GetSource(uint sid, ALSourceb param, out bool value)
+        public static void GetSource(uint sid, AlSourceb param, out bool value)
         {
             int result;
-            GetSource(sid, (ALGetSourcei)param, out result);
+            GetSource(sid, (AlGetSourcei)param, out result);
             value = result != 0;
         }
 
@@ -618,7 +609,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function plays a set of sources. The playing sources will have their state changed to ALSourceState.Playing. When called on a source which is already playing, the source will restart at the beginning. When the attached buffer(s) are done playing, the source will progress to the ALSourceState.Stopped state.</summary>
         /// <param name="ns">The number of sources to be played.</param>
         /// <param name="sids">A pointer to an array of sources to be played.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourcePlayv"), SuppressUnmanagedCodeSecurity]
+        [DllImport("openal32.dll", EntryPoint = "alSourcePlayv"), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourcePlay(int ns, [In] uint* sids);
         // AL_API void AL_APIENTRY alSourcePlayv( ALsizei ns, const ALuint *sids );
 
@@ -643,7 +634,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function stops a set of sources. The stopped sources will have their state changed to ALSourceState.Stopped.</summary>
         /// <param name="ns">The number of sources to stop.</param>
         /// <param name="sids">A pointer to an array of sources to be stopped.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceStopv"), SuppressUnmanagedCodeSecurity]
+        [DllImport("openal32.dll", EntryPoint = "alSourceStopv"), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourceStop(int ns, [In] uint* sids);
         // AL_API void AL_APIENTRY alSourceStopv( ALsizei ns, const ALuint *sids );
 
@@ -668,7 +659,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function stops a set of sources and sets all their states to ALSourceState.Initial.</summary>
         /// <param name="ns">The number of sources to be rewound.</param>
         /// <param name="sids">A pointer to an array of sources to be rewound.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceRewindv"), SuppressUnmanagedCodeSecurity]
+        [DllImport("openal32.dll", EntryPoint = "alSourceRewindv"), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourceRewind(int ns, [In] uint* sids);
         // AL_API void AL_APIENTRY alSourceRewindv( ALsizei ns, const ALuint *sids );
 
@@ -693,7 +684,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function pauses a set of sources. The paused sources will have their state changed to ALSourceState.Paused.</summary>
         /// <param name="ns">The number of sources to be paused.</param>
         /// <param name="sids">A pointer to an array of sources to be paused.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourcePausev"), SuppressUnmanagedCodeSecurity]
+        [DllImport("openal32.dll", EntryPoint = "alSourcePausev"), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourcePause(int ns, [In] uint* sids);
         // AL_API void AL_APIENTRY alSourcePausev( ALsizei ns, const ALuint *sids );
 
@@ -721,7 +712,7 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function plays, replays or resumes a source. The playing source will have it's state changed to ALSourceState.Playing. When called on a source which is already playing, the source will restart at the beginning. When the attached buffer(s) are done playing, the source will progress to the ALSourceState.Stopped state.</summary>
         /// <param name="sid">The name of the source to be played.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourcePlay", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alSourcePlay", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void SourcePlay(uint sid);
         // AL_API void AL_APIENTRY alSourcePlay( ALuint sid );
 
@@ -731,7 +722,7 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function stops a source. The stopped source will have it's state changed to ALSourceState.Stopped.</summary>
         /// <param name="sid">The name of the source to be stopped.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceStop", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alSourceStop", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void SourceStop(uint sid);
 
         #endregion SourceStop
@@ -740,7 +731,7 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function stops the source and sets its state to ALSourceState.Initial.</summary>
         /// <param name="sid">The name of the source to be rewound.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceRewind", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alSourceRewind", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void SourceRewind(uint sid);
 
         #endregion SourceRewind
@@ -749,7 +740,7 @@ namespace OpenTK.Audio.OpenAL
 
         /// <summary>This function pauses a source. The paused source will have its state changed to ALSourceState.Paused.</summary>
         /// <param name="sid">The name of the source to be paused.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourcePause", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alSourcePause", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void SourcePause(uint sid);
         // AL_API void AL_APIENTRY alSourcePause( ALuint sid );
 
@@ -761,15 +752,15 @@ namespace OpenTK.Audio.OpenAL
 
         #region SourceQueueBuffers
 
-        /// <summary>This function queues a set of buffers on a source. All buffers attached to a source will be played in sequence, and the number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed. When first created, a source will be of type ALSourceType.Undetermined. A successful AL.SourceQueueBuffers call will change the source type to ALSourceType.Streaming.</summary>
+        /// <summary>This function queues a set of buffers on a source. All buffers attached to a source will be played in sequence, and the number of processed buffers can be detected using AL.GetSource with parameter AlGetSourcei.BuffersProcessed. When first created, a source will be of type ALSourceType.Undetermined. A successful AL.SourceQueueBuffers call will change the source type to ALSourceType.Streaming.</summary>
         /// <param name="sid">The name of the source to queue buffers onto.</param>
         /// <param name="numEntries">The number of buffers to be queued.</param>
         /// <param name="bids">A pointer to an array of buffer names to be queued.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceQueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [DllImport("openal32.dll", EntryPoint = "alSourceQueueBuffers"), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourceQueueBuffers(uint sid, int numEntries, [In] uint* bids);
         // AL_API void AL_APIENTRY alSourceQueueBuffers( ALuint sid, ALsizei numEntries, const ALuint *bids );
 
-        /// <summary>This function queues a set of buffers on a source. All buffers attached to a source will be played in sequence, and the number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed. When first created, a source will be of type ALSourceType.Undetermined. A successful AL.SourceQueueBuffers call will change the source type to ALSourceType.Streaming.</summary>
+        /// <summary>This function queues a set of buffers on a source. All buffers attached to a source will be played in sequence, and the number of processed buffers can be detected using AL.GetSource with parameter AlGetSourcei.BuffersProcessed. When first created, a source will be of type ALSourceType.Undetermined. A successful AL.SourceQueueBuffers call will change the source type to ALSourceType.Streaming.</summary>
         /// <param name="sid">The name of the source to queue buffers onto.</param>
         /// <param name="numEntries">The number of buffers to be queued.</param>
         /// <param name="bids">A pointer to an array of buffer names to be queued.</param>
@@ -784,7 +775,7 @@ namespace OpenTK.Audio.OpenAL
             }
         }
 
-        /// <summary>This function queues a set of buffers on a source. All buffers attached to a source will be played in sequence, and the number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed. When first created, a source will be of type ALSourceType.Undetermined. A successful AL.SourceQueueBuffers call will change the source type to ALSourceType.Streaming.</summary>
+        /// <summary>This function queues a set of buffers on a source. All buffers attached to a source will be played in sequence, and the number of processed buffers can be detected using AL.GetSource with parameter AlGetSourcei.BuffersProcessed. When first created, a source will be of type ALSourceType.Undetermined. A successful AL.SourceQueueBuffers call will change the source type to ALSourceType.Streaming.</summary>
         /// <param name="source">The name of the source to queue buffers onto.</param>
         /// <param name="buffer">The name of the buffer to be queued.</param>
         public static void SourceQueueBuffer(uint source, uint buffer)
@@ -799,15 +790,15 @@ namespace OpenTK.Audio.OpenAL
 
         #region SourceUnqueueBuffers
 
-        /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
+        /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter AlGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
         /// <param name="sid">The name of the source to unqueue buffers from.</param>
         /// <param name="numEntries">The number of buffers to be unqueued.</param>
         /// <param name="bids">A pointer to an array of buffer names that were removed.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [DllImport("openal32.dll", EntryPoint = "alSourceUnqueueBuffers"), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourceUnqueueBuffers(uint sid, int numEntries, [In] uint* bids);
         // AL_API void AL_APIENTRY alSourceUnqueueBuffers( ALuint sid, ALsizei numEntries, ALuint *bids );
 
-        /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
+        /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter AlGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
         /// <param name="sid">The name of the source to unqueue buffers from.</param>
         /// <param name="numEntries">The number of buffers to be unqueued.</param>
         /// <param name="bids">A pointer to an array of buffer names that were removed.</param>
@@ -822,7 +813,7 @@ namespace OpenTK.Audio.OpenAL
             }
         }
 
-        /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
+        /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter AlGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
         /// <param name="sid">The name of the source to unqueue buffers from.</param>
         public static uint SourceUnqueueBuffer(uint sid)
         {
@@ -856,14 +847,14 @@ namespace OpenTK.Audio.OpenAL
 
         #region GenBuffers
 
-        /// <summary>This function generates one or more buffers, which contain audio buffer (see AL.BufferData). References to buffers are uint values, which are used wherever a buffer reference is needed (in calls such as AL.DeleteBuffers, AL.Source with parameter ALSourcei, AL.SourceQueueBuffers, and AL.SourceUnqueueBuffers).</summary>
+        /// <summary>This function generates one or more buffers, which contain audio buffer (see AL.BufferData). References to buffers are uint values, which are used wherever a buffer reference is needed (in calls such as AL.DeleteBuffers, AL.Source with parameter AlSourcei, AL.SourceQueueBuffers, and AL.SourceUnqueueBuffers).</summary>
         /// <param name="n">The number of buffers to be generated.</param>
         /// <param name="buffers">Pointer to an array of uint values which will store the names of the new buffers.</param>
-        [DllImport(AL.Lib, EntryPoint = "alGenBuffers", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity]
+        [DllImport("openal32.dll", EntryPoint = "alGenBuffers", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         public unsafe static extern void GenBuffers(int n, [Out] uint* buffers);
         // AL_API void AL_APIENTRY alGenBuffers( ALsizei n, ALuint* Buffers );
 
-        /// <summary>This function generates one or more buffers, which contain audio buffer (see AL.BufferData). References to buffers are uint values, which are used wherever a buffer reference is needed (in calls such as AL.DeleteBuffers, AL.Source with parameter ALSourcei, AL.SourceQueueBuffers, and AL.SourceUnqueueBuffers).</summary>
+        /// <summary>This function generates one or more buffers, which contain audio buffer (see AL.BufferData). References to buffers are uint values, which are used wherever a buffer reference is needed (in calls such as AL.DeleteBuffers, AL.Source with parameter AlSourcei, AL.SourceQueueBuffers, and AL.SourceUnqueueBuffers).</summary>
         /// <param name="n">The number of buffers to be generated.</param>
         /// <param name="buffers">Pointer to an array of uint values which will store the names of the new buffers.</param>
         public static void GenBuffers(uint[] buffers)
@@ -877,7 +868,7 @@ namespace OpenTK.Audio.OpenAL
             }
         }
 
-        /// <summary>This function generates one buffer only, which contain audio data (see AL.BufferData). References to buffers are uint values, which are used wherever a buffer reference is needed (in calls such as AL.DeleteBuffers, AL.Source with parameter ALSourcei, AL.SourceQueueBuffers, and AL.SourceUnqueueBuffers).</summary>
+        /// <summary>This function generates one buffer only, which contain audio data (see AL.BufferData). References to buffers are uint values, which are used wherever a buffer reference is needed (in calls such as AL.DeleteBuffers, AL.Source with parameter AlSourcei, AL.SourceQueueBuffers, and AL.SourceUnqueueBuffers).</summary>
         /// <param name="buffer">Pointer to an uint value which will store the names of the new buffer.</param>
         public static uint GenBuffer()
         {
@@ -893,14 +884,14 @@ namespace OpenTK.Audio.OpenAL
 
         #region DeleteBuffers
 
-        /// <summary>This function deletes one or more buffers, freeing the resources used by the buffer. Buffers which are attached to a source can not be deleted. See AL.Source (ALSourcei) and AL.SourceUnqueueBuffers for information on how to detach a buffer from a source.</summary>
+        /// <summary>This function deletes one or more buffers, freeing the resources used by the buffer. Buffers which are attached to a source can not be deleted. See AL.Source (AlSourcei) and AL.SourceUnqueueBuffers for information on how to detach a buffer from a source.</summary>
         /// <param name="n">The number of buffers to be deleted.</param>
         /// <param name="buffers">Pointer to an array of buffer names identifying the buffers to be deleted.</param>
-        [DllImport(AL.Lib, EntryPoint = "alDeleteBuffers", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alDeleteBuffers", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         unsafe public static extern void DeleteBuffers(int n, [In] uint* buffers);
         // AL_API void AL_APIENTRY alDeleteBuffers( ALsizei n, const ALuint* Buffers );
 
-        /// <summary>This function deletes one buffer only, freeing the resources used by the buffer. Buffers which are attached to a source can not be deleted. See AL.Source (ALSourcei) and AL.SourceUnqueueBuffers for information on how to detach a buffer from a source.</summary>
+        /// <summary>This function deletes one buffer only, freeing the resources used by the buffer. Buffers which are attached to a source can not be deleted. See AL.Source (AlSourcei) and AL.SourceUnqueueBuffers for information on how to detach a buffer from a source.</summary>
         /// <param name="buffers">Pointer to a buffer name identifying the buffer to be deleted.</param>
         public static void DeleteBuffers(uint[] buffers)
         {
@@ -915,7 +906,7 @@ namespace OpenTK.Audio.OpenAL
             }
         }
 
-        /// <summary>This function deletes one buffer only, freeing the resources used by the buffer. Buffers which are attached to a source can not be deleted. See AL.Source (ALSourcei) and AL.SourceUnqueueBuffers for information on how to detach a buffer from a source.</summary>
+        /// <summary>This function deletes one buffer only, freeing the resources used by the buffer. Buffers which are attached to a source can not be deleted. See AL.Source (AlSourcei) and AL.SourceUnqueueBuffers for information on how to detach a buffer from a source.</summary>
         /// <param name="buffer">Pointer to a buffer name identifying the buffer to be deleted.</param>
         public static void DeleteBuffer(uint buffer)
         {
@@ -932,7 +923,7 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>This function tests if a buffer name is valid, returning True if valid, False if not.</summary>
         /// <param name="bid">A buffer Handle previously allocated with <see cref="GenBuffers(int)"/>.</param>
         /// <returns>Success.</returns>
-        [DllImport(AL.Lib, EntryPoint = "alIsBuffer", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alIsBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern bool IsBuffer(uint bid);
         // AL_API ALboolean AL_APIENTRY alIsBuffer( ALuint bid );
 
@@ -955,7 +946,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="buffer">Pointer to a pinned audio buffer.</param>
         /// <param name="size">The size of the audio buffer in bytes.</param>
         /// <param name="freq">The frequency of the audio buffer.</param>
-        [DllImport(AL.Lib, EntryPoint = "alBufferData", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alBufferData", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void BufferData(uint bid, int format, IntPtr buffer, int size, int freq);
         // AL_API void AL_APIENTRY alBufferData( ALuint bid, ALenum format, const ALvoid* buffer, ALsizei size, ALsizei freq );
 
@@ -1011,8 +1002,8 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="bid">Buffer name whose attribute is being retrieved</param>
         /// <param name="param">The name of the attribute to be retrieved: ALGetBufferi.Frequency, Bits, Channels, Size, and the currently hidden AL_DATA (dangerous).</param>
         /// <param name="value">A pointer to an int to hold the retrieved buffer</param>
-        [DllImport(AL.Lib, EntryPoint = "alGetBufferi", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void GetBuffer(uint bid, ALGetBufferi param, [Out] out int value);
+        [DllImport("openal32.dll", EntryPoint = "alGetBufferi", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void GetBuffer(uint bid, AlGetBufferi param, [Out] out int value);
         // AL_API void AL_APIENTRY alGetBufferi( ALuint bid, ALenum param, ALint* value );
 
 
@@ -1029,56 +1020,56 @@ namespace OpenTK.Audio.OpenAL
         #region Global Parameters
 
         /// <summary>AL.DopplerFactor is a simple scaling of source and listener velocities to exaggerate or deemphasize the Doppler (pitch) shift resulting from the calculation.</summary>
-        /// <param name="value">A negative value will result in an error, the command is then ignored. The default value is 1f. The current setting can be queried using AL.Get with parameter ALGetFloat.SpeedOfSound.</param>
-        [DllImport(AL.Lib, EntryPoint = "alDopplerFactor", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        /// <param name="value">A negative value will result in an error, the command is then ignored. The default value is 1f. The current setting can be queried using AL.Get with parameter AlGetFloat.SpeedOfSound.</param>
+        [DllImport("openal32.dll", EntryPoint = "alDopplerFactor", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void DopplerFactor(float value);
         // AL_API void AL_APIENTRY alDopplerFactor( ALfloat value );
 
         /// <summary>This function is deprecated and should not be used.</summary>
         /// <param name="value">The default is 1.0f.</param>
-        [DllImport(AL.Lib, EntryPoint = "alDopplerVelocity", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        [DllImport("openal32.dll", EntryPoint = "alDopplerVelocity", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void DopplerVelocity(float value);
         // AL_API void AL_APIENTRY alDopplerVelocity( ALfloat value );
 
         /// <summary>AL.SpeedOfSound allows the application to change the reference (propagation) speed used in the Doppler calculation. The source and listener velocities should be expressed in the same units as the speed of sound.</summary>
-        /// <param name="value">A negative or zero value will result in an error, and the command is ignored. Default: 343.3f (appropriate for velocity units of meters and air as the propagation medium). The current setting can be queried using AL.Get with parameter ALGetFloat.SpeedOfSound.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSpeedOfSound", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        /// <param name="value">A negative or zero value will result in an error, and the command is ignored. Default: 343.3f (appropriate for velocity units of meters and air as the propagation medium). The current setting can be queried using AL.Get with parameter AlGetFloat.SpeedOfSound.</param>
+        [DllImport("openal32.dll", EntryPoint = "alSpeedOfSound", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static extern void SpeedOfSound(float value);
         // AL_API void AL_APIENTRY alSpeedOfSound( ALfloat value );
 
         /// <summary>This function selects the OpenAL distance model – ALDistanceModel.InverseDistance, ALDistanceModel.InverseDistanceClamped, ALDistanceModel.LinearDistance, ALDistanceModel.LinearDistanceClamped, ALDistanceModel.ExponentDistance, ALDistanceModel.ExponentDistanceClamped, or ALDistanceModel.None. The default distance model in OpenAL is ALDistanceModel.InverseDistanceClamped.</summary>
         /// <remarks>
         /// The ALDistanceModel .InverseDistance model works according to the following formula:
-        /// gain = ALSourcef.ReferenceDistance / (ALSourcef.ReferenceDistance + ALSourcef.RolloffFactor * (distance – ALSourcef.ReferenceDistance));
+        /// gain = AlSourcef.ReferenceDistance / (AlSourcef.ReferenceDistance + AlSourcef.RolloffFactor * (distance – AlSourcef.ReferenceDistance));
         /// 
         /// The ALDistanceModel .InverseDistanceClamped model works according to the following formula:
-        /// distance = max(distance,ALSourcef.ReferenceDistance);
-        /// distance = min(distance,ALSourcef.MaxDistance);
-        /// gain = ALSourcef.ReferenceDistance / (ALSourcef.ReferenceDistance + ALSourcef.RolloffFactor * (distance – ALSourcef.ReferenceDistance));
+        /// distance = max(distance,AlSourcef.ReferenceDistance);
+        /// distance = min(distance,AlSourcef.MaxDistance);
+        /// gain = AlSourcef.ReferenceDistance / (AlSourcef.ReferenceDistance + AlSourcef.RolloffFactor * (distance – AlSourcef.ReferenceDistance));
         /// 
         /// The ALDistanceModel.LinearDistance model works according to the following formula: 
-        /// distance = min(distance, ALSourcef.MaxDistance) // avoid negative gain
-        /// gain = (1 – ALSourcef.RolloffFactor * (distance – ALSourcef.ReferenceDistance) / (ALSourcef.MaxDistance – ALSourcef.ReferenceDistance))
+        /// distance = min(distance, AlSourcef.MaxDistance) // avoid negative gain
+        /// gain = (1 – AlSourcef.RolloffFactor * (distance – AlSourcef.ReferenceDistance) / (AlSourcef.MaxDistance – AlSourcef.ReferenceDistance))
         /// 
         /// The ALDistanceModel.LinearDistanceClamped model works according to the following formula:
-        /// distance = max(distance, ALSourcef.ReferenceDistance)
-        /// distance = min(distance, ALSourcef.MaxDistance)
-        /// gain = (1 – ALSourcef.RolloffFactor * (distance – ALSourcef.ReferenceDistance) / (ALSourcef.MaxDistance – ALSourcef.ReferenceDistance))
+        /// distance = max(distance, AlSourcef.ReferenceDistance)
+        /// distance = min(distance, AlSourcef.MaxDistance)
+        /// gain = (1 – AlSourcef.RolloffFactor * (distance – AlSourcef.ReferenceDistance) / (AlSourcef.MaxDistance – AlSourcef.ReferenceDistance))
         /// 
         /// The ALDistanceModel.ExponentDistance model works according to the following formula:
-        /// gain = (distance / ALSourcef.ReferenceDistance) ^ (- ALSourcef.RolloffFactor) 
+        /// gain = (distance / AlSourcef.ReferenceDistance) ^ (- AlSourcef.RolloffFactor) 
         /// 
         /// The ALDistanceModel.ExponentDistanceClamped model works according to the following formula:
-        /// distance = max(distance, ALSourcef.ReferenceDistance)
-        /// distance = min(distance, ALSourcef.MaxDistance)
-        /// gain = (distance / ALSourcef.ReferenceDistance) ^ (- ALSourcef.RolloffFactor)
+        /// distance = max(distance, AlSourcef.ReferenceDistance)
+        /// distance = min(distance, AlSourcef.MaxDistance)
+        /// gain = (distance / AlSourcef.ReferenceDistance) ^ (- AlSourcef.RolloffFactor)
         /// 
         /// The ALDistanceModel.None model works according to the following formula:
         /// gain = 1f;
         /// </remarks>
         /// <param name="distancemodel"></param>
-        [DllImport(AL.Lib, EntryPoint = "alDistanceModel", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void DistanceModel(ALDistanceModel distancemodel);
+        [DllImport("openal32.dll", EntryPoint = "alDistanceModel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static extern void DistanceModel(AlDistanceModel distancemodel);
         // AL_API void AL_APIENTRY alDistanceModel( ALenum distanceModel );
 
         #endregion Global Parameters

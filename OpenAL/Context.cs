@@ -53,7 +53,7 @@ namespace Ibasa.OpenAL
                 }
 
                 Handle = Alc.CreateContext(device.Handle, attribs);
-                Device.ThrowError();
+                device.ThrowError();
             }
         }
 
@@ -91,7 +91,9 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return new Device(Alc.GetContextsDevice(Alc.GetCurrentContext()));
+                var context = Alc.GetCurrentContext();
+                var device = Alc.GetContextsDevice(context);
+                return new Device(device);
             }
         }
 
@@ -99,11 +101,11 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.AL.Get(OpenTK.Audio.OpenAL.ALGetFloat.DopplerFactor);
+                return Al.Get(AlGetFloat.DopplerFactor);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.DopplerFactor(value);
+                Al.DopplerFactor(value);
             }
         }
 
@@ -111,11 +113,11 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.AL.Get(OpenTK.Audio.OpenAL.ALGetFloat.SpeedOfSound);
+                return Al.Get(AlGetFloat.SpeedOfSound);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.SpeedOfSound(value);
+                Al.SpeedOfSound(value);
             }
         }
 
@@ -123,7 +125,7 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.AL.Get(OpenTK.Audio.OpenAL.ALGetString.Version);
+                return Al.Get(AlGetString.Version);
             }
         }
 
@@ -131,7 +133,7 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.AL.Get(OpenTK.Audio.OpenAL.ALGetString.Vendor);
+                return Al.Get(AlGetString.Vendor);
             }
         }
 
@@ -139,7 +141,7 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return OpenTK.Audio.OpenAL.AL.Get(OpenTK.Audio.OpenAL.ALGetString.Renderer);
+                return Al.Get(AlGetString.Renderer);
             }
         }
 
@@ -147,7 +149,7 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                var value = OpenTK.Audio.OpenAL.AL.Get(OpenTK.Audio.OpenAL.ALGetString.Extensions);
+                var value = Al.Get(AlGetString.Extensions);
                 if (value == null)
                 {
                     return null;

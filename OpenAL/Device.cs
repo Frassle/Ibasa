@@ -194,36 +194,8 @@ namespace Ibasa.OpenAL
 
         internal void ThrowError()
         {
-            var error = Alc.GetError(Handle);
-
-            if(error == Alc.ALC_NO_ERROR)
-            {
-                return;
-            }
-            else if(error == Alc.ALC_INVALID_DEVICE)
-            {
-                throw new OpenALException("No Device. The device handle or specifier names an inaccessible driver/server.");
-            }
-            else if(error == Alc.ALC_INVALID_CONTEXT)
-            {
-                throw new OpenALException("Invalid context ID. The Context argument does not name a valid context.");
-            }
-            else if(error == Alc.ALC_INVALID_ENUM)
-            {
-                throw new OpenALException("Bad enum. A token used is not valid, or not applicable.");
-            }
-            else if(error == Alc.ALC_INVALID_VALUE)
-            {
-                throw new OpenALException("Bad value. A value (e.g. Attribute) is not valid, or not applicable.");
-            }
-            else if(error == Alc.ALC_OUT_OF_MEMORY)
-            {
-                throw new OpenALException("Out of memory. Unable to allocate memory.");
-            }
-            else 
-            {
-                throw new OpenALException(string.Format("Unknown OpenAL error: {0}", error));
-            }
+            OpenAL.ThrowNullException(Handle);
+            Alc.ThrowError(Handle);
         }
 
         public override int GetHashCode()

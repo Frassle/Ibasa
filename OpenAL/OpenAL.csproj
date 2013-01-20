@@ -43,9 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OpenALException.cs" />
-    <Compile Include="Bindings\AL.cs" />
+    <Compile Include="Al.cs" />
     <Compile Include="Alc.cs" />
-    <Compile Include="Bindings\ALEnums.cs" />
+    <Compile Include="ALEnums.cs" />
     <Compile Include="Buffer.cs" />
     <Compile Include="CaptureDevice.cs" />
     <Compile Include="Context.cs" />

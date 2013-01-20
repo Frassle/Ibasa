@@ -51,5 +51,10 @@ namespace Ibasa.OpenAL
                 throw new NullReferenceException();
             }
         }
+
+        internal static void ThrowError()
+        {
+            Alc.ThrowError(IntPtr.Zero);
+        }
     }
 }

@@ -13,12 +13,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float x, y, z;
-                OpenTK.Audio.OpenAL.AL.GetListener(OpenTK.Audio.OpenAL.ALListener3f.Position, out x, out y, out z);
+                Al.GetListener(AlListener3f.Position, out x, out y, out z);
                 return new Point3f(x, y, z);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Listener(OpenTK.Audio.OpenAL.ALListener3f.Position, value.X, value.Y, value.Z);
+                Al.Listener(AlListener3f.Position, value.X, value.Y, value.Z);
             }
         }
 
@@ -27,12 +27,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float x, y, z;
-                OpenTK.Audio.OpenAL.AL.GetListener(OpenTK.Audio.OpenAL.ALListener3f.Velocity, out x, out y, out z);
+                Al.GetListener(AlListener3f.Velocity, out x, out y, out z);
                 return new Vector3f(x, y, z);
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Listener(OpenTK.Audio.OpenAL.ALListener3f.Velocity, value.X, value.Y, value.Z);
+                Al.Listener(AlListener3f.Velocity, value.X, value.Y, value.Z);
             }
         }
 
@@ -41,12 +41,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetListener(OpenTK.Audio.OpenAL.ALListenerf.Gain, out value);
+                Al.GetListener(AlListenerf.Gain, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Listener(OpenTK.Audio.OpenAL.ALListenerf.Gain, value);
+                Al.Listener(AlListenerf.Gain, value);
             }
         }
 
@@ -55,12 +55,12 @@ namespace Ibasa.OpenAL
             get
             {
                 float value;
-                OpenTK.Audio.OpenAL.AL.GetListener(OpenTK.Audio.OpenAL.ALListenerf.EfxMetersPerUnit, out value);
+                Al.GetListener(AlListenerf.EfxMetersPerUnit, out value);
                 return value;
             }
             set
             {
-                OpenTK.Audio.OpenAL.AL.Listener(OpenTK.Audio.OpenAL.ALListenerf.EfxMetersPerUnit, value);
+                Al.Listener(AlListenerf.EfxMetersPerUnit, value);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Ibasa.OpenAL
             get
             {
                 Vector3f at, up;
-                OpenTK.Audio.OpenAL.AL.GetListener(OpenTK.Audio.OpenAL.ALListenerfv.Orientation, out at, out up);
+                Al.GetListener(AlListenerfv.Orientation, out at, out up);
                 return Quaternion.FromOrientation(new Vector3f(at.X, at.Y, at.Z), new Vector3f(up.X, up.Y, up.Z));
             }
             set
@@ -77,7 +77,7 @@ namespace Ibasa.OpenAL
                 Vector3f at = Quaternion.Transform(Vector3f.UnitZ, value);
                 Vector3f up = Quaternion.Transform(Vector3f.UnitY, value);
 
-                OpenTK.Audio.OpenAL.AL.Listener(OpenTK.Audio.OpenAL.ALListenerfv.Orientation, ref at, ref up);
+                Al.Listener(AlListenerfv.Orientation, ref at, ref up);
             }
         }
     }
