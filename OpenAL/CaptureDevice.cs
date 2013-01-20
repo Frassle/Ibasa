@@ -2,11 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
+using System.Security;
 
 namespace Ibasa.OpenAL
 {
     public struct CaptureDevice : IEquatable<CaptureDevice>
     {
+        #region Capture functions
+
+        [DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+        static extern IntPtr CaptureOpenDevice(string devicename, uint frequency, int format, int buffersize);
+        // ALC_API ALCdevice*      ALC_APIENTRY alcCaptureOpenDevice( const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize );
+
+        [DllImport("openal32.dll", EntryPoint = "alcCaptureCloseDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        static extern bool CaptureCloseDevice([In] IntPtr device);
+        // ALC_API ALCboolean      ALC_APIENTRY alcCaptureCloseDevice( ALCdevice *device );
+
+        [DllImport("openal32.dll", EntryPoint = "alcCaptureStart", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        static extern void CaptureStart([In] IntPtr device);
+        // ALC_API void            ALC_APIENTRY alcCaptureStart( ALCdevice *device );
+
+        [DllImport("openal32.dll", EntryPoint = "alcCaptureStop", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        static extern void CaptureStop([In] IntPtr device);
+        // ALC_API void            ALC_APIENTRY alcCaptureStop( ALCdevice *device );
+
+        [DllImport("openal32.dll", EntryPoint = "alcCaptureSamples", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        static unsafe extern void alcCaptureSamples(IntPtr device, void* buffer, int samples);
+        // ALC_API void            ALC_APIENTRY alcCaptureSamples( ALCdevice *device, ALCvoid *buffer, ALCsizei samples );
+
+        #endregion Capture functions
+
         public static IEnumerable<CaptureDevice> CaptureDevices(uint frequency, int format, int buffersize)
         {
             if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
@@ -43,7 +69,7 @@ namespace Ibasa.OpenAL
         internal CaptureDevice(string name, uint frequency, int format, int buffersize)
             : this()
         {
-            Handle = Alc.CaptureOpenDevice(name, frequency, format, buffersize);
+            Handle = CaptureOpenDevice(name, frequency, format, buffersize);
             if (Handle == IntPtr.Zero)
             {
                 throw new OpenALException(
@@ -54,7 +80,7 @@ namespace Ibasa.OpenAL
         public bool Close()
         {
             OpenAL.ThrowNullException(Handle);
-            return Alc.CaptureCloseDevice(Handle);
+            return CaptureCloseDevice(Handle);
         }
 
         public string Name
@@ -78,13 +104,13 @@ namespace Ibasa.OpenAL
         public void Start()
         {
             OpenAL.ThrowNullException(Handle);
-            Alc.CaptureStart(Handle);
+            CaptureStart(Handle);
         }
 
         public void Stop()
         {
             OpenAL.ThrowNullException(Handle);
-            Alc.CaptureStop(Handle);
+            CaptureStop(Handle);
         }
 
         public void Read(byte[] buffer, int samples)
@@ -94,7 +120,7 @@ namespace Ibasa.OpenAL
             {
                 fixed (byte* ptr = buffer)
                 {
-                    Alc.CaptureSamples(Handle, ptr, samples);
+                    alcCaptureSamples(Handle, ptr, samples);
                 }
             }
         }

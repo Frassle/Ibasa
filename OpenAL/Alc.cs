@@ -155,56 +155,6 @@ namespace Ibasa.OpenAL
 
         #endregion Query functions
 
-        #region Capture functions
-
-        /// <summary>This function opens a capture device by name. </summary>
-        /// <param name="devicename">a pointer to a device name string.</param>
-        /// <param name="frequency">the frequency that the buffer should be captured at.</param>
-        /// <param name="format">the requested capture buffer format.</param>
-        /// <param name="buffersize">the size of the capture buffer in samples, not bytes.</param>
-        /// <returns>Returns the capture device pointer, or NULL on failure.</returns>
-        [CLSCompliant(false), DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr CaptureOpenDevice(string devicename, uint frequency, int format, int buffersize);
-
-        /// <summary>This function opens a capture device by name. </summary>
-        /// <param name="devicename">a pointer to a device name string.</param>
-        /// <param name="frequency">the frequency that the buffer should be captured at.</param>
-        /// <param name="format">the requested capture buffer format.</param>
-        /// <param name="buffersize">the size of the capture buffer in samples, not bytes.</param>
-        /// <returns>Returns the capture device pointer, or NULL on failure.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        public static extern IntPtr CaptureOpenDevice(string devicename, int frequency, int format, int buffersize);
-
-        // ALC_API ALCdevice*      ALC_APIENTRY alcCaptureOpenDevice( const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize );
-
-        /// <summary>This function closes the specified capture device.</summary>
-        /// <param name="device">a pointer to a capture device.</param>
-        /// <returns>Returns True if the close operation was successful, False on failure.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureCloseDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern bool CaptureCloseDevice([In] IntPtr device);
-        // ALC_API ALCboolean      ALC_APIENTRY alcCaptureCloseDevice( ALCdevice *device );
-
-        /// <summary>This function begins a capture operation.</summary>
-        /// <remarks>alcCaptureStart will begin recording to an internal ring buffer of the size specified when opening the capture device. The application can then retrieve the number of samples currently available using the ALC_CAPTURE_SAPMPLES token with alcGetIntegerv. When the application determines that enough samples are available for processing, then it can obtain them with a call to alcCaptureSamples.</remarks>
-        /// <param name="device">a pointer to a capture device.</param>
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureStart", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void CaptureStart([In] IntPtr device);
-        // ALC_API void            ALC_APIENTRY alcCaptureStart( ALCdevice *device );
-
-        /// <summary>This function stops a capture operation.</summary>
-        /// <param name="device">a pointer to a capture device.</param>
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureStop", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void CaptureStop([In] IntPtr device);
-        // ALC_API void            ALC_APIENTRY alcCaptureStop( ALCdevice *device );
-
-        /// <summary>This function completes a capture operation, and does not block.</summary>
-        /// <param name="device">a pointer to a capture device.</param>
-        /// <param name="buffer">a pointer to a buffer, which must be large enough to accommodate the number of samples.</param>
-        /// <param name="samples">the number of samples to be retrieved.</param>
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureSamples", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern void CaptureSamples(IntPtr device, void* buffer, int samples);
-        // ALC_API void            ALC_APIENTRY alcCaptureSamples( ALCdevice *device, ALCvoid *buffer, ALCsizei samples );
-
-        #endregion Capture functions
+        
     }
 }
