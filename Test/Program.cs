@@ -187,7 +187,7 @@ namespace Test
 
             buffer.Delete();
             source.Delete();
-            Ibasa.OpenAL.Context.Destroy(context);
+            context.Destroy();
             device.Close();
 
             Console.ReadLine();

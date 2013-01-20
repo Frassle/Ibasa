@@ -29,7 +29,7 @@ namespace Ibasa.OpenAL
             unsafe
             {
                 Handle = Alc.CreateContext(device.Handle, null);
-                Device.ThrowError();
+                device.ThrowError();
             }
         }
 
@@ -74,9 +74,10 @@ namespace Ibasa.OpenAL
             return Alc.MakeContextCurrent(context.Handle);
         }
 
-        public static void Destroy(Context context)
+        public void Destroy()
         {
-            Alc.DestroyContext(context.Handle);
+            OpenAL.ThrowNullException(Handle);
+            Alc.DestroyContext(Handle);
         }
 
         public static Context CurrentContext
@@ -87,13 +88,12 @@ namespace Ibasa.OpenAL
             }
         }
 
-        public static Device Device
+        public Device Device
         {
             get
             {
-                var context = Alc.GetCurrentContext();
-                var device = Alc.GetContextsDevice(context);
-                return new Device(device);
+                OpenAL.ThrowNullException(Handle);
+                return new Device(Alc.GetContextsDevice(Handle));
             }
         }
 
