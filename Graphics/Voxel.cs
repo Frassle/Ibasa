@@ -6,7 +6,6 @@ using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.Graphics
 {
-
     public class Voxel
     {
         public struct Vertex
