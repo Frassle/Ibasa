@@ -68,12 +68,12 @@ namespace Ibasa.OpenAL
             return GetMarshaledStringList(IntPtr.Zero, param);
         }
 
-        public static string GetMarshaledString(IntPtr device, int param)
+        internal static string GetMarshaledString(IntPtr device, int param)
         {
             return Marshal.PtrToStringAnsi(GetString(device, param));
         }
 
-        public static List<string> GetMarshaledStringList(IntPtr device, int param)
+        internal static List<string> GetMarshaledStringList(IntPtr device, int param)
         {
             List<string> result = new List<string>();
             IntPtr ptr = GetString(device, param);
@@ -102,11 +102,6 @@ namespace Ibasa.OpenAL
             }
         }
 
-        public static int GetInteger(int param)
-        {
-            return GetInteger(IntPtr.Zero, param);
-        }
-
         public static void GetInteger(int param, int size, int[] data)
         {
             unsafe
@@ -116,6 +111,11 @@ namespace Ibasa.OpenAL
                     GetInteger(IntPtr.Zero, param, size, ptr);
                 }
             }
+        }
+
+        public static int GetInteger(int param)
+        {
+            return GetInteger(IntPtr.Zero, param);
         }
 
         #endregion Query functions
