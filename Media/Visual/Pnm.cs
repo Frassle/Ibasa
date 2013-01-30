@@ -353,13 +353,13 @@ namespace Ibasa.Media.Visual
                     header.Append('f');
             }
 
-            header.Append(Environment.NewLine);
+            header.Append('\n');
             header.Append(Image.Size.Width.ToString());
             header.Append(" ");
             header.Append(Image.Size.Height.ToString());
-            header.Append(Environment.NewLine);
+            header.Append('\n');
             header.Append(floating ? "-1.0" : "255");
-            header.Append(Environment.NewLine);
+            header.Append('\n');
 
             writer.Write(Encoding.ASCII.GetBytes(header.ToString()));
 
