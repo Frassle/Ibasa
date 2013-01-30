@@ -228,9 +228,14 @@ namespace Ibasa.Media.Visual
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R32Float);
             byte[] data = image[0, 0];
 
-            for (int i = 0; i < data.Length; i += 4)
+            for (int y = 0; y < height; ++y)
             {
-                BitConverter.GetBytes(data, i, reader.ReadSingle() * scale);
+                // pfms are stored top row to bottom
+                int offset = (height - (y + 1)) * width * 4;
+                for (int x = 0; x < width; ++x, offset += 4)
+                {
+                    BitConverter.GetBytes(data, offset, reader.ReadSingle() * scale);
+                }
             }
 
             return image;
@@ -240,12 +245,17 @@ namespace Ibasa.Media.Visual
         {
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R32G32B32Float);
             byte[] data = image[0, 0];
-            
-            for (int i = 0; i < data.Length; i += 12)
+
+            for (int y = 0; y < height; ++y)
             {
-                BitConverter.GetBytes(data, i + 0, reader.ReadSingle() * scale);
-                BitConverter.GetBytes(data, i + 4, reader.ReadSingle() * scale);
-                BitConverter.GetBytes(data, i + 8, reader.ReadSingle() * scale);
+                // pfms are stored top row to bottom
+                int offset = (height - (y + 1)) * width * 12;
+                for (int x = 0; x < width; ++x, offset += 12)
+                {
+                    BitConverter.GetBytes(data, offset + 0, reader.ReadSingle() * scale);
+                    BitConverter.GetBytes(data, offset + 4, reader.ReadSingle() * scale);
+                    BitConverter.GetBytes(data, offset + 8, reader.ReadSingle() * scale);
+                }
             }
 
             return image;
@@ -364,7 +374,7 @@ namespace Ibasa.Media.Visual
             writer.Write(Encoding.ASCII.GetBytes(header.ToString()));
 
             byte[] data = Image[0, 0];
-            
+
             if (ascii)
             {
                 if (Image.Format is SharpIL.Formats.R8G8B8UNorm)
@@ -402,7 +412,19 @@ namespace Ibasa.Media.Visual
             }
             else
             {
-                writer.Write(data, 0, data.Length);
+                if (floating)
+                {
+                    for (int y = Image.Size.Height - 1; y >= 0; --y)
+                    {
+                        // pfms are stored top row to bottom
+                        int offset = y * Image.Size.Width * 12;
+                        writer.Write(data, offset, Image.Size.Width * 12);
+                    }
+                }
+                else
+                {
+                    writer.Write(data, 0, data.Length);
+                }
             }
 
             writer.Close();
