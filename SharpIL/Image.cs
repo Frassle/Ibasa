@@ -367,13 +367,31 @@ namespace Ibasa.SharpIL
         {
             Image result = new Image(source.Size);
 
-            for (int z = 0; z < source.Depth; ++z)
+            for (int z = 0; z < result.Depth; ++z)
             {
-                for (int y = 0; y < source.Height; ++y)
+                for (int y = 0; y < result.Height; ++y)
                 {
-                    for (int x = 0; x < source.Width; ++x)
+                    for (int x = 0; x < result.Width; ++x)
                     {
                         result[x, y, z] = function(source[x, y, z]);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static Image Map2(Func<Colord, Colord, Colord> function, Image source1, Image source2)
+        {
+            Image result = new Image(Ibasa.Numerics.Geometry.Size.Min(source1.Size, source2.Size));
+
+            for (int z = 0; z < result.Depth; ++z)
+            {
+                for (int y = 0; y < result.Height; ++y)
+                {
+                    for (int x = 0; x < result.Width; ++x)
+                    {
+                        result[x, y, z] = function(source1[x, y, z], source2[x, y, z]);
                     }
                 }
             }
