@@ -359,6 +359,46 @@ namespace Ibasa.SharpIL
         }
         #endregion
 
+        #region Manipulation
+
+        public static Image Map(Func<Colord, Colord> function, Image source)
+        {
+            Image result = new Image(source.Size);
+
+            for (int z = 0; z < source.Depth; ++z)
+            {
+                for (int y = 0; y < source.Height; ++y)
+                {
+                    for (int x = 0; x < source.Width; ++x)
+                    {
+                        result[x, y, z] = function(source[x, y, z]);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static Image MapIndexed(Func<Point3i, Colord, Colord> function, Image source)
+        {
+            Image result = new Image(source.Size);
+
+            for (int z = 0; z < source.Depth; ++z)
+            {
+                for (int y = 0; y < source.Height; ++y)
+                {
+                    for (int x = 0; x < source.Width; ++x)
+                    {
+                        result[x, y, z] = function(new Point3i(x, y, z), source[x, y, z]);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
         public void Copy(Resource destination, int mipSlice, int arraySlice)
         {
             Contract.Requires(destination != null);
