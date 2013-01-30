@@ -1092,6 +1092,22 @@ namespace Numerics_Generator
                 string.Join(", ", Components.Select(component => string.Format("left.{0} * right.{0}", component))));
             Dedent();
             WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Divides the components of one color by another and returns the result.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"left\">The color to be divided (the dividend)</param>");
+            WriteLine("/// <param name=\"right\">The color to divide by (the divisor).</param>");
+            WriteLine("/// <returns>The result of dividing each component of left by the matching component in right (the quotient).</returns>");
+            WriteLine("public static {0} Divide({0} left, {0} right)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}({1});", Name,
+                string.Join(", ", Components.Select(component => string.Format("left.{0} / right.{0}", component))));
+            Dedent();
+            WriteLine("}");
+
+
             WriteLine("/// <summary>");
             WriteLine("/// Returns the absolute value (per component).");
             WriteLine("/// </summary>");

@@ -4592,6 +4592,16 @@ namespace Ibasa.Numerics
 			return new Colorf(left.R * right.R, left.G * right.G, left.B * right.B, left.A * right.A);
 		}
 		/// <summary>
+		/// Divides the components of one color by another and returns the result.
+		/// </summary>
+		/// <param name="left">The color to be divided (the dividend)</param>
+		/// <param name="right">The color to divide by (the divisor).</param>
+		/// <returns>The result of dividing each component of left by the matching component in right (the quotient).</returns>
+		public static Colorf Divide(Colorf left, Colorf right)
+		{
+			return new Colorf(left.R / right.R, left.G / right.G, left.B / right.B, left.A / right.A);
+		}
+		/// <summary>
 		/// Returns the absolute value (per component).
 		/// </summary>
 		/// <param name="value">A color.</param>
