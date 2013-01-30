@@ -1186,6 +1186,19 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
 
+            WriteLine("/// <summary>");
+            WriteLine("/// Returns the natural (base e) logarithm of each component.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">A color whose logarithm is to be found.</param>");
+            WriteLine("/// <returns>A color with the logarithm of each component.</returns>");
+            WriteLine("public static {0} Log({0} value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}({1});", Name,
+                string.Join(", ", Components.Select(component => string.Format("Functions.Log(value.{0})", component))));
+            Dedent();
+            WriteLine("}");
+
             WriteLine("#endregion");
             #endregion
 

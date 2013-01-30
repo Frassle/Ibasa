@@ -4659,6 +4659,15 @@ namespace Ibasa.Numerics
 		{
 			return new Colord(Functions.Exp(value.R), Functions.Exp(value.G), Functions.Exp(value.B), Functions.Exp(value.A));
 		}
+		/// <summary>
+		/// Returns the natural (base e) logarithm of each component.
+		/// </summary>
+		/// <param name="value">A color whose logarithm is to be found.</param>
+		/// <returns>A color with the logarithm of each component.</returns>
+		public static Colord Log(Colord value)
+		{
+			return new Colord(Functions.Log(value.R), Functions.Log(value.G), Functions.Log(value.B), Functions.Log(value.A));
+		}
 		#endregion
 		#region Interpolation
 		/// <summary>
