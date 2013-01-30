@@ -2,6 +2,8 @@
 using System.Diagnostics.Contracts;
 using Ibasa.Numerics;
 using Ibasa.Numerics.Geometry;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Ibasa.SharpIL
 {
@@ -390,6 +392,34 @@ namespace Ibasa.SharpIL
                     for (int x = 0; x < source.Width; ++x)
                     {
                         result[x, y, z] = function(new Point3i(x, y, z), source[x, y, z]);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static Image Fold(Func<Colord, Colord, Colord> function, Colord color, IEnumerable<Image> images)
+        {
+            var size = images.Aggregate(
+                new Size3i(int.MaxValue, int.MaxValue, int.MaxValue),
+                (s, i) =>
+                    Ibasa.Numerics.Geometry.Size.Min(s, i.Size));
+
+            var result = new Image(size);
+
+            for (int z = 0; z < result.Depth; ++z)
+            {
+                for (int y = 0; y < result.Height; ++y)
+                {
+                    for (int x = 0; x < result.Width; ++x)
+                    {
+                        var fold = color;
+                        foreach (var image in images)
+                        {
+                            fold = function(fold, image[x,y,z]);
+                        }
+                        result[x, y, z] = fold;
                     }
                 }
             }
