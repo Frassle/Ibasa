@@ -46,6 +46,11 @@ namespace Ibasa.Media.Visual
             }
         }
 
+        public Pnm(Resource image)
+        {
+            Image = image;
+        }
+
         public Pnm(string path)
         {
             using (var stream = File.OpenRead(path))
