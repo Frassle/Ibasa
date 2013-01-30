@@ -363,6 +363,24 @@ namespace Ibasa.SharpIL
 
         #region Manipulation
 
+        public static Image Initialize(Size3i size, Func<Point3i, Colord> initalizer)
+        {
+            Image image = new Image(size);
+
+            for (int z = 0; z < image.Depth; ++z)
+            {
+                for (int y = 0; y < image.Height; ++y)
+                {
+                    for (int x = 0; x < image.Width; ++x)
+                    {
+                        image[x, y, z] = initalizer(new Point3i(x, y, z));
+                    }
+                }
+            }
+
+            return image;
+        }
+
         public static void Iterate(Action<Colord> action, Image source)
         {
             for (int z = 0; z < source.Depth; ++z)
@@ -388,6 +406,36 @@ namespace Ibasa.SharpIL
                     for (int x = 0; x < source1.Width; ++x)
                     {
                         action(source1[x, y, z], source2[x, y, z]);
+                    }
+                }
+            }
+        }
+
+        public static void IterateIndexed(Action<Point3i, Colord> action, Image source)
+        {
+            for (int z = 0; z < source.Depth; ++z)
+            {
+                for (int y = 0; y < source.Height; ++y)
+                {
+                    for (int x = 0; x < source.Width; ++x)
+                    {
+                        action(new Point3i(x, y, z), source[x, y, z]);
+                    }
+                }
+            }
+        }
+
+        public static void IterateIndexed2(Action<Point3i, Colord, Colord> action, Image source1, Image source2)
+        {
+            Contract.Requires(source1.Size == source2.Size);
+
+            for (int z = 0; z < source1.Depth; ++z)
+            {
+                for (int y = 0; y < source1.Height; ++y)
+                {
+                    for (int x = 0; x < source1.Width; ++x)
+                    {
+                        action(new Point3i(x, y, z), source1[x, y, z], source2[x, y, z]);
                     }
                 }
             }
@@ -429,6 +477,25 @@ namespace Ibasa.SharpIL
             return result;
         }
 
+        public static Image Map3(Func<Colord, Colord, Colord, Colord> function, Image source1, Image source2, Image source3)
+        {
+            Image result = new Image(
+                Ibasa.Numerics.Geometry.Size.Min(Ibasa.Numerics.Geometry.Size.Min(source1.Size, source2.Size), source3.Size));
+
+            for (int z = 0; z < result.Depth; ++z)
+            {
+                for (int y = 0; y < result.Height; ++y)
+                {
+                    for (int x = 0; x < result.Width; ++x)
+                    {
+                        result[x, y, z] = function(source1[x, y, z], source2[x, y, z], source3[x, y, z]);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static Image MapIndexed(Func<Point3i, Colord, Colord> function, Image source)
         {
             Image result = new Image(source.Size);
@@ -440,6 +507,24 @@ namespace Ibasa.SharpIL
                     for (int x = 0; x < source.Width; ++x)
                     {
                         result[x, y, z] = function(new Point3i(x, y, z), source[x, y, z]);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static Image MapIndexed2(Func<Point3i, Colord, Colord, Colord> function, Image source1, Image source2)
+        {
+            Image result = new Image(Ibasa.Numerics.Geometry.Size.Min(source1.Size, source2.Size));
+
+            for (int z = 0; z < result.Depth; ++z)
+            {
+                for (int y = 0; y < result.Height; ++y)
+                {
+                    for (int x = 0; x < result.Width; ++x)
+                    {
+                        result[x, y, z] = function(new Point3i(x, y, z), source1[x, y, z], source2[x, y, z]);
                     }
                 }
             }
