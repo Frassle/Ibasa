@@ -345,7 +345,9 @@ namespace Ibasa.Media.Visual
         {
             BinaryWriter writer = new BinaryWriter(stream, Encoding.ASCII);
 
-            writer.Write('P');
+            StringBuilder header = new StringBuilder();
+
+            header.Append('P');
 
             bool floating = Image.Format is SharpIL.Formats.R32G32B32Float || Image.Format is SharpIL.Formats.R32Float;
 
@@ -355,29 +357,31 @@ namespace Ibasa.Media.Visual
                     throw new ArgumentException("Cannot save float image as ASCII", "ascii");
 
                 if (Image.Format is SharpIL.Formats.R8G8B8UNorm)
-                    writer.Write('3');
+                    header.Append('3');
                 else
-                    writer.Write('2');
+                    header.Append('2');
             }
             else
             {
                 if (Image.Format is SharpIL.Formats.R8G8B8UNorm)
-                    writer.Write('6');
+                    header.Append('6');
                 else if(Image.Format is SharpIL.Formats.R8UNorm)
-                    writer.Write('5');
+                    header.Append('5');
                 else if (Image.Format is SharpIL.Formats.R32G32B32Float)
-                    writer.Write('F');
+                    header.Append('F');
                 else if (Image.Format is SharpIL.Formats.R32Float)
-                    writer.Write('f');
+                    header.Append('f');
             }
 
-            writer.Write(Environment.NewLine);
-            writer.Write(Image.Size.Width.ToString());
-            writer.Write(" ");
-            writer.Write(Image.Size.Height.ToString());
-            writer.Write(Environment.NewLine);
-            writer.Write(floating ? "-1.0" : "255");
-            writer.Write(Environment.NewLine);
+            header.Append(Environment.NewLine);
+            header.Append(Image.Size.Width.ToString());
+            header.Append(" ");
+            header.Append(Image.Size.Height.ToString());
+            header.Append(Environment.NewLine);
+            header.Append(floating ? "-1.0" : "255");
+            header.Append(Environment.NewLine);
+
+            writer.Write(Encoding.ASCII.GetBytes(header.ToString()));
 
             byte[] data = Image[0, 0];
             
