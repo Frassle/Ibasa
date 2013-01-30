@@ -363,6 +363,36 @@ namespace Ibasa.SharpIL
 
         #region Manipulation
 
+        public static void Iterate(Action<Colord> action, Image source)
+        {
+            for (int z = 0; z < source.Depth; ++z)
+            {
+                for (int y = 0; y < source.Height; ++y)
+                {
+                    for (int x = 0; x < source.Width; ++x)
+                    {
+                        action(source[x, y, z]);
+                    }
+                }
+            }
+        }
+
+        public static void Iterate2(Action<Colord, Colord> action, Image source1, Image source2)
+        {
+            Contract.Requires(source1.Size == source2.Size);
+
+            for (int z = 0; z < source1.Depth; ++z)
+            {
+                for (int y = 0; y < source1.Height; ++y)
+                {
+                    for (int x = 0; x < source1.Width; ++x)
+                    {
+                        action(source1[x, y, z], source2[x, y, z]);
+                    }
+                }
+            }
+        }
+
         public static Image Map(Func<Colord, Colord> function, Image source)
         {
             Image result = new Image(source.Size);
