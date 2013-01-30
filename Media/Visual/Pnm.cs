@@ -74,7 +74,6 @@ namespace Ibasa.Media.Visual
             if (pByte != 'P')
                 throw new InvalidDataException();
 
-
             int type;
 
             if (iByte == 'f')
@@ -97,13 +96,14 @@ namespace Ibasa.Media.Visual
             int width = Parse(reader);
             int height = Parse(reader);
             int max = 0;
-            if (type != 1 && type != 4)
+            if (type == 2 || type == 3 || type == 5 || type == 6)
                 max = Parse(reader);
-            int scale = 0;
-            if (type == 7 || type == 8)
-                scale = Parse(reader);
 
-            if (scale < 0)
+            float scale = 0;
+            if (type == 7 || type == 8)
+                scale = ParseFloat(reader);
+
+            if (scale > 0)
                 throw new NotSupportedException("Does not support big endian floats.");
 
             switch (type)
@@ -128,10 +128,10 @@ namespace Ibasa.Media.Visual
                     ImageData = ReadBinaryPixmap(reader, width, height, max);
                     break;
                 case 7: // Float graymap
-                    ImageData = ReadBinaryFloatGraymap(reader, width, height, scale);
+                    ImageData = ReadBinaryFloatGraymap(reader, width, height, Math.Abs(scale));
                     break;
                 case 8: // Float Pixmap
-                    ImageData = ReadBinaryFloatPixmap(reader, width, height, scale);
+                    ImageData = ReadBinaryFloatPixmap(reader, width, height, Math.Abs(scale));
                     break;
             }
         }
@@ -235,7 +235,7 @@ namespace Ibasa.Media.Visual
             return image;
         }
 
-        private Resource ReadBinaryFloatGraymap(BinaryReader reader, int width, int height, int scale)
+        private Resource ReadBinaryFloatGraymap(BinaryReader reader, int width, int height, float scale)
         {
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R32Float);
             byte[] data = image[0, 0];
@@ -252,7 +252,7 @@ namespace Ibasa.Media.Visual
             return image;
         }
 
-        private Resource ReadBinaryFloatPixmap(BinaryReader reader, int width, int height, int scale)
+        private Resource ReadBinaryFloatPixmap(BinaryReader reader, int width, int height, float scale)
         {
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R32G32B32Float);
             byte[] data = image[0, 0];
@@ -271,39 +271,67 @@ namespace Ibasa.Media.Visual
             return image;
         }
 
-        private int Parse(BinaryReader reader)
+        private void SkipWhitespace(BinaryReader reader)
         {
-            while (char.IsWhiteSpace(reader.ReadChar()))
+            int peek = reader.PeekChar();
+            for (; char.IsWhiteSpace((char)peek); peek = reader.PeekChar())
             {
+                reader.ReadChar();
+
                 if (reader.PeekChar() == '#')
                 {
-                    while (reader.ReadChar() != '\n')
+                    while (reader.PeekChar() != '\n')
                     {
+                        reader.ReadChar();
                     }
                 }
             }
+        }
+
+        private int Parse(BinaryReader reader)
+        {
+            SkipWhitespace(reader);            
 
             int result = 0;
-            bool negative = false;
 
-            char c = reader.ReadChar();
-            if (c == '+')
-            {
-                c = reader.ReadChar();
-            }
-            else if (c == '-')
-            {
-                negative = true;
-                c = reader.ReadChar();
-            }
-
-            for(; char.IsDigit(c); c = reader.ReadChar())
+            for (char c = reader.ReadChar(); char.IsDigit(c); c = reader.ReadChar())
             {
                 result *= 10;
                 result += (c - '0');
             }
 
-            return negative ? -result : result;
+            return result;
+        }
+
+        private float ParseFloat(BinaryReader reader)
+        {
+            SkipWhitespace(reader);
+
+            StringBuilder result = new StringBuilder();
+            
+            char c = reader.ReadChar();
+            if (c == '+' || c == '-')
+            {
+                result.Append(c);
+                c = reader.ReadChar();
+            }
+
+            for(; char.IsDigit(c); c = reader.ReadChar())
+            {
+                result.Append(c);
+            }
+
+            if (c == '.')
+            {
+                result.Append(c);
+
+                for (c = reader.ReadChar(); char.IsDigit(c); c = reader.ReadChar())
+                {
+                    result.Append(c);
+                }
+            }
+
+            return float.Parse(result.ToString());
         }
 
         public void Save(string path, bool ascii)
@@ -348,7 +376,7 @@ namespace Ibasa.Media.Visual
             writer.Write(" ");
             writer.Write(Image.Size.Height.ToString());
             writer.Write(Environment.NewLine);
-            writer.Write(floating ? "1" : "255");
+            writer.Write(floating ? "-1.0" : "255");
             writer.Write(Environment.NewLine);
 
             byte[] data = Image[0, 0];
