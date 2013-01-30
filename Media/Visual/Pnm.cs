@@ -182,10 +182,6 @@ namespace Ibasa.Media.Visual
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R8UNorm);
             byte[] data = image[0, 0];
 
-            int c = reader.PeekChar();
-            if (c == -1 || char.IsWhiteSpace((char)c))
-                reader.ReadChar();
-
             for (int i = 0; i < data.Length; i += 8)
             {
                 byte bits = reader.ReadByte();
@@ -204,10 +200,6 @@ namespace Ibasa.Media.Visual
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R8UNorm);
             byte[] data = image[0, 0];
 
-            int c = reader.PeekChar();
-            if (c == -1 || char.IsWhiteSpace((char)c))
-                reader.ReadChar();
-
             for (int i = 0; i < data.Length; )
             {
                 data[i++] = (byte)((reader.ReadByte() * byte.MaxValue) / max);
@@ -220,10 +212,6 @@ namespace Ibasa.Media.Visual
         {
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R8G8B8UNorm);
             byte[] data = image[0, 0];
-
-            int c = reader.PeekChar();
-            if (c == -1 || char.IsWhiteSpace((char)c))
-                reader.ReadChar();
 
             for (int i = 0; i < data.Length; )
             {
@@ -240,10 +228,6 @@ namespace Ibasa.Media.Visual
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R32Float);
             byte[] data = image[0, 0];
 
-            int c = reader.PeekChar();
-            if (c == -1 || char.IsWhiteSpace((char)c))
-                reader.ReadChar();
-
             for (int i = 0; i < data.Length; i += 4)
             {
                 BitConverter.GetBytes(data, i, reader.ReadSingle() * scale);
@@ -256,11 +240,7 @@ namespace Ibasa.Media.Visual
         {
             Resource image = new Resource(new Size3i(width, height, 1), 1, 1, Format.R32G32B32Float);
             byte[] data = image[0, 0];
-
-            int c = reader.PeekChar();
-            if (c == -1 || char.IsWhiteSpace((char)c))
-                reader.ReadChar();
-
+            
             for (int i = 0; i < data.Length; i += 12)
             {
                 BitConverter.GetBytes(data, i + 0, reader.ReadSingle() * scale);
