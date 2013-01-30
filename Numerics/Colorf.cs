@@ -4640,6 +4640,15 @@ namespace Ibasa.Numerics
 		{
 			return new Colorf(Functions.Saturate(value.R), Functions.Saturate(value.G), Functions.Saturate(value.B), Functions.Saturate(value.A));
 		}
+		/// <summary>
+		/// Exponentiates each component.
+		/// </summary>
+		/// <param name="value">A color to exponentiate.</param>
+		/// <returns>A color with each component exponentiated.</returns>
+		public static Colorf Exp(Colorf value)
+		{
+			return new Colorf(Functions.Exp(value.R), Functions.Exp(value.G), Functions.Exp(value.B), Functions.Exp(value.A));
+		}
 		#endregion
 		#region Interpolation
 		/// <summary>

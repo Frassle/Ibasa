@@ -1156,6 +1156,20 @@ namespace Numerics_Generator
                 string.Join(", ", Components.Select(component => string.Format("Functions.Saturate(value.{0})", component))));
             Dedent();
             WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Exponentiates each component.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">A color to exponentiate.</param>");
+            WriteLine("/// <returns>A color with each component exponentiated.</returns>");
+            WriteLine("public static {0} Exp({0} value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}({1});", Name,
+                string.Join(", ", Components.Select(component => string.Format("Functions.Exp(value.{0})", component))));
+            Dedent();
+            WriteLine("}");
+
             WriteLine("#endregion");
             #endregion
 
