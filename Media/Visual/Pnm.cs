@@ -18,7 +18,7 @@ namespace Ibasa.Media.Visual
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();                
+                    throw new ArgumentNullException("value");
 
                 if (!(
                     value.Format is SharpIL.Formats.R8G8B8UNorm ||
