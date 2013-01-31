@@ -939,23 +939,6 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
 
-            WriteLine("/// <summary>");
-            WriteLine("/// Gamma correct a color.");
-            WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"color\">Color to gamma correct.</param>");
-            WriteLine("/// <param name=\"gamma\">Gamma value to use.</param>");
-            WriteLine("/// <returns>The gamma corrected color.</returns>");
-            WriteLine("public static {0} Gamma({0} color, {1} gamma)", Name, Type);
-            WriteLine("{");
-            Indent();
-            WriteLine("var r = Functions.Pow(color.R, gamma);");
-            WriteLine("var g = Functions.Pow(color.G, gamma);");
-            WriteLine("var b = Functions.Pow(color.B, gamma);");
-            WriteLine("var a = Functions.Pow(color.A, gamma);");
-            WriteLine("return new {0}(r, g, b, a);", Name);
-            Dedent();
-            WriteLine("}");
-
             WriteLine("#endregion");
             #endregion
 
@@ -1187,7 +1170,7 @@ namespace Numerics_Generator
             WriteLine("}");
 
             WriteLine("/// <summary>");
-            WriteLine("/// Returns the natural (base e) logarithm of each component.");
+            WriteLine("/// Returns a color with the natural (base e) logarithm of each component.");
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">A color whose logarithm is to be found.</param>");
             WriteLine("/// <returns>A color with the logarithm of each component.</returns>");
@@ -1196,6 +1179,20 @@ namespace Numerics_Generator
             Indent();
             WriteLine("return new {0}({1});", Name,
                 string.Join(", ", Components.Select(component => string.Format("Functions.Log(value.{0})", component))));
+            Dedent();
+            WriteLine("}");
+            
+            WriteLine("/// <summary>");
+            WriteLine("/// Retuns a color with each component raised to a given power.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">A color to be raised to a power.</param>");
+            WriteLine("/// <param name=\"power\">A number that specifies the power.</param>");
+            WriteLine("/// <returns>A color with each component raised to the given power.</returns>");
+            WriteLine("public static {0} Pow({0} value, {1} power)", Name, Type);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}({1});", Name,
+                string.Join(", ", Components.Select(component => string.Format("Functions.Pow(value.{0}, power)", component))));
             Dedent();
             WriteLine("}");
 

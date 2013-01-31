@@ -4461,20 +4461,6 @@ namespace Ibasa.Numerics
 			var bw = Functions.Round(0.2125 * color.R + 0.7154 * color.G + 0.0721 * color.B);
 			return new Colord(bw, bw, bw, color.A);
 		}
-		/// <summary>
-		/// Gamma correct a color.
-		/// </summary>
-		/// <param name="color">Color to gamma correct.</param>
-		/// <param name="gamma">Gamma value to use.</param>
-		/// <returns>The gamma corrected color.</returns>
-		public static Colord Gamma(Colord color, double gamma)
-		{
-			var r = Functions.Pow(color.R, gamma);
-			var g = Functions.Pow(color.G, gamma);
-			var b = Functions.Pow(color.B, gamma);
-			var a = Functions.Pow(color.A, gamma);
-			return new Colord(r, g, b, a);
-		}
 		#endregion
 		#region Quantization
 		public static Vector4l Quantize(int redBits, int greenBits, int blueBits, int alphaBits, Colord color)
@@ -4660,13 +4646,23 @@ namespace Ibasa.Numerics
 			return new Colord(Functions.Exp(value.R), Functions.Exp(value.G), Functions.Exp(value.B), Functions.Exp(value.A));
 		}
 		/// <summary>
-		/// Returns the natural (base e) logarithm of each component.
+		/// Returns a color with the natural (base e) logarithm of each component.
 		/// </summary>
 		/// <param name="value">A color whose logarithm is to be found.</param>
 		/// <returns>A color with the logarithm of each component.</returns>
 		public static Colord Log(Colord value)
 		{
 			return new Colord(Functions.Log(value.R), Functions.Log(value.G), Functions.Log(value.B), Functions.Log(value.A));
+		}
+		/// <summary>
+		/// Retuns a color with each component raised to a given power.
+		/// </summary>
+		/// <param name="value">A color to be raised to a power.</param>
+		/// <param name="power">A number that specifies the power.</param>
+		/// <returns>A color with each component raised to the given power.</returns>
+		public static Colord Pow(Colord value, double power)
+		{
+			return new Colord(Functions.Pow(value.R, power), Functions.Pow(value.G, power), Functions.Pow(value.B, power), Functions.Pow(value.A, power));
 		}
 		#endregion
 		#region Interpolation
