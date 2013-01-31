@@ -507,63 +507,6 @@ namespace Ibasa.SharpIL
         #endregion
 
         #region Filter
-        public static void Gamma(Image image, double gamma)
-        {
-            for (int z = 0; z < image.Depth; ++z)
-            {
-                for (int y = 0; y < image.Height; ++y)
-                {
-                    for (int x = 0; x < image.Width; ++x)
-                    {
-                        Colord pixel = image[x, y, z];
-                        image[x, y, z] = Color.Gamma(pixel, gamma);
-                    }
-                }
-            }
-        }
-        public static void Grayscale(Image image)
-        {
-            for (int z = 0; z < image.Depth; ++z)
-            {
-                for (int y = 0; y < image.Height; ++y)
-                {
-                    for (int x = 0; x < image.Width; ++x)
-                    {
-                        Colord pixel = image[x, y, z];
-                        image[x, y, z] = Color.Greyscale(pixel);
-                    }
-                }
-            }
-        }
-
-        public static void BlackWhite(Image image)
-        {
-            for (int z = 0; z < image.Depth; ++z)
-            {
-                for (int y = 0; y < image.Height; ++y)
-                {
-                    for (int x = 0; x < image.Width; ++x)
-                    {
-                        Colord pixel = image[x, y, z];
-                        image[x, y, z] = Color.BlackWhite(pixel);
-                    }
-                }
-            }
-        }
-        public static void Negative(Image image)
-        {
-            for (int z = 0; z < image.Depth; ++z)
-            {
-                for (int y = 0; y < image.Height; ++y)
-                {
-                    for (int x = 0; x < image.Width; ++x)
-                    {
-                        Colord pixel = image[x, y, z];
-                        image[x, y, z] = Color.Negative(pixel);
-                    }
-                }
-            }
-        }
 
         public delegate double Metric(int x1, int y1, int z1, int x2, int y2, int z2);
 
