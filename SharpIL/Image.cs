@@ -233,6 +233,43 @@ namespace Ibasa.SharpIL
             AddressY = AddressMode.Clamp;
             AddressZ = AddressMode.Clamp;
         }
+        public Image(Colord[] pixels)
+        {
+            Contract.Requires(pixels != null);
+
+            Size = new Size3i(pixels.GetLength(0), 1, 1);
+            Pixels = new Colord[Width];
+            Array.Copy(pixels, Pixels, Width);
+
+            AddressX = AddressMode.Clamp;
+            AddressY = AddressMode.Clamp;
+            AddressZ = AddressMode.Clamp;
+        }
+        public Image(Colord[,] pixels)
+        {
+            Contract.Requires(pixels != null);
+
+            Size = new Size3i(pixels.GetLength(0), pixels.GetLength(1), 1);
+            Pixels = new Colord[Width * Height];
+            Array.Copy(pixels, Pixels, Width * Height);
+
+            AddressX = AddressMode.Clamp;
+            AddressY = AddressMode.Clamp;
+            AddressZ = AddressMode.Clamp;
+        }
+        public Image(Colord[,,] pixels)
+        {
+            Contract.Requires(pixels != null);
+
+            Size = new Size3i(pixels.GetLength(0), pixels.GetLength(1), pixels.GetLength(2));
+            Pixels = new Colord[Width * Height * Depth];
+            Array.Copy(pixels, Pixels, Width * Height * Depth);
+
+            AddressX = AddressMode.Clamp;
+            AddressY = AddressMode.Clamp;
+            AddressZ = AddressMode.Clamp;
+        }
+
         #endregion
 
         #region Get/Set Pixel
