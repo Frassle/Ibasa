@@ -239,7 +239,10 @@ namespace Ibasa.SharpIL
 
             Size = new Size3i(pixels.GetLength(0), 1, 1);
             Pixels = new Colord[Width];
-            Array.Copy(pixels, Pixels, Width);
+            for (int x = 0; x < Width; ++x)
+            {
+                this[x] = pixels[x];
+            }
 
             AddressX = AddressMode.Clamp;
             AddressY = AddressMode.Clamp;
@@ -251,7 +254,13 @@ namespace Ibasa.SharpIL
 
             Size = new Size3i(pixels.GetLength(0), pixels.GetLength(1), 1);
             Pixels = new Colord[Width * Height];
-            Array.Copy(pixels, Pixels, Width * Height);
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    this[x, y] = pixels[x, y];
+                }
+            }
 
             AddressX = AddressMode.Clamp;
             AddressY = AddressMode.Clamp;
@@ -263,7 +272,16 @@ namespace Ibasa.SharpIL
 
             Size = new Size3i(pixels.GetLength(0), pixels.GetLength(1), pixels.GetLength(2));
             Pixels = new Colord[Width * Height * Depth];
-            Array.Copy(pixels, Pixels, Width * Height * Depth);
+            for (int z = 0; z < Depth; ++z)
+            {
+                for (int y = 0; y < Height; ++y)
+                {
+                    for (int x = 0; x < Width; ++x)
+                    {
+                        this[x, y, z] = pixels[x, y, z];
+                    }
+                }
+            }
 
             AddressX = AddressMode.Clamp;
             AddressY = AddressMode.Clamp;
