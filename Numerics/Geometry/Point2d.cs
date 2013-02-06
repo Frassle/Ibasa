@@ -826,6 +826,29 @@ namespace Ibasa.Numerics.Geometry
 			return new Point2d(1 / value.X, 1 / value.Y);
 		}
 		#endregion
+		#region Coordinate spaces
+		/// <summary>
+		/// Transforms a point in cartesian coordinates to polar coordinates.
+		/// </summary>
+		/// <param name="value">The point to transform.</param>
+		/// <returns>The polar coordinates of value, radius and then theta.</returns>
+		public static Tuple<double, double> CartesianToPolar(Point2d value)
+		{
+			return Tuple.Create(
+			     (double)Functions.Sqrt(value.X * value.X + value.Y * value.Y),
+			     (double)Functions.Atan2(value.X, value.Y));
+		}
+		/// <summary>
+		/// Transforms a point in polar coordinates to cartesian coordinates.
+		/// </summary>
+		/// <param name="value">The point to transform, radius and then theta.</param>
+		/// <returns>The cartesian coordinates of value.</returns>
+		public static Point2d PolarToCartesian(Tuple<double, double> value)
+		{
+			return new Point2d(
+			     value.Item1 * Functions.Cos(value.Item2), value.Item1 * Functions.Sin(value.Item2));
+		}
+		#endregion
 		#region Project
 		/// <summary>
 		/// Projects a point onto a vector, returns the distance of the projection from the origin.
