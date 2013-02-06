@@ -34,7 +34,7 @@ namespace Ibasa.SharpIL
         public AddressMode AddressY { get; set; }
         public AddressMode AddressZ { get; set; }
         public Colord[] Pixels { get; private set; }
-        public Colord BorderColord { get; set; }
+        public Colord BorderColor { get; set; }
 
         private static int Address(int axis, int axisLength, AddressMode mode)
         {
@@ -88,7 +88,7 @@ namespace Ibasa.SharpIL
             get
             {
                 if (Border(x))
-                    return BorderColord;
+                    return BorderColor;
 
                 x = Address(x, Width, AddressX);
 
@@ -109,7 +109,7 @@ namespace Ibasa.SharpIL
             get
             {
                 if (Border(x, y))
-                    return BorderColord;
+                    return BorderColor;
 
                 x = Address(x, Width, AddressX);
                 y = Address(y, Height, AddressY);
@@ -132,7 +132,7 @@ namespace Ibasa.SharpIL
             get
             {
                 if (Border(x, y, z))
-                    return BorderColord;
+                    return BorderColor;
 
                 x = Address(x, Width, AddressX);
                 y = Address(y, Height, AddressY);
@@ -157,7 +157,7 @@ namespace Ibasa.SharpIL
             get
             {
                 if (Border(point.X, point.Y, point.Z))
-                    return BorderColord;
+                    return BorderColor;
 
                 int x = Address(point.X, Width, AddressX);
                 int y = Address(point.Y, Height, AddressY);
