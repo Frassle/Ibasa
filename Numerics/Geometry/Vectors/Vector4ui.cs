@@ -4197,5 +4197,7 @@ namespace Ibasa.Numerics.Geometry
 			return new Vector4ui(Functions.Clamp(value.X, min.X, max.X), Functions.Clamp(value.Y, min.Y, max.Y), Functions.Clamp(value.Z, min.Z, max.Z), Functions.Clamp(value.W, min.W, max.W));
 		}
 		#endregion
+		#region Coordinate spaces
+		#endregion
 	}
 }

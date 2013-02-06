@@ -1100,6 +1100,29 @@ namespace Ibasa.Numerics.Geometry
 			return new Vector2d(1 / value.X, 1 / value.Y);
 		}
 		#endregion
+		#region Coordinate spaces
+		/// <summary>
+		/// Transforms a vector in cartesian coordinates to polar coordinates.
+		/// </summary>
+		/// <param name="value">The vector to transform.</param>
+		/// <returns>The polar coordinates of value, radius and then theta.</returns>
+		public static Tuple<double, double> CartesianToPolar(Vector2d value)
+		{
+			return Tuple.Create(
+			     (double)Functions.Sqrt(value.X * value.X + value.Y * value.Y),
+			     (double)Functions.Atan2(value.X, value.Y));
+		}
+		/// <summary>
+		/// Transforms a vector in polar coordinates to cartesian coordinates.
+		/// </summary>
+		/// <param name="value">The vector to transform, radius and then theta.</param>
+		/// <returns>The cartesian coordinates of value.</returns>
+		public static Vector2d PolarToCartesian(Tuple<double, double> value)
+		{
+			return new Vector2d(
+			     value.Item1 * Functions.Cos(value.Item2), value.Item1 * Functions.Sin(value.Item2));
+		}
+		#endregion
 		#region Barycentric, Reflect, Refract
 		/// <summary>
 		/// Returns the Cartesian coordinate for one axis of a point that is defined

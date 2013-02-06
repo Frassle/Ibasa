@@ -1117,6 +1117,8 @@ namespace Ibasa.Numerics.Geometry
 			return new Vector16f(1 / value.V0, 1 / value.V1, 1 / value.V2, 1 / value.V3, 1 / value.V4, 1 / value.V5, 1 / value.V6, 1 / value.V7, 1 / value.V8, 1 / value.V9, 1 / value.V10, 1 / value.V11, 1 / value.V12, 1 / value.V13, 1 / value.V14, 1 / value.V15);
 		}
 		#endregion
+		#region Coordinate spaces
+		#endregion
 		#region Barycentric, Reflect, Refract
 		/// <summary>
 		/// Returns the Cartesian coordinate for one axis of a point that is defined

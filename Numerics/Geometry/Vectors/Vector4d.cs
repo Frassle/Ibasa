@@ -4237,6 +4237,8 @@ namespace Ibasa.Numerics.Geometry
 			return new Vector4d(1 / value.X, 1 / value.Y, 1 / value.Z, 1 / value.W);
 		}
 		#endregion
+		#region Coordinate spaces
+		#endregion
 		#region Barycentric, Reflect, Refract
 		/// <summary>
 		/// Returns the Cartesian coordinate for one axis of a point that is defined

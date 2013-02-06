@@ -1054,5 +1054,30 @@ namespace Ibasa.Numerics.Geometry
 			return new Vector2us(Functions.Clamp(value.X, min.X, max.X), Functions.Clamp(value.Y, min.Y, max.Y));
 		}
 		#endregion
+		#region Coordinate spaces
+		/// <summary>
+		/// Transforms a vector in cartesian coordinates to polar coordinates.
+		/// </summary>
+		/// <param name="value">The vector to transform.</param>
+		/// <returns>The polar coordinates of value, radius and then theta.</returns>
+		[CLSCompliant(false)]
+		public static Tuple<float, float> CartesianToPolar(Vector2us value)
+		{
+			return Tuple.Create(
+			     (float)Functions.Sqrt(value.X * value.X + value.Y * value.Y),
+			     (float)Functions.Atan2(value.X, value.Y));
+		}
+		/// <summary>
+		/// Transforms a vector in polar coordinates to cartesian coordinates.
+		/// </summary>
+		/// <param name="value">The vector to transform, radius and then theta.</param>
+		/// <returns>The cartesian coordinates of value.</returns>
+		[CLSCompliant(false)]
+		public static Vector2f PolarToCartesian(Tuple<ushort, ushort> value)
+		{
+			return new Vector2f(
+			     value.Item1 * Functions.Cos(value.Item2), value.Item1 * Functions.Sin(value.Item2));
+		}
+		#endregion
 	}
 }

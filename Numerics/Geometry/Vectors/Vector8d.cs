@@ -942,6 +942,8 @@ namespace Ibasa.Numerics.Geometry
 			return new Vector8d(1 / value.V0, 1 / value.V1, 1 / value.V2, 1 / value.V3, 1 / value.V4, 1 / value.V5, 1 / value.V6, 1 / value.V7);
 		}
 		#endregion
+		#region Coordinate spaces
+		#endregion
 		#region Barycentric, Reflect, Refract
 		/// <summary>
 		/// Returns the Cartesian coordinate for one axis of a point that is defined
