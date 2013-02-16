@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="ArraySegment.cs" />
+    <Compile Include="Collections\Array1D.cs" />
     <Compile Include="Collections\Array2D.cs" />
     <Compile Include="Collections\Bag.cs" />
     <Compile Include="Collections\Bimap.cs" />
