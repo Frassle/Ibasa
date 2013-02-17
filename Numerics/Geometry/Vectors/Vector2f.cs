@@ -1105,22 +1105,22 @@ namespace Ibasa.Numerics.Geometry
 		/// Transforms a vector in cartesian coordinates to polar coordinates.
 		/// </summary>
 		/// <param name="value">The vector to transform.</param>
-		/// <returns>The polar coordinates of value, radius and then theta.</returns>
+		/// <returns>The polar coordinates of value, theta and then radius.</returns>
 		public static Tuple<float, float> CartesianToPolar(Vector2f value)
 		{
 			return Tuple.Create(
-			     (float)Functions.Sqrt(value.X * value.X + value.Y * value.Y),
-			     (float)Functions.Atan2(value.X, value.Y));
+			     (float)Functions.Atan2(value.X, value.Y),
+			     (float)Functions.Sqrt(value.X * value.X + value.Y * value.Y));
 		}
 		/// <summary>
 		/// Transforms a vector in polar coordinates to cartesian coordinates.
 		/// </summary>
-		/// <param name="value">The vector to transform, radius and then theta.</param>
+		/// <param name="value">The vector to transform, theta and then radius.</param>
 		/// <returns>The cartesian coordinates of value.</returns>
 		public static Vector2f PolarToCartesian(Tuple<float, float> value)
 		{
 			return new Vector2f(
-			     value.Item1 * Functions.Cos(value.Item2), value.Item1 * Functions.Sin(value.Item2));
+			     value.Item2 * Functions.Cos(value.Item1), value.Item2 * Functions.Sin(value.Item1));
 		}
 		#endregion
 		#region Barycentric, Reflect, Refract
