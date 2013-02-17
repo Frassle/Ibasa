@@ -1177,7 +1177,7 @@ namespace Numerics_Generator
                 WriteLine("/// <param name=\"value\">The point to transform, radius, theta then phi.</param>");
                 WriteLine("/// <returns>The cartesian coordinates of value.</returns>");
                 if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static {1} CartesianToSpherical (Tuple<{0}, {0}, {0}> value)", Type, new Point(Type.RealType, 3));
+                WriteLine("public static {1} SphericalToCartesian (Tuple<{0}, {0}, {0}> value)", Type, new Point(Type.RealType, 3));
                 WriteLine("{");
                 Indent();
                 WriteLine("return new {0}(", new Point(Type.RealType, 3));

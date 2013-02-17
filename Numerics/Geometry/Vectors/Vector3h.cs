@@ -2049,7 +2049,7 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		/// <param name="value">The vector to transform, radius, theta then phi.</param>
 		/// <returns>The cartesian coordinates of value.</returns>
-		public static Vector3f CartesianToSpherical (Tuple<Half, Half, Half> value)
+		public static Vector3f SphericalToCartesian (Tuple<Half, Half, Half> value)
 		{
 			return new Vector3f(
 			     value.Item1 * Functions.Sin(value.Item2) * Functions.Cos(value.Item3),

@@ -1015,7 +1015,7 @@ namespace Ibasa.Numerics.Geometry
 		/// </summary>
 		/// <param name="value">The point to transform, radius, theta then phi.</param>
 		/// <returns>The cartesian coordinates of value.</returns>
-		public static Point3d CartesianToSpherical (Tuple<int, int, int> value)
+		public static Point3d SphericalToCartesian (Tuple<int, int, int> value)
 		{
 			return new Point3d(
 			     value.Item1 * Functions.Sin(value.Item2) * Functions.Cos(value.Item3),
