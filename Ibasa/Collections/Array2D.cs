@@ -23,7 +23,7 @@ namespace Ibasa.Collections
             return array;
         }
 
-        public static U[,] Map<T, U>(T[,] array, Func<T,U> transform)
+        public static U[,] Map<T, U>(Func<T,U> transform, T[,] array)
         {
             var result = new U[array.GetLength(0), array.GetLength(1)];
 
@@ -38,7 +38,7 @@ namespace Ibasa.Collections
             return result;
         }
 
-        public static U[,] MapIndexed<T, U>(T[,] array, Func<int, int, T, U> transform)
+        public static U[,] MapIndexed<T, U>(Func<int, int, T, U> transform, T[,] array)
         {
             var result = new U[array.GetLength(0), array.GetLength(1)];
 
@@ -53,7 +53,7 @@ namespace Ibasa.Collections
             return result;
         }
 
-        public static U[,] Map2<T1, T2, U>(T1[,] array1, T2[,] array2, Func<T1, T2, U> transform)
+        public static U[,] Map2<T1, T2, U>(Func<T1, T2, U> transform, T1[,] array1, T2[,] array2)
         {
             Contract.Requires(array1.GetLength(0) == array2.GetLength(0));
             Contract.Requires(array1.GetLength(1) == array2.GetLength(1));
@@ -71,7 +71,7 @@ namespace Ibasa.Collections
             return result;
         }
 
-        public static U[,] Map2Indexed<T1, T2, U>(T1[,] array1, T2[,] array2, Func<int, int, T1, T2, U> transform)
+        public static U[,] Map2Indexed<T1, T2, U>(Func<int, int, T1, T2, U> transform, T1[,] array1, T2[,] array2)
         {
             Contract.Requires(array1.GetLength(0) == array2.GetLength(0));
             Contract.Requires(array1.GetLength(1) == array2.GetLength(1));
