@@ -735,22 +735,15 @@ namespace Ibasa.Numerics.Geometry
 		/// Transforms a point in cartesian coordinates to polar coordinates.
 		/// </summary>
 		/// <param name="value">The point to transform.</param>
-		/// <returns>The polar coordinates of value, radius and then theta.</returns>
-		public static Tuple<double, double> CartesianToPolar(Point2l value)
+		/// <returns>The polar coordinates of value.</returns>
+		public static PolarCoordinate CartesianToPolar(Point2l value)
 		{
-			return Tuple.Create(
-			     (double)Functions.Sqrt(value.X * value.X + value.Y * value.Y),
-			     (double)Functions.Atan2(value.X, value.Y));
-		}
-		/// <summary>
-		/// Transforms a point in polar coordinates to cartesian coordinates.
-		/// </summary>
-		/// <param name="value">The point to transform, radius and then theta.</param>
-		/// <returns>The cartesian coordinates of value.</returns>
-		public static Point2d PolarToCartesian(Tuple<long, long> value)
-		{
-			return new Point2d(
-			     value.Item1 * Functions.Cos(value.Item2), value.Item1 * Functions.Sin(value.Item2));
+			double theta = Functions.Atan2(value.Y, value.X);
+			if (theta < 0)
+				theta += 2 * Constants.PI;
+			return new PolarCoordinate(
+			     theta,
+			     (double)Functions.Sqrt(value.X * value.X + value.Y * value.Y));
 		}
 		#endregion
 		#region Project

@@ -1958,28 +1958,18 @@ namespace Ibasa.Numerics.Geometry
 		/// Transforms a vector in cartesian coordinates to spherical coordinates.
 		/// </summary>
 		/// <param name="value">The vector to transform.</param>
-		/// <returns>The spherical coordinates of value, theta, phi then radius.</returns>
+		/// <returns>The spherical coordinates of value.</returns>
 		[CLSCompliant(false)]
-		public static Tuple<double, double, double> CartesianToSpherical (Vector3ul value)
+		public static SphericalCoordinate CartesianToSpherical (Vector3ul value)
 		{
 			double r = Functions.Sqrt(value.X * value.X + value.Y * value.Y + value.Z * value.Z);
-			return Tuple.Create(
+			double theta = Functions.Atan2(value.Y, value.X);
+			if (theta < 0)
+				theta += 2 * Constants.PI;
+			return new SphericalCoordinate(
 			     (double)Functions.Acos(value.Z / r),
-			     (double)Functions.Atan2(value.Y, value.X),
-			     (double)r);
-		}
-		/// <summary>
-		/// Transforms a vector in spherical coordinates to cartesian coordinates.
-		/// </summary>
-		/// <param name="value">The vector to transform, theta, phi then radius.</param>
-		/// <returns>The cartesian coordinates of value.</returns>
-		[CLSCompliant(false)]
-		public static Vector3d SphericalToCartesian (Tuple<ulong, ulong, ulong> value)
-		{
-			return new Vector3d(
-			     value.Item3 * Functions.Sin(value.Item1) * Functions.Cos(value.Item2),
-			     value.Item3 * Functions.Sin(value.Item1) * Functions.Sin(value.Item2),
-			     value.Item3 * Functions.Cos(value.Item1));
+			     theta,
+			     r);
 		}
 		#endregion
 	}

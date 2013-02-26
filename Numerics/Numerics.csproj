@@ -152,6 +152,7 @@
     <Compile Include="Geometry\Point3f.cs" />
     <Compile Include="Geometry\Point3i.cs" />
     <Compile Include="Geometry\Point3l.cs" />
+    <Compile Include="Geometry\PolarCoordinate.cs" />
     <Compile Include="Geometry\Polygon2d.cs" />
     <Compile Include="Geometry\Polygon2f.cs" />
     <Compile Include="Geometry\Polygon2i.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Geometry\Spheref.cs" />
     <Compile Include="Geometry\Spherei.cs" />
     <Compile Include="Geometry\Spherel.cs" />
+    <Compile Include="Geometry\SphericalCoordinate.cs" />
     <Compile Include="Geometry\Vectors\Vector16b.cs" />
     <Compile Include="Geometry\Vectors\Vector16d.cs" />
     <Compile Include="Geometry\Vectors\Vector16f.cs" />

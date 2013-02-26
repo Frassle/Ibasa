@@ -1297,30 +1297,38 @@ namespace Numerics_Generator
                 WriteLine("/// Transforms a vector in cartesian coordinates to polar coordinates.");
                 WriteLine("/// </summary>");
                 WriteLine("/// <param name=\"value\">The vector to transform.</param>");
-                WriteLine("/// <returns>The polar coordinates of value, theta and then radius.</returns>");
+                WriteLine("/// <returns>The polar coordinates of value.</returns>");
                 if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static Tuple<{0}, {0}> CartesianToPolar({1} value)", Type.RealType, Name);
+                WriteLine("public static PolarCoordinate CartesianToPolar({0} value)", Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("return Tuple.Create(");
-                WriteLine("     ({0})Functions.Atan2(value.X, value.Y),", Type.RealType);
-                WriteLine("     ({0})Functions.Sqrt(value.X * value.X + value.Y * value.Y));", Type.RealType);
+                WriteLine("double theta = Functions.Atan2(value.Y, value.X);");
+                WriteLine("if (theta < 0)");
+                Indent();
+                WriteLine("theta += 2 * Constants.PI;");
+                Dedent();
+                WriteLine("return new PolarCoordinate(");
+                WriteLine("     theta,");
+                WriteLine("     (double)Functions.Sqrt(value.X * value.X + value.Y * value.Y));");
                 Dedent();
                 WriteLine("}");
 
-                WriteLine("/// <summary>");
-                WriteLine("/// Transforms a vector in polar coordinates to cartesian coordinates.");
-                WriteLine("/// </summary>");
-                WriteLine("/// <param name=\"value\">The vector to transform, theta and then radius.</param>");
-                WriteLine("/// <returns>The cartesian coordinates of value.</returns>");
-                if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static {1} PolarToCartesian(Tuple<{0}, {0}> value)", Type, new Vector(Type.RealType, 2));
-                WriteLine("{");
-                Indent();
-                WriteLine("return new {0}(", new Vector(Type.RealType, 2));
-                WriteLine("     value.Item2 * Functions.Cos(value.Item1), value.Item2 * Functions.Sin(value.Item1));");
-                Dedent();
-                WriteLine("}");
+                if (Type == NumberType.Double)
+                {
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Transforms a vector in polar coordinates to cartesian coordinates.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"value\">The vector to transform.</param>");
+                    WriteLine("/// <returns>The cartesian coordinates of value.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} PolarToCartesian(PolarCoordinate value)", Name);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("return new {0}(", Name);
+                    WriteLine("     value.Rho * Functions.Cos(value.Theta), value.Rho * Functions.Sin(value.Theta));");
+                    Dedent();
+                    WriteLine("}");
+                }
             }
             if (Dimension == 3)
             {
@@ -1328,34 +1336,42 @@ namespace Numerics_Generator
                 WriteLine("/// Transforms a vector in cartesian coordinates to spherical coordinates.");
                 WriteLine("/// </summary>");
                 WriteLine("/// <param name=\"value\">The vector to transform.</param>");
-                WriteLine("/// <returns>The spherical coordinates of value, theta, phi then radius.</returns>");
+                WriteLine("/// <returns>The spherical coordinates of value.</returns>");
                 if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static Tuple<{0}, {0}, {0}> CartesianToSpherical ({1} value)", Type.RealType, Name);
+                WriteLine("public static SphericalCoordinate CartesianToSpherical ({0} value)", Name);
                 WriteLine("{");
                 Indent();
-                WriteLine("{0} r = Functions.Sqrt(value.X * value.X + value.Y * value.Y + value.Z * value.Z);", Type.RealType);
-                WriteLine("return Tuple.Create(");
-                WriteLine("     ({0})Functions.Acos(value.Z / r),", Type.RealType);
-                WriteLine("     ({0})Functions.Atan2(value.Y, value.X),", Type.RealType);
-                WriteLine("     ({0})r);", Type.RealType);
+                WriteLine("double r = Functions.Sqrt(value.X * value.X + value.Y * value.Y + value.Z * value.Z);");
+                WriteLine("double theta = Functions.Atan2(value.Y, value.X);");
+                WriteLine("if (theta < 0)");
+                Indent();
+                WriteLine("theta += 2 * Constants.PI;");
+                Dedent();
+                WriteLine("return new SphericalCoordinate(");
+                WriteLine("     (double)Functions.Acos(value.Z / r),");
+                WriteLine("     theta,");
+                WriteLine("     r);");
                 Dedent();
                 WriteLine("}");
 
-                WriteLine("/// <summary>");
-                WriteLine("/// Transforms a vector in spherical coordinates to cartesian coordinates.");
-                WriteLine("/// </summary>");
-                WriteLine("/// <param name=\"value\">The vector to transform, theta, phi then radius.</param>");
-                WriteLine("/// <returns>The cartesian coordinates of value.</returns>");
-                if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static {1} SphericalToCartesian (Tuple<{0}, {0}, {0}> value)", Type, new Vector(Type.RealType, 3));
-                WriteLine("{");
-                Indent();
-                WriteLine("return new {0}(", new Vector(Type.RealType, 3));
-                WriteLine("     value.Item3 * Functions.Sin(value.Item1) * Functions.Cos(value.Item2),");
-                WriteLine("     value.Item3 * Functions.Sin(value.Item1) * Functions.Sin(value.Item2),");
-                WriteLine("     value.Item3 * Functions.Cos(value.Item1));");
-                Dedent();
-                WriteLine("}");
+                if (Type == NumberType.Double)
+                {
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Transforms a vector in spherical coordinates to cartesian coordinates.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"value\">The vector to transform.</param>");
+                    WriteLine("/// <returns>The cartesian coordinates of value.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} SphericalToCartesian (SphericalCoordinate value)", Name);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("return new {0}(", Name);
+                    WriteLine("     value.Rho * Functions.Sin(value.Phi) * Functions.Cos(value.Theta),");
+                    WriteLine("     value.Rho * Functions.Sin(value.Phi) * Functions.Sin(value.Theta),");
+                    WriteLine("     value.Rho * Functions.Cos(value.Phi));");
+                    Dedent();
+                    WriteLine("}");
+                }
             }
 
             WriteLine("#endregion");
