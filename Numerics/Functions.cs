@@ -2885,6 +2885,26 @@ namespace Ibasa.Numerics
         {
             return Exp(GammaLn(z) + GammaLn(w) - GammaLn(z + w));
         }
+        
+        /// <summary>
+        /// Calculates the factorial function.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        [Pure]
+        public static long Factorial(long n)
+        {
+            Contract.Requires(0 <= n);
+            Contract.Requires(n <= 20);
+            Contract.Ensures(1 <= Contract.Result<long>() && Contract.Result<long>() <= 2432902008176640000);
+
+            long result = 1;
+            while (n > 0)
+            {
+                result *= n--;
+            }
+            return result;
+        }
 
         /// <summary>
         /// Calculates the natural logarithm of the factorial function.
