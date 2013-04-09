@@ -1,22 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8BB66219-AD47-4B9A-8274-72133B867F96}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3ADDE742-EFFF-4778-8C2C-899EB5BED838}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Test</RootNamespace>
     <AssemblyName>Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,15 +21,17 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,37 +47,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
-      <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
-      <Name>Ibasa</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Media\Media.csproj">
-      <Project>{E60F78BE-B464-4894-81BE-18140411B5FE}</Project>
-      <Name>Media</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Numerics\Numerics.csproj">
-      <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
-      <Name>Numerics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenAL\OpenAL.csproj">
-      <Project>{39B5D464-05B2-4DCE-80C2-E74AC543494C}</Project>
-      <Name>OpenAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Packaging\Packaging.csproj">
-      <Project>{7EE0D750-A48A-4832-AF90-A1DE4D73B7AB}</Project>
-      <Name>Packaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpAL\SharpAL.csproj">
-      <Project>{C015A134-9EE4-4691-9E1B-D0256AF9FAF7}</Project>
-      <Name>SharpAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Valve\Valve.csproj">
-      <Project>{4AA2EC27-4E8D-4812-820E-00C23534B054}</Project>
-      <Name>Valve</Name>
-    </ProjectReference>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
+      <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
+      <Name>Ibasa</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Numerics\Numerics.csproj">
+      <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>
+      <Name>Numerics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

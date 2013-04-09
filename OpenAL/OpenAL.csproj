@@ -55,10 +55,6 @@
     <Compile Include="Source.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
-      <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
-      <Name>Ibasa</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Numerics\Numerics.csproj">
       <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
       <Name>Numerics</Name>

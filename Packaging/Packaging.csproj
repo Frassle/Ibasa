@@ -48,12 +48,6 @@
     <Compile Include="Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
-      <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
-      <Name>Ibasa</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

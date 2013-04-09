@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">
-      <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
+      <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
       <Name>Ibasa</Name>
     </ProjectReference>
     <ProjectReference Include="..\Numerics\Numerics.csproj">
