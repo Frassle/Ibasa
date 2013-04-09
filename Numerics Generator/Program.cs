@@ -11,6 +11,23 @@ namespace Numerics_Generator
         {
             string root = System.IO.Path.Combine("..", "..", "..", "Numerics");
 
+            var integer_path = System.IO.Path.Combine(root, "Integer.cs");
+            System.IO.File.Delete(integer_path);
+            foreach (var size in Integer.Sizes)
+            {
+                var integer = new Integer(size, true);
+                integer.Generate();
+
+                System.IO.File.AppendAllText(integer_path, integer.Text);
+                Console.WriteLine("Done - " + integer.Name);
+
+                var uinteger = new Integer(size, false);
+                uinteger.Generate();
+
+                System.IO.File.AppendAllText(integer_path, uinteger.Text);
+                Console.WriteLine("Done - " + uinteger.Name);
+            }
+
             foreach (var type in Color.Types)
             {
                 var color = new Color(type);

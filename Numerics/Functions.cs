@@ -9,7 +9,7 @@ namespace Ibasa.Numerics
     /// <summary>
     /// Provides static methods for trigonometric, logarithmic, and other common mathematical functions.
     /// </summary>
-    public static class Functions
+    public static partial class Functions
     {
         #region Tests
         /// <summary>
@@ -2835,129 +2835,6 @@ namespace Ibasa.Numerics
             return Abs(a * b) / GCD(a, b);
         }
         #endregion
-
-        /// <summary>
-        /// Calculates the natural logarithm of the gamma function.
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        [Pure]
-        public static double GammaLn(double n)
-        {
-            //bounds for gammaln
-            Contract.Requires(0.0 < n);
-            Contract.Ensures(0.0 <= Contract.Result<double>());
-
-            double x = n;
-            double y = n + 1.0;
-            double t = x + (671.0 / 128.0);
-
-            t = (x + 0.5) * Log(t) - t;
-
-            double ser =
-                0.999999999999997092 +
-                (57.1562356658629235 / (y + 0.0)) +
-                (-59.5979603554754912 / (y + 1.0)) +
-                (14.1360979747417471 / (y + 2.0)) +
-                (-0.491913816097620199 / (y + 3.0)) +
-                (0.0000339946499848118887 / (y + 4.0)) +
-                (0.0000465236289270485756 / (y + 5.0)) +
-                (-0.0000983744753048795646 / (y + 6.0)) +
-                (0.000158088703224912494 / (y + 7.0)) +
-                (-0.000210264441724104883 / (y + 8.0)) +
-                (0.000217439618115212643 / (y + 9.0)) +
-                (-0.00016431810653676389 / (y + 10.0)) +
-                (0.0000844182239838527433 / (y + 11.0)) +
-                (-0.0000261908384015814087 / (y + 12.0)) +
-                (0.00000368991826595316234 / (y + 13.0));
-
-            return t + Log(2.5066282746310005 * (ser / x));
-        }
-
-        /// <summary>
-        /// Calculates the beta function.
-        /// </summary>
-        /// <param name="z"></param>
-        /// <param name="w"></param>
-        /// <returns></returns>
-        [Pure]
-        public static double Beta(double z, double w)
-        {
-            return Exp(GammaLn(z) + GammaLn(w) - GammaLn(z + w));
-        }
-        
-        /// <summary>
-        /// Calculates the factorial function.
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        [Pure]
-        public static long Factorial(long n)
-        {
-            Contract.Requires(0 <= n);
-            Contract.Requires(n <= 20);
-            Contract.Ensures(1 <= Contract.Result<long>() && Contract.Result<long>() <= 2432902008176640000);
-
-            long result = 1;
-            while (n > 0)
-            {
-                result *= n--;
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Calculates the natural logarithm of the factorial function.
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        [Pure]
-        public static double FactorialLn(long n)
-        {
-            Contract.Requires(0 <= n);
-            Contract.Ensures(0 <= Contract.Result<double>() && Contract.Result<double>() < double.MaxValue);
-
-            return GammaLn((double)n + 1.0);
-        }
-
-        /// <summary>
-        /// Calculates the natural logarithm binomial coefficient (n k).
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        [Pure]
-        public static double BinomialCoefficientLn(long n, long k)
-        {
-            Contract.Requires(0 <= k && k <= n);
-            Contract.Ensures(0 < Contract.Result<double>());
-
-            return (FactorialLn(n) - (FactorialLn(k) + FactorialLn(n - k)));
-        }
-
-        /// <summary>
-        /// Calculates the binomial coefficient (n k).
-        /// </summary>
-        /// <remarks>Will not overflow internally unless final result would overflow.</remarks>
-        /// <param name="n"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        [Pure]
-        public static long BinomialCoefficient(long n, long k)
-        {
-            Contract.Ensures(0 <= Contract.Result<long>());
-
-            if (k > n)
-                return 0;
-
-            long r = 1;
-            for (long d = 1; d <= k; d++)
-            {
-                r *= n--;
-                r /= d;
-            }
-            return r;
-        }
 
         /// <summary>
         /// Returns the nth fibonnacci number.

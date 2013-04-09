@@ -55,6 +55,7 @@
     <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
     <CodeContractsExtraRewriteOptions />
     <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -85,6 +86,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <DocumentationFile>bin\Release\Ibasa.Numerics.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -97,7 +99,10 @@
     <Compile Include="Binary.cs" />
     <Compile Include="Colord.cs" />
     <Compile Include="Colorf.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Encoding.cs" />
+    <Compile Include="Gamma.cs" />
     <Compile Include="Geometry\Boxd.cs" />
     <Compile Include="Geometry\Boxf.cs" />
     <Compile Include="Geometry\Boxi.cs" />
@@ -239,6 +244,8 @@
     <Compile Include="Geometry\Vectors\Vector8us.cs" />
     <Compile Include="GJK.cs" />
     <Compile Include="Half.cs" />
+    <Compile Include="Integer.cs" />
+    <Compile Include="Legendre.cs" />
     <Compile Include="Morton.cs" />
     <Compile Include="Random\Cauchy.cs" />
     <Compile Include="Random\Discrete.cs" />
@@ -256,10 +263,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rational.cs" />
     <Compile Include="Raytracer.cs" />
+    <Compile Include="SphericalHarmonics.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">
-      <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
+      <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
       <Name>Ibasa</Name>
     </ProjectReference>
   </ItemGroup>
