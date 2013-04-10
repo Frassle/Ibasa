@@ -169,6 +169,12 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public void UnloadPlatformCompiler()
+        {
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.UnloadPlatformCompiler(Handle));
+        }
+
         public override int GetHashCode()
         {
             CLHelper.ThrowNullException(Handle);
