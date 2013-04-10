@@ -45,30 +45,37 @@ namespace Ibasa.OpenCL
             CLHelper.GetError(CL.SetUserEventStatus(Handle, status));
         }
 
-        private static void Callback(IntPtr @event, int event_command_exec_status, IntPtr data)
+        private static void Callback(IntPtr @event, int event_command_exec_status, IntPtr user_data)
         {
-            var handel = GCHandle.FromIntPtr(data);
-            var user_data = (Tuple<Action<Event, CommandExecutionStatus, object>, object>)handel.Target;
+            var handel = GCHandle.FromIntPtr(user_data);
+            var data = (Tuple<Action<Event, CommandExecutionStatus, object>, object>)handel.Target;
             handel.Free();
 
-            user_data.Item1(new Event(@event), (CommandExecutionStatus)event_command_exec_status, user_data.Item2);            
+            data.Item1(new Event(@event), (CommandExecutionStatus)event_command_exec_status, data.Item2);            
         }
 
         public void SetCallback(
             CommandExecutionStatus command_exec_callback_type,
-            Action<Event, CommandExecutionStatus, object> event_notify,
+            Action<Event, CommandExecutionStatus, object> notify,
             object user_data)
         {
             CLHelper.ThrowNullException(Handle);
             unsafe
             {
-                var data = Tuple.Create(event_notify, user_data);
-                var gc_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
 
-                var function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, int, IntPtr>(Callback));
+                var function_ptr = IntPtr.Zero;
+                var data_ptr = IntPtr.Zero;
+
+                if (notify != null)
+                {
+                    var data = Tuple.Create(notify, user_data);
+                    data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
+
+                    function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, int, IntPtr>(Callback));
+                }
 
                 CLHelper.GetError(CL.SetEventCallback(
-                    Handle, (int)command_exec_callback_type, function_ptr, gc_ptr.ToPointer()));
+                    Handle, (int)command_exec_callback_type, function_ptr, data_ptr.ToPointer()));
             }
         }
 
