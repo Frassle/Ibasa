@@ -15,11 +15,11 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 uint num_platforms = 0;
-                OpenCLHelper.GetError(OpenCL.clGetPlatformIDs(0, null, &num_platforms));
+                CLHelper.GetError(CL.GetPlatformIDs(0, null, &num_platforms));
 
                 IntPtr* platform_ptrs = stackalloc IntPtr[(int)num_platforms];
 
-                OpenCLHelper.GetError(OpenCL.clGetPlatformIDs(num_platforms, platform_ptrs, null));
+                CLHelper.GetError(CL.GetPlatformIDs(num_platforms, platform_ptrs, null));
 
                 Platform[] platforms = new Platform[num_platforms];
 
@@ -44,17 +44,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_PROFILE, UIntPtr.Zero, null, &param_value_size_ret));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_PROFILE, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_PROFILE, param_value_size_ret, data_ptr, null));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_PROFILE, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -65,17 +65,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_VERSION, param_value_size_ret, data_ptr, null));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_VERSION, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -86,17 +86,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_NAME, UIntPtr.Zero, null, &param_value_size_ret));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_NAME, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_NAME, param_value_size_ret, data_ptr, null));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_NAME, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -107,17 +107,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_VENDOR, UIntPtr.Zero, null, &param_value_size_ret));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_VENDOR, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_VENDOR, param_value_size_ret, data_ptr, null));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_VENDOR, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -128,17 +128,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_EXTENSIONS, UIntPtr.Zero, null, &param_value_size_ret));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_EXTENSIONS, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    OpenCLHelper.GetError(OpenCL.clGetPlatformInfo(
-                        Handle, OpenCL.CL_PLATFORM_EXTENSIONS, param_value_size_ret, data_ptr, null));
+                    CLHelper.GetError(CL.GetPlatformInfo(
+                        Handle, CL.PLATFORM_EXTENSIONS, param_value_size_ret, data_ptr, null));
 
                     var exts = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                     return exts.Split(' ');
@@ -148,15 +148,15 @@ namespace Ibasa.OpenCL
 
         public Device[] GetDevices(DeviceType deviceType)
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             unsafe
             {
                 uint num_devices = 0;
-                OpenCLHelper.GetError(OpenCL.clGetDeviceIDs(Handle, (uint)deviceType, 0, null, &num_devices));
+                CLHelper.GetError(CL.GetDeviceIDs(Handle, (uint)deviceType, 0, null, &num_devices));
 
                 IntPtr* device_ptrs = stackalloc IntPtr[(int)num_devices];
 
-                OpenCLHelper.GetError(OpenCL.clGetDeviceIDs(Handle, (uint)deviceType, num_devices, device_ptrs, null));
+                CLHelper.GetError(CL.GetDeviceIDs(Handle, (uint)deviceType, num_devices, device_ptrs, null));
 
                 Device[] devices = new Device[num_devices];
 
@@ -171,13 +171,13 @@ namespace Ibasa.OpenCL
 
         public override int GetHashCode()
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             if (obj is Platform)
             {
                 return Equals((Platform)obj);
@@ -187,7 +187,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Platform other)
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -203,7 +203,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

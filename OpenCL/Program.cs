@@ -16,7 +16,7 @@ namespace Ibasa.OpenCL
             Handle = handle;
         }
 
-        public Program(Context context, string source)
+        public Program(Context context, string source) : this()
         {
             unsafe
             {
@@ -31,8 +31,8 @@ namespace Ibasa.OpenCL
                 UIntPtr length = new UIntPtr((uint)bytes);
 
                 int errcode = 0;
-                OpenCL.clCreateProgramWithSource(context.Handle, 1, &strings, &length, &errcode);
-                OpenCLHelper.GetError(errcode);
+                CL.CreateProgramWithSource(context.Handle, 1, &strings, &length, &errcode);
+                CLHelper.GetError(errcode);
             }
         }
 
@@ -57,32 +57,32 @@ namespace Ibasa.OpenCL
                 }
 
                 int errcode = 0;
-                OpenCL.clBuildProgram(Handle, (uint)devices.Length, device_list, bytes, IntPtr.Zero, null);
-                OpenCLHelper.GetError(errcode);
+                CL.BuildProgram(Handle, (uint)devices.Length, device_list, bytes, IntPtr.Zero, null);
+                CLHelper.GetError(errcode);
             }
         }
 
         public void RetainProgram()
         {
-            OpenCLHelper.ThrowNullException(Handle);
-            OpenCLHelper.GetError(OpenCL.clRetainProgram(Handle));
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.RetainProgram(Handle));
         }
 
         public void ReleaseProgram()
         {
-            OpenCLHelper.ThrowNullException(Handle);
-            OpenCLHelper.GetError(OpenCL.clReleaseProgram(Handle));
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.ReleaseProgram(Handle));
         }
 
         public override int GetHashCode()
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             if (obj is Program)
             {
                 return Equals((Program)obj);
@@ -92,7 +92,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Program other)
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -108,7 +108,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

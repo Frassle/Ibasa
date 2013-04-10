@@ -16,51 +16,51 @@ namespace Ibasa.OpenCL
             Handle = handle;
         }
 
-        public CommandQueue(Context context, Device device, CommandQueueProperties properties)
+        public CommandQueue(Context context, Device device, CommandQueueProperties properties) : this()
         {
             unsafe
             {
                 int error = 0;
-                Handle = OpenCL.clCreateCommandQueue(context.Handle, device.Handle, (ulong)properties, &error);
-                OpenCLHelper.GetError(error);
+                Handle = CL.CreateCommandQueue(context.Handle, device.Handle, (ulong)properties, &error);
+                CLHelper.GetError(error);
             }
         }
 
         public void RetainCommandQueue()
         {
-            OpenCLHelper.ThrowNullException(Handle);
-            OpenCLHelper.GetError(OpenCL.clRetainCommandQueue(Handle));
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.RetainCommandQueue(Handle));
         }
 
         public void ReleaseCommandQueue()
         {
-            OpenCLHelper.ThrowNullException(Handle);
-            OpenCLHelper.GetError(OpenCL.clReleaseCommandQueue(Handle));
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.ReleaseCommandQueue(Handle));
         }
 
         public void Flush()
         {
-            OpenCLHelper.ThrowNullException(Handle);
-            OpenCLHelper.GetError(OpenCL.clFlush(Handle));
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.Flush(Handle));
         }
 
         public void Finish()
         {
-            OpenCLHelper.ThrowNullException(Handle);
-            OpenCLHelper.GetError(OpenCL.clFinish(Handle));
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.Finish(Handle));
         }
 
         public Context Context
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    OpenCLHelper.GetError(OpenCL.clGetCommandQueueInfo(
-                        Handle, OpenCL.CL_QUEUE_CONTEXT, param_value_size, &value, null));
+                    CLHelper.GetError(CL.GetCommandQueueInfo(
+                        Handle, CL.QUEUE_CONTEXT, param_value_size, &value, null));
                     return new Context(value);
                 }
             }
@@ -70,13 +70,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    OpenCLHelper.GetError(OpenCL.clGetCommandQueueInfo(
-                        Handle, OpenCL.CL_QUEUE_DEVICE, param_value_size, &value, null));
+                    CLHelper.GetError(CL.GetCommandQueueInfo(
+                        Handle, CL.QUEUE_DEVICE, param_value_size, &value, null));
                     return new Device(value);
                 }
             }
@@ -86,13 +86,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    OpenCLHelper.GetError(OpenCL.clGetContextInfo(
-                        Handle, OpenCL.CL_CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
+                    CLHelper.GetError(CL.GetContextInfo(
+                        Handle, CL.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -102,13 +102,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                OpenCLHelper.ThrowNullException(Handle);
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    OpenCLHelper.GetError(OpenCL.clGetContextInfo(
-                        Handle, OpenCL.CL_CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
+                    CLHelper.GetError(CL.GetContextInfo(
+                        Handle, CL.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
                     return (CommandQueueProperties)value;
                 }
             }
@@ -116,13 +116,13 @@ namespace Ibasa.OpenCL
 
         public override int GetHashCode()
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             if (obj is CommandQueue)
             {
                 return Equals((CommandQueue)obj);
@@ -132,7 +132,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(CommandQueue other)
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -148,7 +148,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            OpenCLHelper.ThrowNullException(Handle);
+            CLHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

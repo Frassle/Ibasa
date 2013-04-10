@@ -9,19 +9,19 @@ namespace Ibasa.OpenCL
     [Flags]
     public enum DeviceType
     {
-        Default = OpenCL.CL_DEVICE_TYPE_DEFAULT,
-        Cpu = OpenCL.CL_DEVICE_TYPE_CPU,
-        Gpu = OpenCL.CL_DEVICE_TYPE_GPU,
-        Accelerator =OpenCL.CL_DEVICE_TYPE_ACCELERATOR,
-        Custom = OpenCL.CL_DEVICE_TYPE_CUSTOM,
-        All = OpenCL.CL_DEVICE_TYPE_ALL,
+        Default = CL.DEVICE_TYPE_DEFAULT,
+        Cpu = CL.DEVICE_TYPE_CPU,
+        Gpu = CL.DEVICE_TYPE_GPU,
+        Accelerator = CL.DEVICE_TYPE_ACCELERATOR,
+        Custom = CL.DEVICE_TYPE_CUSTOM,
+        All = CL.DEVICE_TYPE_ALL,
     }
 
     [Flags]
     public enum CommandQueueProperties
     {
         None = 0,
-        OutOfOrderExecModeEnable = OpenCL.CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
-        ProfilingEnable = OpenCL.CL_QUEUE_PROFILING_ENABLE,
+        OutOfOrderExecModeEnable = CL.QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
+        ProfilingEnable = CL.QUEUE_PROFILING_ENABLE,
     }
 }
