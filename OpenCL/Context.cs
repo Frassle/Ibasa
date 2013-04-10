@@ -18,7 +18,22 @@ namespace Ibasa.OpenCL
             Handle = handle;
         }
 
-        public Context(Dictionary<IntPtr, IntPtr> properties, Device[] devices)
+        private static unsafe void Callback(IntPtr errinfo, IntPtr private_info, UIntPtr cb, IntPtr user_data)
+        {
+            var handel = GCHandle.FromIntPtr(user_data);
+            var data = (Tuple<Action<string, byte[], object>, object>)handel.Target;
+            handel.Free();
+
+            var str = Marshal.PtrToStringAnsi(errinfo);
+
+            var info = new byte[cb.ToUInt32()];
+
+            Marshal.Copy(private_info, info, 0, info.Length);
+
+            data.Item1(str, info, data.Item2);
+        }
+
+        public Context(Dictionary<IntPtr, IntPtr> properties, Device[] devices, Action<string, byte[], object> notify, object user_data)
             : this()
         {
             unsafe
@@ -45,13 +60,24 @@ namespace Ibasa.OpenCL
                 }
                 properties_ptr[index] = IntPtr.Zero;
 
+                var function_ptr = IntPtr.Zero;
+                var data_ptr = IntPtr.Zero;
+
+                if (notify != null)
+                {
+                    var data = Tuple.Create(notify, user_data);
+                    data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
+
+                    function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, IntPtr, UIntPtr, IntPtr>(Callback));
+                }
+                
                 int errcode = 0;
-                Handle = CL.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, IntPtr.Zero, null, &errcode);
+                Handle = CL.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, function_ptr, data_ptr.ToPointer(), &errcode);
                 CLHelper.GetError(errcode);
             }
         }
 
-        public Context(Dictionary<IntPtr, IntPtr> properties, DeviceType deviceType)
+        public Context(Dictionary<IntPtr, IntPtr> properties, DeviceType deviceType, Action<string, byte[], object> notify, object user_data)
             : this()
         {
             unsafe
@@ -71,12 +97,22 @@ namespace Ibasa.OpenCL
                 }
                 properties_ptr[index] = IntPtr.Zero;
 
+                var function_ptr = IntPtr.Zero;
+                var data_ptr = IntPtr.Zero;
+
+                if (notify != null)
+                {
+                    var data = Tuple.Create(notify, user_data);
+                    data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
+
+                    function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, IntPtr, UIntPtr, IntPtr>(Callback));
+                }
+
                 int errcode = 0;
-                Handle = CL.CreateContext(properties_ptr, (int)deviceType, IntPtr.Zero, null, &errcode);
+                Handle = CL.CreateContext(properties_ptr, (int)deviceType, function_ptr, data_ptr.ToPointer(), &errcode);
                 CLHelper.GetError(errcode);
             }
         }
-
 
         public void Retain()
         {
