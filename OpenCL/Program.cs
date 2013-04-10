@@ -190,7 +190,7 @@ namespace Ibasa.OpenCL
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
+                    CLHelper.GetError(CL.GetProgramInfo(
                         Handle, CL.PROGRAM_SOURCE, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
@@ -227,7 +227,7 @@ namespace Ibasa.OpenCL
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
+                    CLHelper.GetError(CL.GetProgramInfo(
                         Handle, CL.PROGRAM_KERNEL_NAMES, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
