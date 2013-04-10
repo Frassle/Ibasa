@@ -213,7 +213,7 @@ namespace Ibasa.OpenCL
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
                     CLHelper.GetError(CL.GetProgramInfo(
-                        Handle, CL.PROGRAM_CONTEXT, param_value_size, &value, null));
+                        Handle, CL.PROGRAM_NUM_KERNELS, param_value_size, &value, null));
                     return (long)value.ToUInt64();
                 }
             }
