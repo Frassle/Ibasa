@@ -20,7 +20,7 @@ namespace Ibasa.OpenCL
         {
             unsafe
             {
-                var bytes = Encoding.UTF8.GetByteCount(source);
+                var bytes = Encoding.ASCII.GetByteCount(source);
                 byte* strings = stackalloc byte[bytes];
 
                 fixed (char* source_ptr = source)
@@ -48,7 +48,7 @@ namespace Ibasa.OpenCL
                     device_list[i] = devices[i].Handle;
                 }
 
-                var byte_count = Encoding.UTF8.GetByteCount(options);
+                var byte_count = Encoding.ASCII.GetByteCount(options);
                 byte* bytes = stackalloc byte[byte_count];
 
                 fixed (char* options_ptr = options)
