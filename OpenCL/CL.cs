@@ -905,23 +905,25 @@ namespace Ibasa.OpenCL
             IntPtr* event_wait_list,
             IntPtr* @event);
                             
-        //extern API_ENTRY int API_CALL
-        //clEnqueueReadBufferRect(cl_command_queue    /* command_queue */,
-        //                        mem              /* buffer */,
-        //                        bool             /* blocking_read */,
-        //                        const UIntPtr *      /* buffer_offset */,
-        //                        const UIntPtr *      /* host_offset */, 
-        //                        const UIntPtr *      /* region */,
-        //                        UIntPtr              /* buffer_row_pitch */,
-        //                        UIntPtr              /* buffer_slice_pitch */,
-        //                        UIntPtr              /* host_row_pitch */,
-        //                        UIntPtr              /* host_slice_pitch */,                        
-        //                        void *              /* ptr */,
-        //                        uint             /* num_events_in_wait_list */,
-        //                        const event *    /* event_wait_list */,
-        //                        event *          /* event */) API_SUFFIX__VERSION_1_1;
+        
+        //[DllImport("opencl.dll", EntryPoint = "clEnqueueReadBufferRect", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        //public static unsafe extern int EnqueueReadBufferRect(
+        //    IntPtr command_queue ,
+        //    IntPtr buffer ,
+        //    bool blocking_read ,
+        //    UIntPtr* buffer_offset ,
+        //    UIntPtr* host_offset ,
+        //    UIntPtr* region ,
+        //    UIntPtr buffer_row_pitch ,
+        //    UIntPtr buffer_slice_pitch ,
+        //    UIntPtr host_row_pitch ,
+        //    UIntPtr host_slice_pitch,
+        //    void* ptr ,
+        //    uint num_events_in_wait_list ,
+        //    IntPtr* event_wait_list,
+        //    IntPtr @event);
                             
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueWriteBuffer(cl_command_queue   /* command_queue */, 
         //                     mem             /* buffer */, 
         //                     bool            /* blocking_write */, 
@@ -932,7 +934,7 @@ namespace Ibasa.OpenCL
         //                     const event *   /* event_wait_list */, 
         //                     event *         /* event */);
                             
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueWriteBufferRect(cl_command_queue    /* command_queue */,
         //                         mem              /* buffer */,
         //                         bool             /* blocking_write */,
@@ -948,7 +950,7 @@ namespace Ibasa.OpenCL
         //                         const event *    /* event_wait_list */,
         //                         event *          /* event */) API_SUFFIX__VERSION_1_1;
                             
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueFillBuffer(cl_command_queue   /* command_queue */,
         //                    mem             /* buffer */, 
         //                    const void *       /* pattern */, 
@@ -959,7 +961,7 @@ namespace Ibasa.OpenCL
         //                    const event *   /* event_wait_list */, 
         //                    event *         /* event */);
                             
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueCopyBuffer(cl_command_queue    /* command_queue */, 
         //                    mem              /* src_buffer */,
         //                    mem              /* dst_buffer */, 
@@ -970,7 +972,7 @@ namespace Ibasa.OpenCL
         //                    const event *    /* event_wait_list */,
         //                    event *          /* event */);
                             
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueCopyBufferRect(cl_command_queue    /* command_queue */, 
         //                        mem              /* src_buffer */,
         //                        mem              /* dst_buffer */, 
@@ -985,7 +987,7 @@ namespace Ibasa.OpenCL
         //                        const event *    /* event_wait_list */,
         //                        event *          /* event */) API_SUFFIX__VERSION_1_1;
                             
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueReadImage(cl_command_queue     /* command_queue */,
         //                   mem               /* image */,
         //                   bool              /* blocking_read */, 
@@ -998,7 +1000,7 @@ namespace Ibasa.OpenCL
         //                   const event *     /* event_wait_list */,
         //                   event *           /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueWriteImage(cl_command_queue    /* command_queue */,
         //                    mem              /* image */,
         //                    bool             /* blocking_write */, 
@@ -1011,7 +1013,7 @@ namespace Ibasa.OpenCL
         //                    const event *    /* event_wait_list */,
         //                    event *          /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueFillImage(cl_command_queue   /* command_queue */,
         //                   mem             /* image */, 
         //                   const void *       /* fill_color */, 
@@ -1021,7 +1023,7 @@ namespace Ibasa.OpenCL
         //                   const event *   /* event_wait_list */, 
         //                   event *         /* event */);
                             
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueCopyImage(cl_command_queue     /* command_queue */,
         //                   mem               /* src_image */,
         //                   mem               /* dst_image */, 
@@ -1032,7 +1034,7 @@ namespace Ibasa.OpenCL
         //                   const event *     /* event_wait_list */,
         //                   event *           /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueCopyImageToBuffer(cl_command_queue /* command_queue */,
         //                           mem           /* src_image */,
         //                           mem           /* dst_buffer */, 
@@ -1043,7 +1045,7 @@ namespace Ibasa.OpenCL
         //                           const event * /* event_wait_list */,
         //                           event *       /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueCopyBufferToImage(cl_command_queue /* command_queue */,
         //                           mem           /* src_buffer */,
         //                           mem           /* dst_image */, 
@@ -1080,7 +1082,7 @@ namespace Ibasa.OpenCL
         //                  event *        /* event */,
         //                  int *          /* errcode_ret */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueUnmapMemObject(cl_command_queue /* command_queue */,
         //                        mem           /* memobj */,
         //                        void *           /* mapped_ptr */,
@@ -1088,7 +1090,7 @@ namespace Ibasa.OpenCL
         //                        const event *  /* event_wait_list */,
         //                        event *        /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueMigrateMemObjects(cl_command_queue       /* command_queue */,
         //                           uint                /* num_mem_objects */,
         //                           const mem *         /* mem_objects */,
@@ -1097,7 +1099,7 @@ namespace Ibasa.OpenCL
         //                           const event *       /* event_wait_list */,
         //                           event *             /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueNDRangeKernel(cl_command_queue /* command_queue */,
         //                       kernel        /* kernel */,
         //                       uint          /* work_dim */,
@@ -1108,14 +1110,14 @@ namespace Ibasa.OpenCL
         //                       const event * /* event_wait_list */,
         //                       event *       /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueTask(cl_command_queue  /* command_queue */,
         //              kernel         /* kernel */,
         //              uint           /* num_events_in_wait_list */,
         //              const event *  /* event_wait_list */,
         //              event *        /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueNativeKernel(cl_command_queue  /* command_queue */,
         //                      void (CL_CALLBACK * /*user_func*/)(void *), 
         //                      void *            /* args */,
@@ -1127,13 +1129,13 @@ namespace Ibasa.OpenCL
         //                      const event *  /* event_wait_list */,
         //                      event *        /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueMarkerWithWaitList(cl_command_queue /* command_queue */,
         //                            uint           /* num_events_in_wait_list */,
         //                            const event *  /* event_wait_list */,
         //                            event *        /* event */);
 
-        //extern API_ENTRY int API_CALL
+        //public static unsafe extern int
         //clEnqueueBarrierWithWaitList(cl_command_queue /* command_queue */,
         //                             uint           /* num_events_in_wait_list */,
         //                             const event *  /* event_wait_list */,
