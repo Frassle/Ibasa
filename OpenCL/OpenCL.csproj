@@ -49,6 +49,7 @@
     <Compile Include="CL.cs" />
     <Compile Include="CLHelper.cs" />
     <Compile Include="Event.cs" />
+    <Compile Include="Kernel.cs" />
     <Compile Include="OpenCLException.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Program.cs" />
