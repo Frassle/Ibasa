@@ -46,6 +46,7 @@ namespace Ibasa.OpenCL
             CLHelper.GetError(CL.SetUserEventStatus(Handle, status));
         }
 
+        private delegate void CallbackDelegete(IntPtr @event, int event_command_exec_status, IntPtr user_data);
         private static void Callback(IntPtr @event, int event_command_exec_status, IntPtr user_data)
         {
             var handel = GCHandle.FromIntPtr(user_data);
@@ -72,7 +73,7 @@ namespace Ibasa.OpenCL
                     var data = Tuple.Create(notify, user_data);
                     data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
 
-                    function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, int, IntPtr>(Callback));
+                    function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegete(Callback));
                 }
 
                 CLHelper.GetError(CL.SetEventCallback(
