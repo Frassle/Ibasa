@@ -78,13 +78,13 @@ namespace Ibasa.OpenCL
         }
 
 
-        public void RetainContext()
+        public void Retain()
         {
             CLHelper.ThrowNullException(Handle);
             CLHelper.GetError(CL.RetainContext(Handle));
         }
 
-        public void ReleaseContext()
+        public void Release()
         {
             CLHelper.ThrowNullException(Handle);
             CLHelper.GetError(CL.ReleaseContext(Handle));

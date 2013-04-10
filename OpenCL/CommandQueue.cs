@@ -26,13 +26,13 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public void RetainCommandQueue()
+        public void Retain()
         {
             CLHelper.ThrowNullException(Handle);
             CLHelper.GetError(CL.RetainCommandQueue(Handle));
         }
 
-        public void ReleaseCommandQueue()
+        public void Release()
         {
             CLHelper.ThrowNullException(Handle);
             CLHelper.GetError(CL.ReleaseCommandQueue(Handle));

@@ -18,13 +18,13 @@ namespace Ibasa.OpenCL
             Handle = handle;
         }
 
-        public void RetainDevice()
+        public void Retain()
         {
             CLHelper.ThrowNullException(Handle);
             CLHelper.GetError(CL.RetainDevice(Handle));
         }
 
-        public void ReleaseDevice()
+        public void Release()
         {
             CLHelper.ThrowNullException(Handle);
             CLHelper.GetError(CL.ReleaseDevice(Handle));
