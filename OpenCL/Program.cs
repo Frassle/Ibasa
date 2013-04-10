@@ -93,6 +93,7 @@ namespace Ibasa.OpenCL
             }
         }
 
+        private delegate void CallbackDelegate(IntPtr program, IntPtr user_data);
         private static unsafe void Callback(IntPtr program, IntPtr user_data)
         {
             var handel = GCHandle.FromIntPtr(user_data);
@@ -129,7 +130,7 @@ namespace Ibasa.OpenCL
                     var data = Tuple.Create(notify, user_data);
                     data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
 
-                    function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, IntPtr>(Callback));
+                    function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegate(Callback));
                 }
 
                 int errcode = 0;
