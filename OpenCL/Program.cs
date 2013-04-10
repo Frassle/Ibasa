@@ -191,7 +191,7 @@ namespace Ibasa.OpenCL
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
                     CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
+                        Handle, CL.PROGRAM_SOURCE, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
@@ -228,7 +228,7 @@ namespace Ibasa.OpenCL
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
                     CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
+                        Handle, CL.PROGRAM_KERNEL_NAMES, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
