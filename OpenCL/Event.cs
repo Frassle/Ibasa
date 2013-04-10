@@ -18,6 +18,7 @@ namespace Ibasa.OpenCL
         }
 
         public Event(Context context)
+            : this()
         {
             unsafe
             {
