@@ -50,6 +50,62 @@ namespace Ibasa.OpenCL
             CLHelper.GetError(CL.Finish(Handle));
         }
 
+        public Event Enqueue(Kernel kernel, ulong[] global_work_offset, ulong[] global_work_size, ulong[] local_work_size, Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            if(kernel == default(Kernel))
+                throw new ArgumentNullException("kernel");
+            if(global_work_size == null)
+                throw new ArgumentNullException("global_work_size");
+            if(global_work_offset != null && global_work_size.Length != global_work_offset.Length)
+                throw new ArgumentException("global_work_size and global_work_offset must be the same length.");
+            if(local_work_size != null && global_work_size.Length != local_work_size.Length)
+                throw new ArgumentException("global_work_size and local_work_size must be the same length.");
+
+            int work_dim = global_work_size.Length;
+
+            unsafe
+            {
+                UIntPtr* global_offset = stackalloc UIntPtr[work_dim];
+                UIntPtr* global_size = stackalloc UIntPtr[work_dim];
+                UIntPtr* local_size = stackalloc UIntPtr[work_dim];
+
+                for (int i = 0; i < work_dim; ++i)
+                {
+                    if(global_work_offset != null)
+                        global_offset[i] = new UIntPtr(global_work_offset[i]);
+
+                    global_size[i] = new UIntPtr(global_work_size[i]);
+
+                    if (local_work_size != null)
+                        local_size[i] = new UIntPtr(local_work_size[i]);
+                }
+
+                if (global_work_offset == null)
+                    global_offset = null;
+                if (local_work_size == null)
+                    local_size = null;
+
+                int num_events_in_wait_list = events == null ? 0 : events.Length;                
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueNDRangeKernel(Handle, kernel.Handle,
+                    (uint)work_dim, global_offset, global_size, local_size, 
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
         public Context Context
         {
             get

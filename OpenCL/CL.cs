@@ -1099,35 +1099,38 @@ namespace Ibasa.OpenCL
         //                           const event *       /* event_wait_list */,
         //                           event *             /* event */);
 
-        //public static unsafe extern int
-        //clEnqueueNDRangeKernel(cl_command_queue /* command_queue */,
-        //                       kernel        /* kernel */,
-        //                       uint          /* work_dim */,
-        //                       const UIntPtr *   /* global_work_offset */,
-        //                       const UIntPtr *   /* global_work_size */,
-        //                       const UIntPtr *   /* local_work_size */,
-        //                       uint          /* num_events_in_wait_list */,
-        //                       const event * /* event_wait_list */,
-        //                       event *       /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueNDRangeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueNDRangeKernel(
+            IntPtr command_queue,
+            IntPtr kernel,
+            uint work_dim,
+            UIntPtr* global_work_offset,
+            UIntPtr* global_work_size,
+            UIntPtr* local_work_size,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
-        //public static unsafe extern int
-        //clEnqueueTask(cl_command_queue  /* command_queue */,
-        //              kernel         /* kernel */,
+        //[DllImport("opencl.dll", EntryPoint = "clEnqueueTask", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        //public static unsafe extern int EnqueueTask(
+        //    IntPtr  /* command_queue */,
+        //              IntPtr         /* kernel */,
         //              uint           /* num_events_in_wait_list */,
-        //              const event *  /* event_wait_list */,
-        //              event *        /* event */);
+        //              IntPtr *  /* event_wait_list */,
+        //              IntPtr *        /* event */);
 
-        //public static unsafe extern int
-        //clEnqueueNativeKernel(cl_command_queue  /* command_queue */,
+        //[DllImport("opencl.dll", EntryPoint = "clEnqueueNativeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        //public static unsafe extern int EnqueueNativeKernel(
+        //    cl_command_queue  /* command_queue */,
         //                      void (CL_CALLBACK * /*user_func*/)(void *), 
         //                      void *            /* args */,
         //                      UIntPtr            /* cb_args */, 
         //                      uint           /* num_mem_objects */,
-        //                      const mem *    /* mem_list */,
-        //                      const void **     /* args_mem_loc */,
+        //                       IntPtr *    /* mem_list */,
+        //                       void **     /* args_mem_loc */,
         //                      uint           /* num_events_in_wait_list */,
-        //                      const event *  /* event_wait_list */,
-        //                      event *        /* event */);
+        //                       IntPtr *  /* event_wait_list */,
+        //                      IntPtr *        /* event */);
 
         //public static unsafe extern int
         //clEnqueueMarkerWithWaitList(cl_command_queue /* command_queue */,
