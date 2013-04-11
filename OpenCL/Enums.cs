@@ -33,7 +33,7 @@ namespace Ibasa.OpenCL
     /// default is used which is ReadWrite.
     /// </summary>
     [Flags]
-    public enum MemFlags
+    public enum MemoryFlags
     {
         /// <summary>
         /// This flag specifies that the memory object will be read and 
@@ -48,6 +48,14 @@ namespace Ibasa.OpenCL
         HostWriteOnly = CL.MEM_HOST_WRITE_ONLY,
         HostReadOnly = CL.MEM_HOST_READ_ONLY,
         HostNoAccess = CL.MEM_HOST_NO_ACCESS,
+    }
+
+    public enum MemoryObjectType
+    {
+        Buffer = CL.MEM_OBJECT_BUFFER,
+        Image1D = CL.MEM_OBJECT_IMAGE1D,
+        Image2D = CL.MEM_OBJECT_IMAGE2D,
+        Image3D = CL.MEM_OBJECT_IMAGE3D,
     }
 
     public enum CommandExecutionStatus

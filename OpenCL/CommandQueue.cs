@@ -106,6 +106,36 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public Event EnqueueRead(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            if (buffer == default(Buffer))
+                throw new ArgumentNullException("buffer");
+            if (destination == IntPtr.Zero)
+                throw new ArgumentNullException("destination");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueReadBuffer(Handle, buffer.Handle,
+                    blocking ? 1u : 0u, new UIntPtr(offset), new UIntPtr(count), destination.ToPointer(), 
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
         public Context Context
         {
             get

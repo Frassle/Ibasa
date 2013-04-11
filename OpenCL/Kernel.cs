@@ -62,8 +62,51 @@ namespace Ibasa.OpenCL
             CLHelper.GetError(CL.ReleaseKernel(Handle));
         }
 
-        public void SetArgument(int index, int size, byte[] value)
+        public void SetArgument(int index, Buffer buffer)
         {
+            CLHelper.ThrowNullException(Handle);
+            if (buffer == default(Buffer))
+                throw new ArgumentNullException("buffer");
+
+            unsafe
+            {
+                IntPtr value = buffer.Handle;
+                CLHelper.GetError(CL.SetKernelArg(Handle,
+                    (uint)index, (UIntPtr)IntPtr.Size, &value));
+            }
+        }
+
+        public void SetArgument(int index, int value)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                CLHelper.GetError(CL.SetKernelArg(Handle,
+                    (uint)index, (UIntPtr)sizeof(int), &value));
+            }
+        }
+
+        public void SetArgument(int index, long value)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                CLHelper.GetError(CL.SetKernelArg(Handle,
+                    (uint)index, (UIntPtr)sizeof(long), &value));
+            }
+        }
+
+        public void SetArgument(int index, IntPtr value)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                CLHelper.GetError(CL.SetKernelArg(Handle,
+                    (uint)index, (UIntPtr)IntPtr.Size, &value));
+            }
         }
 
         public string FunctionName
