@@ -120,27 +120,22 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-
-                if (CLHelper.CheckVersion(Version, 2, 2))
+#if DEBUG
+                CLHelper.CheckVersion(Version, 1, 2);
+#endif
+                unsafe
                 {
-                    unsafe
-                    {
-                        UIntPtr param_value_size_ret = UIntPtr.Zero;
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
 
-                        byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
 
-                        var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
-                        return str.Split(';');
-                    }
-                }
-                else
-                {
-                    return new string[0];
+                    var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                    return str.Split(';');
                 }
             }
         }

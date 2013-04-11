@@ -271,20 +271,16 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-                if (CLHelper.CheckVersion(" 1.1 ", 1, 2))
+#if DEBUG
+                CLHelper.CheckVersion(Devices[0].Version, 1, 2);
+#endif
+                unsafe
                 {
-                    unsafe
-                    {
-                        UIntPtr value;
-                        UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                        CLHelper.GetError(CL.GetProgramInfo(
-                            Handle, CL.PROGRAM_NUM_KERNELS, param_value_size, &value, null));
-                        return (long)value.ToUInt64();
-                    }
-                }
-                else
-                {
-                    return 0;
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_NUM_KERNELS, param_value_size, &value, null));
+                    return (long)value.ToUInt64();
                 }
             }
         }
@@ -294,6 +290,9 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
+#if DEBUG
+                CLHelper.CheckVersion(Devices[0].Version, 1, 2);
+#endif
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
@@ -313,10 +312,10 @@ namespace Ibasa.OpenCL
 
         public struct BuildInfo
         {
-            IntPtr Program;
-            IntPtr Device;
+            Program Program;
+            Device Device;
 
-            internal BuildInfo(IntPtr program, IntPtr device)
+            internal BuildInfo(Program program, Device device)
             {
                 Program = program;
                 Device = device;
@@ -326,12 +325,12 @@ namespace Ibasa.OpenCL
             {
                 get
                 {
-                    CLHelper.ThrowNullException(Program);
+                    CLHelper.ThrowNullException(Program.Handle);
                     unsafe
                     {
                         int value;
                         UIntPtr param_value_size = new UIntPtr((uint)sizeof(int));
-                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program.Handle, Device.Handle,
                             CL.PROGRAM_BUILD_STATUS, param_value_size, &value, null));
                         return (BuildStatus)value;
                     }
@@ -342,16 +341,16 @@ namespace Ibasa.OpenCL
             {
                 get
                 {
-                    CLHelper.ThrowNullException(Program);
+                    CLHelper.ThrowNullException(Program.Handle);
                     unsafe
                     {
                         UIntPtr param_value_size_ret = UIntPtr.Zero;
-                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program.Handle, Device.Handle,
                             CL.PROGRAM_BUILD_OPTIONS, UIntPtr.Zero, null, &param_value_size_ret));
 
                         byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program.Handle, Device.Handle,
                             CL.PROGRAM_BUILD_OPTIONS, param_value_size_ret, data_ptr, null));
 
                         return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
@@ -363,16 +362,16 @@ namespace Ibasa.OpenCL
             {
                 get
                 {
-                    CLHelper.ThrowNullException(Program);
+                    CLHelper.ThrowNullException(Program.Handle);
                     unsafe
                     {
                         UIntPtr param_value_size_ret = UIntPtr.Zero;
-                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program.Handle, Device.Handle,
                             CL.PROGRAM_BUILD_LOG, UIntPtr.Zero, null, &param_value_size_ret));
 
                         byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program.Handle, Device.Handle,
                             CL.PROGRAM_BUILD_LOG, param_value_size_ret, data_ptr, null));
 
                         return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
@@ -384,12 +383,15 @@ namespace Ibasa.OpenCL
             {
                 get
                 {
-                    CLHelper.ThrowNullException(Program);
+                    CLHelper.ThrowNullException(Program.Handle);
+#if DEBUG
+                    CLHelper.CheckVersion(Device.Version, 1, 2);
+#endif
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr((uint)sizeof(uint));
-                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program.Handle, Device.Handle,
                             CL.PROGRAM_BINARY_TYPE, param_value_size, &value, null));
                         return (BinaryType)value;
                     }
@@ -400,7 +402,7 @@ namespace Ibasa.OpenCL
         public BuildInfo GetBuildInfo(Device device)
         {
             CLHelper.ThrowNullException(Handle);
-            return new BuildInfo(Handle, device.Handle);
+            return new BuildInfo(this, device);
         }
 
         public override int GetHashCode()

@@ -77,14 +77,19 @@ namespace Ibasa.OpenCL
             }
         }
 
-        internal static bool CheckVersion(string version, int major, int minor)
+        internal static void CheckVersion(string version, int major, int minor)
         {
             int start = version.IndexOf(' ');
             int end = version.IndexOf(' ', start + 1);
 
             var v = new Version(version.Substring(start, end - start));
 
-            return v.Major > major || (v.Major == major && v.Minor >= minor);
+            bool valid = v.Major > major || (v.Major == major && v.Minor >= minor);
+
+            if (!valid)
+            {
+                throw new OpenCLException(string.Format("This method requires OpenCL {0}.{1}", major, minor));
+            }
         }
 
         internal static void ThrowNullException(IntPtr ptr)
