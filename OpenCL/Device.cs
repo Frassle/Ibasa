@@ -120,19 +120,27 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-                unsafe
+
+                if (CLHelper.CheckVersion(Version, 2, 2))
                 {
-                    UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
+                    unsafe
+                    {
+                        UIntPtr param_value_size_ret = UIntPtr.Zero;
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
 
-                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+                        byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
 
-                    var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
-                    return str.Split(';');
+                        var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                        return str.Split(';');
+                    }
+                }
+                else
+                {
+                    return new string[0];
                 }
             }
         }
@@ -168,6 +176,122 @@ namespace Ibasa.OpenCL
 
                     CLHelper.GetError(CL.GetDeviceInfo(
                         Handle, CL.DEVICE_NAME, param_value_size_ret, data_ptr, null));
+
+                    return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                }
+            }
+        }
+
+        Platform Platform
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    IntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PLATFORM, param_value_size, &value, null));
+                    return new Platform(value);
+                }
+            }
+        }
+
+        public string Profile
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PROFILE, UIntPtr.Zero, null, &param_value_size_ret));
+
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PROFILE, param_value_size_ret, data_ptr, null));
+
+                    return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                }
+            }
+        }
+
+        public string Vendor
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_VENDOR, UIntPtr.Zero, null, &param_value_size_ret));
+
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_VENDOR, param_value_size_ret, data_ptr, null));
+
+                    return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                }
+            }
+        }
+
+        public long VendorID
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_VENDOR_ID, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public string Version
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
+
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_VERSION, param_value_size_ret, data_ptr, null));
+
+                    return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                }
+            }
+        }
+
+        public string DriverVersion
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DRIVER_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
+
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DRIVER_VERSION, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }

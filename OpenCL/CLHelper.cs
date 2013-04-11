@@ -77,6 +77,16 @@ namespace Ibasa.OpenCL
             }
         }
 
+        internal static bool CheckVersion(string version, int major, int minor)
+        {
+            int start = version.IndexOf(' ');
+            int end = version.IndexOf(' ', start + 1);
+
+            var v = new Version(version.Substring(start, end - start));
+
+            return v.Major > major || (v.Major == major && v.Minor >= minor);
+        }
+
         internal static void ThrowNullException(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
