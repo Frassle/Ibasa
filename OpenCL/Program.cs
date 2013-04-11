@@ -115,12 +115,12 @@ namespace Ibasa.OpenCL
                 }
 
                 var byte_count = Encoding.ASCII.GetByteCount(options);
-                byte* bytes = stackalloc byte[byte_count];
-
+                byte* bytes = stackalloc byte[byte_count + 1];
                 fixed (char* options_ptr = options)
                 {
                     Encoding.ASCII.GetBytes(options_ptr, options.Length, bytes, byte_count);
                 }
+                bytes[byte_count] = 0; //null terminator
 
                 var function_ptr = IntPtr.Zero;
                 var data_ptr = IntPtr.Zero;
@@ -183,6 +183,69 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public Device[] Devices
+        {
+            get
+            {
+                unsafe
+                {
+                    uint num_devices;
+                    UIntPtr param_value_size = new UIntPtr((uint)sizeof(uint));
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_NUM_DEVICES, param_value_size, &num_devices, null));
+
+                    IntPtr* device_ptrs = stackalloc IntPtr[(int)num_devices];
+                    param_value_size = new UIntPtr((uint)(IntPtr.Size * num_devices));
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_DEVICES, param_value_size, device_ptrs, null));
+
+                    Device[] devices = new Device[(int)num_devices];
+                    for (int i = 0; i < devices.Length; ++i)
+                    {
+                        devices[i] = new Device(device_ptrs[i]);
+                    }
+
+                    return devices;
+                }
+            }
+        }
+
+
+        public byte[][] Binaries
+        {
+            get
+            {
+                unsafe
+                {
+                    uint num_devices;
+                    UIntPtr param_value_size = new UIntPtr((uint)sizeof(uint));
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_NUM_DEVICES, param_value_size, &num_devices, null));
+
+                    UIntPtr* binary_sizes = stackalloc UIntPtr[(int)num_devices];
+                    param_value_size = new UIntPtr((uint)(UIntPtr.Size * num_devices));
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_BINARY_SIZES, param_value_size, &binary_sizes, null));
+
+                    IntPtr* binaries = stackalloc IntPtr[(int)num_devices];
+                    param_value_size = new UIntPtr((uint)(IntPtr.Size * num_devices));
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_BINARIES, param_value_size, &binaries, null));
+
+                    byte[][] result = new byte[num_devices][];
+
+                    for (int i = 0; i < result.Length; ++i)
+                    {
+                        byte[] binary = new byte[binary_sizes[i].ToUInt32()];
+                        Marshal.Copy(binaries[i], binary, 0, binary.Length);
+                        result[i] = binary;
+                    }
+
+                    return result;
+                }
+            }
+        }
+
         public string Source
         {
             get
@@ -240,6 +303,98 @@ namespace Ibasa.OpenCL
                     return str.Split(';');
                 }
             }
+        }
+
+        public struct BuildInfo
+        {
+            IntPtr Program;
+            IntPtr Device;
+
+            internal BuildInfo(IntPtr program, IntPtr device)
+            {
+                Program = program;
+                Device = device;
+            }
+
+            public BuildStatus BuildStatus
+            {
+                get
+                {
+                    CLHelper.ThrowNullException(Program);
+                    unsafe
+                    {
+                        int value;
+                        UIntPtr param_value_size = new UIntPtr((uint)sizeof(int));
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                            CL.PROGRAM_BUILD_STATUS, param_value_size, &value, null));
+                        return (BuildStatus)value;
+                    }
+                }
+            }
+
+            public string BuildOptions
+            {
+                get
+                {
+                    CLHelper.ThrowNullException(Program);
+                    unsafe
+                    {
+                        UIntPtr param_value_size_ret = UIntPtr.Zero;
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                            CL.PROGRAM_BUILD_OPTIONS, UIntPtr.Zero, null, &param_value_size_ret));
+
+                        byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                            CL.PROGRAM_BUILD_OPTIONS, param_value_size_ret, data_ptr, null));
+
+                        return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                    }
+                }
+            }
+
+            public string Log
+            {
+                get
+                {
+                    CLHelper.ThrowNullException(Program);
+                    unsafe
+                    {
+                        UIntPtr param_value_size_ret = UIntPtr.Zero;
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                            CL.PROGRAM_BUILD_LOG, UIntPtr.Zero, null, &param_value_size_ret));
+
+                        byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                            CL.PROGRAM_BUILD_LOG, param_value_size_ret, data_ptr, null));
+
+                        return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                    }
+                }
+            }
+
+            public BinaryType BinaryType
+            {
+                get
+                {
+                    CLHelper.ThrowNullException(Program);
+                    unsafe
+                    {
+                        uint value;
+                        UIntPtr param_value_size = new UIntPtr((uint)sizeof(uint));
+                        CLHelper.GetError(CL.GetProgramBuildInfo(Program, Device,
+                            CL.PROGRAM_BINARY_TYPE, param_value_size, &value, null));
+                        return (BinaryType)value;
+                    }
+                }
+            }
+        }
+
+        public BuildInfo GetBuildInfo(Device device)
+        {
+            CLHelper.ThrowNullException(Handle);
+            return new BuildInfo(Handle, device.Handle);
         }
 
         public override int GetHashCode()

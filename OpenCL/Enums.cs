@@ -57,4 +57,20 @@ namespace Ibasa.OpenCL
         Submitted = CL.SUBMITTED,
         Queued = CL.QUEUED,
     }
+
+    public enum BuildStatus
+    {
+        None = CL.BUILD_NONE,
+        Error = CL.BUILD_ERROR,
+        Success = CL.BUILD_SUCCESS,
+        InProgress = CL.BUILD_IN_PROGRESS,
+    }
+
+    public enum BinaryType
+    {
+        None = CL.PROGRAM_BINARY_TYPE_NONE,
+        CompiledObject = CL.PROGRAM_BINARY_TYPE_COMPILED_OBJECT,
+        Library = CL.PROGRAM_BINARY_TYPE_LIBRARY,
+        Executable = CL.PROGRAM_BINARY_TYPE_EXECUTABLE,
+    }
 }
