@@ -73,4 +73,30 @@ namespace Ibasa.OpenCL
         Library = CL.PROGRAM_BINARY_TYPE_LIBRARY,
         Executable = CL.PROGRAM_BINARY_TYPE_EXECUTABLE,
     }
+    
+    [Flags]
+    public enum FloatingPointCapability
+    {
+        Denorm = CL.FP_DENORM,
+        InfinityNaN = CL.FP_INF_NAN, 
+        RoundToNearest = CL.FP_ROUND_TO_NEAREST,
+        RoundToZero = CL.FP_ROUND_TO_ZERO,
+        RoundToInfinity = CL.FP_ROUND_TO_INF,
+        FusedMultiplyAdd = CL.FP_FMA,
+        Software = CL.FP_SOFT_FLOAT,
+        CorrectlyRoundedDivideSqrt = CL.FP_CORRECTLY_ROUNDED_DIVIDE_SQRT,
+    }
+
+    [Flags]
+    public enum ExecutionCapabilities
+    {
+        ExecuteKernel = CL.EXEC_KERNEL,
+        ExecuteNativeKernel = CL.EXEC_NATIVE_KERNEL,
+    }
+
+    public enum MemoryCacheType
+    {
+        ReadOnly = CL.READ_ONLY_CACHE,
+        ReadWrite = CL.READ_WRITE_CACHE,
+    }
 }

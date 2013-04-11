@@ -83,7 +83,7 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public long AddressBits
+        public uint AddressBits
         {
             get
             {
@@ -161,6 +161,314 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public FloatingPointCapability DoubleFloatingPointCapability
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                if (Extensions.Contains("cl_khr_fp64"))
+                {
+                    unsafe
+                    {
+                        ulong value;
+                        UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_DOUBLE_FP_CONFIG, param_value_size, &value, null));
+                        return (FloatingPointCapability)value;
+                    }
+                }
+                else
+                {
+                    return (FloatingPointCapability)0;
+                }
+            }
+        }
+        
+        public bool LittleEndian
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_ENDIAN_LITTLE, param_value_size, &value, null));
+                    return value != 0;
+                }
+            }
+        }
+
+        public bool ErrorCorrectionSupport
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_ERROR_CORRECTION_SUPPORT, param_value_size, &value, null));
+                    return value != 0;
+                }
+            }
+        }
+
+        public ExecutionCapabilities ExecutionCapabilities
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_EXECUTION_CAPABILITIES, param_value_size, &value, null));
+                    return (ExecutionCapabilities)value;
+                }
+            }
+        }
+
+        public string[] Extensions
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_EXTENSIONS, UIntPtr.Zero, null, &param_value_size_ret));
+
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_EXTENSIONS, param_value_size_ret, data_ptr, null));
+
+                    var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                    return str.Split(' ');
+                }
+            }
+        }
+
+        public ulong GlobalMemoryCacheSize
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_GLOBAL_MEM_CACHE_SIZE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public MemoryCacheType GlobalMemoryCacheType
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_GLOBAL_MEM_CACHE_TYPE, param_value_size, &value, null));
+                    return (MemoryCacheType)value;
+                }
+            }
+        }
+
+        public uint GlobalMemoryCachelineSize
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_GLOBAL_MEM_CACHELINE_SIZE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public ulong GlobalMemorySize
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_GLOBAL_MEM_SIZE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public FloatingPointCapability HalfFloatingPointCapability
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                if (Extensions.Contains("cl_khr_fp16"))
+                {
+                    unsafe
+                    {
+                        ulong value;
+                        UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_HALF_FP_CONFIG, param_value_size, &value, null));
+                        return (FloatingPointCapability)value;
+                    }
+                }
+                else
+                {
+                    return (FloatingPointCapability)0;
+                }
+            }
+        }
+
+        public bool ImmageSupport
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_IMAGE_SUPPORT, param_value_size, &value, null));
+                    return value != 0;
+                }
+            }
+        }
+
+        public ulong LocalMemorySize
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_LOCAL_MEM_SIZE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public MemoryCacheType LocalMemoryType
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_LOCAL_MEM_TYPE, param_value_size, &value, null));
+                    return (MemoryCacheType)value;
+                }
+            }
+        }
+
+        public uint MaxClockFrequency
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_MAX_CLOCK_FREQUENCY, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public uint MaxComputeUnits
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_MAX_COMPUTE_UNITS, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public uint MaxConstantArgs
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_MAX_CONSTANT_ARGS, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public ulong MaxConstantBufferSize
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_MAX_CONSTANT_BUFFER_SIZE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public ulong MaxMemoryAllocSize
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_MAX_MEM_ALLOC_SIZE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
         public string Name
         {
             get
@@ -182,7 +490,172 @@ namespace Ibasa.OpenCL
             }
         }
 
-        Platform Platform
+        public long NativeVectorWidthByte
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_CHAR, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long NativeVectorWidthShort
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_SHORT, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long NativeVectorWidthInt
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_INT, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long NativeVectorWidthLong
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_LONG, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long NativeVectorWidthSingle
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_FLOAT, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long NativeVectorWidthDouble
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long NativeVectorWidthHalf
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_HALF, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public string CVersion
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_OPENCL_C_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
+
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_OPENCL_C_VERSION, param_value_size_ret, data_ptr, null));
+
+                    return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                }
+            }
+        }
+
+        public Device ParentDevice
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    IntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PARENT_DEVICE, param_value_size, &value, null));
+                    return new Device(value);
+                }
+            }
+        }
+
+        public long PartitionMaxSubDevices
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PARTITION_MAX_SUB_DEVICES, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public Platform Platform
         {
             get
             {
@@ -194,6 +667,150 @@ namespace Ibasa.OpenCL
                     CLHelper.GetError(CL.GetDeviceInfo(
                         Handle, CL.DEVICE_PLATFORM, param_value_size, &value, null));
                     return new Platform(value);
+                }
+            }
+        }
+
+        public long PreferredVectorWidthByte
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_CHAR, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long PreferredVectorWidthShort
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_SHORT, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long PreferredVectorWidthInt
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_INT, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long PreferredVectorWidthLong
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_LONG, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long PreferredVectorWidthSingle
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long PreferredVectorWidthDouble
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public long PreferredVectorWidthHalf
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_HALF, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public ulong PrintfBufferSize
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PRINTF_BUFFER_SIZE, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
+
+        public bool PreferredInteropUserSync
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PREFERRED_INTEROP_USER_SYNC, param_value_size, &value, null));
+                    return value != 0;
                 }
             }
         }
@@ -215,6 +832,86 @@ namespace Ibasa.OpenCL
                         Handle, CL.DEVICE_PROFILE, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                }
+            }
+        }
+
+        public ulong ProfilingTimerResolution
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PROFILING_TIMER_RESOLUTION, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
+
+        public CommandQueueProperties QueueProperties
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr((uint)sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_PROFILING_TIMER_RESOLUTION, param_value_size, &value, null));
+                    return (CommandQueueProperties)value;
+                }
+            }
+        }
+
+        public long ReferenceCount
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_REFERENCE_COUNT, param_value_size, &value, null));
+                    return value;
+                }
+            }
+        }
+
+        public FloatingPointCapability SingleFloatingPointCapability
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_SINGLE_FP_CONFIG, param_value_size, &value, null));
+                    return (FloatingPointCapability)value;
+                }
+            }
+        }
+
+        public DeviceType Type
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_TYPE, param_value_size, &value, null));
+                    return (DeviceType)value;
                 }
             }
         }

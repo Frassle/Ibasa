@@ -179,7 +179,7 @@ namespace Ibasa.OpenCL
         public const int DEVICE_EXTENSIONS = 0x1030;
         public const int DEVICE_PLATFORM = 0x1031;
         public const int DEVICE_DOUBLE_FP_CONFIG = 0x1032;
-        /* 0x1033 reserved for DEVICE_HALF_FP_CONFIG */
+        public const int DEVICE_HALF_FP_CONFIG = 0x1033;
         public const int DEVICE_PREFERRED_VECTOR_WIDTH_HALF = 0x1034;
         public const int DEVICE_HOST_UNIFIED_MEMORY = 0x1035;
         public const int DEVICE_NATIVE_VECTOR_WIDTH_CHAR = 0x1036;
