@@ -961,17 +961,18 @@ namespace Ibasa.OpenCL
         //                    uint            /* num_events_in_wait_list */, 
         //                    const event *   /* event_wait_list */, 
         //                    event *         /* event */);
-                            
-        //public static unsafe extern int
-        //clEnqueueCopyBuffer(cl_command_queue    /* command_queue */, 
-        //                    mem              /* src_buffer */,
-        //                    mem              /* dst_buffer */, 
-        //                    UIntPtr              /* src_offset */,
-        //                    UIntPtr              /* dst_offset */,
-        //                    UIntPtr              /* size */, 
-        //                    uint             /* num_events_in_wait_list */,
-        //                    const event *    /* event_wait_list */,
-        //                    event *          /* event */);
+                           
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueCopyBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueCopyBuffer(            
+            IntPtr command_queue,
+            IntPtr src_buffer,
+            IntPtr dst_buffer,
+            UIntPtr src_offset,
+            UIntPtr dst_offset,
+            UIntPtr size,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
                             
         //public static unsafe extern int
         //clEnqueueCopyBufferRect(cl_command_queue    /* command_queue */, 

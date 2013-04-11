@@ -114,7 +114,7 @@ __kernel void vector_add_gpu (__global const float* src_a,
 
             var eventk = queue.EnqueueKernel(kernel, null, new ulong[] { 50 }, null, null);
 
-            queue.EnqueueRead(bufferd, true, 0, mem_size, dest_ptr.AddrOfPinnedObject(), new Event[] { eventk });
+            queue.EnqueueReadBuffer(bufferd, true, 0, mem_size, dest_ptr.AddrOfPinnedObject(), new Event[] { eventk });
 
             for (int i = 0; i < 50; ++i)
             {

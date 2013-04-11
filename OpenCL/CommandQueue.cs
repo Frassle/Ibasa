@@ -106,7 +106,7 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public Event EnqueueRead(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
+        public Event EnqueueReadBuffer(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
         {
             CLHelper.ThrowNullException(Handle);
 
@@ -136,7 +136,7 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public Event EnqueueWrite(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
+        public Event EnqueueWriteBuffer(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
         {
             CLHelper.ThrowNullException(Handle);
 
@@ -160,6 +160,39 @@ namespace Ibasa.OpenCL
 
                 CLHelper.GetError(CL.EnqueueWriteBuffer(Handle, buffer.Handle,
                     blocking ? 1u : 0u, new UIntPtr(offset), new UIntPtr(count), destination.ToPointer(),
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
+        public Event EnqueueCopyBuffer(
+            Buffer source, ulong sourceOffset,
+            Buffer destination, ulong destinationOffset, ulong count, Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            if (source == default(Buffer))
+                throw new ArgumentNullException("buffer");
+            if (destination == default(Buffer))
+                throw new ArgumentNullException("destination");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueCopyBuffer(Handle,
+                    source.Handle, destination.Handle,
+                    new UIntPtr(sourceOffset), new UIntPtr(sourceOffset), new UIntPtr(count),
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
                 return new Event(event_ptr);
