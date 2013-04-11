@@ -357,6 +357,86 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public ulong Image2dMaxHeight
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_IMAGE2D_MAX_HEIGHT, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
+
+        public ulong Image2dMaxWidth
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_IMAGE2D_MAX_WIDTH, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
+
+        public ulong Image3dMaxDepth
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_IMAGE3D_MAX_DEPTH, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
+
+        public ulong Image3dMaxHeight
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_IMAGE3D_MAX_HEIGHT, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
+
+        public ulong Image3dMaxWidth
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_IMAGE3D_MAX_WIDTH, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
+
         public ulong LocalMemorySize
         {
             get
