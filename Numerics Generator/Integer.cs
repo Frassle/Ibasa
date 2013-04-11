@@ -59,7 +59,7 @@ namespace Numerics_Generator
             WriteLine("[System.Serializable]");
             WriteLine("[System.Runtime.InteropServices.ComVisible(true)]");
             WriteLine("[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]");
-            WriteLine("public struct {0}: System.IEquatable<{0}>, System.IFormattable", Name);
+            WriteLine("public struct {0}: System.IComparable<{0}>, System.IEquatable<{0}>, System.IFormattable", Name);
             WriteLine("{");
             Indent();
             Constants();
@@ -69,6 +69,7 @@ namespace Numerics_Generator
             Operations();
             Conversions();
             Equatable();
+            Comparable();
             String();
             Dedent();
             WriteLine("}");
@@ -585,6 +586,60 @@ namespace Numerics_Generator
 
             WriteLine("#endregion");
         }
+
+        void Comparable()
+        {
+
+            WriteLine("#region Comparable");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Returns a value that indicates whether the current instance and a specified");
+            WriteLine("/// integer have the same value.");
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"other\">The integer to compare.</param>");
+            WriteLine("/// <returns>true if this integer and value have the same value; otherwise, false.</returns>");
+            WriteLine("public int CompareTo({0} other)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("var sub = this - other;");
+            WriteLine("if((~int.MaxValue & sub.{0}) != 0) return -1;", Parts.Last());
+            WriteLine("if({0}) return 0;", string.Join(" & ",
+                Parts.Select(part => string.Format("sub.{0} == 0", part))));
+            WriteLine("return 1;");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public static bool operator <({0} left, {0} right)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return left.CompareTo(right) < 0;");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public static bool operator <=({0} left, {0} right)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return left.CompareTo(right) <= 0;");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public static bool operator >({0} left, {0} right)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return left.CompareTo(right) > 0;");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("public static bool operator >=({0} left, {0} right)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return left.CompareTo(right) >= 0;");
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("#endregion");
+        }
+
 
         void String()
         {

@@ -6,7 +6,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct Int128: System.IEquatable<Int128>, System.IFormattable
+	public struct Int128: System.IComparable<Int128>, System.IEquatable<Int128>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -370,6 +370,37 @@ namespace Ibasa.Numerics
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3;
 		}
 		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(Int128 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part3) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(Int128 left, Int128 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(Int128 left, Int128 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(Int128 left, Int128 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(Int128 left, Int128 right)
+		{
+			return left.CompareTo(right) >= 0;
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -504,7 +535,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct UInt128: System.IEquatable<UInt128>, System.IFormattable
+	public struct UInt128: System.IComparable<UInt128>, System.IEquatable<UInt128>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -858,6 +889,37 @@ namespace Ibasa.Numerics
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3;
 		}
 		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(UInt128 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part3) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(UInt128 left, UInt128 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(UInt128 left, UInt128 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(UInt128 left, UInt128 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(UInt128 left, UInt128 right)
+		{
+			return left.CompareTo(right) >= 0;
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -993,7 +1055,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct Int160: System.IEquatable<Int160>, System.IFormattable
+	public struct Int160: System.IComparable<Int160>, System.IEquatable<Int160>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -1373,6 +1435,37 @@ namespace Ibasa.Numerics
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3 | left.Part4 != right.Part4;
 		}
 		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(Int160 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part4) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0 & sub.Part4 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(Int160 left, Int160 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(Int160 left, Int160 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(Int160 left, Int160 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(Int160 left, Int160 right)
+		{
+			return left.CompareTo(right) >= 0;
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -1507,7 +1600,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct UInt160: System.IEquatable<UInt160>, System.IFormattable
+	public struct UInt160: System.IComparable<UInt160>, System.IEquatable<UInt160>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -1877,6 +1970,37 @@ namespace Ibasa.Numerics
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3 | left.Part4 != right.Part4;
 		}
 		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(UInt160 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part4) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0 & sub.Part4 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(UInt160 left, UInt160 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(UInt160 left, UInt160 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(UInt160 left, UInt160 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(UInt160 left, UInt160 right)
+		{
+			return left.CompareTo(right) >= 0;
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -2012,7 +2136,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct Int256: System.IEquatable<Int256>, System.IFormattable
+	public struct Int256: System.IComparable<Int256>, System.IEquatable<Int256>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -2440,6 +2564,37 @@ namespace Ibasa.Numerics
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3 | left.Part4 != right.Part4 | left.Part5 != right.Part5 | left.Part6 != right.Part6 | left.Part7 != right.Part7;
 		}
 		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(Int256 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part7) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0 & sub.Part4 == 0 & sub.Part5 == 0 & sub.Part6 == 0 & sub.Part7 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(Int256 left, Int256 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(Int256 left, Int256 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(Int256 left, Int256 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(Int256 left, Int256 right)
+		{
+			return left.CompareTo(right) >= 0;
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -2574,7 +2729,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct UInt256: System.IEquatable<UInt256>, System.IFormattable
+	public struct UInt256: System.IComparable<UInt256>, System.IEquatable<UInt256>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -2992,6 +3147,37 @@ namespace Ibasa.Numerics
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3 | left.Part4 != right.Part4 | left.Part5 != right.Part5 | left.Part6 != right.Part6 | left.Part7 != right.Part7;
 		}
 		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(UInt256 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part7) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0 & sub.Part4 == 0 & sub.Part5 == 0 & sub.Part6 == 0 & sub.Part7 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(UInt256 left, UInt256 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(UInt256 left, UInt256 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(UInt256 left, UInt256 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(UInt256 left, UInt256 right)
+		{
+			return left.CompareTo(right) >= 0;
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -3127,7 +3313,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct Int512: System.IEquatable<Int512>, System.IFormattable
+	public struct Int512: System.IComparable<Int512>, System.IEquatable<Int512>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -3683,6 +3869,37 @@ namespace Ibasa.Numerics
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3 | left.Part4 != right.Part4 | left.Part5 != right.Part5 | left.Part6 != right.Part6 | left.Part7 != right.Part7 | left.Part8 != right.Part8 | left.Part9 != right.Part9 | left.Part10 != right.Part10 | left.Part11 != right.Part11 | left.Part12 != right.Part12 | left.Part13 != right.Part13 | left.Part14 != right.Part14 | left.Part15 != right.Part15;
 		}
 		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(Int512 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part15) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0 & sub.Part4 == 0 & sub.Part5 == 0 & sub.Part6 == 0 & sub.Part7 == 0 & sub.Part8 == 0 & sub.Part9 == 0 & sub.Part10 == 0 & sub.Part11 == 0 & sub.Part12 == 0 & sub.Part13 == 0 & sub.Part14 == 0 & sub.Part15 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(Int512 left, Int512 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(Int512 left, Int512 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(Int512 left, Int512 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(Int512 left, Int512 right)
+		{
+			return left.CompareTo(right) >= 0;
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -3817,7 +4034,7 @@ namespace Ibasa.Numerics
 	[System.Serializable]
 	[System.Runtime.InteropServices.ComVisible(true)]
 	[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-	public struct UInt512: System.IEquatable<UInt512>, System.IFormattable
+	public struct UInt512: System.IComparable<UInt512>, System.IEquatable<UInt512>, System.IFormattable
 	{
 		#region Constants
 		/// <summary>
@@ -4361,6 +4578,37 @@ namespace Ibasa.Numerics
 		public static bool operator !=(UInt512 left, UInt512 right)
 		{
 			return left.Part0 != right.Part0 | left.Part1 != right.Part1 | left.Part2 != right.Part2 | left.Part3 != right.Part3 | left.Part4 != right.Part4 | left.Part5 != right.Part5 | left.Part6 != right.Part6 | left.Part7 != right.Part7 | left.Part8 != right.Part8 | left.Part9 != right.Part9 | left.Part10 != right.Part10 | left.Part11 != right.Part11 | left.Part12 != right.Part12 | left.Part13 != right.Part13 | left.Part14 != right.Part14 | left.Part15 != right.Part15;
+		}
+		#endregion
+		#region Comparable
+		/// <summary>
+		/// Returns a value that indicates whether the current instance and a specified
+		/// integer have the same value.
+		/// </summary>
+		/// <param name="other">The integer to compare.</param>
+		/// <returns>true if this integer and value have the same value; otherwise, false.</returns>
+		public int CompareTo(UInt512 other)
+		{
+			var sub = this - other;
+			if((~int.MaxValue & sub.Part15) != 0) return -1;
+			if(sub.Part0 == 0 & sub.Part1 == 0 & sub.Part2 == 0 & sub.Part3 == 0 & sub.Part4 == 0 & sub.Part5 == 0 & sub.Part6 == 0 & sub.Part7 == 0 & sub.Part8 == 0 & sub.Part9 == 0 & sub.Part10 == 0 & sub.Part11 == 0 & sub.Part12 == 0 & sub.Part13 == 0 & sub.Part14 == 0 & sub.Part15 == 0) return 0;
+			return 1;
+		}
+		public static bool operator <(UInt512 left, UInt512 right)
+		{
+			return left.CompareTo(right) < 0;
+		}
+		public static bool operator <=(UInt512 left, UInt512 right)
+		{
+			return left.CompareTo(right) <= 0;
+		}
+		public static bool operator >(UInt512 left, UInt512 right)
+		{
+			return left.CompareTo(right) > 0;
+		}
+		public static bool operator >=(UInt512 left, UInt512 right)
+		{
+			return left.CompareTo(right) >= 0;
 		}
 		#endregion
 		#region ToString
