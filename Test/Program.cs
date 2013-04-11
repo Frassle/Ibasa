@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Ibasa.OpenCL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,63 +10,116 @@ namespace Test
 {
     class Program
     {
+        static string source = @"
+__kernel void vector_add_gpu (__global const float* src_a,
+    __global const float* src_b,
+    __global float* res,
+    const int num)
+{
+    const int idx = get_global_id(0);
+    if (idx < num)
+        res[idx] = src_a[idx] + src_b[idx];
+}";
 
-        static string Type(byte[] bytes)
+        static void ContextCallback(string error, byte[] info, object user_data)
         {
-            return string.Join(", ",
-                Enumerable.Reverse(bytes.Select(b => b.ToString("X"))));
+            Console.WriteLine("Error: {0}", error);
         }
 
-        static Ibasa.Numerics.Int128 Big(long i)
+        static int flag = 0;
+        static void ProgramCallback(Ibasa.OpenCL.Program program, object user_data)
         {
-            return new Ibasa.Numerics.Int128(i);
+            Console.WriteLine("Program built.");
+
+            var device = program.Devices[0];
+
+            Console.WriteLine(device.Name);
+
+            var info = program.GetBuildInfo(device);
+
+            Console.WriteLine(info.BuildOptions);
+            Console.WriteLine(info.BuildStatus);
+            Console.WriteLine(info.Log);
+
+            flag = 1;
         }
 
         static void Main(string[] args)
         {
-            var intA = new Ibasa.Numerics.Int128(32);
-            var intB = new Ibasa.Numerics.Int128(-32);
-            var intC = new Ibasa.Numerics.UInt128(-32);
+            var platform = Platform.GetPlatforms()[0];
+            var device = platform.GetDevices(DeviceType.All)[0];
 
-            Console.WriteLine(Type(intA.ToByteArray()));
-            Console.WriteLine(Type(intB.ToByteArray()));
-            Console.WriteLine(Type(intC.ToByteArray()));
-            Console.WriteLine(intA);
-            Console.WriteLine(intB);
-            Console.WriteLine(intC);
+            Console.WriteLine(platform.Name);
+            Console.WriteLine(platform.Vendor);
+            Console.WriteLine(platform.Profile);
+            Console.WriteLine(platform.Version);
+            Console.WriteLine(string.Join(", ", platform.Extensions));
 
-            var shiftA = intA >> 2;
-            var shiftB = intB >> 2;
-            var shiftC = intC >> 2;
+            Console.WriteLine(device.Name);
+            Console.WriteLine(device.Profile);
+            Console.WriteLine(device.Vendor);
+            Console.WriteLine(device.VendorID);
+            Console.WriteLine(device.Version);
+            Console.WriteLine(device.DriverVersion);
+            Console.WriteLine(device.DoubleFloatingPointCapability);
+            Console.WriteLine(device.SingleFloatingPointCapability);
+            Console.WriteLine(device.HalfFloatingPointCapability);
+            Console.WriteLine(device.Type);
 
-            Console.WriteLine(Type(shiftA.ToByteArray()));
-            Console.WriteLine(Type(shiftB.ToByteArray()));
-            Console.WriteLine(Type(shiftC.ToByteArray()));
-            Console.WriteLine(shiftA);
-            Console.WriteLine(shiftB);
-            Console.WriteLine(shiftC);
+            var context = new Context(null, new Device[] { device }, ContextCallback, null);
 
-            var shift2A = intA >> 48;
-            var shift2B = intB >> 48;
-            var shift2C = intC >> 48;
+            var program = new Ibasa.OpenCL.Program(context, source);
+            program.BuildProgram(new Device[] { device }, "", ProgramCallback, null);
 
-            Console.WriteLine(Type(shift2A.ToByteArray()));
-            Console.WriteLine(Type(shift2B.ToByteArray()));
-            Console.WriteLine(Type(shift2C.ToByteArray()));
-            Console.WriteLine(shift2A);
-            Console.WriteLine(shift2B);
-            Console.WriteLine(shift2C);
+            Console.WriteLine(program.Source);
 
-            var shift3A = intA >> 256;
-            var shift3B = intB >> 256;
-            var shift3C = intC >> 256;
+            while (flag == 0)
+            {
+            }
 
-            Console.WriteLine(Type(shift3A.ToByteArray()));
-            Console.WriteLine(Type(shift3B.ToByteArray()));
-            Console.WriteLine(Type(shift3C.ToByteArray()));
-            Console.WriteLine(shift3A);
-            Console.WriteLine(shift3B);
-            Console.WriteLine(shift3C);
+            var kernel = new Kernel(program, "vector_add_gpu");
+
+            Console.WriteLine(kernel.FunctionName);
+            Console.WriteLine(kernel.ArgumentCount);
+
+            uint mem_size = 50 * sizeof(float);
+
+            float[] srca = new float[50];
+            float[] srcb = new float[50];
+            float[] dest = new float[50];
+
+            for (int i = 0; i < 50; ++i)
+            {
+                srca[i] = i;
+                srcb[i] = 50;
+            }
+
+            var srca_ptr = GCHandle.Alloc(srca, GCHandleType.Pinned);
+            var srcb_ptr = GCHandle.Alloc(srcb, GCHandleType.Pinned);
+            var dest_ptr = GCHandle.Alloc(dest, GCHandleType.Pinned);
+
+            var buffera = new Ibasa.OpenCL.Buffer(
+                context, MemoryFlags.ReadOnly | MemoryFlags.CopyHostPtr, mem_size, srca_ptr.AddrOfPinnedObject());
+            var bufferb = new Ibasa.OpenCL.Buffer(
+                context, MemoryFlags.ReadOnly | MemoryFlags.CopyHostPtr, mem_size, srcb_ptr.AddrOfPinnedObject());
+            var bufferd = new Ibasa.OpenCL.Buffer(
+                context, MemoryFlags.WriteOnly, mem_size);
+
+            kernel.SetArgument(0, buffera);
+            kernel.SetArgument(1, bufferb);
+            kernel.SetArgument(2, bufferd);
+            kernel.SetArgument(3, 50);
+
+            var queue = new CommandQueue(context, device, CommandQueueProperties.None);
+
+            var eventk = queue.Enqueue(kernel, null, new ulong[] { 50 }, null, null);
+
+            queue.EnqueueRead(bufferd, true, 0, mem_size, dest_ptr.AddrOfPinnedObject(), new Event[] { eventk });
+
+            for (int i = 0; i < 50; ++i)
+            {
+                Console.WriteLine(dest[i]);
+            }
 
             Console.ReadLine();
         }

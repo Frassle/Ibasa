@@ -58,6 +58,10 @@
       <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>
       <Name>Numerics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OpenCL\OpenCL.csproj">
+      <Project>{4435d9ed-80c8-4e0c-bcb7-2e74e9ed5c07}</Project>
+      <Name>OpenCL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
