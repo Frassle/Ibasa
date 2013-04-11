@@ -210,6 +210,26 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public string Source
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr param_value_size_ret = UIntPtr.Zero;
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_SOURCE, UIntPtr.Zero, null, &param_value_size_ret));
+
+                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+
+                    CLHelper.GetError(CL.GetProgramInfo(
+                        Handle, CL.PROGRAM_SOURCE, param_value_size_ret, data_ptr, null));
+
+                    return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                }
+            }
+        }
 
         public byte[][] Binaries
         {
@@ -246,39 +266,25 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public string Source
-        {
-            get
-            {
-                CLHelper.ThrowNullException(Handle);
-                unsafe
-                {
-                    UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetProgramInfo(
-                        Handle, CL.PROGRAM_SOURCE, UIntPtr.Zero, null, &param_value_size_ret));
-
-                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
-
-                    CLHelper.GetError(CL.GetProgramInfo(
-                        Handle, CL.PROGRAM_SOURCE, param_value_size_ret, data_ptr, null));
-
-                    return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
-                }
-            }
-        }
-
         public long KernelCount
         {
             get
             {
                 CLHelper.ThrowNullException(Handle);
-                unsafe
+                if (CLHelper.CheckVersion(" 1.1 ", 1, 2))
                 {
-                    UIntPtr value;
-                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetProgramInfo(
-                        Handle, CL.PROGRAM_NUM_KERNELS, param_value_size, &value, null));
-                    return (long)value.ToUInt64();
+                    unsafe
+                    {
+                        UIntPtr value;
+                        UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                        CLHelper.GetError(CL.GetProgramInfo(
+                            Handle, CL.PROGRAM_NUM_KERNELS, param_value_size, &value, null));
+                        return (long)value.ToUInt64();
+                    }
+                }
+                else
+                {
+                    return 0;
                 }
             }
         }
