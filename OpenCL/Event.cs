@@ -46,7 +46,9 @@ namespace Ibasa.OpenCL
         public void Release()
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.ReleaseEvent(Handle));
+            int error = CL.ReleaseEvent(Handle);
+            Handle = IntPtr.Zero;
+            CLHelper.GetError(error);
         }
 
         public void SetUserEventStatus(int status)

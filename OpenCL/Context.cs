@@ -162,6 +162,9 @@ namespace Ibasa.OpenCL
                 var data = CallbackPointers[Handle];
                 data.Free();
                 CallbackPointers.Remove(Handle);
+            }
+            finally
+            {
                 Handle = IntPtr.Zero;
             }
 

@@ -285,7 +285,9 @@ namespace Ibasa.OpenCL
         public void ReleaseProgram()
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.ReleaseProgram(Handle));
+            int error = CL.ReleaseProgram(Handle);
+            Handle = IntPtr.Zero;
+            CLHelper.GetError(error);
         }
 
         public long ReferenceCount

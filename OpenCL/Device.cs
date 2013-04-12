@@ -86,7 +86,9 @@ namespace Ibasa.OpenCL
             CLHelper.ThrowNullException(Handle);
             try
             {
-                CLHelper.GetError(CL.ReleaseDevice(Handle));
+                int error = CL.ReleaseDevice(Handle);
+                Handle = IntPtr.Zero;
+                CLHelper.GetError(error);
             }
             catch (EntryPointNotFoundException)
             {

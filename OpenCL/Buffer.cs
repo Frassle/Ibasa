@@ -142,6 +142,20 @@ namespace Ibasa.OpenCL
             return buffer;
         }
 
+        public void RetainBuffer()
+        {
+            CLHelper.ThrowNullException(Handle);
+            CLHelper.GetError(CL.RetainMemObject(Handle));
+        }
+
+        public void ReleaseBuffer()
+        {
+            CLHelper.ThrowNullException(Handle);
+            int error = CL.ReleaseMemObject(Handle);
+            Handle = IntPtr.Zero;
+            CLHelper.GetError(error);
+        }
+
         public MemoryFlags MemoryFlags
         {
             get

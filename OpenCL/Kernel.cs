@@ -61,7 +61,9 @@ namespace Ibasa.OpenCL
         public void Release()
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.ReleaseKernel(Handle));
+            int error = CL.ReleaseKernel(Handle);
+            Handle = IntPtr.Zero;
+            CLHelper.GetError(error);
         }
 
         public void SetArgument(int index, Buffer buffer)
