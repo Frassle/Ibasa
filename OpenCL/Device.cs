@@ -8,6 +8,20 @@ using System.Threading.Tasks;
 
 namespace Ibasa.OpenCL
 {
+    public struct PartitionProperties
+    {
+        public readonly bool Equally;
+        public readonly bool ByCounts;
+        public readonly bool ByAffinityDomain;
+
+        internal PartitionProperties(bool equally, bool byCounts, bool byAffinityDomain)
+        {
+            Equally = equally;
+            ByCounts = byCounts;
+            ByAffinityDomain = byAffinityDomain;
+        }
+    }
+
     public struct Device : IEquatable<Device>
     {
         public static readonly Device Null = new Device();
@@ -114,7 +128,7 @@ namespace Ibasa.OpenCL
             {
                 IntPtr* properties = stackalloc IntPtr[3];
                 properties[0] = new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN);
-                properties[1] = new IntPtr((uint)domain);
+                properties[1] = new IntPtr((int)domain);
                 properties[2] = new IntPtr(0);
 
                 return CreateSubDevices(properties);
@@ -1072,18 +1086,41 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public long PartitionProperties
+        public PartitionProperties PartitionProperties
         {
             get
             {
                 CLHelper.ThrowNullException(Handle);
-                unsafe
+                try
                 {
-                    IntPtr value;
-                    UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PARTITION_MAX_SUB_DEVICES, param_value_size, &value, null));
-                    return value;
+                    unsafe
+                    {
+                        UIntPtr param_value_size = UIntPtr.Zero;
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_PARTITION_PROPERTIES, UIntPtr.Zero, null, &param_value_size));
+
+                        IntPtr* properties = stackalloc IntPtr[(int)(param_value_size.ToUInt32() / IntPtr.Size)];
+
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_PARTITION_PROPERTIES, param_value_size, properties, null));
+
+                        bool equally = false;
+                        bool byCounts = false;
+                        bool byAffinityDomain = false;
+
+                        while (*properties != IntPtr.Zero)
+                        {
+                            equally |= *properties == new IntPtr(CL.DEVICE_PARTITION_EQUALLY);
+                            byCounts |= *properties == new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS);
+                            byAffinityDomain |= *properties == new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN);
+                        }
+
+                        return new PartitionProperties(equally, byCounts, byAffinityDomain);
+                    }
+                }
+                catch (OpenCLException)
+                {
+                    throw CLHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1102,6 +1139,46 @@ namespace Ibasa.OpenCL
                         CLHelper.GetError(CL.GetDeviceInfo(
                             Handle, CL.DEVICE_PARTITION_AFFINITY_DOMAIN, param_value_size, &value, null));
                         return (AffinityDomain)value;
+                    }
+                }
+                catch (OpenCLException)
+                {
+                    throw CLHelper.VersionException(Version, 1, 2);
+                }
+            }
+        }
+
+        public PartitionType PartitionType
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                try
+                {
+                    unsafe
+                    {
+                        UIntPtr param_value_size = UIntPtr.Zero;
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_PARTITION_TYPE, UIntPtr.Zero, null, &param_value_size));
+
+                        IntPtr* properties = stackalloc IntPtr[(int)(param_value_size.ToUInt32() / IntPtr.Size)];
+
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_PARTITION_TYPE, param_value_size, properties, null));
+
+                        if(properties[0] == new IntPtr(CL.DEVICE_PARTITION_EQUALLY))
+                        {
+                        }
+                        if(properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS))
+                        {
+                        }
+                        if(properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN))
+                        {
+                        }
+                        if(properties[0] == IntPtr.Zero)
+                        {
+                            return null;
+                        }
                     }
                 }
                 catch (OpenCLException)
