@@ -228,6 +228,97 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public Event EnqueueMarker()
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueMarker(Handle, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
+        public Event EnqueueMarkerWithWaitList(Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueMarkerWithWaitList(Handle, num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
+        public void EnqueueWaitForEvents(Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+            if (events == null)
+                throw new ArgumentNullException("events");
+            if (events.Length == 0)
+                throw new ArgumentException("events is empty.");
+
+            unsafe
+            {
+                int num_events = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events];
+                for (int i = 0; i < num_events; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+
+                CLHelper.GetError(CL.EnqueueWaitForEvents(Handle, (uint)num_events, wait_list));
+            }
+        }
+
+        public void EnqueueBarrier()
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                CLHelper.GetError(CL.EnqueueBarrier(Handle));
+            }
+        }
+
+        public Event EnqueueBarrierWithWaitList(Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueBarrierWithWaitList(Handle, num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
         public Context Context
         {
             get
