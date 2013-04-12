@@ -35,6 +35,8 @@ namespace Ibasa.OpenCL
             data.Item1(str, info, data.Item2);
         }
 
+        private static Dictionary<IntPtr, GCHandle> CallbackPointers = new Dictionary<IntPtr, GCHandle>();
+
         public Context(Dictionary<IntPtr, IntPtr> properties, Device[] devices, Action<string, byte[], object> notify, object user_data)
             : this()
         {
@@ -79,6 +81,8 @@ namespace Ibasa.OpenCL
                     Handle = CL.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, 
                         function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
                     CLHelper.GetError(errcode);
+
+                    CallbackPointers.Add(Handle, data_ptr);
                 }
                 catch(Exception)
                 {
@@ -109,19 +113,30 @@ namespace Ibasa.OpenCL
                 properties_ptr[index] = IntPtr.Zero;
 
                 var function_ptr = IntPtr.Zero;
-                var data_ptr = IntPtr.Zero;
+                var data_ptr = new GCHandle();
 
                 if (notify != null)
                 {
                     var data = Tuple.Create(notify, user_data);
-                    data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
+                    data_ptr = GCHandle.Alloc(data);
 
                     function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, IntPtr, UIntPtr, IntPtr>(Callback));
                 }
+                
+                try
+                {
+                    int errcode = 0;
+                    Handle = CL.CreateContext(properties_ptr, (int)deviceType,
+                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
+                    CLHelper.GetError(errcode);
 
-                int errcode = 0;
-                Handle = CL.CreateContext(properties_ptr, (int)deviceType, function_ptr, data_ptr.ToPointer(), &errcode);
-                CLHelper.GetError(errcode);
+                    CallbackPointers.Add(Handle, data_ptr);
+                }
+                catch (Exception)
+                {
+                    data_ptr.Free();
+                    throw;
+                }
             }
         }
 
@@ -134,7 +149,23 @@ namespace Ibasa.OpenCL
         public void Release()
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.ReleaseContext(Handle));
+            int error = CL.ReleaseContext(Handle);
+
+            try
+            {
+                // try to get the ref count
+                var test = ReferenceCount;
+            }
+            catch (OpenCLException)
+            {
+                // if the context is released ReferenceCount will throw
+                var data = CallbackPointers[Handle];
+                data.Free();
+                CallbackPointers.Remove(Handle);
+                Handle = IntPtr.Zero;
+            }
+
+            CLHelper.GetError(error);
         }
 
         public long ReferenceCount
