@@ -22,11 +22,18 @@ namespace Ibasa.OpenCL
         public Event(Context context)
             : this()
         {
-            unsafe
+            try
             {
-                int error;
-                Handle = CL.CreateUserEvent(context.Handle, &error);
-                CLHelper.GetError(error);
+                unsafe
+                {
+                    int error;
+                    Handle = CL.CreateUserEvent(context.Handle, &error);
+                    CLHelper.GetError(error);
+                }
+            }
+            catch (EntryPointNotFoundException)
+            {
+                throw CLHelper.VersionException(1, 1);
             }
         }
 
@@ -45,7 +52,18 @@ namespace Ibasa.OpenCL
         public void SetUserEventStatus(int status)
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.SetUserEventStatus(Handle, status));
+
+            if (status > 0)
+                throw new ArgumentException("status must be zero or negative.");
+
+            try
+            {
+                CLHelper.GetError(CL.SetUserEventStatus(Handle, status));
+            }
+            catch (EntryPointNotFoundException)
+            {
+                throw CLHelper.VersionException(1, 1);
+            }
         }
 
         private delegate void CallbackDelegete(IntPtr @event, int event_command_exec_status, IntPtr user_data);
@@ -59,27 +77,35 @@ namespace Ibasa.OpenCL
         }
 
         public void SetCallback(
-            CommandExecutionStatus command_exec_callback_type,
             Action<Event, CommandExecutionStatus, object> notify,
             object user_data)
         {
             CLHelper.ThrowNullException(Handle);
-            unsafe
+
+            if (notify == null)
+                throw new ArgumentNullException("notify");
+
+            var function_ptr = IntPtr.Zero;
+            var data_handle = new GCHandle();
+
+            try
             {
-
-                var function_ptr = IntPtr.Zero;
-                var data_ptr = IntPtr.Zero;
-
-                if (notify != null)
+                unsafe
                 {
                     var data = Tuple.Create(notify, user_data);
-                    data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
+                    data_handle = GCHandle.Alloc(data);
 
                     function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegete(Callback));
-                }
 
-                CLHelper.GetError(CL.SetEventCallback(
-                    Handle, (int)command_exec_callback_type, function_ptr, data_ptr.ToPointer()));
+                    CLHelper.GetError(CL.SetEventCallback(
+                        Handle, (int)CommandExecutionStatus.Complete, function_ptr, GCHandle.ToIntPtr(data_handle).ToPointer()));
+                }
+            }
+            catch (OpenCLException)
+            {
+                data_handle.Free();
+
+                throw CLHelper.VersionException(1, 1);
             }
         }
 
@@ -104,13 +130,36 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
+                try
+                {
+                    unsafe
+                    {
+                        IntPtr value;
+                        UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
+                        CLHelper.GetError(CL.GetEventInfo(
+                            Handle, CL.EVENT_CONTEXT, param_value_size, &value, null));
+                        return new Context(value);
+                    }
+                }
+                catch (OpenCLException)
+                {
+                    throw CLHelper.VersionException(1, 1);
+                }
+            }
+        }
+
+        public uint CommandType
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
                 unsafe
                 {
-                    IntPtr value;
-                    UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
+                    uint value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(uint));
                     CLHelper.GetError(CL.GetEventInfo(
-                        Handle, CL.EVENT_CONTEXT, param_value_size, &value, null));
-                    return new Context(value);
+                        Handle, CL.EVENT_COMMAND_TYPE, param_value_size, &value, null));
+                    return value;
                 }
             }
         }

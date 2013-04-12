@@ -85,6 +85,13 @@ namespace Ibasa.OpenCL
                 major, minor, clversion.Major, clversion.Minor));
         }
 
+        internal static OpenCLException VersionException(int major, int minor)
+        {
+            return new OpenCLException(string.Format(
+                "This method requires OpenCL {0}.{1}.",
+                major, minor));
+        }
+
         internal static Version ParseCLVersion(string version)
         {
             int start = version.IndexOf(' ');
