@@ -102,9 +102,11 @@ __kernel void vector_add_gpu (__global const float* src_a,
             kernel.SetArgument(2, bufferd);
             kernel.SetArgument(3, 50);
 
-            var queue = new CommandQueue(context, device, CommandQueueProperties.None);
+            var queue = new CommandQueue(context, device, CommandQueueProperties.ProfilingEnable);
 
             var eventk = queue.EnqueueKernel(kernel, null, new ulong[] { 50 }, null, null);
+
+            eventk.SetCallback((eve, status, obj) => Console.WriteLine(status), null);
 
             var dest_handle = GCHandle.Alloc(dest, GCHandleType.Pinned);
             var dest_ptr = dest_handle.AddrOfPinnedObject();
@@ -117,6 +119,10 @@ __kernel void vector_add_gpu (__global const float* src_a,
             {
                 Console.WriteLine(dest[i]);
             }
+
+            var time = eventk.TimeEnded - eventk.TimeStarted;
+
+            Console.WriteLine("Took {0}", time);
 
             Console.ReadLine();
         }
