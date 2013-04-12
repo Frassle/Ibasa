@@ -122,9 +122,6 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-#if DEBUG
-                CLHelper.CheckVersion(Version, 1, 2);
-#endif
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
@@ -163,20 +160,13 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-                if (Extensions.Contains("cl_khr_fp64"))
+                unsafe
                 {
-                    unsafe
-                    {
-                        ulong value;
-                        UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_DOUBLE_FP_CONFIG, param_value_size, &value, null));
-                        return (FloatingPointCapability)value;
-                    }
-                }
-                else
-                {
-                    return (FloatingPointCapability)0;
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_DOUBLE_FP_CONFIG, param_value_size, &value, null));
+                    return (FloatingPointCapability)value;
                 }
             }
         }
@@ -320,20 +310,13 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-                if (Extensions.Contains("cl_khr_fp16"))
+                unsafe
                 {
-                    unsafe
-                    {
-                        ulong value;
-                        UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_HALF_FP_CONFIG, param_value_size, &value, null));
-                        return (FloatingPointCapability)value;
-                    }
-                }
-                else
-                {
-                    return (FloatingPointCapability)0;
+                    ulong value;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetDeviceInfo(
+                        Handle, CL.DEVICE_HALF_FP_CONFIG, param_value_size, &value, null));
+                    return (FloatingPointCapability)value;
                 }
             }
         }

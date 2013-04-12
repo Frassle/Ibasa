@@ -273,9 +273,6 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-#if DEBUG
-                CLHelper.CheckVersion(Devices[0].Version, 1, 2);
-#endif
                 unsafe
                 {
                     UIntPtr value;
@@ -292,9 +289,6 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-#if DEBUG
-                CLHelper.CheckVersion(Devices[0].Version, 1, 2);
-#endif
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
@@ -386,9 +380,6 @@ namespace Ibasa.OpenCL
                 get
                 {
                     CLHelper.ThrowNullException(Program.Handle);
-#if DEBUG
-                    CLHelper.CheckVersion(Device.Version, 1, 2);
-#endif
                     unsafe
                     {
                         uint value;

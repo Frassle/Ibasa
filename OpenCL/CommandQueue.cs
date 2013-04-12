@@ -56,7 +56,7 @@ namespace Ibasa.OpenCL
         {
             CLHelper.ThrowNullException(Handle);
 
-            if(kernel == default(Kernel))
+            if(kernel == Kernel.Null)
                 throw new ArgumentNullException("kernel");
             if(global_work_size == null)
                 throw new ArgumentNullException("global_work_size");
@@ -112,7 +112,7 @@ namespace Ibasa.OpenCL
         {
             CLHelper.ThrowNullException(Handle);
 
-            if (kernel == default(Kernel))
+            if (kernel == Kernel.Null)
                 throw new ArgumentNullException("kernel");
 
             unsafe
@@ -139,7 +139,7 @@ namespace Ibasa.OpenCL
         {
             CLHelper.ThrowNullException(Handle);
 
-            if (buffer == default(Buffer))
+            if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
             if (destination == IntPtr.Zero)
                 throw new ArgumentNullException("destination");
@@ -169,7 +169,7 @@ namespace Ibasa.OpenCL
         {
             CLHelper.ThrowNullException(Handle);
 
-            if (buffer == default(Buffer))
+            if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
             if (destination == IntPtr.Zero)
                 throw new ArgumentNullException("destination");
@@ -201,9 +201,9 @@ namespace Ibasa.OpenCL
         {
             CLHelper.ThrowNullException(Handle);
 
-            if (source == default(Buffer))
+            if (source == Buffer.Null)
                 throw new ArgumentNullException("buffer");
-            if (destination == default(Buffer))
+            if (destination == Buffer.Null)
                 throw new ArgumentNullException("destination");
 
             unsafe

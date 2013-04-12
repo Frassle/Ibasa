@@ -67,7 +67,7 @@ namespace Ibasa.OpenCL
         public void SetArgument(int index, Buffer buffer)
         {
             CLHelper.ThrowNullException(Handle);
-            if (buffer == default(Buffer))
+            if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
 
             unsafe
