@@ -142,6 +142,44 @@ namespace Ibasa.OpenCL
             return buffer;
         }
 
+        private delegate void CallbackDelegete(IntPtr buffer, IntPtr user_data);
+        private static void Callback(IntPtr buffer, IntPtr user_data)
+        {
+            var handel = GCHandle.FromIntPtr(user_data);
+            var data = (Tuple<Action<Buffer, object>, object>)handel.Target;
+            handel.Free();
+
+            data.Item1(new Buffer(buffer), data.Item2);
+        }
+
+        public void SetDestructorCallback(Action<Buffer, object> notify, object user_data)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            if (notify == null)
+                throw new ArgumentNullException("notify");
+
+            unsafe
+            {
+                var function_ptr = IntPtr.Zero;
+                var data = Tuple.Create(notify, user_data);
+                var data_handle = GCHandle.Alloc(data);
+
+                function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegete(Callback));
+
+                try
+                {
+                    CLHelper.GetError(CL.SetMemObjectDestructorCallback(
+                        Handle, function_ptr, GCHandle.ToIntPtr(data_handle).ToPointer()));
+                }
+                catch (Exception)
+                {
+                    data_handle.Free();
+                    throw;
+                }
+            }
+        }
+
         public void RetainBuffer()
         {
             CLHelper.ThrowNullException(Handle);
