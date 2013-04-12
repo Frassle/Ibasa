@@ -25,7 +25,6 @@ namespace Ibasa.OpenCL
         {
             var handel = GCHandle.FromIntPtr(user_data);
             var data = (Tuple<Action<string, byte[], object>, object>)handel.Target;
-            handel.Free();
 
             var str = Marshal.PtrToStringAnsi(errinfo);
 
@@ -64,19 +63,28 @@ namespace Ibasa.OpenCL
                 properties_ptr[index] = IntPtr.Zero;
 
                 var function_ptr = IntPtr.Zero;
-                var data_ptr = IntPtr.Zero;
+                var data_ptr = new GCHandle();
 
                 if (notify != null)
                 {
                     var data = Tuple.Create(notify, user_data);
-                    data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
+                    data_ptr = GCHandle.Alloc(data);
 
                     function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegete(Callback));
                 }
-                
-                int errcode = 0;
-                Handle = CL.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, function_ptr, data_ptr.ToPointer(), &errcode);
-                CLHelper.GetError(errcode);
+
+                try
+                {
+                    int errcode = 0;
+                    Handle = CL.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, 
+                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
+                    CLHelper.GetError(errcode);
+                }
+                catch(Exception)
+                {
+                    data_ptr.Free();
+                    throw;
+                }
             }
         }
 

@@ -142,9 +142,10 @@ namespace Ibasa.OpenCL
                         function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer());
                     CLHelper.GetError(errcode);
                 }
-                finally
+                catch(Exception)
                 {
                     data_ptr.Free();
+                    throw;
                 }
             }
         }

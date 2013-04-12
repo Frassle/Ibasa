@@ -85,27 +85,25 @@ namespace Ibasa.OpenCL
             if (notify == null)
                 throw new ArgumentNullException("notify");
 
-            var function_ptr = IntPtr.Zero;
-            var data_handle = new GCHandle();
-
-            try
+            unsafe
             {
-                unsafe
+                var function_ptr = IntPtr.Zero;
+                var data_handle = new GCHandle();
+                var data = Tuple.Create(notify, user_data);
+                data_handle = GCHandle.Alloc(data);
+
+                function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegete(Callback));
+
+                try
                 {
-                    var data = Tuple.Create(notify, user_data);
-                    data_handle = GCHandle.Alloc(data);
-
-                    function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegete(Callback));
-
                     CLHelper.GetError(CL.SetEventCallback(
                         Handle, (int)CommandExecutionStatus.Complete, function_ptr, GCHandle.ToIntPtr(data_handle).ToPointer()));
                 }
-            }
-            catch (OpenCLException)
-            {
-                data_handle.Free();
-
-                throw CLHelper.VersionException(1, 1);
+                catch (Exception)
+                {
+                    data_handle.Free();
+                    throw;
+                }
             }
         }
 
