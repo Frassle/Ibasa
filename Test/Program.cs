@@ -26,7 +26,6 @@ __kernel void vector_add_gpu (__global const float* src_a,
             Console.WriteLine("Error: {0}", error);
         }
 
-        static int flag = 0;
         static void ProgramCallback(Ibasa.OpenCL.Program program, object user_data)
         {
             Console.WriteLine("Program built.");
@@ -40,8 +39,6 @@ __kernel void vector_add_gpu (__global const float* src_a,
             Console.WriteLine(info.BuildOptions);
             Console.WriteLine(info.BuildStatus);
             Console.WriteLine(info.Log);
-
-            flag = 1;
         }
 
         static void Main(string[] args)
@@ -72,7 +69,7 @@ __kernel void vector_add_gpu (__global const float* src_a,
 
             Console.WriteLine(program.Source);
 
-            while (flag == 0)
+            while (program.GetBuildInfo(device).BuildStatus == BuildStatus.InProgress)
             {
             }
 
