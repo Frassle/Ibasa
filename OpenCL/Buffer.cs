@@ -130,8 +130,16 @@ namespace Ibasa.OpenCL
             var size = Marshal.SizeOf(typeof(T));
             var ptr = handle.AddrOfPinnedObject();
 
-            var buffer = new Buffer(context, flags, (ulong)(size * count), IntPtr.Add(ptr, size * index));
-            handle.Free();
+            Buffer buffer = Buffer.Null;
+            try
+            {
+                buffer = new Buffer(context, flags, (ulong)(size * count), IntPtr.Add(ptr, size * index));
+            }
+            finally
+            {
+                handle.Free();
+            }
+
             return buffer;
         }
 
