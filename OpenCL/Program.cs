@@ -137,12 +137,138 @@ namespace Ibasa.OpenCL
 
                 try
                 {
-                    int errcode = 0;
-                    CL.BuildProgram(Handle, (uint)devices.Length, device_list, bytes,
-                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer());
-                    CLHelper.GetError(errcode);
+                    CLHelper.GetError(CL.BuildProgram(Handle, (uint)devices.Length, device_list, bytes,
+                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer()));
                 }
                 catch(Exception)
+                {
+                    data_ptr.Free();
+                    throw;
+                }
+            }
+        }
+
+        public void CompileProgram(Device[] devices, string options, Tuple<Program, string>[] headers, Action<Program, object> notify, object user_data)
+        {
+            unsafe
+            {
+                var device_list = stackalloc IntPtr[devices.Length];
+
+                for (int i = 0; i < devices.Length; ++i)
+                {
+                    device_list[i] = devices[i].Handle;
+                }
+
+                var byte_count = Encoding.ASCII.GetByteCount(options);
+                byte* bytes = stackalloc byte[byte_count + 1];
+                fixed (char* options_ptr = options)
+                {
+                    Encoding.ASCII.GetBytes(options_ptr, options.Length, bytes, byte_count);
+                }
+                bytes[byte_count] = 0; //null terminator
+
+                var num_headers = headers == null ? 0 : headers.Length;
+
+                IntPtr* input_headers = stackalloc IntPtr[num_headers];
+                byte** header_include_names = stackalloc byte*[num_headers];
+
+                for (int i = 0; i < num_headers; ++i)
+                {
+                    input_headers[i] = headers[i].Item1.Handle;
+
+                    var name = headers[i].Item2;
+                    var length = Encoding.ASCII.GetByteCount(name);
+                    byte* chars = (byte*)Marshal.AllocHGlobal(length + 1).ToPointer();
+                    fixed (char* name_ptr = name)
+                    {
+                        Encoding.ASCII.GetBytes(name_ptr, name.Length, chars, length);
+                    }
+                    chars[length] = 0; //null terminator
+                    header_include_names[i] = chars;
+                }
+
+                var function_ptr = IntPtr.Zero;
+                var data_ptr = new GCHandle();
+
+                if (notify != null)
+                {
+                    var data = Tuple.Create(notify, user_data);
+                    data_ptr = GCHandle.Alloc(data);
+
+                    function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegate(Callback));
+                }
+
+                try
+                {
+                    CLHelper.GetError(CL.CompileProgram(Handle, (uint)devices.Length, device_list, bytes,
+                        (uint)num_headers, input_headers, header_include_names,
+                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer()));
+                }
+                catch (Exception)
+                {
+                    data_ptr.Free();
+                    throw;
+                }
+                finally
+                {
+                    for (int i = 0; i < num_headers; ++i)
+                    {
+                        Marshal.FreeHGlobal(new IntPtr(header_include_names[i]));
+                    }
+                }
+            }
+        }
+
+        public static Program LinkProgram(Context context, Device[] devices, string options, Program[] programs, Action<Program, object> notify, object user_data)
+        {
+            unsafe
+            {
+                var device_list = stackalloc IntPtr[devices.Length];
+
+                for (int i = 0; i < devices.Length; ++i)
+                {
+                    device_list[i] = devices[i].Handle;
+                }
+
+                var byte_count = Encoding.ASCII.GetByteCount(options);
+                byte* bytes = stackalloc byte[byte_count + 1];
+                fixed (char* options_ptr = options)
+                {
+                    Encoding.ASCII.GetBytes(options_ptr, options.Length, bytes, byte_count);
+                }
+                bytes[byte_count] = 0; //null terminator
+
+                var num_programs = programs == null ? 0 : programs.Length;
+
+                IntPtr* input_programs = stackalloc IntPtr[num_programs];
+
+                for (int i = 0; i < num_programs; ++i)
+                {
+                    input_programs[i] = programs[i].Handle;
+                }
+
+                var function_ptr = IntPtr.Zero;
+                var data_ptr = new GCHandle();
+
+                if (notify != null)
+                {
+                    var data = Tuple.Create(notify, user_data);
+                    data_ptr = GCHandle.Alloc(data);
+
+                    function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegate(Callback));
+                }
+
+                try
+                {
+                    int errcode = 0;
+                    var program = CL.LinkProgram(context.Handle, (uint)devices.Length, device_list, bytes,
+                        (uint)num_programs, input_programs,
+                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
+                    CLHelper.GetError(errcode);
+
+                    return new Program(program);
+                }
+                catch (Exception)
                 {
                     data_ptr.Free();
                     throw;
