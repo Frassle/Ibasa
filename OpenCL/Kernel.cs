@@ -9,6 +9,8 @@ namespace Ibasa.OpenCL
 {
     public struct Kernel : IEquatable<Kernel>
     {
+        public static readonly Kernel Null = new Kernel();
+
         public IntPtr Handle { get; private set; }
 
         public Kernel(IntPtr handle)

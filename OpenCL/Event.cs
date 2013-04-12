@@ -9,6 +9,8 @@ namespace Ibasa.OpenCL
 {
     public struct Event : IEquatable<Event>
     {
+        public static readonly Event Null = new Event();
+
         public IntPtr Handle { get; private set; }
 
         public Event(IntPtr handle)

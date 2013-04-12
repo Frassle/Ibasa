@@ -9,6 +9,8 @@ namespace Ibasa.OpenCL
 {
     public struct Program : IEquatable<Program>
     {
+        public static readonly Program Null = new Program();
+
         public IntPtr Handle { get; private set; }
 
         public Program(IntPtr handle)

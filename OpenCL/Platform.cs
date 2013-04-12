@@ -10,6 +10,8 @@ namespace Ibasa.OpenCL
 {
     public struct Platform : IEquatable<Platform>
     {
+        public static readonly Platform Null = new Platform();
+
         public static Platform[] GetPlatforms()
         {
             unsafe

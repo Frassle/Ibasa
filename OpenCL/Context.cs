@@ -10,6 +10,8 @@ namespace Ibasa.OpenCL
 {
     public struct Context : IEquatable<Context>
     {
+        public static readonly Context Null = new Context();
+
         public IntPtr Handle { get; private set; }
 
         public Context(IntPtr handle)

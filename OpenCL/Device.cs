@@ -10,6 +10,8 @@ namespace Ibasa.OpenCL
 {
     public struct Device : IEquatable<Device>
     {
+        public static readonly Device Null = new Device();
+
         public IntPtr Handle { get; private set; }
 
         public Device(IntPtr handle)

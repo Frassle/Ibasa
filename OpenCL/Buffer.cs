@@ -8,6 +8,8 @@ namespace Ibasa.OpenCL
 {
     public struct Buffer : IEquatable<Buffer>
     {
+        public static readonly Buffer Null = new Buffer();
+
         public IntPtr Handle { get; private set; }
 
         public Buffer(IntPtr handle)

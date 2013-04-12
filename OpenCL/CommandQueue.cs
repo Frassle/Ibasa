@@ -8,6 +8,8 @@ namespace Ibasa.OpenCL
 {
     public struct CommandQueue : IEquatable<CommandQueue>
     {
+        public static readonly CommandQueue Null = new CommandQueue();
+
         public IntPtr Handle { get; private set; }
 
         public CommandQueue(IntPtr handle)
