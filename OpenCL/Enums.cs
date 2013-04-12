@@ -30,6 +30,14 @@ namespace Ibasa.OpenCL
         NextPartitionable = CL.DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE,
     }
 
+    [Flags]
+    public enum MapFlags
+    {
+        Read = CL.MAP_READ,
+        Write = CL.MAP_WRITE,
+        WriteInvalidateRegion = CL.MAP_WRITE_INVALIDATE_REGION,
+    }
+
     public enum AddressingMode
     {
         None = CL.ADDRESS_NONE,

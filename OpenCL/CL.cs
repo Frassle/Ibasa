@@ -1058,17 +1058,19 @@ namespace Ibasa.OpenCL
         //                           const event * /* event_wait_list */,
         //                           event *       /* event */);
 
-        //extern API_ENTRY void * API_CALL
-        //clEnqueueMapBuffer(cl_command_queue /* command_queue */,
-        //                   mem           /* buffer */,
-        //                   bool          /* blocking_map */, 
-        //                   map_flags     /* map_flags */,
-        //                   UIntPtr           /* offset */,
-        //                   UIntPtr           /* size */,
-        //                   uint          /* num_events_in_wait_list */,
-        //                   const event * /* event_wait_list */,
-        //                   event *       /* event */,
-        //                   int *         /* errcode_ret */);
+
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueMapBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern void* EnqueueMapBuffer(
+            IntPtr command_queue,
+            IntPtr buffer,
+            uint blocking_map, 
+            ulong map_flags,
+            UIntPtr offset,
+            UIntPtr size,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event,
+            int* errcode_ret);
 
         //extern API_ENTRY void * API_CALL
         //clEnqueueMapImage(cl_command_queue  /* command_queue */,

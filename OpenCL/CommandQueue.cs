@@ -207,7 +207,7 @@ namespace Ibasa.OpenCL
             CLHelper.ThrowNullException(Handle);
 
             if (source == Buffer.Null)
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException("source");
             if (destination == Buffer.Null)
                 throw new ArgumentNullException("destination");
 
@@ -228,6 +228,41 @@ namespace Ibasa.OpenCL
                     source.Handle, destination.Handle,
                     new UIntPtr(sourceOffset), new UIntPtr(sourceOffset), new UIntPtr(count),
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
+        public Event EnqueueMapBuffer(
+            Buffer buffer, bool blocking, MapFlags flags,
+            ulong offset, ulong size, Event[] events, out IntPtr pointer)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            if (buffer == Buffer.Null)
+                throw new ArgumentNullException("buffer");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                int error;
+                void* result = CL.EnqueueMapBuffer(Handle,
+                    buffer.Handle, blocking ? 1u : 0u, (ulong)flags,
+                    new UIntPtr(offset), new UIntPtr(size),
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr, &error);
+                CLHelper.GetError(error);
+
+                pointer = new IntPtr(result);
 
                 return new Event(event_ptr);
             }
