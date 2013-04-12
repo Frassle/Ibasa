@@ -17,6 +17,19 @@ namespace Ibasa.OpenCL
         All = CL.DEVICE_TYPE_ALL,
     }
 
+    public enum AffinityDomain
+    {
+        /// <summary>
+        /// Non-Uniform Memory Access
+        /// </summary>
+        NUMA = CL.DEVICE_AFFINITY_DOMAIN_NUMA,
+        L1Cache = CL.DEVICE_AFFINITY_DOMAIN_L1_CACHE,
+        L2Cache = CL.DEVICE_AFFINITY_DOMAIN_L2_CACHE,
+        L3Cache = CL.DEVICE_AFFINITY_DOMAIN_L3_CACHE,
+        L4Cache = CL.DEVICE_AFFINITY_DOMAIN_L4_CACHE,
+        NextPartitionable = CL.DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE,
+    }
+
     [Flags]
     public enum CommandQueueProperties
     {

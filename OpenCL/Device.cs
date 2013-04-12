@@ -23,31 +23,52 @@ namespace Ibasa.OpenCL
         public void Retain()
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.RetainDevice(Handle));
+            try
+            {
+                CLHelper.GetError(CL.RetainDevice(Handle));
+            }
+            catch (EntryPointNotFoundException)
+            {
+                throw CLHelper.VersionException(Version, 1, 2);
+            }
         }
 
         public void Release()
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.ReleaseDevice(Handle));
+            try
+            {
+                CLHelper.GetError(CL.ReleaseDevice(Handle));
+            }
+            catch (EntryPointNotFoundException)
+            {
+                throw CLHelper.VersionException(Version, 1, 2);
+            }
         }
 
         private unsafe Device[] CreateSubDevices(IntPtr* properties)
         {
-            uint num_devices;
-            CLHelper.GetError(CL.CreateSubDevices(Handle, properties, 0, null, &num_devices));
-
-            IntPtr* device_ptrs = stackalloc IntPtr[(int)num_devices];
-
-            CLHelper.GetError(CL.CreateSubDevices(Handle, properties, num_devices, device_ptrs, null));
-
-            Device[] sub_devices = new Device[num_devices];
-            for (uint i = 0; i < num_devices; ++i)
+            try
             {
-                sub_devices[i] = new Device(device_ptrs[i]);
-            }
+                uint num_devices;
+                CLHelper.GetError(CL.CreateSubDevices(Handle, properties, 0, null, &num_devices));
 
-            return sub_devices;
+                IntPtr* device_ptrs = stackalloc IntPtr[(int)num_devices];
+
+                CLHelper.GetError(CL.CreateSubDevices(Handle, properties, num_devices, device_ptrs, null));
+
+                Device[] sub_devices = new Device[num_devices];
+                for (uint i = 0; i < num_devices; ++i)
+                {
+                    sub_devices[i] = new Device(device_ptrs[i]);
+                }
+
+                return sub_devices;
+            }
+            catch (EntryPointNotFoundException)
+            {
+                throw CLHelper.VersionException(Version, 1, 2);
+            }
         }
 
         public Device[] CreateSubDevicesEqually(int units)
@@ -76,10 +97,25 @@ namespace Ibasa.OpenCL
 
                 for (int i = 0; i < counts.Length; ++i)
                 {
-                    properties[1 + i] = new IntPtr(counts[i]);
+                    properties[i + 1] = new IntPtr(counts[i]);
                 }
                 properties[counts.Length + 1] = new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS_LIST_END);
                 properties[counts.Length + 2] = new IntPtr(0);
+
+                return CreateSubDevices(properties);
+            }
+        }
+
+        public Device[] CreateSubDevicesByAffinityDomain(AffinityDomain domain)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            unsafe
+            {
+                IntPtr* properties = stackalloc IntPtr[3];
+                properties[0] = new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN);
+                properties[1] = new IntPtr((uint)domain);
+                properties[2] = new IntPtr(0);
 
                 return CreateSubDevices(properties);
             }
@@ -122,19 +158,26 @@ namespace Ibasa.OpenCL
             get
             {
                 CLHelper.ThrowNullException(Handle);
-                unsafe
+                try
                 {
-                    UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
+                    unsafe
+                    {
+                        UIntPtr param_value_size_ret = UIntPtr.Zero;
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
 
-                    byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
+                        byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
+                        CLHelper.GetError(CL.GetDeviceInfo(
+                            Handle, CL.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
 
-                    var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
-                    return str.Split(';');
+                        var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
+                        return str.Split(';');
+                    }
+                }
+                catch (OpenCLException)
+                {
+                    throw CLHelper.VersionException(Version, 1, 2);
                 }
             }
         }

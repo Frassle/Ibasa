@@ -77,6 +77,14 @@ namespace Ibasa.OpenCL
             }
         }
 
+        internal static OpenCLException VersionException(string version, int major, int minor)
+        {
+            var clversion = CLHelper.ParseCLVersion(version);
+            return new OpenCLException(string.Format(
+                "This method requires OpenCL {0}.{1}, currently running OpenCL {2}.{3}.",
+                major, minor, clversion.Major, clversion.Minor));
+        }
+
         internal static Version ParseCLVersion(string version)
         {
             int start = version.IndexOf(' ');
