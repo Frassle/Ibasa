@@ -172,6 +172,11 @@ namespace Ibasa.OpenCL
                     CLHelper.GetError(CL.SetMemObjectDestructorCallback(
                         Handle, function_ptr, GCHandle.ToIntPtr(data_handle).ToPointer()));
                 }
+                catch (EntryPointNotFoundException)
+                {
+                    data_handle.Free();
+                    throw CLHelper.VersionException(1, 1);
+                }
                 catch (Exception)
                 {
                     data_handle.Free();
