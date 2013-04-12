@@ -30,6 +30,21 @@ namespace Ibasa.OpenCL
         NextPartitionable = CL.DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE,
     }
 
+    public enum AddressingMode
+    {
+        None = CL.ADDRESS_NONE,
+        Clamp = CL.ADDRESS_CLAMP,
+        ClampToEdge = CL.ADDRESS_CLAMP_TO_EDGE,
+        Repeat = CL.ADDRESS_REPEAT,
+        MirroredRepeat = CL.ADDRESS_MIRRORED_REPEAT,
+    }
+
+    public enum FilterMode
+    {
+        Nearest = CL.FILTER_NEAREST,
+        Linear = CL.FILTER_LINEAR,
+    }
+
     [Flags]
     public enum CommandQueueProperties
     {
