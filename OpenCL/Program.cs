@@ -125,19 +125,27 @@ namespace Ibasa.OpenCL
                 bytes[byte_count] = 0; //null terminator
 
                 var function_ptr = IntPtr.Zero;
-                var data_ptr = IntPtr.Zero;
+                var data_ptr = new GCHandle();
 
                 if (notify != null)
                 {
                     var data = Tuple.Create(notify, user_data);
-                    data_ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
+                    data_ptr = GCHandle.Alloc(data);
 
                     function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegate(Callback));
                 }
 
-                int errcode = 0;
-                CL.BuildProgram(Handle, (uint)devices.Length, device_list, bytes, function_ptr, data_ptr.ToPointer());
-                CLHelper.GetError(errcode);
+                try
+                {
+                    int errcode = 0;
+                    CL.BuildProgram(Handle, (uint)devices.Length, device_list, bytes,
+                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer());
+                    CLHelper.GetError(errcode);
+                }
+                finally
+                {
+                    data_ptr.Free();
+                }
             }
         }
 
