@@ -171,6 +171,12 @@ namespace Ibasa.OpenCL
             }
         }
 
+        [Obsolete("Deprecated OpenCL 1.1 API.")]
+        public static void UnloadCompiler()
+        {
+            CLHelper.GetError(CL.UnloadCompiler());
+        }
+
         public void UnloadPlatformCompiler()
         {
             CLHelper.ThrowNullException(Handle);

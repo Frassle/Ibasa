@@ -1185,29 +1185,29 @@ namespace Ibasa.OpenCL
         //                void *                  /* host_ptr */,
         //                int *                /* errcode_ret */) EXT_SUFFIX__VERSION_1_1_DEPRECATED;
     
-        [Obsolete("Deprecated OpenCL 1.1 API")]
+        [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clEnqueueMarker", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern int EnqueueMarker(
             IntPtr command_queue,
             IntPtr* @event);
 
-        [Obsolete("Deprecated OpenCL 1.1 API")]
+        [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clEnqueueWaitForEvents", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern int EnqueueWaitForEvents(
             IntPtr command_queue,
             uint num_events,
             IntPtr* event_list);
 
-        [Obsolete("Deprecated OpenCL 1.1 API")]
+        [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clEnqueueBarrier", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern int EnqueueBarrier(IntPtr command_queue);
 
-        [Obsolete("Deprecated OpenCL 1.1 API")]
+        [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clUnloadCompiler", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern int UnloadCompiler();
 
-        [Obsolete("Deprecated OpenCL 1.1 API")]
+        [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clGetExtensionFunctionAddress", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern void* GetExtensionFunctionAddress(char* func_name);
+        public static unsafe extern void* GetExtensionFunctionAddress(byte* func_name);
     }
 }
