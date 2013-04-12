@@ -1113,13 +1113,13 @@ namespace Ibasa.OpenCL
             IntPtr* event_wait_list,
             IntPtr* @event);
 
-        //[DllImport("opencl.dll", EntryPoint = "clEnqueueTask", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        //public static unsafe extern int EnqueueTask(
-        //    IntPtr  /* command_queue */,
-        //              IntPtr         /* kernel */,
-        //              uint           /* num_events_in_wait_list */,
-        //              IntPtr *  /* event_wait_list */,
-        //              IntPtr *        /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueTask", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueTask(
+            IntPtr command_queue,
+            IntPtr kernel,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
         //[DllImport("opencl.dll", EntryPoint = "clEnqueueNativeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         //public static unsafe extern int EnqueueNativeKernel(
