@@ -8,17 +8,51 @@ using System.Threading.Tasks;
 
 namespace Ibasa.OpenCL
 {
-    public struct PartitionProperties
+    public class PartitionProperties
     {
-        public readonly bool Equally;
-        public readonly bool ByCounts;
-        public readonly bool ByAffinityDomain;
+        public bool Equally { get; private set; }
+        public bool ByCounts { get; private set; }
+        public bool ByAffinityDomain { get; private set; }
 
         internal PartitionProperties(bool equally, bool byCounts, bool byAffinityDomain)
         {
             Equally = equally;
             ByCounts = byCounts;
             ByAffinityDomain = byAffinityDomain;
+        }
+    }
+
+    public abstract class PartitionType
+    {
+    }
+
+    public sealed class PartitionTypeEqually : PartitionType
+    {
+        public int Units { get; private set; }
+
+        internal PartitionTypeEqually(int units)
+        {
+            Units = units;
+        }
+    }
+
+    public sealed class PartitionTypeByCounts : PartitionType
+    {
+        public int[] Counts { get; private set; }
+
+        internal PartitionTypeByCounts(int[] counts)
+        {
+            Counts = counts;
+        }
+    }
+
+    public sealed class PartitionTypeByAffinityDomain : PartitionType
+    {
+        public AffinityDomain AffinityDomain { get; private set; }
+
+        internal PartitionTypeByAffinityDomain(AffinityDomain affinityDomain)
+        {
+            AffinityDomain = affinityDomain;
         }
     }
 
@@ -1166,16 +1200,35 @@ namespace Ibasa.OpenCL
                         CLHelper.GetError(CL.GetDeviceInfo(
                             Handle, CL.DEVICE_PARTITION_TYPE, param_value_size, properties, null));
 
-                        if(properties[0] == new IntPtr(CL.DEVICE_PARTITION_EQUALLY))
+                        if (properties[0] == new IntPtr(CL.DEVICE_PARTITION_EQUALLY))
                         {
+                            var units = properties[1].ToInt32();
+
+                            return new PartitionTypeEqually(units);
                         }
-                        if(properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS))
+                        else if (properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS))
                         {
+                            int count = 0;
+                            for (int i = 1; properties[i] != IntPtr.Zero; ++i)
+                            {
+                                ++count;
+                            }
+
+                            var counts = new int[count];
+                            for (int i = 0; i < count; ++i)
+                            {
+                                counts[i] = properties[i + 1].ToInt32();
+                            }
+
+                            return new PartitionTypeByCounts(counts);
                         }
-                        if(properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN))
+                        else if (properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN))
                         {
+                            var domain = (AffinityDomain)properties[1].ToInt64();
+
+                            return new PartitionTypeByAffinityDomain(domain);
                         }
-                        if(properties[0] == IntPtr.Zero)
+                        else
                         {
                             return null;
                         }
