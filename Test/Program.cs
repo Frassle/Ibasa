@@ -90,14 +90,10 @@ __kernel void vector_add_gpu (__global const float* src_a,
                 srcb[i] = 50;
             }
 
-            var srca_ptr = GCHandle.Alloc(srca, GCHandleType.Pinned);
-            var srcb_ptr = GCHandle.Alloc(srcb, GCHandleType.Pinned);
-            var dest_ptr = GCHandle.Alloc(dest, GCHandleType.Pinned);
-
-            var buffera = new Ibasa.OpenCL.Buffer(
-                context, MemoryFlags.ReadOnly | MemoryFlags.CopyHostPtr, mem_size, srca_ptr.AddrOfPinnedObject());
-            var bufferb = new Ibasa.OpenCL.Buffer(
-                context, MemoryFlags.ReadOnly | MemoryFlags.CopyHostPtr, mem_size, srcb_ptr.AddrOfPinnedObject());
+            var buffera = Ibasa.OpenCL.Buffer.Create(
+                context, MemoryFlags.ReadOnly, srca);
+            var bufferb = Ibasa.OpenCL.Buffer.Create(
+                context, MemoryFlags.ReadOnly, srcb);
             var bufferd = new Ibasa.OpenCL.Buffer(
                 context, MemoryFlags.WriteOnly, mem_size);
 
