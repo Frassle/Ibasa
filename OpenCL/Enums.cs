@@ -38,6 +38,14 @@ namespace Ibasa.OpenCL
         WriteInvalidateRegion = CL.MAP_WRITE_INVALIDATE_REGION,
     }
 
+    [Flags]
+    public enum MemoryMigrationFlags
+    {
+        None = 0,
+        ObjectHost = CL.MIGRATE_MEM_OBJECT_HOST,
+        ObjectContentUndefined = CL.MIGRATE_MEM_OBJECT_CONTENT_UNDEFINED,
+    }
+
     public enum AddressingMode
     {
         None = CL.ADDRESS_NONE,

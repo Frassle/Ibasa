@@ -268,6 +268,71 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public Event EnqueueUnmapBuffer(
+            Buffer buffer, IntPtr pointer, Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            if (buffer == Buffer.Null)
+                throw new ArgumentNullException("buffer");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueUnmapMemObject(Handle,
+                    buffer.Handle, pointer.ToPointer(), 
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
+        public Event EnqueueMigrateBuffer(
+            Buffer[] buffers, MemoryMigrationFlags flags, Event[] events)
+        {
+            CLHelper.ThrowNullException(Handle);
+
+            if (buffers == null)
+                throw new ArgumentNullException("buffers");
+
+            unsafe
+            {
+                var buffer_list = stackalloc IntPtr[buffers.Length];
+
+                for (int i = 0; i < buffers.Length; ++i)
+                {
+                    buffer_list[i] = buffers[i].Handle;
+                }
+
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                CLHelper.GetError(CL.EnqueueMigrateMemObjects(Handle,
+                    (uint)buffers.Length, buffer_list, (ulong)flags,
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
         public Event EnqueueMarker()
         {
             CLHelper.ThrowNullException(Handle);

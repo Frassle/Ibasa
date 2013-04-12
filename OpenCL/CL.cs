@@ -1086,22 +1086,24 @@ namespace Ibasa.OpenCL
         //                  event *        /* event */,
         //                  int *          /* errcode_ret */);
 
-        //public static unsafe extern int
-        //clEnqueueUnmapMemObject(cl_command_queue /* command_queue */,
-        //                        mem           /* memobj */,
-        //                        void *           /* mapped_ptr */,
-        //                        uint          /* num_events_in_wait_list */,
-        //                        const event *  /* event_wait_list */,
-        //                        event *        /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueUnmapMemObject", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueUnmapMemObject(
+            IntPtr command_queue,
+            IntPtr memobj,
+            void* mapped_ptr,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
-        //public static unsafe extern int
-        //clEnqueueMigrateMemObjects(cl_command_queue       /* command_queue */,
-        //                           uint                /* num_mem_objects */,
-        //                           const mem *         /* mem_objects */,
-        //                           mem_migration_flags /* flags */,
-        //                           uint                /* num_events_in_wait_list */,
-        //                           const event *       /* event_wait_list */,
-        //                           event *             /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueMigrateMemObjects", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueMigrateMemObjects(
+            IntPtr command_queue,
+            uint num_mem_objects,
+            IntPtr* memobj,
+            ulong flags,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueNDRangeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern int EnqueueNDRangeKernel(
