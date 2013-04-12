@@ -63,7 +63,6 @@ __kernel void vector_add_gpu (__global const float* src_a,
             Console.WriteLine(device.DriverVersion);
             Console.WriteLine(device.DoubleFloatingPointCapability);
             Console.WriteLine(device.SingleFloatingPointCapability);
-            Console.WriteLine(device.HalfFloatingPointCapability);
             Console.WriteLine(device.Type);
 
             var context = new Context(null, new Device[] { device }, ContextCallback, null);
