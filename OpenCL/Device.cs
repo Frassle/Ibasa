@@ -364,7 +364,7 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public bool ImmageSupport
+        public bool ImageSupport
         {
             get
             {
