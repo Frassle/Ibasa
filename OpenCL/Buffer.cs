@@ -311,6 +311,37 @@ namespace Ibasa.OpenCL
             }
         }
 
+        Buffer Parent
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    IntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
+                    CLHelper.GetError(CL.GetMemObjectInfo(
+                        Handle, CL.MEM_ASSOCIATED_MEMOBJECT, param_value_size, &value, null));
+                    return new Buffer(value);
+                }
+            }
+        }
+
+        ulong Offset
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    UIntPtr value;
+                    UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                    CLHelper.GetError(CL.GetMemObjectInfo(
+                        Handle, CL.MEM_OFFSET, param_value_size, &value, null));
+                    return value.ToUInt64();
+                }
+            }
+        }
 
         public override int GetHashCode()
         {
