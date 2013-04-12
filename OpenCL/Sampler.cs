@@ -19,6 +19,7 @@ namespace Ibasa.OpenCL
         }
 
         public Sampler(Context context, bool normalizedCoords, AddressingMode addressingMode, FilterMode filterMode)
+            : this()
         {
             if (context == Context.Null)
                 throw new ArgumentNullException("context");
