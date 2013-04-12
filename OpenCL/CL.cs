@@ -1125,18 +1125,18 @@ namespace Ibasa.OpenCL
             IntPtr* event_wait_list,
             IntPtr* @event);
 
-        //[DllImport("opencl.dll", EntryPoint = "clEnqueueNativeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        //public static unsafe extern int EnqueueNativeKernel(
-        //    cl_command_queue  /* command_queue */,
-        //                      void (CL_CALLBACK * /*user_func*/)(void *), 
-        //                      void *            /* args */,
-        //                      UIntPtr            /* cb_args */, 
-        //                      uint           /* num_mem_objects */,
-        //                       IntPtr *    /* mem_list */,
-        //                       void **     /* args_mem_loc */,
-        //                      uint           /* num_events_in_wait_list */,
-        //                       IntPtr *  /* event_wait_list */,
-        //                      IntPtr *        /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueNativeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueNativeKernel(
+            IntPtr  command_queue,
+            IntPtr user_func, 
+            void* args,
+            UIntPtr cb_args, 
+            uint num_mem_objects,
+            IntPtr* mem_list,
+            void** args_mem_loc,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueMarkerWithWaitList", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern int EnqueueMarkerWithWaitList(
