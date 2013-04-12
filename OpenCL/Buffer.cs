@@ -127,6 +127,8 @@ namespace Ibasa.OpenCL
             var size = Marshal.SizeOf(typeof(T));
             var ptr = handle.AddrOfPinnedObject();
 
+            flags |= MemoryFlags.CopyHostPtr;
+
             Buffer buffer = Buffer.Null;
             try
             {
