@@ -118,13 +118,10 @@ namespace Ibasa.OpenCL
 
             if (index < 0)
                 throw new ArgumentOutOfRangeException("index", index, "index is less than 0.");
-            if (index >= data.Length)
-                throw new ArgumentOutOfRangeException("index", index, "index is greater than or equal to data.Length.");
-
             if (count == 0)
                 throw new ArgumentOutOfRangeException("count", count, "count is 0.");
-            if (index + count >= data.Length)
-                throw new ArgumentOutOfRangeException("count", count, "index + count is greater than or equal to data.Length.");
+            if (index + count > data.Length)
+                throw new ArgumentOutOfRangeException("count", count, "index + count is greater than data.Length.");
             
             var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             var size = Marshal.SizeOf(typeof(T));
