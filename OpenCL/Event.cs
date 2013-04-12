@@ -196,6 +196,70 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public TimeSpan TimeQueued
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong nanoseconds;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetEventProfilingInfo(
+                        Handle, CL.PROFILING_COMMAND_QUEUED, param_value_size, &nanoseconds, null));
+                    return new TimeSpan((long)(nanoseconds / 100));
+                }
+            }
+        }
+
+        public TimeSpan TimeSubmited
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong nanoseconds;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetEventProfilingInfo(
+                        Handle, CL.PROFILING_COMMAND_SUBMIT, param_value_size, &nanoseconds, null));
+                    return new TimeSpan((long)(nanoseconds / 100));
+                }
+            }
+        }
+
+        public TimeSpan TimeStarted
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong nanoseconds;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetEventProfilingInfo(
+                        Handle, CL.PROFILING_COMMAND_START, param_value_size, &nanoseconds, null));
+                    return new TimeSpan((long)(nanoseconds / 100));
+                }
+            }
+        }
+
+        public TimeSpan TimeEnded
+        {
+            get
+            {
+                CLHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    ulong nanoseconds;
+                    UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                    CLHelper.GetError(CL.GetEventProfilingInfo(
+                        Handle, CL.PROFILING_COMMAND_END, param_value_size, &nanoseconds, null));
+                    return new TimeSpan((long)(nanoseconds / 100));
+                }
+            }
+        }
+
         public static void Wait(Event @event)
         {
             unsafe
