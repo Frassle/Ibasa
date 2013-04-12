@@ -40,6 +40,9 @@ namespace Ibasa.OpenCL
         public Context(Dictionary<IntPtr, IntPtr> properties, Device[] devices, Action<string, byte[], object> notify, object user_data)
             : this()
         {
+            if (devices == null)
+                throw new ArgumentNullException("devices");
+
             unsafe
             {
                 IntPtr* device_ptrs = stackalloc IntPtr[devices.Length];

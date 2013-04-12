@@ -22,6 +22,9 @@ namespace Ibasa.OpenCL
         public Kernel(Program program, string kernel_name)
             : this()
         {
+            if (program == Program.Null)
+                throw new ArgumentNullException("context");
+
             unsafe
             {
                 int error;
@@ -34,6 +37,9 @@ namespace Ibasa.OpenCL
 
         public static Kernel[] CreateKernelsInProgram(Program program)
         {
+            if (program == Program.Null)
+                throw new ArgumentNullException("context");
+
             unsafe
             {
                 uint num_kernels = 0;
@@ -287,6 +293,9 @@ namespace Ibasa.OpenCL
         public WorkGroupInfo GetWorkGroupInfo(Device device)
         {
             CLHelper.ThrowNullException(Handle);
+            if (device == Device.Null)
+                throw new ArgumentNullException("device");
+
             return new WorkGroupInfo(Handle, device.Handle);
         }
 

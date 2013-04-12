@@ -22,6 +22,11 @@ namespace Ibasa.OpenCL
         public Program(Context context, string source)
             : this()
         {
+            if (context == Context.Null)
+                throw new ArgumentNullException("context");
+            if (source == null)
+                throw new ArgumentNullException("source");
+
             unsafe
             {
                 var bytes = Encoding.ASCII.GetByteCount(source);
@@ -43,6 +48,17 @@ namespace Ibasa.OpenCL
         public Program(Context context, Device[] devices, byte[][] binaries)
             : this()
         {
+            if (context == Context.Null)
+                throw new ArgumentNullException("context");
+            if (devices == null)
+                throw new ArgumentNullException("devices");
+            if (binaries == null)
+                throw new ArgumentNullException("binaries");
+            if (devices.Length == 0)
+                throw new ArgumentException("devices is empty.", "devices");
+            if (devices.Length != binaries.Length)
+                throw new ArgumentException("binaries must be the same length as devices.", "binaries");
+
             unsafe
             {
                 var device_list = stackalloc IntPtr[devices.Length];
@@ -109,20 +125,31 @@ namespace Ibasa.OpenCL
         {
             unsafe
             {
-                var device_list = stackalloc IntPtr[devices.Length];
+                var devices_length = devices == null ? 0 : devices.Length;
+                var device_list = stackalloc IntPtr[devices_length];
 
-                for (int i = 0; i < devices.Length; ++i)
+                for (int i = 0; i < devices_length; ++i)
                 {
                     device_list[i] = devices[i].Handle;
                 }
 
-                var byte_count = Encoding.ASCII.GetByteCount(options);
-                byte* bytes = stackalloc byte[byte_count + 1];
-                fixed (char* options_ptr = options)
+                device_list = devices_length == 0 ? null : device_list;
+
+                int length = options == null ? 0 : Encoding.ASCII.GetByteCount(options);
+                byte* chars = stackalloc byte[length + 1];
+
+                if (options != null)
                 {
-                    Encoding.ASCII.GetBytes(options_ptr, options.Length, bytes, byte_count);
+                    fixed (char* options_ptr = options)
+                    {
+                        Encoding.ASCII.GetBytes(options_ptr, options.Length, chars, length);
+                    }
+                    chars[length] = 0; //null terminator
                 }
-                bytes[byte_count] = 0; //null terminator
+                else
+                {
+                    chars = null;
+                }
 
                 var function_ptr = IntPtr.Zero;
                 var data_ptr = new GCHandle();
@@ -137,7 +164,7 @@ namespace Ibasa.OpenCL
 
                 try
                 {
-                    CLHelper.GetError(CL.BuildProgram(Handle, (uint)devices.Length, device_list, bytes,
+                    CLHelper.GetError(CL.BuildProgram(Handle, (uint)devices_length, device_list, chars,
                         function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer()));
                 }
                 catch(Exception)
@@ -152,20 +179,31 @@ namespace Ibasa.OpenCL
         {
             unsafe
             {
-                var device_list = stackalloc IntPtr[devices.Length];
+                var devices_length = devices == null ? 0 : devices.Length;
+                var device_list = stackalloc IntPtr[devices_length];
 
-                for (int i = 0; i < devices.Length; ++i)
+                for (int i = 0; i < devices_length; ++i)
                 {
                     device_list[i] = devices[i].Handle;
                 }
 
-                var byte_count = Encoding.ASCII.GetByteCount(options);
-                byte* bytes = stackalloc byte[byte_count + 1];
-                fixed (char* options_ptr = options)
+                device_list = devices_length == 0 ? null : device_list;
+
+                int length = options == null ? 0 : Encoding.ASCII.GetByteCount(options);
+                byte* chars = stackalloc byte[length + 1];
+
+                if (options != null)
                 {
-                    Encoding.ASCII.GetBytes(options_ptr, options.Length, bytes, byte_count);
+                    fixed (char* options_ptr = options)
+                    {
+                        Encoding.ASCII.GetBytes(options_ptr, options.Length, chars, length);
+                    }
+                    chars[length] = 0; //null terminator
                 }
-                bytes[byte_count] = 0; //null terminator
+                else
+                {
+                    chars = null;
+                }
 
                 var num_headers = headers == null ? 0 : headers.Length;
 
@@ -177,14 +215,20 @@ namespace Ibasa.OpenCL
                     input_headers[i] = headers[i].Item1.Handle;
 
                     var name = headers[i].Item2;
-                    var length = Encoding.ASCII.GetByteCount(name);
-                    byte* chars = (byte*)Marshal.AllocHGlobal(length + 1).ToPointer();
+                    var header_length = Encoding.ASCII.GetByteCount(name);
+                    byte* header_chars = (byte*)Marshal.AllocHGlobal(length + 1).ToPointer();
                     fixed (char* name_ptr = name)
                     {
-                        Encoding.ASCII.GetBytes(name_ptr, name.Length, chars, length);
+                        Encoding.ASCII.GetBytes(name_ptr, name.Length, header_chars, header_length);
                     }
-                    chars[length] = 0; //null terminator
-                    header_include_names[i] = chars;
+                    header_chars[header_length] = 0; //null terminator
+                    header_include_names[i] = header_chars;
+                }
+
+                if (headers == null)
+                {
+                    input_headers = null;
+                    header_include_names = null;
                 }
 
                 var function_ptr = IntPtr.Zero;
@@ -200,7 +244,7 @@ namespace Ibasa.OpenCL
 
                 try
                 {
-                    CLHelper.GetError(CL.CompileProgram(Handle, (uint)devices.Length, device_list, bytes,
+                    CLHelper.GetError(CL.CompileProgram(Handle, (uint)devices_length, device_list, chars,
                         (uint)num_headers, input_headers, header_include_names,
                         function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer()));
                 }
@@ -221,22 +265,36 @@ namespace Ibasa.OpenCL
 
         public static Program LinkProgram(Context context, Device[] devices, string options, Program[] programs, Action<Program, object> notify, object user_data)
         {
+            if (context == Context.Null)
+                throw new ArgumentNullException("context");
+
             unsafe
             {
-                var device_list = stackalloc IntPtr[devices.Length];
+                var devices_length = devices == null ? 0 : devices.Length;
+                var device_list = stackalloc IntPtr[devices_length];
 
-                for (int i = 0; i < devices.Length; ++i)
+                for (int i = 0; i < devices_length; ++i)
                 {
                     device_list[i] = devices[i].Handle;
                 }
 
-                var byte_count = Encoding.ASCII.GetByteCount(options);
-                byte* bytes = stackalloc byte[byte_count + 1];
-                fixed (char* options_ptr = options)
+                device_list = devices_length == 0 ? null : device_list;
+
+                int length = options == null ? 0 : Encoding.ASCII.GetByteCount(options);
+                byte* chars = stackalloc byte[length + 1];
+
+                if (options != null)
                 {
-                    Encoding.ASCII.GetBytes(options_ptr, options.Length, bytes, byte_count);
+                    fixed (char* options_ptr = options)
+                    {
+                        Encoding.ASCII.GetBytes(options_ptr, options.Length, chars, length);
+                    }
+                    chars[length] = 0; //null terminator
                 }
-                bytes[byte_count] = 0; //null terminator
+                else
+                {
+                    chars = null;
+                }
 
                 var num_programs = programs == null ? 0 : programs.Length;
 
@@ -261,7 +319,7 @@ namespace Ibasa.OpenCL
                 try
                 {
                     int errcode = 0;
-                    var program = CL.LinkProgram(context.Handle, (uint)devices.Length, device_list, bytes,
+                    var program = CL.LinkProgram(context.Handle, (uint)devices_length, device_list, chars,
                         (uint)num_programs, input_programs,
                         function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
                     CLHelper.GetError(errcode);

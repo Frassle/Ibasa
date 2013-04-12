@@ -22,6 +22,9 @@ namespace Ibasa.OpenCL
         public Event(Context context)
             : this()
         {
+            if (context == Context.Null)
+                throw new ArgumentNullException("context");
+
             try
             {
                 unsafe
@@ -262,6 +265,9 @@ namespace Ibasa.OpenCL
 
         public static void Wait(Event @event)
         {
+            if (@event == null)
+                throw new ArgumentNullException("event");
+
             unsafe
             {
                 IntPtr list = @event.Handle;
@@ -272,6 +278,11 @@ namespace Ibasa.OpenCL
 
         public static void Wait(Event[] events)
         {
+            if (events == null)
+                throw new ArgumentNullException("events");
+            if (events.Length == 0)
+                throw new ArgumentException("events is empty.", "events");
+
             unsafe
             {
                 IntPtr* list = stackalloc IntPtr[events.Length];

@@ -20,6 +20,9 @@ namespace Ibasa.OpenCL
 
         public CommandQueue(Context context, Device device, CommandQueueProperties properties) : this()
         {
+            if (context == Context.Null)
+                throw new ArgumentNullException("context");
+
             unsafe
             {
                 int error = 0;
@@ -37,7 +40,9 @@ namespace Ibasa.OpenCL
         public void Release()
         {
             CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.ReleaseCommandQueue(Handle));
+            var error = CL.ReleaseCommandQueue(Handle);
+            Handle = IntPtr.Zero;
+            CLHelper.GetError(error);
         }
 
         public void Flush()

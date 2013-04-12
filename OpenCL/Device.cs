@@ -140,6 +140,9 @@ namespace Ibasa.OpenCL
         {
             CLHelper.ThrowNullException(Handle);
 
+            if (counts == null)
+                throw new ArgumentNullException("counts");
+
             unsafe
             {
                 IntPtr* properties = stackalloc IntPtr[3 + counts.Length];
