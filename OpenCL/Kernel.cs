@@ -240,7 +240,6 @@ namespace Ibasa.OpenCL
             {
                 get
                 {
-                    CLHelper.ThrowNullException(Kernel);
                     unsafe
                     {
                         UIntPtr value;
@@ -256,7 +255,6 @@ namespace Ibasa.OpenCL
             {
                 get
                 {
-                    CLHelper.ThrowNullException(Kernel);
                     unsafe
                     {
                         UIntPtr* value = stackalloc UIntPtr[3];
@@ -277,13 +275,42 @@ namespace Ibasa.OpenCL
             {
                 get
                 {
-                    CLHelper.ThrowNullException(Kernel);
                     unsafe
                     {
                         ulong value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
                         CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
                             CL.KERNEL_LOCAL_MEM_SIZE, param_value_size, &value, null));
+                        return value;
+                    }
+                }
+            }
+
+            public ulong PreferredWorkGroupSizeMultiple
+            {
+                get
+                {
+                    unsafe
+                    {
+                        UIntPtr value;
+                        UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
+                        CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
+                            CL.KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE, param_value_size, &value, null));
+                        return value.ToUInt64();
+                    }
+                }
+            }
+
+            public ulong PrivateMemSize
+            {
+                get
+                {
+                    unsafe
+                    {
+                        ulong value;
+                        UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
+                        CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
+                            CL.KERNEL_PRIVATE_MEM_SIZE, param_value_size, &value, null));
                         return value;
                     }
                 }
