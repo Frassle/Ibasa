@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,21 @@ namespace Ibasa.OpenCL
                 Handle = CL.CreateBuffer(context.Handle, (ulong)flags, new UIntPtr(size), hostPtr.ToPointer(), &error);
                 CLHelper.GetError(error);
             }
+        }
+
+        public static Buffer Create<T>(Context context, MemoryFlags flags, T[] data) where T : struct
+        {
+            return Create(context, flags, data, 0, data.Length);
+        }
+
+        public static Buffer Create<T>(Context context, MemoryFlags flags, T[] data, int index, int count) where T : struct
+        {
+            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            var size = Marshal.SizeOf(typeof(T));
+            var ptr = handle.AddrOfPinnedObject();
+            var buffer = new Buffer(context, flags, (ulong)(size * count), IntPtr.Add(ptr, size * index));
+            handle.Free();
+            return buffer;
         }
 
         public MemoryFlags MemoryFlags
