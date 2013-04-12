@@ -242,26 +242,34 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public Event EnqueueMarkerWithWaitList(Event[] events)
+        public Event EnqueueMarker(Event[] events)
         {
             CLHelper.ThrowNullException(Handle);
 
-            unsafe
+            try
             {
-                int num_events_in_wait_list = events == null ? 0 : events.Length;
-                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
-                for (int i = 0; i < num_events_in_wait_list; ++i)
+                unsafe
                 {
-                    wait_list[i] = events[i].Handle;
+                    int num_events_in_wait_list = events == null ? 0 : events.Length;
+                    IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                    for (int i = 0; i < num_events_in_wait_list; ++i)
+                    {
+                        wait_list[i] = events[i].Handle;
+                    }
+                    if (events == null)
+                        wait_list = null;
+
+                    IntPtr event_ptr = IntPtr.Zero;
+
+                    CLHelper.GetError(CL.EnqueueMarkerWithWaitList(
+                        Handle, (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                    return new Event(event_ptr);
                 }
-                if (events == null)
-                    wait_list = null;
-
-                IntPtr event_ptr = IntPtr.Zero;
-
-                CLHelper.GetError(CL.EnqueueMarkerWithWaitList(Handle, num_events_in_wait_list, wait_list, &event_ptr));
-
-                return new Event(event_ptr);
+            }
+            catch (EntryPointNotFoundException)
+            {
+                throw CLHelper.VersionException(1, 2);
             }
         }
 
@@ -296,26 +304,34 @@ namespace Ibasa.OpenCL
             }
         }
 
-        public Event EnqueueBarrierWithWaitList(Event[] events)
+        public Event EnqueueBarrier(Event[] events)
         {
             CLHelper.ThrowNullException(Handle);
 
-            unsafe
+            try
             {
-                int num_events_in_wait_list = events == null ? 0 : events.Length;
-                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
-                for (int i = 0; i < num_events_in_wait_list; ++i)
+                unsafe
                 {
-                    wait_list[i] = events[i].Handle;
+                    int num_events_in_wait_list = events == null ? 0 : events.Length;
+                    IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                    for (int i = 0; i < num_events_in_wait_list; ++i)
+                    {
+                        wait_list[i] = events[i].Handle;
+                    }
+                    if (events == null)
+                        wait_list = null;
+
+                    IntPtr event_ptr = IntPtr.Zero;
+
+                    CLHelper.GetError(CL.EnqueueBarrierWithWaitList(
+                        Handle, (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                    return new Event(event_ptr);
                 }
-                if (events == null)
-                    wait_list = null;
-
-                IntPtr event_ptr = IntPtr.Zero;
-
-                CLHelper.GetError(CL.EnqueueBarrierWithWaitList(Handle, num_events_in_wait_list, wait_list, &event_ptr));
-
-                return new Event(event_ptr);
+            }
+            catch (EntryPointNotFoundException)
+            {
+                throw CLHelper.VersionException(1, 2);
             }
         }
 
