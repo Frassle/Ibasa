@@ -26,40 +26,40 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 int error = 0;
-                Handle = CL.CreateCommandQueue(context.Handle, device.Handle, (ulong)properties, &error);
-                CLHelper.GetError(error);
+                Handle = Cl.CreateCommandQueue(context.Handle, device.Handle, (ulong)properties, &error);
+                ClHelper.GetError(error);
             }
         }
 
         public void Retain()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.RetainCommandQueue(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.RetainCommandQueue(Handle));
         }
 
         public void Release()
         {
-            CLHelper.ThrowNullException(Handle);
-            var error = CL.ReleaseCommandQueue(Handle);
+            ClHelper.ThrowNullException(Handle);
+            var error = Cl.ReleaseCommandQueue(Handle);
             Handle = IntPtr.Zero;
-            CLHelper.GetError(error);
+            ClHelper.GetError(error);
         }
 
         public void Flush()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.Flush(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.Flush(Handle));
         }
 
         public void Finish()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.Finish(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.Finish(Handle));
         }
 
         public Event EnqueueKernel(Kernel kernel, ulong[] global_work_offset, ulong[] global_work_size, ulong[] local_work_size, Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if(kernel == Kernel.Null)
                 throw new ArgumentNullException("kernel");
@@ -105,7 +105,7 @@ namespace Ibasa.OpenCL
 
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueNDRangeKernel(Handle, kernel.Handle,
+                ClHelper.GetError(Cl.EnqueueNDRangeKernel(Handle, kernel.Handle,
                     (uint)work_dim, global_offset, global_size, local_size, 
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
@@ -115,7 +115,7 @@ namespace Ibasa.OpenCL
 
         public Event EnqueueTask(Kernel kernel, Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (kernel == Kernel.Null)
                 throw new ArgumentNullException("kernel");
@@ -133,7 +133,7 @@ namespace Ibasa.OpenCL
 
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueTask(Handle, kernel.Handle,
+                ClHelper.GetError(Cl.EnqueueTask(Handle, kernel.Handle,
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
                 return new Event(event_ptr);
@@ -142,7 +142,7 @@ namespace Ibasa.OpenCL
 
         public Event EnqueueReadBuffer(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
@@ -162,7 +162,7 @@ namespace Ibasa.OpenCL
 
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueReadBuffer(Handle, buffer.Handle,
+                ClHelper.GetError(Cl.EnqueueReadBuffer(Handle, buffer.Handle,
                     blocking ? 1u : 0u, new UIntPtr(offset), new UIntPtr(count), destination.ToPointer(), 
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
@@ -172,7 +172,7 @@ namespace Ibasa.OpenCL
 
         public Event EnqueueWriteBuffer(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
@@ -192,7 +192,7 @@ namespace Ibasa.OpenCL
 
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueWriteBuffer(Handle, buffer.Handle,
+                ClHelper.GetError(Cl.EnqueueWriteBuffer(Handle, buffer.Handle,
                     blocking ? 1u : 0u, new UIntPtr(offset), new UIntPtr(count), destination.ToPointer(),
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
@@ -204,7 +204,7 @@ namespace Ibasa.OpenCL
             Buffer source, ulong sourceOffset,
             Buffer destination, ulong destinationOffset, ulong count, Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (source == Buffer.Null)
                 throw new ArgumentNullException("source");
@@ -224,7 +224,7 @@ namespace Ibasa.OpenCL
 
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueCopyBuffer(Handle,
+                ClHelper.GetError(Cl.EnqueueCopyBuffer(Handle,
                     source.Handle, destination.Handle,
                     new UIntPtr(sourceOffset), new UIntPtr(sourceOffset), new UIntPtr(count),
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
@@ -237,7 +237,7 @@ namespace Ibasa.OpenCL
             Buffer buffer, bool blocking, MapFlags flags,
             ulong offset, ulong size, Event[] events, out IntPtr pointer)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
@@ -256,11 +256,11 @@ namespace Ibasa.OpenCL
                 IntPtr event_ptr = IntPtr.Zero;
 
                 int error;
-                void* result = CL.EnqueueMapBuffer(Handle,
+                void* result = Cl.EnqueueMapBuffer(Handle,
                     buffer.Handle, blocking ? 1u : 0u, (ulong)flags,
                     new UIntPtr(offset), new UIntPtr(size),
                     (uint)num_events_in_wait_list, wait_list, &event_ptr, &error);
-                CLHelper.GetError(error);
+                ClHelper.GetError(error);
 
                 pointer = new IntPtr(result);
 
@@ -271,7 +271,7 @@ namespace Ibasa.OpenCL
         public Event EnqueueUnmapBuffer(
             Buffer buffer, IntPtr pointer, Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
@@ -289,7 +289,7 @@ namespace Ibasa.OpenCL
 
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueUnmapMemObject(Handle,
+                ClHelper.GetError(Cl.EnqueueUnmapMemObject(Handle,
                     buffer.Handle, pointer.ToPointer(), 
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
@@ -300,7 +300,7 @@ namespace Ibasa.OpenCL
         public Event EnqueueMigrateBuffer(
             Buffer[] buffers, MemoryMigrationFlags flags, Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (buffers == null)
                 throw new ArgumentNullException("buffers");
@@ -325,7 +325,7 @@ namespace Ibasa.OpenCL
 
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueMigrateMemObjects(Handle,
+                ClHelper.GetError(Cl.EnqueueMigrateMemObjects(Handle,
                     (uint)buffers.Length, buffer_list, (ulong)flags,
                     (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
@@ -335,13 +335,13 @@ namespace Ibasa.OpenCL
 
         public Event EnqueueMarker()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             unsafe
             {
                 IntPtr event_ptr = IntPtr.Zero;
 
-                CLHelper.GetError(CL.EnqueueMarker(Handle, &event_ptr));
+                ClHelper.GetError(Cl.EnqueueMarker(Handle, &event_ptr));
 
                 return new Event(event_ptr);
             }
@@ -349,7 +349,7 @@ namespace Ibasa.OpenCL
 
         public Event EnqueueMarker(Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             try
             {
@@ -366,7 +366,7 @@ namespace Ibasa.OpenCL
 
                     IntPtr event_ptr = IntPtr.Zero;
 
-                    CLHelper.GetError(CL.EnqueueMarkerWithWaitList(
+                    ClHelper.GetError(Cl.EnqueueMarkerWithWaitList(
                         Handle, (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
                     return new Event(event_ptr);
@@ -374,13 +374,13 @@ namespace Ibasa.OpenCL
             }
             catch (EntryPointNotFoundException)
             {
-                throw CLHelper.VersionException(1, 2);
+                throw ClHelper.VersionException(1, 2);
             }
         }
 
         public void EnqueueWaitForEvents(Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (events == null)
                 throw new ArgumentNullException("events");
             if (events.Length == 0)
@@ -395,23 +395,23 @@ namespace Ibasa.OpenCL
                     wait_list[i] = events[i].Handle;
                 }
 
-                CLHelper.GetError(CL.EnqueueWaitForEvents(Handle, (uint)num_events, wait_list));
+                ClHelper.GetError(Cl.EnqueueWaitForEvents(Handle, (uint)num_events, wait_list));
             }
         }
 
         public void EnqueueBarrier()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             unsafe
             {
-                CLHelper.GetError(CL.EnqueueBarrier(Handle));
+                ClHelper.GetError(Cl.EnqueueBarrier(Handle));
             }
         }
 
         public Event EnqueueBarrier(Event[] events)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             try
             {
@@ -428,7 +428,7 @@ namespace Ibasa.OpenCL
 
                     IntPtr event_ptr = IntPtr.Zero;
 
-                    CLHelper.GetError(CL.EnqueueBarrierWithWaitList(
+                    ClHelper.GetError(Cl.EnqueueBarrierWithWaitList(
                         Handle, (uint)num_events_in_wait_list, wait_list, &event_ptr));
 
                     return new Event(event_ptr);
@@ -436,7 +436,7 @@ namespace Ibasa.OpenCL
             }
             catch (EntryPointNotFoundException)
             {
-                throw CLHelper.VersionException(1, 2);
+                throw ClHelper.VersionException(1, 2);
             }
         }
 
@@ -444,13 +444,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetCommandQueueInfo(
-                        Handle, CL.QUEUE_CONTEXT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetCommandQueueInfo(
+                        Handle, Cl.QUEUE_CONTEXT, param_value_size, &value, null));
                     return new Context(value);
                 }
             }
@@ -460,13 +460,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetCommandQueueInfo(
-                        Handle, CL.QUEUE_DEVICE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetCommandQueueInfo(
+                        Handle, Cl.QUEUE_DEVICE, param_value_size, &value, null));
                     return new Device(value);
                 }
             }
@@ -476,13 +476,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetContextInfo(
-                        Handle, CL.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetContextInfo(
+                        Handle, Cl.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -492,13 +492,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetContextInfo(
-                        Handle, CL.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetContextInfo(
+                        Handle, Cl.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
                     return (CommandQueueProperties)value;
                 }
             }
@@ -506,13 +506,13 @@ namespace Ibasa.OpenCL
 
         public override int GetHashCode()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (obj is CommandQueue)
             {
                 return Equals((CommandQueue)obj);
@@ -522,7 +522,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(CommandQueue other)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -538,7 +538,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

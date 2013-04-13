@@ -46,8 +46,8 @@
     <Compile Include="Context.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="CL.cs" />
-    <Compile Include="CLHelper.cs" />
+    <Compile Include="Cl.cs" />
+    <Compile Include="ClHelper.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="OpenCLException.cs" />

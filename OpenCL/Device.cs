@@ -70,29 +70,29 @@ namespace Ibasa.OpenCL
 
         public void Retain()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             try
             {
-                CLHelper.GetError(CL.RetainDevice(Handle));
+                ClHelper.GetError(Cl.RetainDevice(Handle));
             }
             catch (EntryPointNotFoundException)
             {
-                throw CLHelper.VersionException(Version, 1, 2);
+                throw ClHelper.VersionException(Version, 1, 2);
             }
         }
 
         public void Release()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             try
             {
-                int error = CL.ReleaseDevice(Handle);
+                int error = Cl.ReleaseDevice(Handle);
                 Handle = IntPtr.Zero;
-                CLHelper.GetError(error);
+                ClHelper.GetError(error);
             }
             catch (EntryPointNotFoundException)
             {
-                throw CLHelper.VersionException(Version, 1, 2);
+                throw ClHelper.VersionException(Version, 1, 2);
             }
         }
 
@@ -101,11 +101,11 @@ namespace Ibasa.OpenCL
             try
             {
                 uint num_devices;
-                CLHelper.GetError(CL.CreateSubDevices(Handle, properties, 0, null, &num_devices));
+                ClHelper.GetError(Cl.CreateSubDevices(Handle, properties, 0, null, &num_devices));
 
                 IntPtr* device_ptrs = stackalloc IntPtr[(int)num_devices];
 
-                CLHelper.GetError(CL.CreateSubDevices(Handle, properties, num_devices, device_ptrs, null));
+                ClHelper.GetError(Cl.CreateSubDevices(Handle, properties, num_devices, device_ptrs, null));
 
                 Device[] sub_devices = new Device[num_devices];
                 for (uint i = 0; i < num_devices; ++i)
@@ -117,18 +117,18 @@ namespace Ibasa.OpenCL
             }
             catch (EntryPointNotFoundException)
             {
-                throw CLHelper.VersionException(Version, 1, 2);
+                throw ClHelper.VersionException(Version, 1, 2);
             }
         }
 
         public Device[] CreateSubDevicesEqually(int units)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             unsafe
             {
                 IntPtr* properties = stackalloc IntPtr[3];
-                properties[0] = new IntPtr(CL.DEVICE_PARTITION_EQUALLY);
+                properties[0] = new IntPtr(Cl.DEVICE_PARTITION_EQUALLY);
                 properties[1] = new IntPtr(units);
                 properties[2] = new IntPtr(0);
 
@@ -138,7 +138,7 @@ namespace Ibasa.OpenCL
 
         public Device[] CreateSubDevicesByCounts(params int[] counts)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (counts == null)
                 throw new ArgumentNullException("counts");
@@ -146,13 +146,13 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 IntPtr* properties = stackalloc IntPtr[3 + counts.Length];
-                properties[0] = new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS);
+                properties[0] = new IntPtr(Cl.DEVICE_PARTITION_BY_COUNTS);
 
                 for (int i = 0; i < counts.Length; ++i)
                 {
                     properties[i + 1] = new IntPtr(counts[i]);
                 }
-                properties[counts.Length + 1] = new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS_LIST_END);
+                properties[counts.Length + 1] = new IntPtr(Cl.DEVICE_PARTITION_BY_COUNTS_LIST_END);
                 properties[counts.Length + 2] = new IntPtr(0);
 
                 return CreateSubDevices(properties);
@@ -161,12 +161,12 @@ namespace Ibasa.OpenCL
 
         public Device[] CreateSubDevicesByAffinityDomain(AffinityDomain domain)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             unsafe
             {
                 IntPtr* properties = stackalloc IntPtr[3];
-                properties[0] = new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN);
+                properties[0] = new IntPtr(Cl.DEVICE_PARTITION_BY_AFFINITY_DOMAIN);
                 properties[1] = new IntPtr((int)domain);
                 properties[2] = new IntPtr(0);
 
@@ -178,13 +178,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_ADDRESS_BITS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_ADDRESS_BITS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -194,13 +194,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_AVAILABLE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_AVAILABLE, param_value_size, &value, null));
                     return value != 0;
                 }
             }
@@ -210,19 +210,19 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         UIntPtr param_value_size_ret = UIntPtr.Zero;
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_BUILT_IN_KERNELS, UIntPtr.Zero, null, &param_value_size_ret));
 
                         byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_BUILT_IN_KERNELS, param_value_size_ret, data_ptr, null));
 
                         var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                         return str.Split(';');
@@ -230,7 +230,7 @@ namespace Ibasa.OpenCL
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -239,13 +239,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_COMPILER_AVAILABLE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_COMPILER_AVAILABLE, param_value_size, &value, null));
                     return value != 0;
                 }
             }
@@ -255,13 +255,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_DOUBLE_FP_CONFIG, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_DOUBLE_FP_CONFIG, param_value_size, &value, null));
                     return (FloatingPointCapability)value;
                 }
             }
@@ -271,13 +271,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_ENDIAN_LITTLE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_ENDIAN_LITTLE, param_value_size, &value, null));
                     return value != 0;
                 }
             }
@@ -287,13 +287,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_ERROR_CORRECTION_SUPPORT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_ERROR_CORRECTION_SUPPORT, param_value_size, &value, null));
                     return value != 0;
                 }
             }
@@ -303,13 +303,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_EXECUTION_CAPABILITIES, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_EXECUTION_CAPABILITIES, param_value_size, &value, null));
                     return (ExecutionCapabilities)value;
                 }
             }
@@ -319,17 +319,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_EXTENSIONS, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_EXTENSIONS, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_EXTENSIONS, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_EXTENSIONS, param_value_size_ret, data_ptr, null));
 
                     var str = Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                     return str.Split(' ');
@@ -341,13 +341,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_GLOBAL_MEM_CACHE_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_GLOBAL_MEM_CACHE_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -357,13 +357,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_GLOBAL_MEM_CACHE_TYPE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_GLOBAL_MEM_CACHE_TYPE, param_value_size, &value, null));
                     return (MemoryCacheType)value;
                 }
             }
@@ -373,13 +373,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_GLOBAL_MEM_CACHELINE_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_GLOBAL_MEM_CACHELINE_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -389,13 +389,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_GLOBAL_MEM_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_GLOBAL_MEM_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -405,13 +405,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_HALF_FP_CONFIG, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_HALF_FP_CONFIG, param_value_size, &value, null));
                     return (FloatingPointCapability)value;
                 }
             }
@@ -421,21 +421,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_HOST_UNIFIED_MEMORY, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_HOST_UNIFIED_MEMORY, param_value_size, &value, null));
                         return value != 0;
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -444,13 +444,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_IMAGE_SUPPORT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_IMAGE_SUPPORT, param_value_size, &value, null));
                     return value != 0;
                 }
             }
@@ -460,13 +460,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_IMAGE2D_MAX_HEIGHT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_IMAGE2D_MAX_HEIGHT, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -476,13 +476,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_IMAGE2D_MAX_WIDTH, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_IMAGE2D_MAX_WIDTH, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -492,13 +492,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_IMAGE3D_MAX_DEPTH, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_IMAGE3D_MAX_DEPTH, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -508,13 +508,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_IMAGE3D_MAX_HEIGHT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_IMAGE3D_MAX_HEIGHT, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -524,13 +524,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_IMAGE3D_MAX_WIDTH, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_IMAGE3D_MAX_WIDTH, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -540,21 +540,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         UIntPtr value;
                         UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_IMAGE_MAX_BUFFER_SIZE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_IMAGE_MAX_BUFFER_SIZE, param_value_size, &value, null));
                         return value.ToUInt64();
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -563,21 +563,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         UIntPtr value;
                         UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_IMAGE_MAX_ARRAY_SIZE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_IMAGE_MAX_ARRAY_SIZE, param_value_size, &value, null));
                         return value.ToUInt64();
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -586,21 +586,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_LINKER_AVAILABLE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_LINKER_AVAILABLE, param_value_size, &value, null));
                         return value != 0;
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -609,13 +609,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_LOCAL_MEM_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_LOCAL_MEM_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -625,13 +625,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_LOCAL_MEM_TYPE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_LOCAL_MEM_TYPE, param_value_size, &value, null));
                     return (MemoryCacheType)value;
                 }
             }
@@ -641,13 +641,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_CLOCK_FREQUENCY, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_CLOCK_FREQUENCY, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -657,13 +657,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_COMPUTE_UNITS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_COMPUTE_UNITS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -673,13 +673,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_CONSTANT_ARGS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_CONSTANT_ARGS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -689,13 +689,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_CONSTANT_BUFFER_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_CONSTANT_BUFFER_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -705,13 +705,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_MEM_ALLOC_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_MEM_ALLOC_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -721,13 +721,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_PARAMETER_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_PARAMETER_SIZE, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -737,13 +737,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_READ_IMAGE_ARGS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_READ_IMAGE_ARGS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -753,13 +753,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_SAMPLERS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_SAMPLERS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -769,13 +769,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_WORK_GROUP_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_WORK_GROUP_SIZE, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -785,13 +785,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_WORK_ITEM_DIMENSIONS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_WORK_ITEM_DIMENSIONS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -801,14 +801,14 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     int dim = (int)MaxWorkItemDimensions;
                     UIntPtr* sizes = stackalloc UIntPtr[dim];
                     UIntPtr param_value_size = new UIntPtr((uint)(UIntPtr.Size * dim));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_WORK_ITEM_SIZES, param_value_size, sizes, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_WORK_ITEM_SIZES, param_value_size, sizes, null));
 
                     var value = new ulong[dim];
                     for (int i = 0; i < dim; ++i)
@@ -825,13 +825,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MAX_WRITE_IMAGE_ARGS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MAX_WRITE_IMAGE_ARGS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -841,13 +841,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MEM_BASE_ADDR_ALIGN, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MEM_BASE_ADDR_ALIGN, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -857,13 +857,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_MIN_DATA_TYPE_ALIGN_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_MIN_DATA_TYPE_ALIGN_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -873,17 +873,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_NAME, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_NAME, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_NAME, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_NAME, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -894,21 +894,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_CHAR, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_NATIVE_VECTOR_WIDTH_CHAR, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch(OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -917,21 +917,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_SHORT, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_NATIVE_VECTOR_WIDTH_SHORT, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch(OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -940,21 +940,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_INT, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_NATIVE_VECTOR_WIDTH_INT, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch(OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -963,21 +963,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_LONG, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_NATIVE_VECTOR_WIDTH_LONG, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch(OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -986,21 +986,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_FLOAT, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_NATIVE_VECTOR_WIDTH_FLOAT, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch(OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -1009,21 +1009,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch(OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -1032,21 +1032,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_HALF, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_HALF, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -1055,26 +1055,26 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         UIntPtr param_value_size_ret = UIntPtr.Zero;
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_OPENCL_C_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_OPENCL_C_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
 
                         byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_OPENCL_C_VERSION, param_value_size_ret, data_ptr, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_OPENCL_C_VERSION, param_value_size_ret, data_ptr, null));
 
                         return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 1);
+                    throw ClHelper.VersionException(Version, 1, 1);
                 }
             }
         }
@@ -1083,21 +1083,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         IntPtr value;
                         UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PARENT_DEVICE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PARENT_DEVICE, param_value_size, &value, null));
                         return new Device(value);
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1106,21 +1106,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PARTITION_MAX_SUB_DEVICES, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PARTITION_MAX_SUB_DEVICES, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1129,19 +1129,19 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         UIntPtr param_value_size = UIntPtr.Zero;
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PARTITION_PROPERTIES, UIntPtr.Zero, null, &param_value_size));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PARTITION_PROPERTIES, UIntPtr.Zero, null, &param_value_size));
 
                         IntPtr* properties = stackalloc IntPtr[(int)(param_value_size.ToUInt32() / IntPtr.Size)];
 
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PARTITION_PROPERTIES, param_value_size, properties, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PARTITION_PROPERTIES, param_value_size, properties, null));
 
                         bool equally = false;
                         bool byCounts = false;
@@ -1149,9 +1149,9 @@ namespace Ibasa.OpenCL
 
                         while (*properties != IntPtr.Zero)
                         {
-                            equally |= *properties == new IntPtr(CL.DEVICE_PARTITION_EQUALLY);
-                            byCounts |= *properties == new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS);
-                            byAffinityDomain |= *properties == new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN);
+                            equally |= *properties == new IntPtr(Cl.DEVICE_PARTITION_EQUALLY);
+                            byCounts |= *properties == new IntPtr(Cl.DEVICE_PARTITION_BY_COUNTS);
+                            byAffinityDomain |= *properties == new IntPtr(Cl.DEVICE_PARTITION_BY_AFFINITY_DOMAIN);
                         }
 
                         return new PartitionProperties(equally, byCounts, byAffinityDomain);
@@ -1159,7 +1159,7 @@ namespace Ibasa.OpenCL
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1168,21 +1168,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         ulong value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PARTITION_AFFINITY_DOMAIN, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PARTITION_AFFINITY_DOMAIN, param_value_size, &value, null));
                         return (AffinityDomain)value;
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1191,27 +1191,27 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         UIntPtr param_value_size = UIntPtr.Zero;
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PARTITION_TYPE, UIntPtr.Zero, null, &param_value_size));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PARTITION_TYPE, UIntPtr.Zero, null, &param_value_size));
 
                         IntPtr* properties = stackalloc IntPtr[(int)(param_value_size.ToUInt32() / IntPtr.Size)];
 
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PARTITION_TYPE, param_value_size, properties, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PARTITION_TYPE, param_value_size, properties, null));
 
-                        if (properties[0] == new IntPtr(CL.DEVICE_PARTITION_EQUALLY))
+                        if (properties[0] == new IntPtr(Cl.DEVICE_PARTITION_EQUALLY))
                         {
                             var units = properties[1].ToInt32();
 
                             return new PartitionTypeEqually(units);
                         }
-                        else if (properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_COUNTS))
+                        else if (properties[0] == new IntPtr(Cl.DEVICE_PARTITION_BY_COUNTS))
                         {
                             int count = 0;
                             for (int i = 1; properties[i] != IntPtr.Zero; ++i)
@@ -1227,7 +1227,7 @@ namespace Ibasa.OpenCL
 
                             return new PartitionTypeByCounts(counts);
                         }
-                        else if (properties[0] == new IntPtr(CL.DEVICE_PARTITION_BY_AFFINITY_DOMAIN))
+                        else if (properties[0] == new IntPtr(Cl.DEVICE_PARTITION_BY_AFFINITY_DOMAIN))
                         {
                             var domain = (AffinityDomain)properties[1].ToInt64();
 
@@ -1241,7 +1241,7 @@ namespace Ibasa.OpenCL
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1250,13 +1250,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PLATFORM, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PLATFORM, param_value_size, &value, null));
                     return new Platform(value);
                 }
             }
@@ -1266,13 +1266,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_CHAR, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_CHAR, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1282,13 +1282,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_SHORT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_SHORT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1298,13 +1298,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_INT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_INT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1314,13 +1314,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_LONG, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_LONG, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1330,13 +1330,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1346,13 +1346,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1362,13 +1362,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PREFERRED_VECTOR_WIDTH_HALF, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PREFERRED_VECTOR_WIDTH_HALF, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1378,21 +1378,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         UIntPtr value;
                         UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PRINTF_BUFFER_SIZE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PRINTF_BUFFER_SIZE, param_value_size, &value, null));
                         return value.ToUInt64();
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1401,21 +1401,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_PREFERRED_INTEROP_USER_SYNC, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_PREFERRED_INTEROP_USER_SYNC, param_value_size, &value, null));
                         return value != 0;
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1424,17 +1424,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PROFILE, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PROFILE, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PROFILE, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PROFILE, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -1445,13 +1445,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PROFILING_TIMER_RESOLUTION, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PROFILING_TIMER_RESOLUTION, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -1461,13 +1461,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr((uint)sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_PROFILING_TIMER_RESOLUTION, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_PROFILING_TIMER_RESOLUTION, param_value_size, &value, null));
                     return (CommandQueueProperties)value;
                 }
             }
@@ -1477,21 +1477,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         uint value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                        CLHelper.GetError(CL.GetDeviceInfo(
-                            Handle, CL.DEVICE_REFERENCE_COUNT, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetDeviceInfo(
+                            Handle, Cl.DEVICE_REFERENCE_COUNT, param_value_size, &value, null));
                         return value;
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(Version, 1, 2);
+                    throw ClHelper.VersionException(Version, 1, 2);
                 }
             }
         }
@@ -1500,13 +1500,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_SINGLE_FP_CONFIG, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_SINGLE_FP_CONFIG, param_value_size, &value, null));
                     return (FloatingPointCapability)value;
                 }
             }
@@ -1516,13 +1516,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_TYPE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_TYPE, param_value_size, &value, null));
                     return (DeviceType)value;
                 }
             }
@@ -1532,17 +1532,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_VENDOR, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_VENDOR, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_VENDOR, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_VENDOR, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -1553,13 +1553,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_VENDOR_ID, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_VENDOR_ID, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -1569,17 +1569,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DEVICE_VERSION, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DEVICE_VERSION, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -1590,17 +1590,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DRIVER_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DRIVER_VERSION, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetDeviceInfo(
-                        Handle, CL.DRIVER_VERSION, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetDeviceInfo(
+                        Handle, Cl.DRIVER_VERSION, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -1609,13 +1609,13 @@ namespace Ibasa.OpenCL
 
         public override int GetHashCode()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (obj is Device)
             {
                 return Equals((Device)obj);
@@ -1625,7 +1625,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Device other)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -1641,7 +1641,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

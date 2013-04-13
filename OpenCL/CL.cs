@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ibasa.OpenCL
 {
-    public static class CL
+    public static class Cl
     {
         [StructLayout(LayoutKind.Sequential, Pack=1)]
         public struct image_format 

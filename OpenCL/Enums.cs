@@ -9,12 +9,12 @@ namespace Ibasa.OpenCL
     [Flags]
     public enum DeviceType
     {
-        Default = CL.DEVICE_TYPE_DEFAULT,
-        Cpu = CL.DEVICE_TYPE_CPU,
-        Gpu = CL.DEVICE_TYPE_GPU,
-        Accelerator = CL.DEVICE_TYPE_ACCELERATOR,
-        Custom = CL.DEVICE_TYPE_CUSTOM,
-        All = CL.DEVICE_TYPE_ALL,
+        Default = Cl.DEVICE_TYPE_DEFAULT,
+        Cpu = Cl.DEVICE_TYPE_CPU,
+        Gpu = Cl.DEVICE_TYPE_GPU,
+        Accelerator = Cl.DEVICE_TYPE_ACCELERATOR,
+        Custom = Cl.DEVICE_TYPE_CUSTOM,
+        All = Cl.DEVICE_TYPE_ALL,
     }
 
     public enum AffinityDomain
@@ -22,51 +22,51 @@ namespace Ibasa.OpenCL
         /// <summary>
         /// Non-Uniform Memory Access
         /// </summary>
-        NUMA = CL.DEVICE_AFFINITY_DOMAIN_NUMA,
-        L1Cache = CL.DEVICE_AFFINITY_DOMAIN_L1_CACHE,
-        L2Cache = CL.DEVICE_AFFINITY_DOMAIN_L2_CACHE,
-        L3Cache = CL.DEVICE_AFFINITY_DOMAIN_L3_CACHE,
-        L4Cache = CL.DEVICE_AFFINITY_DOMAIN_L4_CACHE,
-        NextPartitionable = CL.DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE,
+        NUMA = Cl.DEVICE_AFFINITY_DOMAIN_NUMA,
+        L1Cache = Cl.DEVICE_AFFINITY_DOMAIN_L1_CACHE,
+        L2Cache = Cl.DEVICE_AFFINITY_DOMAIN_L2_CACHE,
+        L3Cache = Cl.DEVICE_AFFINITY_DOMAIN_L3_CACHE,
+        L4Cache = Cl.DEVICE_AFFINITY_DOMAIN_L4_CACHE,
+        NextPartitionable = Cl.DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE,
     }
 
     [Flags]
     public enum MapFlags
     {
-        Read = CL.MAP_READ,
-        Write = CL.MAP_WRITE,
-        WriteInvalidateRegion = CL.MAP_WRITE_INVALIDATE_REGION,
+        Read = Cl.MAP_READ,
+        Write = Cl.MAP_WRITE,
+        WriteInvalidateRegion = Cl.MAP_WRITE_INVALIDATE_REGION,
     }
 
     [Flags]
     public enum MemoryMigrationFlags
     {
         None = 0,
-        ObjectHost = CL.MIGRATE_MEM_OBJECT_HOST,
-        ObjectContentUndefined = CL.MIGRATE_MEM_OBJECT_CONTENT_UNDEFINED,
+        ObjectHost = Cl.MIGRATE_MEM_OBJECT_HOST,
+        ObjectContentUndefined = Cl.MIGRATE_MEM_OBJECT_CONTENT_UNDEFINED,
     }
 
     public enum AddressingMode
     {
-        None = CL.ADDRESS_NONE,
-        Clamp = CL.ADDRESS_CLAMP,
-        ClampToEdge = CL.ADDRESS_CLAMP_TO_EDGE,
-        Repeat = CL.ADDRESS_REPEAT,
-        MirroredRepeat = CL.ADDRESS_MIRRORED_REPEAT,
+        None = Cl.ADDRESS_NONE,
+        Clamp = Cl.ADDRESS_CLAMP,
+        ClampToEdge = Cl.ADDRESS_CLAMP_TO_EDGE,
+        Repeat = Cl.ADDRESS_REPEAT,
+        MirroredRepeat = Cl.ADDRESS_MIRRORED_REPEAT,
     }
 
     public enum FilterMode
     {
-        Nearest = CL.FILTER_NEAREST,
-        Linear = CL.FILTER_LINEAR,
+        Nearest = Cl.FILTER_NEAREST,
+        Linear = Cl.FILTER_LINEAR,
     }
 
     [Flags]
     public enum CommandQueueProperties
     {
         None = 0,
-        OutOfOrderExecModeEnable = CL.QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
-        ProfilingEnable = CL.QUEUE_PROFILING_ENABLE,
+        OutOfOrderExecModeEnable = Cl.QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
+        ProfilingEnable = Cl.QUEUE_PROFILING_ENABLE,
     }
 
     /// <summary>
@@ -83,72 +83,72 @@ namespace Ibasa.OpenCL
         /// This flag specifies that the memory object will be read and 
         /// written by a kernel. This is the default.
         /// </summary>
-        ReadWrite = CL.MEM_READ_WRITE,
-        WriteOnly = CL.MEM_WRITE_ONLY,
-        ReadOnly = CL.MEM_READ_ONLY,
-        UseHostPtr = CL.MEM_USE_HOST_PTR,
-        AllocHostPtr = CL.MEM_ALLOC_HOST_PTR,
-        CopyHostPtr = CL.MEM_COPY_HOST_PTR,
-        HostWriteOnly = CL.MEM_HOST_WRITE_ONLY,
-        HostReadOnly = CL.MEM_HOST_READ_ONLY,
-        HostNoAccess = CL.MEM_HOST_NO_ACCESS,
+        ReadWrite = Cl.MEM_READ_WRITE,
+        WriteOnly = Cl.MEM_WRITE_ONLY,
+        ReadOnly = Cl.MEM_READ_ONLY,
+        UseHostPtr = Cl.MEM_USE_HOST_PTR,
+        AllocHostPtr = Cl.MEM_ALLOC_HOST_PTR,
+        CopyHostPtr = Cl.MEM_COPY_HOST_PTR,
+        HostWriteOnly = Cl.MEM_HOST_WRITE_ONLY,
+        HostReadOnly = Cl.MEM_HOST_READ_ONLY,
+        HostNoAccess = Cl.MEM_HOST_NO_ACCESS,
     }
 
     public enum MemoryObjectType
     {
-        Buffer = CL.MEM_OBJECT_BUFFER,
-        Image1D = CL.MEM_OBJECT_IMAGE1D,
-        Image2D = CL.MEM_OBJECT_IMAGE2D,
-        Image3D = CL.MEM_OBJECT_IMAGE3D,
+        Buffer = Cl.MEM_OBJECT_BUFFER,
+        Image1D = Cl.MEM_OBJECT_IMAGE1D,
+        Image2D = Cl.MEM_OBJECT_IMAGE2D,
+        Image3D = Cl.MEM_OBJECT_IMAGE3D,
     }
 
     public enum CommandExecutionStatus
     {
-        Complete = CL.COMPLETE,
-        Running = CL.RUNNING,
-        Submitted = CL.SUBMITTED,
-        Queued = CL.QUEUED,
+        Complete = Cl.COMPLETE,
+        Running = Cl.RUNNING,
+        Submitted = Cl.SUBMITTED,
+        Queued = Cl.QUEUED,
     }
 
     public enum BuildStatus
     {
-        None = CL.BUILD_NONE,
-        Error = CL.BUILD_ERROR,
-        Success = CL.BUILD_SUCCESS,
-        InProgress = CL.BUILD_IN_PROGRESS,
+        None = Cl.BUILD_NONE,
+        Error = Cl.BUILD_ERROR,
+        Success = Cl.BUILD_SUCCESS,
+        InProgress = Cl.BUILD_IN_PROGRESS,
     }
 
     public enum BinaryType
     {
-        None = CL.PROGRAM_BINARY_TYPE_NONE,
-        CompiledObject = CL.PROGRAM_BINARY_TYPE_COMPILED_OBJECT,
-        Library = CL.PROGRAM_BINARY_TYPE_LIBRARY,
-        Executable = CL.PROGRAM_BINARY_TYPE_EXECUTABLE,
+        None = Cl.PROGRAM_BINARY_TYPE_NONE,
+        CompiledObject = Cl.PROGRAM_BINARY_TYPE_COMPILED_OBJECT,
+        Library = Cl.PROGRAM_BINARY_TYPE_LIBRARY,
+        Executable = Cl.PROGRAM_BINARY_TYPE_EXECUTABLE,
     }
     
     [Flags]
     public enum FloatingPointCapability
     {
-        Denorm = CL.FP_DENORM,
-        InfinityNaN = CL.FP_INF_NAN, 
-        RoundToNearest = CL.FP_ROUND_TO_NEAREST,
-        RoundToZero = CL.FP_ROUND_TO_ZERO,
-        RoundToInfinity = CL.FP_ROUND_TO_INF,
-        FusedMultiplyAdd = CL.FP_FMA,
-        Software = CL.FP_SOFT_FLOAT,
-        CorrectlyRoundedDivideSqrt = CL.FP_CORRECTLY_ROUNDED_DIVIDE_SQRT,
+        Denorm = Cl.FP_DENORM,
+        InfinityNaN = Cl.FP_INF_NAN, 
+        RoundToNearest = Cl.FP_ROUND_TO_NEAREST,
+        RoundToZero = Cl.FP_ROUND_TO_ZERO,
+        RoundToInfinity = Cl.FP_ROUND_TO_INF,
+        FusedMultiplyAdd = Cl.FP_FMA,
+        Software = Cl.FP_SOFT_FLOAT,
+        CorrectlyRoundedDivideSqrt = Cl.FP_CORRECTLY_ROUNDED_DIVIDE_SQRT,
     }
 
     [Flags]
     public enum ExecutionCapabilities
     {
-        ExecuteKernel = CL.EXEC_KERNEL,
-        ExecuteNativeKernel = CL.EXEC_NATIVE_KERNEL,
+        ExecuteKernel = Cl.EXEC_KERNEL,
+        ExecuteNativeKernel = Cl.EXEC_NATIVE_KERNEL,
     }
 
     public enum MemoryCacheType
     {
-        ReadOnly = CL.READ_ONLY_CACHE,
-        ReadWrite = CL.READ_WRITE_CACHE,
+        ReadOnly = Cl.READ_ONLY_CACHE,
+        ReadWrite = Cl.READ_WRITE_CACHE,
     }
 }

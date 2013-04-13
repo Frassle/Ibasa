@@ -81,9 +81,9 @@ namespace Ibasa.OpenCL
                 try
                 {
                     int errcode = 0;
-                    Handle = CL.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, 
+                    Handle = Cl.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, 
                         function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
-                    CLHelper.GetError(errcode);
+                    ClHelper.GetError(errcode);
 
                     CallbackPointers.Add(Handle, data_ptr);
                 }
@@ -129,9 +129,9 @@ namespace Ibasa.OpenCL
                 try
                 {
                     int errcode = 0;
-                    Handle = CL.CreateContext(properties_ptr, (int)deviceType,
+                    Handle = Cl.CreateContext(properties_ptr, (int)deviceType,
                         function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
-                    CLHelper.GetError(errcode);
+                    ClHelper.GetError(errcode);
 
                     CallbackPointers.Add(Handle, data_ptr);
                 }
@@ -145,14 +145,14 @@ namespace Ibasa.OpenCL
 
         public void Retain()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.RetainContext(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.RetainContext(Handle));
         }
 
         public void Release()
         {
-            CLHelper.ThrowNullException(Handle);
-            int error = CL.ReleaseContext(Handle);
+            ClHelper.ThrowNullException(Handle);
+            int error = Cl.ReleaseContext(Handle);
 
             try
             {
@@ -171,20 +171,20 @@ namespace Ibasa.OpenCL
                 Handle = IntPtr.Zero;
             }
 
-            CLHelper.GetError(error);
+            ClHelper.GetError(error);
         }
 
         public long ReferenceCount
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetContextInfo(
-                        Handle, CL.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetContextInfo(
+                        Handle, Cl.CONTEXT_REFERENCE_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -194,19 +194,19 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint num_devices;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetContextInfo(
-                        Handle, CL.CONTEXT_NUM_DEVICES, param_value_size, &num_devices, null));
+                    ClHelper.GetError(Cl.GetContextInfo(
+                        Handle, Cl.CONTEXT_NUM_DEVICES, param_value_size, &num_devices, null));
 
                     IntPtr* device_ptrs = stackalloc IntPtr[(int)num_devices];
 
                     param_value_size = new UIntPtr((uint)(IntPtr.Size * num_devices));
-                    CLHelper.GetError(CL.GetContextInfo(
-                        Handle, CL.CONTEXT_DEVICES, param_value_size, device_ptrs, null));
+                    ClHelper.GetError(Cl.GetContextInfo(
+                        Handle, Cl.CONTEXT_DEVICES, param_value_size, device_ptrs, null));
 
                     Device[] devices = new Device[num_devices];
                     for (int i = 0; i < devices.Length; ++i)
@@ -223,12 +223,12 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetContextInfo(
-                        Handle, CL.CONTEXT_PROPERTIES, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetContextInfo(
+                        Handle, Cl.CONTEXT_PROPERTIES, UIntPtr.Zero, null, &param_value_size_ret));
 
                     var properties = new Dictionary<IntPtr, IntPtr>();
 
@@ -236,8 +236,8 @@ namespace Ibasa.OpenCL
                     {
                         IntPtr* data_ptr = stackalloc IntPtr[(int)param_value_size_ret.ToUInt32()];
 
-                        CLHelper.GetError(CL.GetContextInfo(
-                            Handle, CL.CONTEXT_PROPERTIES, param_value_size_ret, data_ptr, null));
+                        ClHelper.GetError(Cl.GetContextInfo(
+                            Handle, Cl.CONTEXT_PROPERTIES, param_value_size_ret, data_ptr, null));
 
                         while (*data_ptr != IntPtr.Zero)
                         {
@@ -255,13 +255,13 @@ namespace Ibasa.OpenCL
     
         public override int GetHashCode()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (obj is Context)
             {
                 return Equals((Context)obj);
@@ -271,7 +271,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Context other)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -287,7 +287,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

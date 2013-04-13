@@ -30,44 +30,44 @@ namespace Ibasa.OpenCL
                 unsafe
                 {
                     int error;
-                    Handle = CL.CreateUserEvent(context.Handle, &error);
-                    CLHelper.GetError(error);
+                    Handle = Cl.CreateUserEvent(context.Handle, &error);
+                    ClHelper.GetError(error);
                 }
             }
             catch (EntryPointNotFoundException)
             {
-                throw CLHelper.VersionException(1, 1);
+                throw ClHelper.VersionException(1, 1);
             }
         }
 
         public void Retain()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.RetainEvent(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.RetainEvent(Handle));
         }
 
         public void Release()
         {
-            CLHelper.ThrowNullException(Handle);
-            int error = CL.ReleaseEvent(Handle);
+            ClHelper.ThrowNullException(Handle);
+            int error = Cl.ReleaseEvent(Handle);
             Handle = IntPtr.Zero;
-            CLHelper.GetError(error);
+            ClHelper.GetError(error);
         }
 
         public void SetUserEventStatus(int status)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (status > 0)
                 throw new ArgumentException("status must be zero or negative.");
 
             try
             {
-                CLHelper.GetError(CL.SetUserEventStatus(Handle, status));
+                ClHelper.GetError(Cl.SetUserEventStatus(Handle, status));
             }
             catch (EntryPointNotFoundException)
             {
-                throw CLHelper.VersionException(1, 1);
+                throw ClHelper.VersionException(1, 1);
             }
         }
 
@@ -85,7 +85,7 @@ namespace Ibasa.OpenCL
             Action<Event, CommandExecutionStatus, object> notify,
             object user_data)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (notify == null)
                 throw new ArgumentNullException("notify");
@@ -101,7 +101,7 @@ namespace Ibasa.OpenCL
 
                 try
                 {
-                    CLHelper.GetError(CL.SetEventCallback(
+                    ClHelper.GetError(Cl.SetEventCallback(
                         Handle, (int)CommandExecutionStatus.Complete, function_ptr, GCHandle.ToIntPtr(data_handle).ToPointer()));
                 }
                 catch (Exception)
@@ -116,13 +116,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetEventInfo(
-                        Handle, CL.EVENT_COMMAND_QUEUE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetEventInfo(
+                        Handle, Cl.EVENT_COMMAND_QUEUE, param_value_size, &value, null));
                     return new CommandQueue(value);
                 }
             }
@@ -132,21 +132,21 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 try
                 {
                     unsafe
                     {
                         IntPtr value;
                         UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                        CLHelper.GetError(CL.GetEventInfo(
-                            Handle, CL.EVENT_CONTEXT, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetEventInfo(
+                            Handle, Cl.EVENT_CONTEXT, param_value_size, &value, null));
                         return new Context(value);
                     }
                 }
                 catch (OpenCLException)
                 {
-                    throw CLHelper.VersionException(1, 1);
+                    throw ClHelper.VersionException(1, 1);
                 }
             }
         }
@@ -155,13 +155,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetEventInfo(
-                        Handle, CL.EVENT_COMMAND_TYPE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetEventInfo(
+                        Handle, Cl.EVENT_COMMAND_TYPE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -171,13 +171,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     int value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(int));
-                    CLHelper.GetError(CL.GetEventInfo(
-                        Handle, CL.EVENT_COMMAND_EXECUTION_STATUS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetEventInfo(
+                        Handle, Cl.EVENT_COMMAND_EXECUTION_STATUS, param_value_size, &value, null));
                     return (CommandExecutionStatus)value;
                 }
             }
@@ -187,13 +187,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetEventInfo(
-                        Handle, CL.EVENT_REFERENCE_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetEventInfo(
+                        Handle, Cl.EVENT_REFERENCE_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -203,13 +203,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong nanoseconds;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetEventProfilingInfo(
-                        Handle, CL.PROFILING_COMMAND_QUEUED, param_value_size, &nanoseconds, null));
+                    ClHelper.GetError(Cl.GetEventProfilingInfo(
+                        Handle, Cl.PROFILING_COMMAND_QUEUED, param_value_size, &nanoseconds, null));
                     return new TimeSpan((long)(nanoseconds / 100));
                 }
             }
@@ -219,13 +219,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong nanoseconds;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetEventProfilingInfo(
-                        Handle, CL.PROFILING_COMMAND_SUBMIT, param_value_size, &nanoseconds, null));
+                    ClHelper.GetError(Cl.GetEventProfilingInfo(
+                        Handle, Cl.PROFILING_COMMAND_SUBMIT, param_value_size, &nanoseconds, null));
                     return new TimeSpan((long)(nanoseconds / 100));
                 }
             }
@@ -235,13 +235,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong nanoseconds;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetEventProfilingInfo(
-                        Handle, CL.PROFILING_COMMAND_START, param_value_size, &nanoseconds, null));
+                    ClHelper.GetError(Cl.GetEventProfilingInfo(
+                        Handle, Cl.PROFILING_COMMAND_START, param_value_size, &nanoseconds, null));
                     return new TimeSpan((long)(nanoseconds / 100));
                 }
             }
@@ -251,13 +251,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong nanoseconds;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetEventProfilingInfo(
-                        Handle, CL.PROFILING_COMMAND_END, param_value_size, &nanoseconds, null));
+                    ClHelper.GetError(Cl.GetEventProfilingInfo(
+                        Handle, Cl.PROFILING_COMMAND_END, param_value_size, &nanoseconds, null));
                     return new TimeSpan((long)(nanoseconds / 100));
                 }
             }
@@ -271,8 +271,8 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 IntPtr list = @event.Handle;
-                int error = CL.WaitForEvents(1, &list);
-                CLHelper.GetError(error);
+                int error = Cl.WaitForEvents(1, &list);
+                ClHelper.GetError(error);
             }
         }
 
@@ -290,20 +290,20 @@ namespace Ibasa.OpenCL
                 {
                     list[i] = events[i].Handle;
                 }
-                int error = CL.WaitForEvents((uint)events.Length, list);
-                CLHelper.GetError(error);
+                int error = Cl.WaitForEvents((uint)events.Length, list);
+                ClHelper.GetError(error);
             }
         }
 
         public override int GetHashCode()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (obj is Event)
             {
                 return Equals((Event)obj);
@@ -313,7 +313,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Event other)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -329,7 +329,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

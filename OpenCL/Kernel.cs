@@ -29,9 +29,9 @@ namespace Ibasa.OpenCL
             {
                 int error;
                 IntPtr str = Marshal.StringToHGlobalAnsi(kernel_name);
-                Handle = CL.CreateKernel(program.Handle, (byte*)str.ToPointer(), &error);
+                Handle = Cl.CreateKernel(program.Handle, (byte*)str.ToPointer(), &error);
                 Marshal.FreeHGlobal(str);
-                CLHelper.GetError(error);
+                ClHelper.GetError(error);
             }
         }
 
@@ -43,10 +43,10 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 uint num_kernels = 0;
-                CLHelper.GetError(CL.CreateKernelsInProgram(program.Handle, 0, null, &num_kernels));
+                ClHelper.GetError(Cl.CreateKernelsInProgram(program.Handle, 0, null, &num_kernels));
 
                 IntPtr* kernel_ptrs = stackalloc IntPtr[(int)num_kernels];
-                CLHelper.GetError(CL.CreateKernelsInProgram(program.Handle, num_kernels, kernel_ptrs, null));
+                ClHelper.GetError(Cl.CreateKernelsInProgram(program.Handle, num_kernels, kernel_ptrs, null));
 
                 Kernel[] kernels = new Kernel[(int)num_kernels];
                 for (int i = 0; i < kernels.Length; ++i)
@@ -60,61 +60,61 @@ namespace Ibasa.OpenCL
 
         public void Retain()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.RetainKernel(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.RetainKernel(Handle));
         }
 
         public void Release()
         {
-            CLHelper.ThrowNullException(Handle);
-            int error = CL.ReleaseKernel(Handle);
+            ClHelper.ThrowNullException(Handle);
+            int error = Cl.ReleaseKernel(Handle);
             Handle = IntPtr.Zero;
-            CLHelper.GetError(error);
+            ClHelper.GetError(error);
         }
 
         public void SetArgument(int index, Buffer buffer)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (buffer == Buffer.Null)
                 throw new ArgumentNullException("buffer");
 
             unsafe
             {
                 IntPtr value = buffer.Handle;
-                CLHelper.GetError(CL.SetKernelArg(Handle,
+                ClHelper.GetError(Cl.SetKernelArg(Handle,
                     (uint)index, (UIntPtr)IntPtr.Size, &value));
             }
         }
 
         public void SetArgument(int index, int value)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             unsafe
             {
-                CLHelper.GetError(CL.SetKernelArg(Handle,
+                ClHelper.GetError(Cl.SetKernelArg(Handle,
                     (uint)index, (UIntPtr)sizeof(int), &value));
             }
         }
 
         public void SetArgument(int index, long value)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             unsafe
             {
-                CLHelper.GetError(CL.SetKernelArg(Handle,
+                ClHelper.GetError(Cl.SetKernelArg(Handle,
                     (uint)index, (UIntPtr)sizeof(long), &value));
             }
         }
 
         public void SetArgument(int index, IntPtr value)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             unsafe
             {
-                CLHelper.GetError(CL.SetKernelArg(Handle,
+                ClHelper.GetError(Cl.SetKernelArg(Handle,
                     (uint)index, (UIntPtr)IntPtr.Size, &value));
             }
         }
@@ -123,17 +123,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_FUNCTION_NAME, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_FUNCTION_NAME, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_FUNCTION_NAME, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_FUNCTION_NAME, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -144,13 +144,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_NUM_ARGS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_NUM_ARGS, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -160,13 +160,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_REFERENCE_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_REFERENCE_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -176,13 +176,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_CONTEXT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_CONTEXT, param_value_size, &value, null));
                     return new Context(value);
                 }
             }
@@ -192,13 +192,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_PROGRAM, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_PROGRAM, param_value_size, &value, null));
                     return new Program(value);
                 }
             }
@@ -208,17 +208,17 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr param_value_size_ret = UIntPtr.Zero;
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_ATTRIBUTES, UIntPtr.Zero, null, &param_value_size_ret));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_ATTRIBUTES, UIntPtr.Zero, null, &param_value_size_ret));
 
                     byte* data_ptr = stackalloc byte[(int)param_value_size_ret.ToUInt32()];
 
-                    CLHelper.GetError(CL.GetKernelInfo(
-                        Handle, CL.KERNEL_ATTRIBUTES, param_value_size_ret, data_ptr, null));
+                    ClHelper.GetError(Cl.GetKernelInfo(
+                        Handle, Cl.KERNEL_ATTRIBUTES, param_value_size_ret, data_ptr, null));
 
                     return Marshal.PtrToStringAnsi(new IntPtr(data_ptr), (int)param_value_size_ret.ToUInt32() - 1);
                 }
@@ -244,8 +244,8 @@ namespace Ibasa.OpenCL
                     {
                         UIntPtr value;
                         UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                        CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
-                            CL.KERNEL_WORK_GROUP_SIZE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetKernelWorkGroupInfo(Kernel, Device,
+                            Cl.KERNEL_WORK_GROUP_SIZE, param_value_size, &value, null));
                         return value.ToUInt64();
                     }
                 }
@@ -259,8 +259,8 @@ namespace Ibasa.OpenCL
                     {
                         UIntPtr* value = stackalloc UIntPtr[3];
                         UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size * 3);
-                        CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
-                            CL.KERNEL_COMPILE_WORK_GROUP_SIZE, param_value_size, value, null));
+                        ClHelper.GetError(Cl.GetKernelWorkGroupInfo(Kernel, Device,
+                            Cl.KERNEL_COMPILE_WORK_GROUP_SIZE, param_value_size, value, null));
 
                         ulong[] result = new ulong[3];
                         result[0] = value[0].ToUInt64();
@@ -279,8 +279,8 @@ namespace Ibasa.OpenCL
                     {
                         ulong value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                        CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
-                            CL.KERNEL_LOCAL_MEM_SIZE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetKernelWorkGroupInfo(Kernel, Device,
+                            Cl.KERNEL_LOCAL_MEM_SIZE, param_value_size, &value, null));
                         return value;
                     }
                 }
@@ -294,8 +294,8 @@ namespace Ibasa.OpenCL
                     {
                         UIntPtr value;
                         UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                        CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
-                            CL.KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetKernelWorkGroupInfo(Kernel, Device,
+                            Cl.KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE, param_value_size, &value, null));
                         return value.ToUInt64();
                     }
                 }
@@ -309,8 +309,8 @@ namespace Ibasa.OpenCL
                     {
                         ulong value;
                         UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                        CLHelper.GetError(CL.GetKernelWorkGroupInfo(Kernel, Device,
-                            CL.KERNEL_PRIVATE_MEM_SIZE, param_value_size, &value, null));
+                        ClHelper.GetError(Cl.GetKernelWorkGroupInfo(Kernel, Device,
+                            Cl.KERNEL_PRIVATE_MEM_SIZE, param_value_size, &value, null));
                         return value;
                     }
                 }
@@ -319,7 +319,7 @@ namespace Ibasa.OpenCL
 
         public WorkGroupInfo GetWorkGroupInfo(Device device)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (device == Device.Null)
                 throw new ArgumentNullException("device");
 
@@ -329,13 +329,13 @@ namespace Ibasa.OpenCL
 
         public override int GetHashCode()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (obj is Kernel)
             {
                 return Equals((Kernel)obj);
@@ -345,7 +345,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Kernel other)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -361,7 +361,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

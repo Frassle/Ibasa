@@ -27,37 +27,37 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 int error;
-                Handle = CL.CreateSampler(context.Handle,
+                Handle = Cl.CreateSampler(context.Handle,
                     normalizedCoords ? 1u : 0u, (uint)addressingMode, (uint)filterMode, &error);
-                CLHelper.GetError(error);
+                ClHelper.GetError(error);
             }
         }
 
         public void Retain()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.RetainSampler(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.RetainSampler(Handle));
         }
 
         public void Release()
         {
-            CLHelper.ThrowNullException(Handle);
-            int error = CL.ReleaseSampler(Handle);
+            ClHelper.ThrowNullException(Handle);
+            int error = Cl.ReleaseSampler(Handle);
             Handle = IntPtr.Zero;
-            CLHelper.GetError(error);
+            ClHelper.GetError(error);
         }
 
         public AddressingMode AddressingMode
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetSamplerInfo(
-                        Handle, CL.SAMPLER_ADDRESSING_MODE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetSamplerInfo(
+                        Handle, Cl.SAMPLER_ADDRESSING_MODE, param_value_size, &value, null));
                     return (AddressingMode)value;
                 }
             }
@@ -67,13 +67,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetSamplerInfo(
-                        Handle, CL.SAMPLER_FILTER_MODE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetSamplerInfo(
+                        Handle, Cl.SAMPLER_FILTER_MODE, param_value_size, &value, null));
                     return (FilterMode)value;
                 }
             }
@@ -83,13 +83,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetSamplerInfo(
-                        Handle, CL.SAMPLER_CONTEXT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetSamplerInfo(
+                        Handle, Cl.SAMPLER_CONTEXT, param_value_size, &value, null));
                     return new Context(value);
                 }
             }
@@ -99,13 +99,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetSamplerInfo(
-                        Handle, CL.SAMPLER_NORMALIZED_COORDS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetSamplerInfo(
+                        Handle, Cl.SAMPLER_NORMALIZED_COORDS, param_value_size, &value, null));
                     return value != 0;
                 }
             }
@@ -115,13 +115,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetSamplerInfo(
-                        Handle, CL.SAMPLER_REFERENCE_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetSamplerInfo(
+                        Handle, Cl.SAMPLER_REFERENCE_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -129,13 +129,13 @@ namespace Ibasa.OpenCL
 
         public override int GetHashCode()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (obj is Sampler)
             {
                 return Equals((Sampler)obj);
@@ -145,7 +145,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Sampler other)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -161,7 +161,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }

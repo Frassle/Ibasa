@@ -45,8 +45,8 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 int error;
-                Handle = CL.CreateBuffer(context.Handle, (ulong)flags, new UIntPtr(size), null, &error);
-                CLHelper.GetError(error);
+                Handle = Cl.CreateBuffer(context.Handle, (ulong)flags, new UIntPtr(size), null, &error);
+                ClHelper.GetError(error);
             }
         }
 
@@ -84,8 +84,8 @@ namespace Ibasa.OpenCL
             unsafe
             {
                 int error;
-                Handle = CL.CreateBuffer(context.Handle, (ulong)flags, new UIntPtr(size), hostPtr.ToPointer(), &error);
-                CLHelper.GetError(error);
+                Handle = Cl.CreateBuffer(context.Handle, (ulong)flags, new UIntPtr(size), hostPtr.ToPointer(), &error);
+                ClHelper.GetError(error);
             }
         }
 
@@ -154,7 +154,7 @@ namespace Ibasa.OpenCL
 
         public void SetDestructorCallback(Action<Buffer, object> notify, object user_data)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
 
             if (notify == null)
                 throw new ArgumentNullException("notify");
@@ -169,13 +169,13 @@ namespace Ibasa.OpenCL
 
                 try
                 {
-                    CLHelper.GetError(CL.SetMemObjectDestructorCallback(
+                    ClHelper.GetError(Cl.SetMemObjectDestructorCallback(
                         Handle, function_ptr, GCHandle.ToIntPtr(data_handle).ToPointer()));
                 }
                 catch (EntryPointNotFoundException)
                 {
                     data_handle.Free();
-                    throw CLHelper.VersionException(1, 1);
+                    throw ClHelper.VersionException(1, 1);
                 }
                 catch (Exception)
                 {
@@ -187,29 +187,29 @@ namespace Ibasa.OpenCL
 
         public void RetainBuffer()
         {
-            CLHelper.ThrowNullException(Handle);
-            CLHelper.GetError(CL.RetainMemObject(Handle));
+            ClHelper.ThrowNullException(Handle);
+            ClHelper.GetError(Cl.RetainMemObject(Handle));
         }
 
         public void ReleaseBuffer()
         {
-            CLHelper.ThrowNullException(Handle);
-            int error = CL.ReleaseMemObject(Handle);
+            ClHelper.ThrowNullException(Handle);
+            int error = Cl.ReleaseMemObject(Handle);
             Handle = IntPtr.Zero;
-            CLHelper.GetError(error);
+            ClHelper.GetError(error);
         }
 
         public MemoryFlags MemoryFlags
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_FLAGS, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_FLAGS, param_value_size, &value, null));
                     return (MemoryFlags)value;
                 }
             }
@@ -219,13 +219,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_TYPE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_TYPE, param_value_size, &value, null));
                     return (MemoryObjectType)value;
                 }
             }
@@ -235,13 +235,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     ulong value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(ulong));
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_SIZE, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_SIZE, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -251,13 +251,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_HOST_PTR, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_HOST_PTR, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -267,13 +267,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_MAP_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_MAP_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -283,13 +283,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     uint value;
                     UIntPtr param_value_size = new UIntPtr(sizeof(uint));
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_REFERENCE_COUNT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_REFERENCE_COUNT, param_value_size, &value, null));
                     return value;
                 }
             }
@@ -299,13 +299,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_CONTEXT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_CONTEXT, param_value_size, &value, null));
                     return new Context(value);
                 }
             }
@@ -315,13 +315,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     IntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)IntPtr.Size);
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_ASSOCIATED_MEMOBJECT, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_ASSOCIATED_MEMOBJECT, param_value_size, &value, null));
                     return new Buffer(value);
                 }
             }
@@ -331,13 +331,13 @@ namespace Ibasa.OpenCL
         {
             get
             {
-                CLHelper.ThrowNullException(Handle);
+                ClHelper.ThrowNullException(Handle);
                 unsafe
                 {
                     UIntPtr value;
                     UIntPtr param_value_size = new UIntPtr((uint)UIntPtr.Size);
-                    CLHelper.GetError(CL.GetMemObjectInfo(
-                        Handle, CL.MEM_OFFSET, param_value_size, &value, null));
+                    ClHelper.GetError(Cl.GetMemObjectInfo(
+                        Handle, Cl.MEM_OFFSET, param_value_size, &value, null));
                     return value.ToUInt64();
                 }
             }
@@ -345,13 +345,13 @@ namespace Ibasa.OpenCL
 
         public override int GetHashCode()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             if (obj is Buffer)
             {
                 return Equals((Buffer)obj);
@@ -361,7 +361,7 @@ namespace Ibasa.OpenCL
 
         public bool Equals(Buffer other)
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -377,7 +377,7 @@ namespace Ibasa.OpenCL
 
         public override string ToString()
         {
-            CLHelper.ThrowNullException(Handle);
+            ClHelper.ThrowNullException(Handle);
             return Handle.ToString();
         }
     }
