@@ -328,6 +328,78 @@ namespace Ibasa.Numerics
 		{
 			return new UInt128(value.Part0, value.Part1, value.Part2, value.Part3);
 		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(sbyte value)
+		{
+			return new Int128((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(short value)
+		{
+			return new Int128((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(int value)
+		{
+			return new Int128(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(long value)
+		{
+			return new Int128(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(byte value)
+		{
+			return new Int128((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(ushort value)
+		{
+			return new Int128((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(uint value)
+		{
+			return new Int128(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an Int128.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt128.</param>
+		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		public static implicit operator Int128(ulong value)
+		{
+			return new Int128(value);
+		}
 		#endregion
 		#region Equatable
 		/// <summary>
@@ -880,6 +952,78 @@ namespace Ibasa.Numerics
 		public static explicit operator Int128(UInt128 value)
 		{
 			return new Int128(value.Part0, value.Part1, value.Part2, value.Part3);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(sbyte value)
+		{
+			return new UInt128((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(short value)
+		{
+			return new UInt128((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(int value)
+		{
+			return new UInt128(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(long value)
+		{
+			return new UInt128(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(byte value)
+		{
+			return new UInt128((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(ushort value)
+		{
+			return new UInt128((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(uint value)
+		{
+			return new UInt128(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an UInt128.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int128.</param>
+		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt128(ulong value)
+		{
+			return new UInt128(value);
 		}
 		#endregion
 		#region Equatable
@@ -1462,6 +1606,78 @@ namespace Ibasa.Numerics
 		{
 			return new UInt160(value.Part0, value.Part1, value.Part2, value.Part3, value.Part4);
 		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(sbyte value)
+		{
+			return new Int160((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(short value)
+		{
+			return new Int160((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(int value)
+		{
+			return new Int160(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(long value)
+		{
+			return new Int160(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(byte value)
+		{
+			return new Int160((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(ushort value)
+		{
+			return new Int160((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(uint value)
+		{
+			return new Int160(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an Int160.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt160.</param>
+		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		public static implicit operator Int160(ulong value)
+		{
+			return new Int160(value);
+		}
 		#endregion
 		#region Equatable
 		/// <summary>
@@ -2031,6 +2247,78 @@ namespace Ibasa.Numerics
 		public static explicit operator Int160(UInt160 value)
 		{
 			return new Int160(value.Part0, value.Part1, value.Part2, value.Part3, value.Part4);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(sbyte value)
+		{
+			return new UInt160((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(short value)
+		{
+			return new UInt160((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(int value)
+		{
+			return new UInt160(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(long value)
+		{
+			return new UInt160(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(byte value)
+		{
+			return new UInt160((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(ushort value)
+		{
+			return new UInt160((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(uint value)
+		{
+			return new UInt160(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an UInt160.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int160.</param>
+		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt160(ulong value)
+		{
+			return new UInt160(value);
 		}
 		#endregion
 		#region Equatable
@@ -2664,6 +2952,78 @@ namespace Ibasa.Numerics
 		{
 			return new UInt256(value.Part0, value.Part1, value.Part2, value.Part3, value.Part4, value.Part5, value.Part6, value.Part7);
 		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(sbyte value)
+		{
+			return new Int256((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(short value)
+		{
+			return new Int256((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(int value)
+		{
+			return new Int256(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(long value)
+		{
+			return new Int256(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(byte value)
+		{
+			return new Int256((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(ushort value)
+		{
+			return new Int256((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(uint value)
+		{
+			return new Int256(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an Int256.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt256.</param>
+		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		public static implicit operator Int256(ulong value)
+		{
+			return new Int256(value);
+		}
 		#endregion
 		#region Equatable
 		/// <summary>
@@ -3284,6 +3644,78 @@ namespace Ibasa.Numerics
 		public static explicit operator Int256(UInt256 value)
 		{
 			return new Int256(value.Part0, value.Part1, value.Part2, value.Part3, value.Part4, value.Part5, value.Part6, value.Part7);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(sbyte value)
+		{
+			return new UInt256((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(short value)
+		{
+			return new UInt256((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(int value)
+		{
+			return new UInt256(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(long value)
+		{
+			return new UInt256(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(byte value)
+		{
+			return new UInt256((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(ushort value)
+		{
+			return new UInt256((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(uint value)
+		{
+			return new UInt256(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an UInt256.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int256.</param>
+		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt256(ulong value)
+		{
+			return new UInt256(value);
 		}
 		#endregion
 		#region Equatable
@@ -4053,6 +4485,78 @@ namespace Ibasa.Numerics
 		{
 			return new UInt512(value.Part0, value.Part1, value.Part2, value.Part3, value.Part4, value.Part5, value.Part6, value.Part7, value.Part8, value.Part9, value.Part10, value.Part11, value.Part12, value.Part13, value.Part14, value.Part15);
 		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(sbyte value)
+		{
+			return new Int512((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(short value)
+		{
+			return new Int512((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(int value)
+		{
+			return new Int512(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(long value)
+		{
+			return new Int512(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(byte value)
+		{
+			return new Int512((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(ushort value)
+		{
+			return new Int512((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(uint value)
+		{
+			return new Int512(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an Int512.
+		/// </summary>
+		/// <param name="value">The value to convert to an UInt512.</param>
+		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		public static implicit operator Int512(ulong value)
+		{
+			return new Int512(value);
+		}
 		#endregion
 		#region Equatable
 		/// <summary>
@@ -4809,6 +5313,78 @@ namespace Ibasa.Numerics
 		public static explicit operator Int512(UInt512 value)
 		{
 			return new Int512(value.Part0, value.Part1, value.Part2, value.Part3, value.Part4, value.Part5, value.Part6, value.Part7, value.Part8, value.Part9, value.Part10, value.Part11, value.Part12, value.Part13, value.Part14, value.Part15);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed byte to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(sbyte value)
+		{
+			return new UInt512((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 16-bit integer to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(short value)
+		{
+			return new UInt512((int)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 32-bit integer to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(int value)
+		{
+			return new UInt512(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of a signed 64-bit integer to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(long value)
+		{
+			return new UInt512(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned byte to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(byte value)
+		{
+			return new UInt512((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 16-bit integer to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(ushort value)
+		{
+			return new UInt512((uint)value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 32-bit integer to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(uint value)
+		{
+			return new UInt512(value);
+		}
+		/// <summary>
+		/// Defines an implicit conversion of an unsigned 64-bit integer to an UInt512.
+		/// </summary>
+		/// <param name="value">The value to convert to an Int512.</param>
+		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		public static implicit operator UInt512(ulong value)
+		{
+			return new UInt512(value);
 		}
 		#endregion
 		#region Equatable

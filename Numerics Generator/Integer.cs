@@ -535,25 +535,322 @@ namespace Numerics_Generator
                 string.Join(", ", Parts.Select(part => string.Format("value.{0}", part))));
             Dedent();
             WriteLine("}");
+            
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     a signed 8-bit value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a signed 8-bit value.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.SByte.MinValue.-or-value is greater than System.SByte.MaxValue.
+            //[CLSCompliant(false)]
+            //public static explicit operator sbyte(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     a System.Decimal value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a System.Decimal.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.Decimal.MinValue.-or-value is greater than System.Decimal.MaxValue.
+            //public static explicit operator decimal(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     a System.Double value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a System.Double.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            //public static explicit operator double(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     a single-precision floating-point value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a single-precision floating-point value.
+            ////
+            //// Returns:
+            ////     An object that contains the closest possible representation of the value
+            ////     parameter.
+            //public static explicit operator float(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     an unsigned 64-bit integer value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to an unsigned 64-bit integer.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.UInt64.MinValue.-or-value is greater than System.UInt64.MaxValue.
+            //[CLSCompliant(false)]
+            //public static explicit operator ulong(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     a 64-bit signed integer value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a 64-bit signed integer.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.Int64.MinValue.-or-value is greater than System.Int64.MaxValue.
+            //public static explicit operator long(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     an unsigned 32-bit integer value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to an unsigned 32-bit integer.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.UInt32.MinValue.-or-value is greater than System.UInt32.MaxValue.
+            //[CLSCompliant(false)]
+            //public static explicit operator uint(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     a 32-bit signed integer value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a 32-bit signed integer.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.Int32.MinValue.-or-value is greater than System.Int32.MaxValue.
+            //public static explicit operator int(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     a 16-bit signed integer value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a 16-bit signed integer.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.Int16.MinValue.-or-value is greater than System.Int16.MaxValue.
+            //public static explicit operator short(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     an unsigned 16-bit integer value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to an unsigned 16-bit integer.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.UInt16.MinValue.-or-value is greater than System.UInt16.MaxValue.
+            //[CLSCompliant(false)]
+            //public static explicit operator ushort(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Numerics.BigInteger object to
+            ////     an unsigned byte value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a System.Byte.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is less than System.Byte.MinValue. -or-value is greater than System.Byte.MaxValue.
+            //public static explicit operator byte(BigInteger value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Decimal object to a System.Numerics.BigInteger
+            ////     value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a System.Numerics.BigInteger.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            //public static explicit operator BigInteger(decimal value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Double value to a System.Numerics.BigInteger
+            ////     value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a System.Numerics.BigInteger.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is System.Double.NaN.-or-value is System.Double.PositiveInfinity.-or-value
+            ////     is System.Double.NegativeInfinity.
+            //public static explicit operator BigInteger(double value);
+            ////
+            //// Summary:
+            ////     Defines an explicit conversion of a System.Single object to a System.Numerics.BigInteger
+            ////     value.
+            ////
+            //// Parameters:
+            ////   value:
+            ////     The value to convert to a System.Numerics.BigInteger.
+            ////
+            //// Returns:
+            ////     An object that contains the value of the value parameter.
+            ////
+            //// Exceptions:
+            ////   System.OverflowException:
+            ////     value is System.Single.NaN.-or-value is System.Single.PositiveInfinity.-or-value
+            ////     is System.Single.NegativeInfinity.
+            //public static explicit operator BigInteger(float value);
 
-            //foreach (var type in NumberType.Types)
-            //{
-            //    WriteLine("/// <summary>");
-            //    WriteLine("/// Defines an explicit conversion of a {1} value to a {2}.", imex, other, Name);
-            //    WriteLine("/// </summary>");
-            //    WriteLine("/// <param name=\"value\">The value to convert to a {0}.</param>", Name);
-            //    WriteLine("/// <returns>A {0} that has all components equal to value.</returns>", Name); 
-            //    if (Type.IsCLSCompliant && !type.IsCLSCompliant)
-            //    {
-            //        WriteLine("[CLSCompliant(false)]");
-            //    }
-            //    WriteLine("public static {0} operator {1}({2} value)", imex, Name, other);
-            //    WriteLine("{");
-            //    Indent();
-            //    WriteLine("return new {0}({1});", Name, casts);
-            //    Dedent();
-            //    WriteLine("}");
-            //}
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of a signed byte to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(sbyte value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}((int)value);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of a signed 16-bit integer to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(short value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}((int)value);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of a signed 32-bit integer to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(int value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}(value);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of a signed 64-bit integer to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(long value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}(value);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of an unsigned byte to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(byte value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}((uint)value);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of an unsigned 16-bit integer to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(ushort value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}((uint)value);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of an unsigned 32-bit integer to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(uint value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}(value);", Name);
+            Dedent();
+            WriteLine("}");
+
+            WriteLine("/// <summary>");
+            WriteLine("/// Defines an implicit conversion of an unsigned 64-bit integer to an {0}.", Name);
+            WriteLine("/// </summary>");
+            WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
+            WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("public static implicit operator {0}(ulong value)", Name);
+            WriteLine("{");
+            Indent();
+            WriteLine("return new {0}(value);", Name);
+            Dedent();
+            WriteLine("}");
 
             WriteLine("#endregion");
         }
