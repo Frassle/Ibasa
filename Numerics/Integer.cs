@@ -333,6 +333,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt128.</param>
 		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int128(sbyte value)
 		{
 			return new Int128((int)value);
@@ -378,6 +379,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt128.</param>
 		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int128(ushort value)
 		{
 			return new Int128((uint)value);
@@ -387,6 +389,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt128.</param>
 		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int128(uint value)
 		{
 			return new Int128(value);
@@ -396,6 +399,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt128.</param>
 		/// <returns>An UInt128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int128(ulong value)
 		{
 			return new Int128(value);
@@ -958,6 +962,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int128.</param>
 		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt128(sbyte value)
 		{
 			return new UInt128((int)value);
@@ -1003,6 +1008,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int128.</param>
 		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt128(ushort value)
 		{
 			return new UInt128((uint)value);
@@ -1012,6 +1018,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int128.</param>
 		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt128(uint value)
 		{
 			return new UInt128(value);
@@ -1021,6 +1028,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int128.</param>
 		/// <returns>An Int128 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt128(ulong value)
 		{
 			return new UInt128(value);
@@ -1611,6 +1619,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt160.</param>
 		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int160(sbyte value)
 		{
 			return new Int160((int)value);
@@ -1656,6 +1665,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt160.</param>
 		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int160(ushort value)
 		{
 			return new Int160((uint)value);
@@ -1665,6 +1675,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt160.</param>
 		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int160(uint value)
 		{
 			return new Int160(value);
@@ -1674,6 +1685,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt160.</param>
 		/// <returns>An UInt160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int160(ulong value)
 		{
 			return new Int160(value);
@@ -2253,6 +2265,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int160.</param>
 		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt160(sbyte value)
 		{
 			return new UInt160((int)value);
@@ -2298,6 +2311,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int160.</param>
 		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt160(ushort value)
 		{
 			return new UInt160((uint)value);
@@ -2307,6 +2321,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int160.</param>
 		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt160(uint value)
 		{
 			return new UInt160(value);
@@ -2316,6 +2331,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int160.</param>
 		/// <returns>An Int160 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt160(ulong value)
 		{
 			return new UInt160(value);
@@ -2957,6 +2973,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt256.</param>
 		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int256(sbyte value)
 		{
 			return new Int256((int)value);
@@ -3002,6 +3019,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt256.</param>
 		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int256(ushort value)
 		{
 			return new Int256((uint)value);
@@ -3011,6 +3029,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt256.</param>
 		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int256(uint value)
 		{
 			return new Int256(value);
@@ -3020,6 +3039,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt256.</param>
 		/// <returns>An UInt256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int256(ulong value)
 		{
 			return new Int256(value);
@@ -3650,6 +3670,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int256.</param>
 		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt256(sbyte value)
 		{
 			return new UInt256((int)value);
@@ -3695,6 +3716,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int256.</param>
 		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt256(ushort value)
 		{
 			return new UInt256((uint)value);
@@ -3704,6 +3726,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int256.</param>
 		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt256(uint value)
 		{
 			return new UInt256(value);
@@ -3713,6 +3736,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int256.</param>
 		/// <returns>An Int256 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt256(ulong value)
 		{
 			return new UInt256(value);
@@ -4490,6 +4514,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt512.</param>
 		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int512(sbyte value)
 		{
 			return new Int512((int)value);
@@ -4535,6 +4560,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt512.</param>
 		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int512(ushort value)
 		{
 			return new Int512((uint)value);
@@ -4544,6 +4570,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt512.</param>
 		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int512(uint value)
 		{
 			return new Int512(value);
@@ -4553,6 +4580,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an UInt512.</param>
 		/// <returns>An UInt512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator Int512(ulong value)
 		{
 			return new Int512(value);
@@ -5319,6 +5347,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int512.</param>
 		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt512(sbyte value)
 		{
 			return new UInt512((int)value);
@@ -5364,6 +5393,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int512.</param>
 		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt512(ushort value)
 		{
 			return new UInt512((uint)value);
@@ -5373,6 +5403,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int512.</param>
 		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt512(uint value)
 		{
 			return new UInt512(value);
@@ -5382,6 +5413,7 @@ namespace Ibasa.Numerics
 		/// </summary>
 		/// <param name="value">The value to convert to an Int512.</param>
 		/// <returns>An Int512 that contains the value of the value parameter.</returns>
+		[System.CLSCompliant(false)]
 		public static implicit operator UInt512(ulong value)
 		{
 			return new UInt512(value);

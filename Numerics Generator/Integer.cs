@@ -755,12 +755,13 @@ namespace Numerics_Generator
             ////     value is System.Single.NaN.-or-value is System.Single.PositiveInfinity.-or-value
             ////     is System.Single.NegativeInfinity.
             //public static explicit operator BigInteger(float value);
-
+            
             WriteLine("/// <summary>");
             WriteLine("/// Defines an implicit conversion of a signed byte to an {0}.", Name);
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
             WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("[System.CLSCompliant(false)]");
             WriteLine("public static implicit operator {0}(sbyte value)", Name);
             WriteLine("{");
             Indent();
@@ -821,6 +822,7 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
             WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("[System.CLSCompliant(false)]");
             WriteLine("public static implicit operator {0}(ushort value)", Name);
             WriteLine("{");
             Indent();
@@ -833,6 +835,7 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
             WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("[System.CLSCompliant(false)]");
             WriteLine("public static implicit operator {0}(uint value)", Name);
             WriteLine("{");
             Indent();
@@ -845,6 +848,7 @@ namespace Numerics_Generator
             WriteLine("/// </summary>");
             WriteLine("/// <param name=\"value\">The value to convert to an {0}.</param>", other);
             WriteLine("/// <returns>An {0} that contains the value of the value parameter.</returns>", other);
+            WriteLine("[System.CLSCompliant(false)]");
             WriteLine("public static implicit operator {0}(ulong value)", Name);
             WriteLine("{");
             Indent();
