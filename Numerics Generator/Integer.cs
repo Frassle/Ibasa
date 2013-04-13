@@ -70,6 +70,7 @@ namespace Numerics_Generator
             Conversions();
             Equatable();
             Comparable();
+            Parse();
             String();
             Dedent();
             WriteLine("}");
@@ -88,6 +89,48 @@ namespace Numerics_Generator
             WriteLine("/// Returns a new <see cref=\"{0}\"/> equal to one.", Name);
             WriteLine("/// </summary>");
             WriteLine("public static readonly {0} One = new {0}(1);", Name);
+
+            if(Signed)
+            {
+                var parts = new string[Parts.Length];
+
+                parts[parts.Length - 1] = "(uint)int.MaxValue";
+                for (int i = 0; i < parts.Length - 1; ++i)
+                {
+                    parts[i] = "uint.MaxValue";
+                }
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Represents the largest possible value of an {0}.", Name);
+                WriteLine("/// </summary>");
+                WriteLine("public static readonly {0} MaxValue = new {0}({1});", Name,
+                    string.Join(", ", parts));
+
+                parts[parts.Length - 1] = "unchecked((uint)int.MinValue)";
+                for (int i = 0; i < parts.Length - 1; ++i)
+                {
+                    parts[i] = "0";
+                }
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Represents the smallest possible value of an {0}.", Name);
+                WriteLine("/// </summary>");
+                WriteLine("public static readonly {0} MinValue = new {0}({1});", Name,
+                    string.Join(", ", parts));
+            }
+            else
+            {
+                WriteLine("/// <summary>");
+                WriteLine("/// Represents the largest possible value of an {0}.", Name);
+                WriteLine("/// </summary>");
+                WriteLine("public static readonly {0} MaxValue = new {0}({1});", Name,
+                    string.Join(", ", Parts.Select(part => "uint.MaxValue")));
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Represents the smallest possible value of an {0}.", Name);
+                WriteLine("/// </summary>");
+                WriteLine("public static readonly {0} MinValue = new {0}(0);", Name);
+            }
             
             WriteLine("#endregion");
         }
@@ -117,7 +160,7 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified bytes.", Name);
             WriteLine("/// </summary>");
-            WriteLine("/// <param name=\"value\">The value that will be assigned.</param>");
+            WriteLine("/// <param name=\"bytes\">The bytes that will be used.</param>");
             WriteLine("public {0}(byte[] bytes)", Name);
             WriteLine("{");
             Indent();
@@ -131,6 +174,10 @@ namespace Numerics_Generator
             WriteLine("/// <summary>");
             WriteLine("/// Initializes a new instance of the <see cref=\"{0}\"/> using the specified 32 bit parts.", Name);
             WriteLine("/// </summary>");
+            for (int i = 0; i < Parts.Length; ++i)
+            {
+                WriteLine("/// <param name=\"{0}\">Contains bytes {1} to {2}.</param>", Parts[i].ToLower(), i * 4, (i * 4) + 3);
+            }
             WriteLine("[System.CLSCompliant(false)]");
             WriteLine("public {0}({1})", Name, 
                 string.Join(", ", Parts.Select(part => string.Format("uint {0}", part.ToLower()))));
@@ -640,6 +687,35 @@ namespace Numerics_Generator
             WriteLine("#endregion");
         }
 
+        void Parse()
+        {
+            WriteLine("#region Parse"); 
+            
+            WriteLine("public static bool TryParse(string value, out {0} result)", Name);
+            Indent("{");
+            WriteLine("return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);");
+            Dedent("}");
+
+            WriteLine("public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out {0} result)", Name);
+            Indent("{");
+            WriteLine("System.Numerics.BigInteger bigint;");
+            WriteLine("bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);");
+            WriteLine("byte[] bytes = bigint.ToByteArray();");
+            WriteLine("if (bytes.Length <= {0} || (bytes.Length == {1} && bytes[{0}] == 0))", Bytes, Bytes + 1);
+            Indent("{");
+            WriteLine("result = new {0}(bytes);", Name);
+            WriteLine("return true;");
+            Dedent("}");
+            WriteLine("else");
+            Indent("{");
+            WriteLine("result = Zero;");
+            WriteLine("return false;");
+            Dedent("}");
+            Dedent("}");            
+
+            WriteLine("#endregion");
+        }
+
 
         void String()
         {
@@ -685,8 +761,7 @@ namespace Numerics_Generator
             Indent();
             WriteLine("return ToString(format, System.Globalization.CultureInfo.CurrentCulture);");
             Dedent();
-            WriteLine("}");
-            
+            WriteLine("}");            
 
             WriteLine("/// <summary>");
             WriteLine("/// Converts the value of the current integer to its equivalent string");

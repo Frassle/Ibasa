@@ -17,6 +17,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="Int128"/> equal to one.
 		/// </summary>
 		public static readonly Int128 One = new Int128(1);
+		/// <summary>
+		/// Represents the largest possible value of an Int128.
+		/// </summary>
+		public static readonly Int128 MaxValue = new Int128(uint.MaxValue, uint.MaxValue, uint.MaxValue, (uint)int.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an Int128.
+		/// </summary>
+		public static readonly Int128 MinValue = new Int128(0, 0, 0, unchecked((uint)int.MinValue));
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -30,7 +38,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int128"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public Int128(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -41,6 +49,10 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int128"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
 		[System.CLSCompliant(false)]
 		public Int128(uint part0, uint part1, uint part2, uint part3)
 		{
@@ -401,6 +413,28 @@ namespace Ibasa.Numerics
 			return left.CompareTo(right) >= 0;
 		}
 		#endregion
+		#region Parse
+		public static bool TryParse(string value, out Int128 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out Int128 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 16 || (bytes.Length == 17 && bytes[16] == 0))
+			{
+				result = new Int128(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -546,6 +580,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="UInt128"/> equal to one.
 		/// </summary>
 		public static readonly UInt128 One = new UInt128(1);
+		/// <summary>
+		/// Represents the largest possible value of an UInt128.
+		/// </summary>
+		public static readonly UInt128 MaxValue = new UInt128(uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an UInt128.
+		/// </summary>
+		public static readonly UInt128 MinValue = new UInt128(0);
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -559,7 +601,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt128"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public UInt128(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -570,6 +612,10 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt128"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
 		[System.CLSCompliant(false)]
 		public UInt128(uint part0, uint part1, uint part2, uint part3)
 		{
@@ -920,6 +966,28 @@ namespace Ibasa.Numerics
 			return left.CompareTo(right) >= 0;
 		}
 		#endregion
+		#region Parse
+		public static bool TryParse(string value, out UInt128 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out UInt128 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 16 || (bytes.Length == 17 && bytes[16] == 0))
+			{
+				result = new UInt128(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -1066,6 +1134,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="Int160"/> equal to one.
 		/// </summary>
 		public static readonly Int160 One = new Int160(1);
+		/// <summary>
+		/// Represents the largest possible value of an Int160.
+		/// </summary>
+		public static readonly Int160 MaxValue = new Int160(uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, (uint)int.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an Int160.
+		/// </summary>
+		public static readonly Int160 MinValue = new Int160(0, 0, 0, 0, unchecked((uint)int.MinValue));
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -1080,7 +1156,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int160"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public Int160(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -1092,6 +1168,11 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int160"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
+		/// <param name="part4">Contains bytes 16 to 19.</param>
 		[System.CLSCompliant(false)]
 		public Int160(uint part0, uint part1, uint part2, uint part3, uint part4)
 		{
@@ -1466,6 +1547,28 @@ namespace Ibasa.Numerics
 			return left.CompareTo(right) >= 0;
 		}
 		#endregion
+		#region Parse
+		public static bool TryParse(string value, out Int160 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out Int160 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 20 || (bytes.Length == 21 && bytes[20] == 0))
+			{
+				result = new Int160(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -1611,6 +1714,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="UInt160"/> equal to one.
 		/// </summary>
 		public static readonly UInt160 One = new UInt160(1);
+		/// <summary>
+		/// Represents the largest possible value of an UInt160.
+		/// </summary>
+		public static readonly UInt160 MaxValue = new UInt160(uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an UInt160.
+		/// </summary>
+		public static readonly UInt160 MinValue = new UInt160(0);
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -1625,7 +1736,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt160"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public UInt160(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -1637,6 +1748,11 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt160"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
+		/// <param name="part4">Contains bytes 16 to 19.</param>
 		[System.CLSCompliant(false)]
 		public UInt160(uint part0, uint part1, uint part2, uint part3, uint part4)
 		{
@@ -2001,6 +2117,28 @@ namespace Ibasa.Numerics
 			return left.CompareTo(right) >= 0;
 		}
 		#endregion
+		#region Parse
+		public static bool TryParse(string value, out UInt160 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out UInt160 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 20 || (bytes.Length == 21 && bytes[20] == 0))
+			{
+				result = new UInt160(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -2147,6 +2285,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="Int256"/> equal to one.
 		/// </summary>
 		public static readonly Int256 One = new Int256(1);
+		/// <summary>
+		/// Represents the largest possible value of an Int256.
+		/// </summary>
+		public static readonly Int256 MaxValue = new Int256(uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, (uint)int.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an Int256.
+		/// </summary>
+		public static readonly Int256 MinValue = new Int256(0, 0, 0, 0, 0, 0, 0, unchecked((uint)int.MinValue));
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -2164,7 +2310,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int256"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public Int256(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -2179,6 +2325,14 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int256"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
+		/// <param name="part4">Contains bytes 16 to 19.</param>
+		/// <param name="part5">Contains bytes 20 to 23.</param>
+		/// <param name="part6">Contains bytes 24 to 27.</param>
+		/// <param name="part7">Contains bytes 28 to 31.</param>
 		[System.CLSCompliant(false)]
 		public Int256(uint part0, uint part1, uint part2, uint part3, uint part4, uint part5, uint part6, uint part7)
 		{
@@ -2595,6 +2749,28 @@ namespace Ibasa.Numerics
 			return left.CompareTo(right) >= 0;
 		}
 		#endregion
+		#region Parse
+		public static bool TryParse(string value, out Int256 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out Int256 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 32 || (bytes.Length == 33 && bytes[32] == 0))
+			{
+				result = new Int256(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -2740,6 +2916,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="UInt256"/> equal to one.
 		/// </summary>
 		public static readonly UInt256 One = new UInt256(1);
+		/// <summary>
+		/// Represents the largest possible value of an UInt256.
+		/// </summary>
+		public static readonly UInt256 MaxValue = new UInt256(uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an UInt256.
+		/// </summary>
+		public static readonly UInt256 MinValue = new UInt256(0);
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -2757,7 +2941,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt256"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public UInt256(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -2772,6 +2956,14 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt256"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
+		/// <param name="part4">Contains bytes 16 to 19.</param>
+		/// <param name="part5">Contains bytes 20 to 23.</param>
+		/// <param name="part6">Contains bytes 24 to 27.</param>
+		/// <param name="part7">Contains bytes 28 to 31.</param>
 		[System.CLSCompliant(false)]
 		public UInt256(uint part0, uint part1, uint part2, uint part3, uint part4, uint part5, uint part6, uint part7)
 		{
@@ -3178,6 +3370,28 @@ namespace Ibasa.Numerics
 			return left.CompareTo(right) >= 0;
 		}
 		#endregion
+		#region Parse
+		public static bool TryParse(string value, out UInt256 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out UInt256 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 32 || (bytes.Length == 33 && bytes[32] == 0))
+			{
+				result = new UInt256(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -3324,6 +3538,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="Int512"/> equal to one.
 		/// </summary>
 		public static readonly Int512 One = new Int512(1);
+		/// <summary>
+		/// Represents the largest possible value of an Int512.
+		/// </summary>
+		public static readonly Int512 MaxValue = new Int512(uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, (uint)int.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an Int512.
+		/// </summary>
+		public static readonly Int512 MinValue = new Int512(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, unchecked((uint)int.MinValue));
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -3349,7 +3571,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int512"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public Int512(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -3372,6 +3594,22 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Int512"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
+		/// <param name="part4">Contains bytes 16 to 19.</param>
+		/// <param name="part5">Contains bytes 20 to 23.</param>
+		/// <param name="part6">Contains bytes 24 to 27.</param>
+		/// <param name="part7">Contains bytes 28 to 31.</param>
+		/// <param name="part8">Contains bytes 32 to 35.</param>
+		/// <param name="part9">Contains bytes 36 to 39.</param>
+		/// <param name="part10">Contains bytes 40 to 43.</param>
+		/// <param name="part11">Contains bytes 44 to 47.</param>
+		/// <param name="part12">Contains bytes 48 to 51.</param>
+		/// <param name="part13">Contains bytes 52 to 55.</param>
+		/// <param name="part14">Contains bytes 56 to 59.</param>
+		/// <param name="part15">Contains bytes 60 to 63.</param>
 		[System.CLSCompliant(false)]
 		public Int512(uint part0, uint part1, uint part2, uint part3, uint part4, uint part5, uint part6, uint part7, uint part8, uint part9, uint part10, uint part11, uint part12, uint part13, uint part14, uint part15)
 		{
@@ -3900,6 +4138,28 @@ namespace Ibasa.Numerics
 			return left.CompareTo(right) >= 0;
 		}
 		#endregion
+		#region Parse
+		public static bool TryParse(string value, out Int512 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out Int512 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 64 || (bytes.Length == 65 && bytes[64] == 0))
+			{
+				result = new Int512(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
+		}
+		#endregion
 		#region ToString
 		/// <summary>
 		/// Converts the value of the current integer to its equivalent string
@@ -4045,6 +4305,14 @@ namespace Ibasa.Numerics
 		/// Returns a new <see cref="UInt512"/> equal to one.
 		/// </summary>
 		public static readonly UInt512 One = new UInt512(1);
+		/// <summary>
+		/// Represents the largest possible value of an UInt512.
+		/// </summary>
+		public static readonly UInt512 MaxValue = new UInt512(uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue, uint.MaxValue);
+		/// <summary>
+		/// Represents the smallest possible value of an UInt512.
+		/// </summary>
+		public static readonly UInt512 MinValue = new UInt512(0);
 		#endregion
 		#region Fields
 		private readonly uint Part0;
@@ -4070,7 +4338,7 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt512"/> using the specified bytes.
 		/// </summary>
-		/// <param name="value">The value that will be assigned.</param>
+		/// <param name="bytes">The bytes that will be used.</param>
 		public UInt512(byte[] bytes)
 		{
 			Part0 = (uint)((bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0]);
@@ -4093,6 +4361,22 @@ namespace Ibasa.Numerics
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UInt512"/> using the specified 32 bit parts.
 		/// </summary>
+		/// <param name="part0">Contains bytes 0 to 3.</param>
+		/// <param name="part1">Contains bytes 4 to 7.</param>
+		/// <param name="part2">Contains bytes 8 to 11.</param>
+		/// <param name="part3">Contains bytes 12 to 15.</param>
+		/// <param name="part4">Contains bytes 16 to 19.</param>
+		/// <param name="part5">Contains bytes 20 to 23.</param>
+		/// <param name="part6">Contains bytes 24 to 27.</param>
+		/// <param name="part7">Contains bytes 28 to 31.</param>
+		/// <param name="part8">Contains bytes 32 to 35.</param>
+		/// <param name="part9">Contains bytes 36 to 39.</param>
+		/// <param name="part10">Contains bytes 40 to 43.</param>
+		/// <param name="part11">Contains bytes 44 to 47.</param>
+		/// <param name="part12">Contains bytes 48 to 51.</param>
+		/// <param name="part13">Contains bytes 52 to 55.</param>
+		/// <param name="part14">Contains bytes 56 to 59.</param>
+		/// <param name="part15">Contains bytes 60 to 63.</param>
 		[System.CLSCompliant(false)]
 		public UInt512(uint part0, uint part1, uint part2, uint part3, uint part4, uint part5, uint part6, uint part7, uint part8, uint part9, uint part10, uint part11, uint part12, uint part13, uint part14, uint part15)
 		{
@@ -4609,6 +4893,28 @@ namespace Ibasa.Numerics
 		public static bool operator >=(UInt512 left, UInt512 right)
 		{
 			return left.CompareTo(right) >= 0;
+		}
+		#endregion
+		#region Parse
+		public static bool TryParse(string value, out UInt512 result)
+		{
+			return TryParse(value, System.Globalization.NumberStyles.Any, null, out result);
+		}
+		public static bool TryParse(string value, System.Globalization.NumberStyles style, System.IFormatProvider provider, out UInt512 result)
+		{
+			System.Numerics.BigInteger bigint;
+			bool parse = System.Numerics.BigInteger.TryParse(value, style, provider, out bigint);
+			byte[] bytes = bigint.ToByteArray();
+			if (bytes.Length <= 64 || (bytes.Length == 65 && bytes[64] == 0))
+			{
+				result = new UInt512(bytes);
+				return true;
+			}
+			else
+			{
+				result = Zero;
+				return false;
+			}
 		}
 		#endregion
 		#region ToString
