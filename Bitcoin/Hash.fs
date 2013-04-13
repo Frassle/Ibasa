@@ -1,6 +1,6 @@
 ﻿module Hash
 
-let hash (buffer : byte[]) = 
+let hash256 (buffer : byte[]) = 
     use sha256 = System.Security.Cryptography.SHA256.Create()
     Ibasa.Numerics.UInt256(sha256.ComputeHash(buffer))
     
