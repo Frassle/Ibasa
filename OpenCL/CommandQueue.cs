@@ -170,6 +170,16 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public Event EnqueueReadBuffer(Buffer buffer, bool blocking, long offset, long count, IntPtr destination, Event[] events)
+        {
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException("offset", offset, "offset is less than zero.");
+            if (count < 0)
+                throw new ArgumentOutOfRangeException("count", count, "count is less than zero.");
+
+            return EnqueueReadBuffer(buffer, blocking, (ulong)offset, (ulong)count, destination, events);
+        }
+
         public Event EnqueueWriteBuffer(Buffer buffer, bool blocking, ulong offset, ulong count, IntPtr destination, Event[] events)
         {
             ClHelper.ThrowNullException(Handle);
@@ -198,6 +208,16 @@ namespace Ibasa.OpenCL
 
                 return new Event(event_ptr);
             }
+        }
+
+        public Event EnqueueWriteBuffer(Buffer buffer, bool blocking, long offset, long count, IntPtr destination, Event[] events)
+        {
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException("offset", offset, "offset is less than zero.");
+            if (count < 0)
+                throw new ArgumentOutOfRangeException("count", count, "count is less than zero.");
+
+            return EnqueueWriteBuffer(buffer, blocking, (ulong)offset, (ulong)count, destination, events);
         }
 
         public Event EnqueueCopyBuffer(
@@ -233,6 +253,22 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public Event EnqueueCopyBuffer(
+            Buffer source, long sourceOffset,
+            Buffer destination, long destinationOffset, long count, Event[] events)
+        {
+            if (sourceOffset < 0)
+                throw new ArgumentOutOfRangeException("sourceOffset", sourceOffset, "sourceOffset is less than zero.");
+            if (destinationOffset < 0)
+                throw new ArgumentOutOfRangeException("destinationOffset", destinationOffset, "destinationOffset is less than zero.");
+            if (count < 0)
+                throw new ArgumentOutOfRangeException("count", count, "count is less than zero.");
+
+            return EnqueueCopyBuffer(
+                source, (ulong)sourceOffset,
+                destination, (ulong)destinationOffset, (ulong)count, events);
+        }
+
         public Event EnqueueMapBuffer(
             Buffer buffer, bool blocking, MapFlags flags,
             ulong offset, ulong size, Event[] events, out IntPtr pointer)
@@ -266,6 +302,18 @@ namespace Ibasa.OpenCL
 
                 return new Event(event_ptr);
             }
+        }
+
+        public Event EnqueueMapBuffer(
+            Buffer buffer, bool blocking, MapFlags flags,
+            long offset, long size, Event[] events, out IntPtr pointer)
+        {
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException("offset", offset, "offset is less than zero.");
+            if (size < 0)
+                throw new ArgumentOutOfRangeException("size", size, "size is less than zero.");
+
+            return EnqueueMapBuffer(buffer, blocking, flags, (ulong)offset, (ulong)size, events, out pointer);
         }
 
         public Event EnqueueUnmapBuffer(

@@ -50,6 +50,13 @@ namespace Ibasa.OpenCL
             }
         }
 
+        public Buffer(Context context, MemoryFlags flags, long size)
+            : this(context, flags, (ulong)size)
+        {
+            if (size < 0)
+                throw new ArgumentOutOfRangeException("size", size, "size is less than 0.");
+        }
+
         public Buffer(Context context, MemoryFlags flags, ulong size, IntPtr hostPtr)
             : this()
         {
@@ -76,6 +83,10 @@ namespace Ibasa.OpenCL
             {
                 if (!flags.HasFlag(MemoryFlags.UseHostPtr) & !flags.HasFlag(MemoryFlags.CopyHostPtr))
                     throw new ArgumentException("MemoryFlags.UseHostPtr or MemoryFlags.CopyHostPtr is required.");
+                if (flags.HasFlag(MemoryFlags.UseHostPtr) & flags.HasFlag(MemoryFlags.CopyHostPtr))
+                    throw new ArgumentException("MemoryFlags.UseHostPtr and MemoryFlags.CopyHostPtr are mutually exclusive.");
+                if (flags.HasFlag(MemoryFlags.UseHostPtr) & flags.HasFlag(MemoryFlags.AllocHostPtr))
+                    throw new ArgumentException("MemoryFlags.UseHostPtr and MemoryFlags.AllocHostPtr are mutually exclusive.");
             }
 
             if (size == 0)
@@ -87,6 +98,13 @@ namespace Ibasa.OpenCL
                 Handle = Cl.CreateBuffer(context.Handle, (ulong)flags, new UIntPtr(size), hostPtr.ToPointer(), &error);
                 ClHelper.GetError(error);
             }
+        }
+
+        public Buffer(Context context, MemoryFlags flags, long size,  IntPtr hostPtr)
+            : this(context, flags, (ulong)size, hostPtr)
+        {
+            if (size < 0)
+                throw new ArgumentOutOfRangeException("size", size, "size is less than 0.");
         }
 
         public static Buffer Create<T>(Context context, MemoryFlags flags, T[] data) where T : struct
