@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -53,6 +55,10 @@
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">
       <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
       <Name>Ibasa</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interop\Interop.csproj">
+      <Project>{ffce024e-bd5b-494e-b881-b1cee1512078}</Project>
+      <Name>Interop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Numerics\Numerics.csproj">
       <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>

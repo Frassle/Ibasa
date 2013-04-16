@@ -41,8 +41,34 @@ __kernel void vector_add_gpu (__global const float* src_a,
             Console.WriteLine(info.Log);
         }
 
+        struct Pair { public int A; public int B; }
+        
         static void Main(string[] args)
         {
+            unsafe
+            {
+                long longs = 1337;
+                int* ints = stackalloc int[2];
+
+                Ibasa.Interop.Memory.Copy(&longs, ints, 8);
+
+                Pair pair = new Pair();
+                Ibasa.Interop.Memory.Read(ints, out pair);
+
+                Console.WriteLine("{0}:{1}", ints[0], pair.A);
+                Console.WriteLine("{0}:{1}", ints[1], pair.B);
+
+                pair.A = 8008;
+                pair.B = 1337;
+
+                Ibasa.Interop.Memory.Write(ints, ref pair);
+
+                Console.WriteLine("{0}:{1}", ints[0], pair.A);
+                Console.WriteLine("{0}:{1}", ints[1], pair.B);
+
+                Console.WriteLine("Sizeof(Pair) = {0}", Ibasa.Interop.Memory.SizeOf<Pair>());
+            }
+
             var platform = Platform.GetPlatforms()[0];
             var device = platform.GetDevices(DeviceType.All)[0];
 
@@ -78,11 +104,9 @@ __kernel void vector_add_gpu (__global const float* src_a,
             Console.WriteLine(kernel.FunctionName);
             Console.WriteLine(kernel.ArgumentCount);
 
-            uint mem_size = 50 * sizeof(float);
-
-            float[] srca = new float[50];
-            float[] srcb = new float[50];
-            float[] dest = new float[50];
+            Ibasa.Interop.UnmanagedArray<float> srca = new Ibasa.Interop.UnmanagedArray<float>(50);
+            Ibasa.Interop.UnmanagedArray<float> srcb = new Ibasa.Interop.UnmanagedArray<float>(50);
+            Ibasa.Interop.UnmanagedArray<float> dest = new Ibasa.Interop.UnmanagedArray<float>(50);
 
             for (int i = 0; i < 50; ++i)
             {
@@ -90,12 +114,12 @@ __kernel void vector_add_gpu (__global const float* src_a,
                 srcb[i] = 50;
             }
 
-            var buffera = Ibasa.OpenCL.Buffer.Create(
-                context, MemoryFlags.ReadOnly, srca);
-            var bufferb = Ibasa.OpenCL.Buffer.Create(
-                context, MemoryFlags.ReadOnly, srcb);
+            var buffera = new Ibasa.OpenCL.Buffer(
+                context, MemoryFlags.ReadOnly | MemoryFlags.CopyHostPtr, srca.Size, srca.Pointer);
+            var bufferb = new Ibasa.OpenCL.Buffer(
+                context, MemoryFlags.ReadOnly | MemoryFlags.CopyHostPtr, srcb.Size, srcb.Pointer);
             var bufferd = new Ibasa.OpenCL.Buffer(
-                context, MemoryFlags.WriteOnly, mem_size);
+                context, MemoryFlags.WriteOnly, dest.Size);
 
             kernel.SetArgument(0, buffera);
             kernel.SetArgument(1, bufferb);
@@ -107,14 +131,9 @@ __kernel void vector_add_gpu (__global const float* src_a,
             var eventk = queue.EnqueueKernel(kernel, null, new ulong[] { 50 }, null, null);
 
             eventk.SetCallback((eve, status, obj) => Console.WriteLine(status), null);
-
-            var dest_handle = GCHandle.Alloc(dest, GCHandleType.Pinned);
-            var dest_ptr = dest_handle.AddrOfPinnedObject();
-
-            queue.EnqueueReadBuffer(bufferd, true, 0, mem_size, dest_ptr, new Event[] { eventk });
-
-            dest_handle.Free();
-
+            
+            queue.EnqueueReadBuffer(bufferd, true, 0, dest.Size, dest.Pointer, new Event[] { eventk });
+            
             for (int i = 0; i < 50; ++i)
             {
                 Console.WriteLine(dest[i]);
