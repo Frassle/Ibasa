@@ -88,6 +88,16 @@ namespace Ibasa.Interop
             throw new NotImplementedException();
         }
 
+        public static unsafe int Compare(IntPtr ptr1, IntPtr ptr2, int count)
+        {
+            return Compare(ptr1.ToPointer(), ptr2.ToPointer(), count);
+        }
+
+        public static unsafe IntPtr Search(IntPtr ptr, int count, byte value)
+        {
+            return new IntPtr(Search(ptr.ToPointer(), count, value));
+        }
+
         public static unsafe void Copy(IntPtr src, IntPtr dst, int count)
         {
             Copy(src.ToPointer(), dst.ToPointer(), count);
