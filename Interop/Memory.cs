@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,57 @@ namespace Ibasa.Interop
     /// </summary>
     public static class Memory
     {
+        public static unsafe int Compare(void* ptr1, void* ptr2, int count)
+        {
+            ulong* lptr1 = (ulong*)ptr1;
+            ulong* lptr2 = (ulong*)ptr2;
+
+            int long_count = count >> 3;
+            while (long_count > 0)
+            {
+                if (lptr1 < lptr2)
+                    return -1;
+                if (lptr1 > lptr2)
+                    return 1;
+
+                lptr1++;
+                lptr2++;
+                --long_count;
+            }
+            
+            byte* bptr1 = (byte*)lptr1;
+            byte* bptr2 = (byte*)lptr2;
+
+            int byte_count = count & 7;
+            while (byte_count > 0)
+            {
+                if (bptr1 < bptr2)
+                    return -1;
+                if (bptr1 > bptr2)
+                    return 1;
+
+                bptr1++;
+                bptr2++;
+                --byte_count;
+            }
+
+            return 0;
+        }
+
+        public static unsafe void* Search(void* ptr, int count, byte value)
+        {
+            byte* bptr = (byte*)ptr;
+
+            while (count > 0)
+            {
+                if (*bptr == value)
+                    return bptr;
+                --count;
+            }
+
+            return null;
+        }
+
         public static unsafe void Copy(void* src, void* dst, int count)
         {
             throw new NotImplementedException();
