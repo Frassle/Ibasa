@@ -1642,7 +1642,7 @@ namespace Ibasa.OpenCL
         public override string ToString()
         {
             ClHelper.ThrowNullException(Handle);
-            return Handle.ToString();
+            return string.Format("Device: {0}", Handle.ToString());
         }
     }
 }

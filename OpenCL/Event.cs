@@ -330,7 +330,7 @@ namespace Ibasa.OpenCL
         public override string ToString()
         {
             ClHelper.ThrowNullException(Handle);
-            return Handle.ToString();
+            return string.Format("Event: {0}", Handle.ToString());
         }
     }
 }

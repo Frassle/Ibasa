@@ -162,7 +162,7 @@ namespace Ibasa.OpenCL
         public override string ToString()
         {
             ClHelper.ThrowNullException(Handle);
-            return Handle.ToString();
+            return string.Format("Sampler: {0}", Handle.ToString());
         }
     }
 }

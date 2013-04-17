@@ -628,7 +628,7 @@ namespace Ibasa.OpenCL
         public override string ToString()
         {
             ClHelper.ThrowNullException(Handle);
-            return Handle.ToString();
+            return string.Format("Program: {0}", Handle.ToString());
         }
     }
 }
