@@ -951,16 +951,17 @@ namespace Ibasa.OpenCL
         //                         const event *    /* event_wait_list */,
         //                         event *          /* event */) API_SUFFIX__VERSION_1_1;
                             
-        //public static unsafe extern int
-        //clEnqueueFillBuffer(cl_command_queue   /* command_queue */,
-        //                    mem             /* buffer */, 
-        //                    const void *       /* pattern */, 
-        //                    UIntPtr             /* pattern_size */, 
-        //                    UIntPtr             /* offset */, 
-        //                    UIntPtr             /* size */, 
-        //                    uint            /* num_events_in_wait_list */, 
-        //                    const event *   /* event_wait_list */, 
-        //                    event *         /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueFillBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueFillBuffer(
+            IntPtr command_queue,
+            IntPtr buffer, 
+            void* pattern, 
+            UIntPtr pattern_size, 
+            UIntPtr offset, 
+            UIntPtr size, 
+            uint num_events_in_wait_list, 
+            IntPtr* event_wait_list, 
+            IntPtr* @event);
                            
         [DllImport("opencl.dll", EntryPoint = "clEnqueueCopyBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         public static unsafe extern int EnqueueCopyBuffer(            
@@ -989,52 +990,56 @@ namespace Ibasa.OpenCL
         //                        const event *    /* event_wait_list */,
         //                        event *          /* event */) API_SUFFIX__VERSION_1_1;
                             
-        //public static unsafe extern int
-        //clEnqueueReadImage(cl_command_queue     /* command_queue */,
-        //                   mem               /* image */,
-        //                   bool              /* blocking_read */, 
-        //                   const UIntPtr *       /* origin[3] */,
-        //                   const UIntPtr *       /* region[3] */,
-        //                   UIntPtr               /* row_pitch */,
-        //                   UIntPtr               /* slice_pitch */, 
-        //                   void *               /* ptr */,
-        //                   uint              /* num_events_in_wait_list */,
-        //                   const event *     /* event_wait_list */,
-        //                   event *           /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueReadImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueReadImage(
+            IntPtr command_queue,
+            IntPtr image,
+            uint blocking_read, 
+            UIntPtr* origin,
+            UIntPtr* region,
+            UIntPtr row_pitch,
+            UIntPtr slice_pitch, 
+            void* ptr,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
-        //public static unsafe extern int
-        //clEnqueueWriteImage(cl_command_queue    /* command_queue */,
-        //                    mem              /* image */,
-        //                    bool             /* blocking_write */, 
-        //                    const UIntPtr *      /* origin[3] */,
-        //                    const UIntPtr *      /* region[3] */,
-        //                    UIntPtr              /* input_row_pitch */,
-        //                    UIntPtr              /* input_slice_pitch */, 
-        //                    const void *        /* ptr */,
-        //                    uint             /* num_events_in_wait_list */,
-        //                    const event *    /* event_wait_list */,
-        //                    event *          /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueWriteImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueWriteImage(
+            IntPtr command_queue,
+            IntPtr image,
+            uint blocking_write, 
+            UIntPtr* origin,
+            UIntPtr* region,
+            UIntPtr input_row_pitch,
+            UIntPtr input_slice_pitch, 
+            void* ptr,
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
-        //public static unsafe extern int
-        //clEnqueueFillImage(cl_command_queue   /* command_queue */,
-        //                   mem             /* image */, 
-        //                   const void *       /* fill_color */, 
-        //                   const UIntPtr *     /* origin[3] */, 
-        //                   const UIntPtr *     /* region[3] */, 
-        //                   uint            /* num_events_in_wait_list */, 
-        //                   const event *   /* event_wait_list */, 
-        //                   event *         /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueFillImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueFillImage(
+            IntPtr command_queue,
+            IntPtr image, 
+            void* fill_color, 
+            UIntPtr* origin, 
+            UIntPtr* region, 
+            uint num_events_in_wait_list, 
+            IntPtr* event_wait_list, 
+            IntPtr* @event);
                             
-        //public static unsafe extern int
-        //clEnqueueCopyImage(cl_command_queue     /* command_queue */,
-        //                   mem               /* src_image */,
-        //                   mem               /* dst_image */, 
-        //                   const UIntPtr *       /* src_origin[3] */,
-        //                   const UIntPtr *       /* dst_origin[3] */,
-        //                   const UIntPtr *       /* region[3] */, 
-        //                   uint              /* num_events_in_wait_list */,
-        //                   const event *     /* event_wait_list */,
-        //                   event *           /* event */);
+        [DllImport("opencl.dll", EntryPoint = "clEnqueueCopyImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern int EnqueueCopyImage(
+            IntPtr command_queue,
+            IntPtr src_image,
+            IntPtr dst_image, 
+            UIntPtr* src_origin,
+            UIntPtr* dst_origin,
+            UIntPtr* region, 
+            uint num_events_in_wait_list,
+            IntPtr* event_wait_list,
+            IntPtr* @event);
 
         //public static unsafe extern int
         //clEnqueueCopyImageToBuffer(cl_command_queue /* command_queue */,

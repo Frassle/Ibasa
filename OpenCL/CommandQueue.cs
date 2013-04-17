@@ -220,6 +220,38 @@ namespace Ibasa.OpenCL
             return EnqueueWriteBuffer(buffer, blocking, (ulong)offset, (ulong)count, destination, events);
         }
 
+        public Event EnqueueFillBuffer(Buffer buffer,
+            IntPtr pattern, ulong patternSize,            
+            ulong offset, ulong size, Event[] events)
+        {
+            ClHelper.ThrowNullException(Handle);
+
+            if (buffer == Buffer.Null)
+                throw new ArgumentNullException("buffer");
+            if (pattern == IntPtr.Zero)
+                throw new ArgumentNullException("pattern");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                ClHelper.GetError(Cl.EnqueueFillBuffer(Handle, buffer.Handle, 
+                    pattern.ToPointer(), new UIntPtr(patternSize), new UIntPtr(offset), new UIntPtr(size),
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
         public Event EnqueueCopyBuffer(
             Buffer source, ulong sourceOffset,
             Buffer destination, ulong destinationOffset, ulong count, Event[] events)
@@ -257,6 +289,8 @@ namespace Ibasa.OpenCL
             Buffer source, long sourceOffset,
             Buffer destination, long destinationOffset, long count, Event[] events)
         {
+            ClHelper.ThrowNullException(Handle);
+
             if (sourceOffset < 0)
                 throw new ArgumentOutOfRangeException("sourceOffset", sourceOffset, "sourceOffset is less than zero.");
             if (destinationOffset < 0)
@@ -267,6 +301,189 @@ namespace Ibasa.OpenCL
             return EnqueueCopyBuffer(
                 source, (ulong)sourceOffset,
                 destination, (ulong)destinationOffset, (ulong)count, events);
+        }
+
+        public Event EnqueueReadImage(Image image, bool blocking,
+            ulong originX, ulong originY, ulong originZ,
+            ulong regionX, ulong regionY, ulong regionZ,
+            ulong rowPitch, ulong slicePitch,
+            IntPtr destination, Event[] events)
+        {
+            ClHelper.ThrowNullException(Handle);
+
+            if (image == Image.Null)
+                throw new ArgumentNullException("image");
+            if (destination == IntPtr.Zero)
+                throw new ArgumentNullException("destination");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+                
+                UIntPtr* origin = stackalloc UIntPtr[3];
+                origin[0] = new UIntPtr(originX);
+                origin[1] = new UIntPtr(originY);
+                origin[2] = new UIntPtr(originZ);
+
+                UIntPtr* region = stackalloc UIntPtr[3];
+                region[0] = new UIntPtr(regionX);
+                region[1] = new UIntPtr(regionY);
+                region[2] = new UIntPtr(regionZ);
+
+                ClHelper.GetError(Cl.EnqueueReadImage(Handle, image.Handle,
+                    blocking ? 1u : 0u, origin, region, new UIntPtr(rowPitch), new UIntPtr(slicePitch),
+                    destination.ToPointer(), (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
+        public Event EnqueueWriteImage(Image image, bool blocking,
+            ulong originX, ulong originY, ulong originZ,
+            ulong regionX, ulong regionY, ulong regionZ,
+            ulong rowPitch, ulong slicePitch,
+            IntPtr source, Event[] events)
+        {
+            ClHelper.ThrowNullException(Handle);
+
+            if (image == Image.Null)
+                throw new ArgumentNullException("image");
+            if (source == IntPtr.Zero)
+                throw new ArgumentNullException("source");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                UIntPtr* origin = stackalloc UIntPtr[3];
+                origin[0] = new UIntPtr(originX);
+                origin[1] = new UIntPtr(originY);
+                origin[2] = new UIntPtr(originZ);
+
+                UIntPtr* region = stackalloc UIntPtr[3];
+                region[0] = new UIntPtr(regionX);
+                region[1] = new UIntPtr(regionY);
+                region[2] = new UIntPtr(regionZ);
+
+                ClHelper.GetError(Cl.EnqueueReadImage(Handle, image.Handle,
+                    blocking ? 1u : 0u, origin, region, new UIntPtr(rowPitch), new UIntPtr(slicePitch),
+                    source.ToPointer(), (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }
+
+        public Event EnqueueFillBuffer(Image image,
+            IntPtr fillColor,
+            ulong originX, ulong originY, ulong originZ,
+            ulong regionX, ulong regionY, ulong regionZ,
+            ulong offset, ulong size, Event[] events)
+        {
+            ClHelper.ThrowNullException(Handle);
+
+            if (image == Image.Null)
+                throw new ArgumentNullException("image");
+            if (fillColor == IntPtr.Zero)
+                throw new ArgumentNullException("fillColor");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                UIntPtr* origin = stackalloc UIntPtr[3];
+                origin[0] = new UIntPtr(originX);
+                origin[1] = new UIntPtr(originY);
+                origin[2] = new UIntPtr(originZ);
+
+                UIntPtr* region = stackalloc UIntPtr[3];
+                region[0] = new UIntPtr(regionX);
+                region[1] = new UIntPtr(regionY);
+                region[2] = new UIntPtr(regionZ);
+
+                ClHelper.GetError(Cl.EnqueueFillImage(Handle, image.Handle,
+                    fillColor.ToPointer(), origin, region,
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
+        }        
+
+        public Event EnqueueCopyImage(
+            Image source, ulong sourceOriginX, ulong sourceOriginY, ulong sourceOriginZ,
+            Image destination, ulong destinationOriginX, ulong destinationOriginY, ulong destinationOriginZ,
+            ulong regionX, ulong regionY, ulong regionZ,
+            ulong rowPitch, ulong slicePitch,
+            Event[] events)
+        {
+            ClHelper.ThrowNullException(Handle);
+
+            if (source == Image.Null)
+                throw new ArgumentNullException("source");
+            if (destination == Image.Null)
+                throw new ArgumentNullException("destination");
+
+            unsafe
+            {
+                int num_events_in_wait_list = events == null ? 0 : events.Length;
+                IntPtr* wait_list = stackalloc IntPtr[num_events_in_wait_list];
+                for (int i = 0; i < num_events_in_wait_list; ++i)
+                {
+                    wait_list[i] = events[i].Handle;
+                }
+                if (events == null)
+                    wait_list = null;
+
+                IntPtr event_ptr = IntPtr.Zero;
+
+                UIntPtr* sourceOrigin = stackalloc UIntPtr[3];
+                sourceOrigin[0] = new UIntPtr(sourceOriginX);
+                sourceOrigin[1] = new UIntPtr(sourceOriginY);
+                sourceOrigin[2] = new UIntPtr(sourceOriginZ);
+
+                UIntPtr* destinationOrigin = stackalloc UIntPtr[3];
+                destinationOrigin[0] = new UIntPtr(destinationOriginX);
+                destinationOrigin[1] = new UIntPtr(destinationOriginY);
+                destinationOrigin[2] = new UIntPtr(destinationOriginZ);
+
+                UIntPtr* region = stackalloc UIntPtr[3];
+                region[0] = new UIntPtr(regionX);
+                region[1] = new UIntPtr(regionY);
+                region[2] = new UIntPtr(regionZ);
+
+                ClHelper.GetError(Cl.EnqueueCopyImage(Handle,
+                    source.Handle, destination.Handle,
+                    sourceOrigin, destinationOrigin, region,
+                    (uint)num_events_in_wait_list, wait_list, &event_ptr));
+
+                return new Event(event_ptr);
+            }
         }
 
         public Event EnqueueMapBuffer(
