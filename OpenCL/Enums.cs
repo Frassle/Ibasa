@@ -17,6 +17,46 @@ namespace Ibasa.OpenCL
         All = Cl.DEVICE_TYPE_ALL,
     }
 
+    public enum ChannelOrder
+    {
+        R = Cl.R,
+        A = Cl.A,
+        RG = Cl.RG,
+        RA = Cl.RA,
+        RGB = Cl.RGB,
+        RGBA = Cl.RGBA,
+        BGRA = Cl.BGRA,
+        ARGB = Cl.ARGB,
+        Intensity = Cl.INTENSITY,
+        Luminance = Cl.LUMINANCE,
+        Rx = Cl.Rx,
+        RGx = Cl.RGx,
+        RGBx = Cl.RGBx,
+        Depth = Cl.DEPTH,
+        DepthStencil = Cl.DEPTH_STENCIL,
+    }
+    
+
+    public enum ChannelType
+    {
+        SNormInt8 = Cl.SNORM_INT8,
+        SNormInt16 = Cl.SNORM_INT16,
+        UNormInt8 = Cl.UNORM_INT8,
+        UNormInt16 = Cl.UNORM_INT16,
+        UNormShort565 = Cl.UNORM_SHORT_565,
+        UNormShort555 = Cl.UNORM_SHORT_555,
+        UNormInt101010 = Cl.UNORM_INT_101010,
+        SignedInt8 = Cl.SIGNED_INT8,
+        SignedInt16 = Cl.SIGNED_INT16,
+        SignedInt32 = Cl.SIGNED_INT32,
+        UnsignedInt8 = Cl.UNSIGNED_INT8,
+        UnsignedInt16 = Cl.UNSIGNED_INT16,
+        UnsignedInt32 = Cl.UNSIGNED_INT32,
+        HalfFloat = Cl.HALF_FLOAT,
+        Float = Cl.FLOAT,
+        UNormInt24 = Cl.UNORM_INT24,
+    }
+
     public enum AffinityDomain
     {
         /// <summary>
@@ -94,11 +134,24 @@ namespace Ibasa.OpenCL
         HostNoAccess = Cl.MEM_HOST_NO_ACCESS,
     }
 
+    public enum ImageType
+    {
+        Image1D = Cl.MEM_OBJECT_IMAGE1D,
+        Image1DArray = Cl.MEM_OBJECT_IMAGE1D_ARRAY,
+        Image1DBuffer = Cl.MEM_OBJECT_IMAGE1D_BUFFER,
+        Image2D = Cl.MEM_OBJECT_IMAGE2D,
+        Image2DArray = Cl.MEM_OBJECT_IMAGE2D_ARRAY,
+        Image3D = Cl.MEM_OBJECT_IMAGE3D,
+    }
+
     public enum MemoryObjectType
     {
         Buffer = Cl.MEM_OBJECT_BUFFER,
         Image1D = Cl.MEM_OBJECT_IMAGE1D,
+        Image1DArray = Cl.MEM_OBJECT_IMAGE1D_ARRAY,
+        Image1DBuffer = Cl.MEM_OBJECT_IMAGE1D_BUFFER,
         Image2D = Cl.MEM_OBJECT_IMAGE2D,
+        Image2DArray = Cl.MEM_OBJECT_IMAGE2D_ARRAY,
         Image3D = Cl.MEM_OBJECT_IMAGE3D,
     }
 

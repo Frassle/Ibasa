@@ -252,6 +252,32 @@ namespace Ibasa.OpenCL
                 }
             }
         }
+
+        public Tuple<ChannelOrder, ChannelType>[] GetSupportedImageFormats(MemoryFlags flags, ImageType type)
+        {
+            unsafe
+            {
+                uint num_image_formats = 0;
+                ClHelper.GetError(Cl.GetSupportedImageFormats(
+                    Handle, (ulong)flags, (uint)type, 0, null, &num_image_formats));
+
+                Cl.image_format* image_formats = stackalloc Cl.image_format[(int)num_image_formats];
+
+                ClHelper.GetError(Cl.GetSupportedImageFormats(
+                    Handle, (ulong)flags, (uint)type, num_image_formats, image_formats, null));
+
+                Tuple<ChannelOrder, ChannelType>[] formats = new Tuple<ChannelOrder, ChannelType>[num_image_formats];
+
+                for (uint i = 0; i < num_image_formats; ++i)
+                {
+                    formats[i] = Tuple.Create(
+                        (ChannelOrder)image_formats[i].image_channel_order,
+                        (ChannelType)image_formats[i].image_channel_data_type);
+                }
+
+                return formats;
+            }
+        }
     
         public override int GetHashCode()
         {

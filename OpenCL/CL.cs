@@ -1167,27 +1167,29 @@ namespace Ibasa.OpenCL
             byte* func_name);
 
         //// Deprecated OpenCL 1.1 APIs
-        //extern API_ENTRY EXT_PREFIX__VERSION_1_1_DEPRECATED mem API_CALL
-        //clCreateImage2D(cl_context              /* context */,
-        //                mem_flags            /* flags */,
-        //                const image_format * /* image_format */,
-        //                UIntPtr                  /* image_width */,
-        //                UIntPtr                  /* image_height */,
-        //                UIntPtr                  /* image_row_pitch */, 
-        //                void *                  /* host_ptr */,
-        //                int *                /* errcode_ret */) EXT_SUFFIX__VERSION_1_1_DEPRECATED;
+        [DllImport("opencl.dll", EntryPoint = "clCreateImage2D", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern IntPtr CreateImage2D(
+            IntPtr context,
+            ulong flags,
+            image_format* image_format,
+            UIntPtr image_width,
+            UIntPtr image_height,
+            UIntPtr image_row_pitch, 
+            void* host_ptr,
+            int* errcode_ret);
     
-        //extern API_ENTRY EXT_PREFIX__VERSION_1_1_DEPRECATED mem API_CALL
-        //clCreateImage3D(cl_context              /* context */,
-        //                mem_flags            /* flags */,
-        //                const image_format * /* image_format */,
-        //                UIntPtr                  /* image_width */, 
-        //                UIntPtr                  /* image_height */,
-        //                UIntPtr                  /* image_depth */, 
-        //                UIntPtr                  /* image_row_pitch */, 
-        //                UIntPtr                  /* image_slice_pitch */, 
-        //                void *                  /* host_ptr */,
-        //                int *                /* errcode_ret */) EXT_SUFFIX__VERSION_1_1_DEPRECATED;
+        [DllImport("opencl.dll", EntryPoint = "clCreateImage3D", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
+        public static unsafe extern IntPtr CreateImage3D(
+            IntPtr context,
+            ulong flags,
+            image_format* image_format,
+            UIntPtr image_width, 
+            UIntPtr image_height,
+            UIntPtr image_depth, 
+            UIntPtr image_row_pitch, 
+            UIntPtr image_slice_pitch, 
+            void* host_ptr,
+            int* errcode_ret);
     
         [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clEnqueueMarker", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
