@@ -16,25 +16,22 @@ namespace Ibasa.Interop
         {
             ulong* lptr1 = (ulong*)ptr1;
             ulong* lptr2 = (ulong*)ptr2;
+            ulong* lptrend = (ulong*)ptr1 + (count >> 3);
 
-            int long_count = count >> 3;
-            while (long_count > 0)
+            while (lptr1 != lptrend)
             {
-                if (lptr1 < lptr2)
-                    return -1;
-                if (lptr1 > lptr2)
-                    return 1;
+                if (lptr1 != lptr2)
+                    break;
 
                 lptr1++;
                 lptr2++;
-                --long_count;
             }
             
             byte* bptr1 = (byte*)lptr1;
             byte* bptr2 = (byte*)lptr2;
+            byte* bptrend = (byte*)ptr1 + count;
 
-            int byte_count = count & 7;
-            while (byte_count > 0)
+            while (bptr1 != bptrend)
             {
                 if (bptr1 < bptr2)
                     return -1;
@@ -43,7 +40,6 @@ namespace Ibasa.Interop
 
                 bptr1++;
                 bptr2++;
-                --byte_count;
             }
 
             return 0;
