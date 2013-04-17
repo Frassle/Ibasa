@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ibasa.Interop
 {
-    public sealed class UnmanagedArray<T> : IDisposable, IEnumerable<T>
+    public class UnmanagedArray<T> : IDisposable, IEnumerable<T>
         where T : struct
     {
         private static readonly int SizeOfT = Memory.SizeOf<T>();
@@ -64,7 +64,7 @@ namespace Ibasa.Interop
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (Pointer == IntPtr.Zero)
                 return;
