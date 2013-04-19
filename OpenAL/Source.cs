@@ -2,56 +2,80 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ibasa.Numerics.Geometry;
 using System.Diagnostics.Contracts;
+using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.OpenAL
 {
-    public enum SourceType
-    {
-        Static = AlSourceType.Static,
-        Streaming = AlSourceType.Streaming,
-        Undetermined = AlSourceType.Undetermined,
-    }
 
-    public enum SourceState
+    public struct Source : IEquatable<Source>
     {
-        Initial = AlSourceState.Initial,
-        Paused = AlSourceState.Paused,
-        Playing = AlSourceState.Playing,
-        Stopped = AlSourceState.Stopped,
-    }
-
-    public struct Source
-    {
-        internal uint Id { get; private set; }
-
         public static readonly Source Null = new Source(0);
 
-        internal Source(uint sid)
+        public uint Id { get; private set; }
+
+        public Source(uint id)
             : this()
         {
-            Id = sid;
-            Contract.Assert(Id == 0 || Al.IsSource(Id));
+            if (Al.IsSource(id) == 0)
+                throw new ArgumentException("id is not an OpenAL source identifier.", "id");
+
+            Id = id;
         }
 
         public static Source Gen()
         {
-            return new Source(Al.GenSource());
+            unsafe
+            {
+                uint id;
+                Al.GenSources(1, &id);
+                AlHelper.GetAlError(Al.GetError());
+                return new Source(id);
+            }
+        }
+
+        public static void Gen(Source[] sources, int index, int count)
+        {
+            if (sources == null)
+                throw new ArgumentNullException("sources");
+            if (index < 0)
+                throw new ArgumentOutOfRangeException("index", index, "index is less than 0.");
+            if (index + count > sources.Length)
+                throw new ArgumentOutOfRangeException("count", count, "index + count is greater than buffers.Length.");
+
+            unsafe
+            {
+                uint* ids = stackalloc uint[count];
+                Al.GenSources(count, ids);
+                AlHelper.GetAlError(Al.GetError());
+                for (int i = 0; i < count; ++i)
+                {
+                    sources[index + i] = new Source(ids[i]);
+                }
+            }
         }
 
         public void Delete()
         {
-            Al.DeleteSource(Id);
+            AlHelper.ThrowNullException(Id);
+            unsafe
+            {
+                uint id = Id;
+                Al.DeleteSources(1, &id);
+            }
         }
 
         public SourceType Type
         {
             get
             {
-                int type;
-                Al.GetSource(Id, AlGetSourcei.SourceType, out type);
-                return (SourceType)type;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int value;
+                    Al.GetSourcei(Id, Al.SOURCE_TYPE, &value);
+                    return (SourceType)value;
+                }
             }
         }
 
@@ -59,9 +83,13 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                int state;
-                Al.GetSource(Id, AlGetSourcei.SourceState, out state);
-                return (SourceState)state;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int value;
+                    Al.GetSourcei(Id, Al.SOURCE_STATE, &value);
+                    return (SourceState)value;
+                }
             }
         }
 
@@ -69,13 +97,18 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                int value;
-                Al.GetSource(Id, AlGetSourcei.ByteOffset, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int value;
+                    Al.GetSourcei(Id, Al.BYTE_OFFSET, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcei.ByteOffset, value);
+                AlHelper.ThrowNullException(Id);
+                Al.Sourcei(Id, Al.BYTE_OFFSET, value);
             }
         }
 
@@ -83,13 +116,18 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                int value;
-                Al.GetSource(Id, AlGetSourcei.SampleOffset, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int value;
+                    Al.GetSourcei(Id, Al.SAMPLE_OFFSET, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcei.SampleOffset, value);
+                AlHelper.ThrowNullException(Id);
+                Al.Sourcei(Id, Al.SAMPLE_OFFSET, value);
             }
         }
 
@@ -97,9 +135,13 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                int value;
-                Al.GetSource(Id, AlGetSourcei.BuffersProcessed, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int value;
+                    Al.GetSourcei(Id, Al.BUFFERS_PROCESSED, &value);
+                    return value;
+                }
             }
         }
 
@@ -107,9 +149,13 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                int value;
-                Al.GetSource(Id, AlGetSourcei.BuffersQueued, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int value;
+                    Al.GetSourcei(Id, Al.BUFFERS_QUEUED, &value);
+                    return value;
+                }
             }
         }
 
@@ -117,13 +163,18 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                int id;
-                Al.GetSource(Id, AlGetSourcei.Buffer, out id);
-                return new Buffer((uint)id);
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int id;
+                    Al.GetSourcei(Id, Al.BUFFER, &id);
+                    return new Buffer((uint)id);
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcei.Buffer, (int)value.Id);
+                AlHelper.ThrowNullException(Id);
+                Al.Sourcei(Id, Al.BUFFER, (int)value.Id);
             }
         }
 
@@ -131,13 +182,18 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                bool value;
-                Al.GetSource(Id, AlSourceb.Looping, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int id;
+                    Al.GetSourcei(Id, Al.LOOPING, &id);
+                    return id != 0;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourceb.Looping, value);
+                AlHelper.ThrowNullException(Id);
+                Al.Sourcei(Id, Al.LOOPING, value ? 1 : 0);
             }
         }
 
@@ -145,13 +201,18 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                bool value;
-                Al.GetSource(Id, AlSourceb.SourceRelative, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    int id;
+                    Al.GetSourcei(Id, Al.SOURCE_RELATIVE, &id);
+                    return id != 0;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourceb.SourceRelative, value);
+                AlHelper.ThrowNullException(Id);
+                Al.Sourcei(Id, Al.SOURCE_RELATIVE, value ? 1 : 0);
             }
         }
 
@@ -159,13 +220,16 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float x, y, z;
-                Al.GetSource(Id, AlSource3f.Direction, out x, out y, out z);
-                return new Vector3f(x, y, z);
+                unsafe
+                {
+                    float x, y, z;
+                    Al.GetSource3f(Id, Al.DIRECTION, &x, &y, &z);
+                    return new Vector3f(x, y, z);
+                }
             }
             set
             {
-                Al.Source(Id, AlSource3f.Direction, value.X, value.Y, value.Z);
+                Al.Source3f(Id, Al.DIRECTION, value.X, value.Y, value.Z);
             }
         }
 
@@ -173,13 +237,16 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float x, y, z;
-                Al.GetSource(Id, AlSource3f.Position, out x, out y, out z);
-                return new Point3f(x, y, z);
+                unsafe
+                {
+                    float x, y, z;
+                    Al.GetSource3f(Id, Al.POSITION, &x, &y, &z);
+                    return new Point3f(x, y, z);
+                }
             }
             set
             {
-                Al.Source(Id, AlSource3f.Position, value.X, value.Y, value.Z);
+                Al.Source3f(Id, Al.POSITION, value.X, value.Y, value.Z);
             }
         }
 
@@ -187,13 +254,16 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float x, y, z;
-                Al.GetSource(Id, AlSource3f.Velocity, out x, out y, out z);
-                return new Vector3f(x, y, z);
+                unsafe
+                {
+                    float x, y, z;
+                    Al.GetSource3f(Id, Al.VELOCITY, &x, &y, &z);
+                    return new Vector3f(x, y, z);
+                }
             }
             set
             {
-                Al.Source(Id, AlSource3f.Velocity, value.X, value.Y, value.Z);
+                Al.Source3f(Id, Al.VELOCITY, value.X, value.Y, value.Z);
             }
         }
 
@@ -201,13 +271,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.ConeInnerAngle, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.CONE_INNER_ANGLE, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.ConeInnerAngle, value);
+                Al.Sourcef(Id, Al.CONE_INNER_ANGLE, value);
             }
         }
 
@@ -215,13 +289,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.ConeOuterAngle, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.CONE_OUTER_ANGLE, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.ConeOuterAngle, value);
+                Al.Sourcef(Id, Al.CONE_OUTER_ANGLE, value);
             }
         }
 
@@ -229,55 +307,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.ConeOuterGain, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.CONE_OUTER_GAIN, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.ConeOuterGain, value);
-            }
-        }
-
-        public float EfxAirAbsorptionFactor
-        {
-            get
-            {
-                float value;
-                Al.GetSource(Id, AlSourcef.EfxAirAbsorptionFactor, out value);
-                return value;
-            }
-            set
-            {
-                Al.Source(Id, AlSourcef.EfxAirAbsorptionFactor, value);
-            }
-        }
-
-        public float EfxConeOuterGainHighFrequency
-        {
-            get
-            {
-                float value;
-                Al.GetSource(Id, AlSourcef.EfxConeOuterGainHighFrequency, out value);
-                return value;
-            }
-            set
-            {
-                Al.Source(Id, AlSourcef.EfxConeOuterGainHighFrequency, value);
-            }
-        }
-
-        public float EfxRoomRolloffFactor
-        {
-            get
-            {
-                float value;
-                Al.GetSource(Id, AlSourcef.EfxRoomRolloffFactor, out value);
-                return value;
-            }
-            set
-            {
-                Al.Source(Id, AlSourcef.EfxRoomRolloffFactor, value);
+                Al.Sourcef(Id, Al.CONE_OUTER_GAIN, value);
             }
         }
 
@@ -285,13 +325,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.Gain, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.GAIN, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.Gain, value);
+                Al.Sourcef(Id, Al.GAIN, value);
             }
         }
 
@@ -299,13 +343,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.MaxDistance, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.MAX_DISTANCE, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.MaxDistance, value);
+                Al.Sourcef(Id, Al.MAX_DISTANCE, value);
             }
         }
 
@@ -313,13 +361,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.MaxGain, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.MAX_GAIN, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.MaxGain, value);
+                Al.Sourcef(Id, Al.MAX_GAIN, value);
             }
         }
 
@@ -327,13 +379,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.MinGain, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.MIN_GAIN, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.MinGain, value);
+                Al.Sourcef(Id, Al.MIN_GAIN, value);
             }
         }
 
@@ -341,13 +397,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.Pitch, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.PITCH, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.Pitch, value);
+                Al.Sourcef(Id, Al.PITCH, value);
             }
         }
 
@@ -355,13 +415,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.ReferenceDistance, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.REFERENCE_DISTANCE, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.ReferenceDistance, value);
+                Al.Sourcef(Id, Al.REFERENCE_DISTANCE, value);
             }
         }
 
@@ -369,13 +433,17 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.RolloffFactor, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.ROLLOFF_FACTOR, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.RolloffFactor, value);
+                Al.Sourcef(Id, Al.ROLLOFF_FACTOR, value);
             }
         }
 
@@ -383,67 +451,142 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetSource(Id, AlSourcef.SecOffset, out value);
-                return value;
+                AlHelper.ThrowNullException(Id);
+                unsafe
+                {
+                    float value;
+                    Al.GetSourcef(Id, Al.SEC_OFFSET, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Source(Id, AlSourcef.SecOffset, value);
+                Al.Sourcef(Id, Al.SEC_OFFSET, value);
             }
         }
 
         public void Pause()
         {
+            AlHelper.ThrowNullException(Id);
             Al.SourcePause(Id);
         }
 
         public void Play()
         {
+            AlHelper.ThrowNullException(Id);
             Al.SourcePlay(Id);
         }
 
         public void Rewind()
         {
+            AlHelper.ThrowNullException(Id);
             Al.SourceRewind(Id);
         }
 
         public void Stop()
         {
+            AlHelper.ThrowNullException(Id);
             Al.SourceStop(Id);
         }
 
         public void Queue(Buffer buffer)
         {
-            Al.SourceQueueBuffer(Id, buffer.Id);
+            AlHelper.ThrowNullException(Id);
+            if (buffer == Buffer.Null)
+                throw new ArgumentNullException("buffer");
+
+            unsafe
+            {
+                uint bid = buffer.Id;
+                Al.SourceQueueBuffers(Id, 1, &bid);
+            }
         }
 
         public void Queue(Buffer[] buffers)
         {
-            uint[] bids = new uint[buffers.Length];
-            for (int i = 0; i < bids.Length; ++i)
+            AlHelper.ThrowNullException(Id);
+            if (buffers == null)
+                throw new ArgumentNullException("buffers");
+
+            unsafe
             {
-                bids[i] = buffers[i].Id;
+                uint* bids = stackalloc uint[buffers.Length];
+                for (int i = 0; i < buffers.Length; ++i)
+                {
+                    bids[i] = buffers[i].Id;
+                }
+                Al.SourceQueueBuffers(Id, buffers.Length, bids);
             }
-            Al.SourceQueueBuffers(Id, buffers.Length, bids);
         }
 
         public Buffer Unqueue()
         {
-            var bid = Al.SourceUnqueueBuffer(Id);
-            return new Buffer(bid);
+            AlHelper.ThrowNullException(Id);
+
+            unsafe
+            {
+                uint bid;
+                Al.SourceUnqueueBuffers(Id, 1, &bid);
+                return new OpenAL.Buffer(bid);
+            }
         }
 
         public Buffer[] Unqueue(int count)
         {
-            uint[] bids = new uint[count];
-            Al.SourceUnqueueBuffers(Id, count, bids);
-            var buffers = new Buffer[count];
-            for (int i = 0; i < count; ++i)
+            AlHelper.ThrowNullException(Id);
+            if (count <= 0)
+                throw new ArgumentException("count is less than or equal to 0.", "count");
+
+            unsafe
             {
-                buffers[i] = new Buffer(bids[i]);
+                uint* bids = stackalloc uint[count];
+                Al.SourceUnqueueBuffers(Id, count, bids);
+
+                Buffer[] buffers = new Buffer[count];
+                for (int i = 0; i < count; ++i)
+                {
+                    buffers[i] = new Buffer(bids[i]);
+                }
+                return buffers;
             }
-            return buffers;
+        }
+
+        public override int GetHashCode()
+        {
+            AlHelper.ThrowNullException(Id);
+            return Id.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            AlHelper.ThrowNullException(Id);
+            if (obj is Source)
+            {
+                return Equals((Source)obj);
+            }
+            return false;
+        }
+
+        public bool Equals(Source other)
+        {
+            AlHelper.ThrowNullException(Id);
+            return Id == other.Id;
+        }
+
+        public static bool operator ==(Source left, Source right)
+        {
+            return left.Id == right.Id;
+        }
+
+        public static bool operator !=(Source left, Source right)
+        {
+            return left.Id != right.Id;
+        }
+
+        public override string ToString()
+        {
+            AlHelper.ThrowNullException(Id);
+            return string.Format("Source: {0}", Id.ToString());
         }
     }
 }

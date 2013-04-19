@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Ibasa.Numerics.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.OpenAL
 {
@@ -12,13 +12,16 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float x, y, z;
-                Al.GetListener(AlListener3f.Position, out x, out y, out z);
-                return new Point3f(x, y, z);
+                unsafe
+                {
+                    float x, y, z;
+                    Al.GetListener3f(Al.POSITION, &x, &y, &z);
+                    return new Point3f(x, y, z);
+                }
             }
             set
             {
-                Al.Listener(AlListener3f.Position, value.X, value.Y, value.Z);
+                Al.Listener3f(Al.POSITION, value.X, value.Y, value.Z);
             }
         }
 
@@ -26,13 +29,16 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float x, y, z;
-                Al.GetListener(AlListener3f.Velocity, out x, out y, out z);
-                return new Vector3f(x, y, z);
+                unsafe
+                {
+                    float x, y, z;
+                    Al.GetListener3f(Al.VELOCITY, &x, &y, &z);
+                    return new Vector3f(x, y, z);
+                }
             }
             set
             {
-                Al.Listener(AlListener3f.Velocity, value.X, value.Y, value.Z);
+                Al.Listener3f(Al.VELOCITY, value.X, value.Y, value.Z);
             }
         }
 
@@ -40,27 +46,16 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                float value;
-                Al.GetListener(AlListenerf.Gain, out value);
-                return value;
+                unsafe
+                {
+                    float value;
+                    Al.GetListenerf(Al.GAIN, &value);
+                    return value;
+                }
             }
             set
             {
-                Al.Listener(AlListenerf.Gain, value);
-            }
-        }
-
-        public static float EfxMetersPerUnit
-        {
-            get
-            {
-                float value;
-                Al.GetListener(AlListenerf.EfxMetersPerUnit, out value);
-                return value;
-            }
-            set
-            {
-                Al.Listener(AlListenerf.EfxMetersPerUnit, value);
+                Al.Listenerf(Al.GAIN, value);
             }
         }
 
@@ -68,16 +63,33 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                Vector3f at, up;
-                Al.GetListener(AlListenerfv.Orientation, out at, out up);
-                return Quaternion.FromOrientation(new Vector3f(at.X, at.Y, at.Z), new Vector3f(up.X, up.Y, up.Z));
+                unsafe
+                {
+                    float* at_up = stackalloc float[6];
+                    Al.GetListenerfv(Al.ORIENTATION, at_up);
+                    return Quaternion.FromOrientation(
+                        new Vector3f(at_up[0], at_up[1], at_up[2]),
+                        new Vector3f(at_up[3], at_up[4], at_up[5]));
+                }
             }
             set
             {
-                Vector3f at = Quaternion.Transform(Vector3f.UnitZ, value);
-                Vector3f up = Quaternion.Transform(Vector3f.UnitY, value);
+                unsafe
+                {
+                    Vector3f at = Quaternion.Transform(Vector3f.UnitZ, value);
+                    Vector3f up = Quaternion.Transform(Vector3f.UnitY, value);
 
-                Al.Listener(AlListenerfv.Orientation, ref at, ref up);
+                    float* at_up = stackalloc float[6];
+
+                    at_up[0] = at.X;
+                    at_up[1] = at.Y;
+                    at_up[2] = at.Z;
+                    at_up[3] = at.X;
+                    at_up[4] = at.Y;
+                    at_up[5] = at.Z;
+
+                    Al.Listenerfv(Al.ORIENTATION, at_up);
+                }
             }
         }
     }

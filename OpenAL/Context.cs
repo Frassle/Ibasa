@@ -10,42 +10,11 @@ namespace Ibasa.OpenAL
 {
     public struct Context : IEquatable<Context>
     {
-        #region Context Management
+        public static readonly Context Null = new Context();
 
-        [DllImport("openal32.dll", EntryPoint = "alcCreateContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        public unsafe static extern IntPtr CreateContext([In] IntPtr device, [In] int* attrlist);
+        public IntPtr Handle { get; private set; }
 
-        [DllImport("openal32.dll", EntryPoint = "alcMakeContextCurrent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        private static extern bool MakeContextCurrent(IntPtr context);
-        // ALC_API ALCboolean      ALC_APIENTRY alcMakeContextCurrent( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcProcessContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        private static extern void ProcessContext(IntPtr context);
-        // ALC_API void            ALC_APIENTRY alcProcessContext( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcSuspendContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        private static extern void SuspendContext(IntPtr context);
-        // ALC_API void            ALC_APIENTRY alcSuspendContext( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcDestroyContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        private static extern void DestroyContext(IntPtr context);
-        // ALC_API void            ALC_APIENTRY alcDestroyContext( ALCcontext *context );
-
-        [DllImport("openal32.dll", EntryPoint = "alcGetCurrentContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        private static extern IntPtr GetCurrentContext();
-        // ALC_API ALCcontext *    ALC_APIENTRY alcGetCurrentContext( void );
-
-        [DllImport("openal32.dll", EntryPoint = "alcGetContextsDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        private static extern IntPtr GetContextsDevice(IntPtr context);
-        // ALC_API ALCdevice*      ALC_APIENTRY alcGetContextsDevice( ALCcontext *context );
-
-        #endregion Context Management
-
-        internal IntPtr Handle { get; private set; }
-
-        public static readonly Context Null = new Context(IntPtr.Zero);
-
-        private Context(IntPtr handle)
+        public Context(IntPtr handle)
             : this()
         {
             Handle = handle;
@@ -54,97 +23,108 @@ namespace Ibasa.OpenAL
         public Context(Device device)
             : this()
         {
-            if (device == default(Device))
-            {
+            if (device == Device.Null)
                 throw new ArgumentNullException("device");
-            }
 
             unsafe
             {
-                Handle = CreateContext(device.Handle, null);
-                device.GetError();
+                Handle = Alc.CreateContext(device.Handle, null);
+                AlHelper.GetAlcError(Alc.GetError(device.Handle));
             }
         }
 
         public Context(Device device, Dictionary<int, int> attributes)
             : this()
         {
-            if (device == default(Device))
-            {
+            if (device == Device.Null)
                 throw new ArgumentNullException("device");
-            }
 
             unsafe
             {
-                int* attribs = stackalloc int[attributes.Count * 2];
+                var attribs_length = attributes == null ? 0 : attributes.Count * 2;
+                int* attribs = stackalloc int[attribs_length + 1];
 
-                int index = 0;
-                foreach(var pair in attributes)
+                if (attributes != null)
                 {
-                    attribs[index++] = pair.Key;
-                    attribs[index++] = pair.Value;
+                    int index = 0;
+                    foreach (var pair in attributes)
+                    {
+                        attribs[index++] = pair.Key;
+                        attribs[index++] = pair.Value;
+                    }
+                    attribs[attribs_length] = 0;
+                }
+                else
+                {
+                    attribs = null;
                 }
 
-                Handle = CreateContext(device.Handle, attribs);
-                device.GetError();
+                Handle = Alc.CreateContext(device.Handle, attribs);
+                AlHelper.GetAlcError(Alc.GetError(device.Handle));
             }
         }
 
         public void Process()
         {
-            OpenAL.ThrowNullException(Handle);
-            ProcessContext(Handle);
+            AlHelper.ThrowNullException(Handle);
+            Alc.ProcessContext(Handle);
         }
 
         public void Suspend()
         {
-            OpenAL.ThrowNullException(Handle);
-            SuspendContext(Handle);
+            AlHelper.ThrowNullException(Handle);
+            Alc.SuspendContext(Handle);
         }
 
-        public static void MakeContextCurrent(Context context)
+        public static bool MakeContextCurrent(Context context)
         {
-            if (!MakeContextCurrent(context.Handle))
-            {
-                context.GetDeviceError();
-            }
+            return Alc.MakeContextCurrent(context.Handle) != 0;
         }
 
         public void Destroy()
         {
-            OpenAL.ThrowNullException(Handle);
-            DestroyContext(Handle);
-        }
-
-        internal void GetDeviceError()
-        {
-            OpenAL.GetError(GetContextsDevice(Handle));
+            AlHelper.ThrowNullException(Handle);
+            Alc.DestroyContext(Handle);
         }
 
         public static Context CurrentContext
         {
             get
             {
-                return new Context(GetCurrentContext());
+                return new Context(Alc.GetCurrentContext());
             }
         }
 
         public static bool IsExtensionPresent(string extension)
         {
-            return Al.IsExtensionPresent(extension);
+            unsafe
+            {
+                int length = Encoding.ASCII.GetByteCount(extension);
+                byte* chars = stackalloc byte[length];
+                AlHelper.StringToAnsi(extension, chars, length);
+
+                return Al.IsExtensionPresent(chars);
+            }
         }
 
         public static int GetEnumValue(string enumname)
         {
-            return Al.GetEnumValue(enumname);
+            unsafe
+            {
+                int length = Encoding.ASCII.GetByteCount(enumname);
+                byte* chars = stackalloc byte[length];
+                AlHelper.StringToAnsi(enumname, chars, length);
+
+                return Al.GetEnumValue(chars);
+            }
         }
 
         public Device Device
         {
             get
             {
-                OpenAL.ThrowNullException(Handle);
-                return new Device(GetContextsDevice(Handle));
+                AlHelper.ThrowNullException(Handle);
+                return new Device(Alc.GetContextsDevice(Handle));
             }
         }
 
@@ -152,7 +132,7 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return Al.Get(AlGetFloat.DopplerFactor);
+                return Al.GetFloat(Al.DOPPLER_FACTOR);
             }
             set
             {
@@ -164,7 +144,7 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return Al.Get(AlGetFloat.SpeedOfSound);
+                return Al.GetFloat(Al.SPEED_OF_SOUND);
             }
             set
             {
@@ -176,7 +156,10 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return Al.Get(AlGetString.Version);
+                unsafe
+                {
+                    return AlHelper.MarshalString(Al.GetString(Al.VERSION));
+                }
             }
         }
 
@@ -184,7 +167,10 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return Al.Get(AlGetString.Vendor);
+                unsafe
+                {
+                    return AlHelper.MarshalString(Al.GetString(Al.VENDOR));
+                }
             }
         }
 
@@ -192,7 +178,10 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                return Al.Get(AlGetString.Renderer);
+                unsafe
+                {
+                    return AlHelper.MarshalString(Al.GetString(Al.RENDERER));
+                }
             }
         }
 
@@ -200,113 +189,31 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                var value = Al.Get(AlGetString.Extensions);
-                if (value == null)
+                unsafe
                 {
-                    return null;
-                }
-                else
-                {
-                    return value.Split();
+                    byte* extensions = Al.GetString(Al.EXTENSIONS);
+
+                    if (extensions == null)
+                    {
+                        return new string[0];
+                    }
+                    else
+                    {
+                        return AlHelper.MarshalString(extensions).Split();
+                    }
                 }
             }
         }
 
-
-        #region Renderer State management
-
-        /// <summary>This function enables a feature of the OpenAL driver. There are no capabilities defined in OpenAL 1.1 to be used with this function, but it may be used by an extension.</summary>
-        /// <param name="capability">The name of a capability to enable.</param>
-        [DllImport("openal32.dll", EntryPoint = "alEnable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void Enable(int capability);
-        //AL_API void AL_APIENTRY alEnable( ALenum capability );
-
-        /// <summary>This function disables a feature of the OpenAL driver.</summary>
-        /// <param name="capability">The name of a capability to disable.</param>
-        [DllImport("openal32.dll", EntryPoint = "alDisable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern void Disable(int capability);
-        // AL_API void AL_APIENTRY alDisable( ALenum capability ); 
-
-        /// <summary>This function returns a boolean indicating if a specific feature is enabled in the OpenAL driver.</summary>
-        /// <param name="capability">The name of a capability to enable.</param>
-        /// <returns>True if enabled, False if disabled.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alIsEnabled", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern bool IsEnabled(int capability);
-        // AL_API ALboolean AL_APIENTRY alIsEnabled( ALenum capability ); 
-
-        #endregion Renderer State management
-
-        #region State retrieval
-
-        [DllImport("openal32.dll", EntryPoint = "alGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        private static extern IntPtr alGetString(int param); // accepts the enums AlError, AlContextString
-        // AL_API const ALchar* AL_APIENTRY alGetString( ALenum param );
-
-        /// <summary>This function retrieves an OpenAL string property.</summary>
-        /// <param name="param">The property to be returned: Vendor, Version, Renderer and Extensions</param>
-        /// <returns>Returns a pointer to a null-terminated string.</returns>
-        public static string GetString(int param)
-        {
-            return OpenAL.MarshalString(alGetString(param));
-        }
-
-        /* no functions return more than 1 result ..
-        // AL_API void AL_APIENTRY alGetBooleanv( ALenum param, ALboolean* buffer );
-        // AL_API void AL_APIENTRY alGetIntegerv( ALenum param, ALint* buffer );
-        // AL_API void AL_APIENTRY alGetFloatv( ALenum param, ALfloat* buffer );
-        // AL_API void AL_APIENTRY alGetDoublev( ALenum param, ALdouble* buffer );
-        */
-
-        /* disabled due to no token using it
-        /// <summary>This function returns a boolean OpenAL state.</summary>
-        /// <param name="param">the state to be queried: AL_DOPPLER_FACTOR, AL_SPEED_OF_SOUND, AL_DISTANCE_MODEL</param>
-        /// <returns>The boolean state described by param will be returned.</returns>
-        [DllImport( "openal32.dll", EntryPoint = "alGetBoolean", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl ), SuppressUnmanagedCodeSecurity( )]
-        public static extern bool Get( ALGetBoolean param );
-        // AL_API ALboolean AL_APIENTRY alGetBoolean( ALenum param );
-        */
-
-        /// <summary>This function returns an integer OpenAL state.</summary>
-        /// <param name="param">the state to be queried: DistanceModel.</param>
-        /// <returns>The integer state described by param will be returned.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alGetInteger", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern int GetInteger(int param);
-        // AL_API ALint AL_APIENTRY alGetInteger( ALenum param );
-
-        /// <summary>This function returns a floating-point OpenAL state.</summary>
-        /// <param name="param">the state to be queried: DopplerFactor, SpeedOfSound.</param>
-        /// <returns>The floating-point state described by param will be returned.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alGetFloat", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern float GetFloat(int param);
-        // AL_API ALfloat AL_APIENTRY alGetFloat( ALenum param );
-
-        /* disabled due to no token using it
-        /// <summary>This function returns a double-precision floating-point OpenAL state.</summary>
-        /// <param name="param">the state to be queried: AL_DOPPLER_FACTOR, AL_SPEED_OF_SOUND, AL_DISTANCE_MODEL</param>
-        /// <returns>The double value described by param will be returned.</returns>
-        [DllImport( "openal32.dll", EntryPoint = "alGetDouble", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl ), SuppressUnmanagedCodeSecurity( )]
-        public static extern double Get( ALGetDouble param );
-        // AL_API ALdouble AL_APIENTRY alGetDouble( ALenum param );
-        */
-
-        /// <summary>Error support. Obtain the most recent error generated in the AL state machine. When an error is detected by AL, a flag is set and the error code is recorded. Further errors, if they occur, do not affect this recorded code. When alGetError is called, the code is returned and the flag is cleared, so that a further error will again record its code.</summary>
-        /// <returns>The first error that occured. can be used with AL.GetString. Returns an Alenum representing the error state. When an OpenAL error occurs, the error state is set and will not be changed until the error state is retrieved using alGetError. Whenever alGetError is called, the error state is cleared and the last state (the current state when the call was made) is returned. To isolate error detection to a specific portion of code, alGetError should be called before the isolated section to clear the current error state.</returns>
-        [DllImport("openal32.dll", EntryPoint = "alGetError", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern AlError GetError();
-        // AL_API ALenum AL_APIENTRY alGetError( void );
-
-        #endregion State retrieval
-
-
         public override int GetHashCode()
         {
-            OpenAL.ThrowNullException(Handle);
+            AlHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            OpenAL.ThrowNullException(Handle);
+            AlHelper.ThrowNullException(Handle);
             if (obj is Context)
             {
                 return Equals((Context)obj);
@@ -316,7 +223,7 @@ namespace Ibasa.OpenAL
 
         public bool Equals(Context other)
         {
-            OpenAL.ThrowNullException(Handle);
+            AlHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -332,8 +239,8 @@ namespace Ibasa.OpenAL
 
         public override string ToString()
         {
-            OpenAL.ThrowNullException(Handle);
-            return Handle.ToString();
+            AlHelper.ThrowNullException(Handle);
+            return string.Format("Context: {0}", Handle.ToString());
         }
     }
 }

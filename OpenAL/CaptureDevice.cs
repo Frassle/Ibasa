@@ -9,117 +9,88 @@ namespace Ibasa.OpenAL
 {
     public struct CaptureDevice : IEquatable<CaptureDevice>
     {
-        #region Capture functions
-
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
-        static extern IntPtr CaptureOpenDevice(string devicename, uint frequency, int format, int buffersize);
-        // ALC_API ALCdevice*      ALC_APIENTRY alcCaptureOpenDevice( const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize );
-
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureCloseDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        static extern bool CaptureCloseDevice([In] IntPtr device);
-        // ALC_API ALCboolean      ALC_APIENTRY alcCaptureCloseDevice( ALCdevice *device );
-
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureStart", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        static extern void CaptureStart([In] IntPtr device);
-        // ALC_API void            ALC_APIENTRY alcCaptureStart( ALCdevice *device );
-
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureStop", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        static extern void CaptureStop([In] IntPtr device);
-        // ALC_API void            ALC_APIENTRY alcCaptureStop( ALCdevice *device );
-
-        [DllImport("openal32.dll", EntryPoint = "alcCaptureSamples", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        static unsafe extern void alcCaptureSamples(IntPtr device, void* buffer, int samples);
-        // ALC_API void            ALC_APIENTRY alcCaptureSamples( ALCdevice *device, ALCvoid *buffer, ALCsizei samples );
-
-        #endregion Capture functions
-
-        static readonly int ALC_CAPTURE_DEVICE_SPECIFIER = OpenAL.GetEnumValue("ALC_CAPTURE_DEVICE_SPECIFIER");
-        static readonly int ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER = OpenAL.GetEnumValue("ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER");
-        static readonly int ALC_CAPTURE_SAMPLES = OpenAL.GetEnumValue("ALC_CAPTURE_SAMPLES");
+        public static readonly CaptureDevice Null = new CaptureDevice();
 
         public static IEnumerable<CaptureDevice> CaptureDevices(uint frequency, int format, int buffersize)
         {
-            if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
+            unsafe
             {
-                var devices = OpenAL.GetStrings(ALC_CAPTURE_DEVICE_SPECIFIER);
-                return devices.Select(name => new CaptureDevice(name, frequency, format, buffersize));
-            }
-            else
-            {
-                return new CaptureDevice[0];
+                int ext_capture_length = Encoding.ASCII.GetByteCount("ALC_EXT_CAPTURE");
+                byte* ext_capture = stackalloc byte[ext_capture_length];
+                AlHelper.StringToAnsi("ALC_EXT_CAPTURE", ext_capture, ext_capture_length);
+
+                if (Alc.IsExtensionPresent(IntPtr.Zero, ext_capture) != 0)
+                {
+                    var device_string = Alc.GetString(IntPtr.Zero, Alc.CAPTURE_DEVICE_SPECIFIER);
+
+                    List<CaptureDevice> devices = new List<CaptureDevice>();
+
+                    while (*device_string != 0)
+                    {
+                        devices.Add(new CaptureDevice(device_string, frequency, format, buffersize));
+
+                        while (*device_string != 0) { ++device_string; }
+                        ++device_string;
+                    }
+
+                    return devices;
+                }
+                else
+                {
+                    return new CaptureDevice[0];
+                }
             }
         }
 
         public static CaptureDevice DefaultCaptureDevice(uint frequency, int format, int buffersize)
         {
-            if (OpenAL.IsExtensionPresent("ALC_EXT_CAPTURE"))
+            unsafe
             {
-                return new CaptureDevice(null, frequency, format, buffersize);
-            }
-            else
-            {
-                return default(CaptureDevice);
+                int ext_capture_length = Encoding.ASCII.GetByteCount("ALC_EXT_CAPTURE");
+                byte* ext_capture = stackalloc byte[ext_capture_length];
+                AlHelper.StringToAnsi("ALC_EXT_CAPTURE", ext_capture, ext_capture_length);
+
+                if (Alc.IsExtensionPresent(IntPtr.Zero, ext_capture) != 0)
+                {
+                    return new CaptureDevice(null, frequency, format, buffersize);
+                }
+                else
+                {
+                    return CaptureDevice.Null;
+                }
             }
         }
 
-        internal IntPtr Handle { get; private set; }
+        public IntPtr Handle { get; private set; }
 
-        internal CaptureDevice(IntPtr handle)
+        public CaptureDevice(IntPtr handle)
             : this()
         {
             Handle = handle;
         }
 
-        internal CaptureDevice(string name, uint frequency, int format, int buffersize)
+        internal unsafe CaptureDevice(byte* name, uint frequency, int format, int buffersize)
             : this()
         {
-            Handle = CaptureOpenDevice(name, frequency, format, buffersize);
+            Handle = Alc.CaptureOpenDevice(name, frequency, format, buffersize);
             if (Handle == IntPtr.Zero)
             {
-                throw new OpenALException(
-                    string.Format("CaptureOpenDevice({0}, {1}, {2}, {3}) failed.", name, frequency, format, buffersize));
+                throw new OpenALException(string.Format(
+                    "CaptureOpenDevice({0}, {1}, {2}, {3}) failed.", AlHelper.MarshalString(name), frequency, format, buffersize));
             }
         }
 
         public bool Close()
         {
-            OpenAL.ThrowNullException(Handle);
-            return CaptureCloseDevice(Handle);
-        }
-
-        public string GetString(int param)
-        {
-            OpenAL.ThrowNullException(Handle);
-            return OpenAL.MarshalString(OpenAL.GetString(IntPtr.Zero, param));
-        }
-
-        public List<string> GetStrings(int param)
-        {
-            OpenAL.ThrowNullException(Handle);
-            return OpenAL.MarshalStringList(OpenAL.GetString(IntPtr.Zero, param));
-        }
-
-        public int GetInteger(int param)
-        {
-            OpenAL.ThrowNullException(Handle);
-            return OpenAL.GetInteger(Handle, param);
-        }
-
-        public unsafe void GetInteger(int param, int size, int* data)
-        {
-            OpenAL.ThrowNullException(Handle);
-            OpenAL.GetInteger(Handle, param, size, data);
-        }
-
-        public void GetInteger(int param, int count, int[] values)
-        {
-            OpenAL.ThrowNullException(Handle);
-            unsafe
+            AlHelper.ThrowNullException(Handle);
+            if (Alc.CaptureCloseDevice(Handle) != 0)
             {
-                fixed (int* ptr = values)
-                {
-                    OpenAL.GetInteger(Handle, param, count, ptr);
-                }
+                Handle = IntPtr.Zero;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -127,59 +98,75 @@ namespace Ibasa.OpenAL
         {
             get
             {
-                OpenAL.ThrowNullException(Handle);
-                return GetString(ALC_CAPTURE_DEVICE_SPECIFIER);
+                AlHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    return AlHelper.MarshalString(Alc.GetString(Handle, Alc.CAPTURE_DEVICE_SPECIFIER));
+                }
             }
         }
+
 
         public int CaptureSamples
         {
             get
             {
-                OpenAL.ThrowNullException(Handle);
-                return GetInteger(ALC_CAPTURE_SAMPLES);
+                AlHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    int value;
+                    Alc.GetIntegerv(Handle, Alc.CAPTURE_SAMPLES, 1, &value);
+                    return value;                
+                }
             }
         }
 
         public void Start()
         {
-            OpenAL.ThrowNullException(Handle);
-            CaptureStart(Handle);
+            AlHelper.ThrowNullException(Handle);
+            Alc.CaptureStart(Handle);
+            AlHelper.GetAlcError(Alc.GetError(Handle));
         }
 
         public void Stop()
         {
-            OpenAL.ThrowNullException(Handle);
-            CaptureStop(Handle);
+            AlHelper.ThrowNullException(Handle);
+            Alc.CaptureStop(Handle);
+            AlHelper.GetAlcError(Alc.GetError(Handle));
+        }
+
+        public void Read(IntPtr buffer, int samples)
+        {
+            AlHelper.ThrowNullException(Handle);
+            unsafe
+            {
+                Alc.CaptureSamples(Handle, buffer.ToPointer(), samples);
+                AlHelper.GetAlcError(Alc.GetError(Handle));
+            }
         }
 
         public void Read(byte[] buffer, int samples)
         {
-            OpenAL.ThrowNullException(Handle);
+            AlHelper.ThrowNullException(Handle);
             unsafe
             {
-                fixed (byte* ptr = buffer)
+                fixed (byte* pointer = buffer)
                 {
-                    alcCaptureSamples(Handle, ptr, samples);
+                    Alc.CaptureSamples(Handle, pointer, samples);
+                    AlHelper.GetAlcError(Alc.GetError(Handle));
                 }
             }
         }
 
-        internal void GetError()
-        {
-            OpenAL.ThrowNullException(Handle);
-            OpenAL.GetError(Handle);
-        }
-
         public override int GetHashCode()
         {
-            OpenAL.ThrowNullException(Handle);
+            AlHelper.ThrowNullException(Handle);
             return Handle.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            OpenAL.ThrowNullException(Handle);
+            AlHelper.ThrowNullException(Handle);
             if (obj is CaptureDevice)
             {
                 return Equals((CaptureDevice)obj);
@@ -189,7 +176,7 @@ namespace Ibasa.OpenAL
 
         public bool Equals(CaptureDevice other)
         {
-            OpenAL.ThrowNullException(Handle);
+            AlHelper.ThrowNullException(Handle);
             return Handle == other.Handle;
         }
 
@@ -205,8 +192,8 @@ namespace Ibasa.OpenAL
 
         public override string ToString()
         {
-            OpenAL.ThrowNullException(Handle);
-            return Handle.ToString();
+            AlHelper.ThrowNullException(Handle);
+            return string.Format("CaputreDevice: {0}", Handle.ToString());
         }
     }
 }
