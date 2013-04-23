@@ -10,7 +10,7 @@ namespace Ibasa.OpenAL
 
     public struct Source : IEquatable<Source>
     {
-        public static readonly Source Null = new Source(0);
+        public static readonly Source Null = new Source();
 
         public uint Id { get; private set; }
 
@@ -23,18 +23,19 @@ namespace Ibasa.OpenAL
             Id = id;
         }
 
-        public static Source Gen()
+        public static Source Create()
         {
             unsafe
             {
                 uint id;
                 Al.GenSources(1, &id);
                 AlHelper.GetAlError(Al.GetError());
+                AlHelper.CheckName(id, "source");
                 return new Source(id);
             }
         }
 
-        public static void Gen(Source[] sources, int index, int count)
+        public static void Create(Source[] sources, int index, int count)
         {
             if (sources == null)
                 throw new ArgumentNullException("sources");
@@ -50,6 +51,7 @@ namespace Ibasa.OpenAL
                 AlHelper.GetAlError(Al.GetError());
                 for (int i = 0; i < count; ++i)
                 {
+                    AlHelper.CheckName(ids[i], "source");
                     sources[index + i] = new Source(ids[i]);
                 }
             }

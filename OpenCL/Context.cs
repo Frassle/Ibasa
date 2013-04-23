@@ -64,16 +64,22 @@ namespace Ibasa.OpenCL
                         properties_ptr[index++] = pair.Key;
                         properties_ptr[index++] = pair.Value;
                     }
+                    properties_ptr[index] = IntPtr.Zero;
                 }
-                properties_ptr[index] = IntPtr.Zero;
+                else
+                {
+                    properties_ptr = null;
+                }
 
                 var function_ptr = IntPtr.Zero;
-                var data_ptr = new GCHandle();
+                var data_handle = new GCHandle();
+                var data_ptr = IntPtr.Zero;
 
                 if (notify != null)
                 {
                     var data = Tuple.Create(notify, user_data);
-                    data_ptr = GCHandle.Alloc(data);
+                    data_handle = GCHandle.Alloc(data);
+                    data_ptr = GCHandle.ToIntPtr(data_handle);
 
                     function_ptr = Marshal.GetFunctionPointerForDelegate(new CallbackDelegete(Callback));
                 }
@@ -82,14 +88,15 @@ namespace Ibasa.OpenCL
                 {
                     int errcode = 0;
                     Handle = Cl.CreateContext(properties_ptr, (uint)devices.Length, device_ptrs, 
-                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
+                        function_ptr, data_ptr.ToPointer(), &errcode);
                     ClHelper.GetError(errcode);
 
-                    CallbackPointers.Add(Handle, data_ptr);
+                    CallbackPointers.Add(Handle, data_handle);
                 }
                 catch(Exception)
                 {
-                    data_ptr.Free();
+                    if (data_handle.IsAllocated)
+                        data_handle.Free();
                     throw;
                 }
             }
@@ -102,7 +109,7 @@ namespace Ibasa.OpenCL
             {
                 int property_count = properties == null ? 0 : properties.Count;
 
-                IntPtr* properties_ptr = stackalloc IntPtr[property_count * 2];
+                IntPtr* properties_ptr = stackalloc IntPtr[property_count * 2 + 1];
 
                 int index = 0;
                 if (properties != null)
@@ -112,16 +119,22 @@ namespace Ibasa.OpenCL
                         properties_ptr[index++] = pair.Key;
                         properties_ptr[index++] = pair.Value;
                     }
+                    properties_ptr[index] = IntPtr.Zero;
                 }
-                properties_ptr[index] = IntPtr.Zero;
+                else
+                {
+                    properties_ptr = null;
+                }
 
                 var function_ptr = IntPtr.Zero;
-                var data_ptr = new GCHandle();
+                var data_handle = new GCHandle();
+                var data_ptr = IntPtr.Zero;
 
                 if (notify != null)
                 {
                     var data = Tuple.Create(notify, user_data);
-                    data_ptr = GCHandle.Alloc(data);
+                    data_handle = GCHandle.Alloc(data);
+                    data_ptr = GCHandle.ToIntPtr(data_handle);
 
                     function_ptr = Marshal.GetFunctionPointerForDelegate(new Action<IntPtr, IntPtr, UIntPtr, IntPtr>(Callback));
                 }
@@ -129,15 +142,16 @@ namespace Ibasa.OpenCL
                 try
                 {
                     int errcode = 0;
-                    Handle = Cl.CreateContext(properties_ptr, (int)deviceType,
-                        function_ptr, GCHandle.ToIntPtr(data_ptr).ToPointer(), &errcode);
+                    Handle = Cl.CreateContextFromType(properties_ptr, (int)deviceType,
+                        function_ptr, data_ptr.ToPointer(), &errcode);
                     ClHelper.GetError(errcode);
 
-                    CallbackPointers.Add(Handle, data_ptr);
+                    CallbackPointers.Add(Handle, data_handle);
                 }
                 catch (Exception)
                 {
-                    data_ptr.Free();
+                    if(data_handle.IsAllocated)
+                        data_handle.Free();
                     throw;
                 }
             }

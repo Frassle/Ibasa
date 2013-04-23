@@ -119,6 +119,18 @@ namespace Ibasa.OpenAL
             }
         }
 
+        public static IntPtr GetFunctionPointer(string fname)
+        {
+            unsafe
+            {
+                int length = Encoding.ASCII.GetByteCount(fname);
+                byte* chars = stackalloc byte[length];
+                AlHelper.StringToAnsi(fname, chars, length);
+
+                return new IntPtr(Al.GetProcAddress(chars));
+            }
+        }
+
         public Device Device
         {
             get

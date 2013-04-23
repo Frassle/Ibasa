@@ -11,7 +11,7 @@ namespace Ibasa.OpenAL
     {
         public static readonly Device Null = new Device();
 
-        public static IEnumerable<Device> Devices
+        public static IEnumerable<string> Devices
         {
             get
             {
@@ -29,37 +29,23 @@ namespace Ibasa.OpenAL
                     {
                         var device_string = Alc.GetString(IntPtr.Zero, Alc.ALL_DEVICES_SPECIFIER);
 
-                        List<Device> devices = new List<Device>();
-
-                        while (*device_string != 0)
-                        {
-                            devices.Add(new Device(device_string));
-
-                            while (*device_string != 0) { ++device_string; }
-                            ++device_string;
-                        }
+                        return AlHelper.MarshalStringList(device_string);
                     }
                     else if (Alc.IsExtensionPresent(IntPtr.Zero, enumerate_ext) != 0)
                     {
                         var device_string = Alc.GetString(IntPtr.Zero, Alc.DEVICE_SPECIFIER);
 
-                        List<Device> devices = new List<Device>();
-
-                        while (*device_string != 0)
-                        {
-                            devices.Add(new Device(device_string));
-
-                            while (*device_string != 0) { ++device_string; }
-                            ++device_string;
-                        }
+                        return AlHelper.MarshalStringList(device_string);
                     }
-
-                    return new Device[] { new Device(null) };
+                    else
+                    {
+                        return new string[0];
+                    }
                 }
             }
         }
 
-        public static Device DefaultDevice
+        public static string DefaultDevice
         {
             get
             {
@@ -75,17 +61,15 @@ namespace Ibasa.OpenAL
 
                     if (Alc.IsExtensionPresent(IntPtr.Zero, enumerate_all_ext) != 0)
                     {
-                        var device = Alc.GetString(IntPtr.Zero, Alc.ALL_DEVICES_SPECIFIER);
-                        return new Device(device);
+                        return AlHelper.MarshalString(Alc.GetString(IntPtr.Zero, Alc.ALL_DEVICES_SPECIFIER));
                     }
                     else if (Alc.IsExtensionPresent(IntPtr.Zero, enumerate_ext) != 0)
                     {
-                        var device = Alc.GetString(IntPtr.Zero, Alc.DEVICE_SPECIFIER);
-                        return new Device(device);
+                        return AlHelper.MarshalString(Alc.GetString(IntPtr.Zero, Alc.DEVICE_SPECIFIER));
                     }
                     else
                     {
-                        return new Device(null);
+                        return null;
                     }
                 }
             }
@@ -99,14 +83,22 @@ namespace Ibasa.OpenAL
             Handle = handle;
         }
 
-        internal unsafe Device(byte* name)
+        public Device(string name)
             : this()
         {
-            Handle = Alc.OpenDevice(name);
-            if (Handle == IntPtr.Zero)
+            unsafe
             {
-                throw new OpenALException(string.Format(
-                    "OpenDevice({0}) failed.", AlHelper.MarshalString(name)));
+                int name_length = name == null ? 0 : Encoding.ASCII.GetByteCount(name);
+                byte* name_ansi = stackalloc byte[name_length + 1];
+                AlHelper.StringToAnsi(name, name_ansi, name_length);
+                name_ansi = name == null ? null : name_ansi;
+
+                Handle = Alc.OpenDevice(name_ansi);
+                if (Handle == IntPtr.Zero)
+                {
+                    throw new OpenALException(string.Format(
+                    "OpenDevice({0}) failed.", name));
+                }
             }
         }
 
@@ -124,18 +116,6 @@ namespace Ibasa.OpenAL
             }
         }
 
-        public string Name
-        {
-            get
-            {
-                AlHelper.ThrowNullException(Handle);
-                unsafe
-                {
-                    return AlHelper.MarshalString(Alc.GetString(Handle, Alc.DEVICE_SPECIFIER));
-                }
-            }
-        }
-
         public Version Version
         {
             get
@@ -149,6 +129,18 @@ namespace Ibasa.OpenAL
                     Alc.GetIntegerv(Handle, Alc.MINOR_VERSION, 1, &minor);
 
                     return new Version(major, minor);
+                }
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                AlHelper.ThrowNullException(Handle);
+                unsafe
+                {
+                    return AlHelper.MarshalString(Alc.GetString(Handle, Alc.DEVICE_SPECIFIER));
                 }
             }
         }

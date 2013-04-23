@@ -552,7 +552,7 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clCreateContextFromType", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateContext(
+        public static unsafe extern IntPtr CreateContextFromType(
             IntPtr* properties,
             int device_type,
             IntPtr pfn_notify,

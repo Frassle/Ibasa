@@ -11,52 +11,50 @@ namespace Ibasa.OpenAL
     {
         public static readonly CaptureDevice Null = new CaptureDevice();
 
-        public static IEnumerable<CaptureDevice> CaptureDevices(uint frequency, int format, int buffersize)
+        public static IEnumerable<string> CaptureDevices
         {
-            unsafe
+            get
             {
-                int ext_capture_length = Encoding.ASCII.GetByteCount("ALC_EXT_CAPTURE");
-                byte* ext_capture = stackalloc byte[ext_capture_length];
-                AlHelper.StringToAnsi("ALC_EXT_CAPTURE", ext_capture, ext_capture_length);
-
-                if (Alc.IsExtensionPresent(IntPtr.Zero, ext_capture) != 0)
+                unsafe
                 {
-                    var device_string = Alc.GetString(IntPtr.Zero, Alc.CAPTURE_DEVICE_SPECIFIER);
+                    int ext_capture_length = Encoding.ASCII.GetByteCount("ALC_EXT_CAPTURE");
+                    byte* ext_capture = stackalloc byte[ext_capture_length + 1];
+                    AlHelper.StringToAnsi("ALC_EXT_CAPTURE", ext_capture, ext_capture_length);
 
-                    List<CaptureDevice> devices = new List<CaptureDevice>();
-
-                    while (*device_string != 0)
+                    if (Alc.IsExtensionPresent(IntPtr.Zero, ext_capture) != 0)
                     {
-                        devices.Add(new CaptureDevice(device_string, frequency, format, buffersize));
+                        var device_string = Alc.GetString(IntPtr.Zero, Alc.CAPTURE_DEVICE_SPECIFIER);
 
-                        while (*device_string != 0) { ++device_string; }
-                        ++device_string;
+                        return AlHelper.MarshalStringList(device_string);
                     }
-
-                    return devices;
-                }
-                else
-                {
-                    return new CaptureDevice[0];
+                    else
+                    {
+                        return new string[0];
+                    }
                 }
             }
         }
 
-        public static CaptureDevice DefaultCaptureDevice(uint frequency, int format, int buffersize)
+        public static string DefaultCaptureDevice
         {
-            unsafe
+            get
             {
-                int ext_capture_length = Encoding.ASCII.GetByteCount("ALC_EXT_CAPTURE");
-                byte* ext_capture = stackalloc byte[ext_capture_length];
-                AlHelper.StringToAnsi("ALC_EXT_CAPTURE", ext_capture, ext_capture_length);
+                unsafe
+                {
+                    int ext_capture_length = Encoding.ASCII.GetByteCount("ALC_EXT_CAPTURE");
+                    byte* ext_capture = stackalloc byte[ext_capture_length + 1];
+                    AlHelper.StringToAnsi("ALC_EXT_CAPTURE", ext_capture, ext_capture_length);
 
-                if (Alc.IsExtensionPresent(IntPtr.Zero, ext_capture) != 0)
-                {
-                    return new CaptureDevice(null, frequency, format, buffersize);
-                }
-                else
-                {
-                    return CaptureDevice.Null;
+                    if (Alc.IsExtensionPresent(IntPtr.Zero, ext_capture) != 0)
+                    {
+                        var device_string = Alc.GetString(IntPtr.Zero, Alc.CAPTURE_DEFAULT_DEVICE_SPECIFIER);
+
+                        return AlHelper.MarshalString(device_string);
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
         }
@@ -69,14 +67,22 @@ namespace Ibasa.OpenAL
             Handle = handle;
         }
 
-        internal unsafe CaptureDevice(byte* name, uint frequency, int format, int buffersize)
+        public CaptureDevice(string name, uint frequency, Format format, int buffersize)
             : this()
         {
-            Handle = Alc.CaptureOpenDevice(name, frequency, format, buffersize);
-            if (Handle == IntPtr.Zero)
+            unsafe
             {
-                throw new OpenALException(string.Format(
-                    "CaptureOpenDevice({0}, {1}, {2}, {3}) failed.", AlHelper.MarshalString(name), frequency, format, buffersize));
+                int name_length = name == null ? 0 : Encoding.ASCII.GetByteCount(name);
+                byte* name_ansi = stackalloc byte[name_length + 1];
+                AlHelper.StringToAnsi(name, name_ansi, name_length);
+                name_ansi = name == null ? null : name_ansi;
+
+                Handle = Alc.CaptureOpenDevice(name_ansi, frequency, (int)format, buffersize);
+                if (Handle == IntPtr.Zero)
+                {
+                    throw new OpenALException(string.Format(
+                        "CaptureOpenDevice({0}, {1}, {2}, {3}) failed.", name, frequency, format, buffersize));
+                }
             }
         }
 

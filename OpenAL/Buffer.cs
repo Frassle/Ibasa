@@ -8,7 +8,7 @@ namespace Ibasa.OpenAL
 {
     public struct Buffer : IEquatable<Buffer>
     {
-        public static readonly Buffer Null = new Buffer(0);
+        public static readonly Buffer Null = new Buffer();
 
         public uint Id { get; private set; }
 
@@ -21,18 +21,19 @@ namespace Ibasa.OpenAL
             Id = id;
         }
 
-        public static Buffer Gen()
+        public static Buffer Create()
         {
             unsafe
             {
                 uint id;
                 Al.GenBuffers(1, &id);
                 AlHelper.GetAlError(Al.GetError());
+                AlHelper.CheckName(id, "buffer");
                 return new Buffer(id);
             }
         }
 
-        public static void Gen(Buffer[] buffers, int index, int count)
+        public static void Create(Buffer[] buffers, int index, int count)
         {
             if (buffers == null)
                 throw new ArgumentNullException("buffers");
@@ -48,6 +49,7 @@ namespace Ibasa.OpenAL
                 AlHelper.GetAlError(Al.GetError());
                 for (int i = 0; i < count; ++i)
                 {
+                    AlHelper.CheckName(ids[i], "buffer");
                     buffers[index + i] = new Buffer(ids[i]);
                 }
             }

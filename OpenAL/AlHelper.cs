@@ -43,6 +43,9 @@ namespace Ibasa.OpenAL
 
         internal unsafe static void StringToAnsi(string str, byte* chars, int length)
         {
+            if (str == null)
+                return;
+
             fixed (char* ptr = str)
             {
                 Encoding.ASCII.GetBytes(ptr, str.Length, chars, length);
@@ -82,6 +85,21 @@ namespace Ibasa.OpenAL
             if (ptr == IntPtr.Zero)
             {
                 throw new NullReferenceException();
+            }
+        }
+
+        internal static void CheckName(uint id, string type)
+        {
+            if (id == 0)
+            {
+                var context = Context.CurrentContext;
+
+                if (context == Context.Null)
+                {
+                    throw new OpenALException(string.Format("No active context! Could not create {0}!", type));
+                }
+
+                throw new OpenALException(string.Format("Could not create {0}!", type));
             }
         }
     }
