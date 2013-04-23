@@ -576,5 +576,3 @@ namespace Ibasa.OpenCL
         }
     }
 }
-
-}
