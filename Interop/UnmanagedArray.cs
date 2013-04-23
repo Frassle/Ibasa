@@ -10,7 +10,7 @@ namespace Ibasa.Interop
     public class UnmanagedArray<T> : IDisposable, IEnumerable<T>
         where T : struct
     {
-        private static readonly int SizeOfT = Memory.SizeOf<T>();
+        internal static readonly int SizeOfT = Memory.SizeOf<T>();
 
         /// <summary>
         /// Gets the number of elements actually contained in the Ibasa.Interop.UnmanagedArray{T}.
@@ -27,7 +27,7 @@ namespace Ibasa.Interop
         /// </summary>
         public int Size { get { return SizeOfT * Count; } }
 
-        private int Version = 0;
+        internal int Version = 0;
         private bool OwnsPointer;
 
         public UnmanagedArray(int count)
@@ -69,7 +69,7 @@ namespace Ibasa.Interop
             if (Pointer == IntPtr.Zero)
                 return;
 
-            if(OwnsPointer)
+            if (OwnsPointer)
             {
                 GC.RemoveMemoryPressure(Count * SizeOfT);
                 Marshal.FreeHGlobal(Pointer);
@@ -106,42 +106,6 @@ namespace Ibasa.Interop
             }
         }
 
-        public static void Clear(UnmanagedArray<T> array, int index, int length)
-        {
-            if (array == null)
-                throw new ArgumentNullException("array");
-            if (index < 0)
-                throw new ArgumentOutOfRangeException("index", index, "index is less than zero.");
-            if (index + length > array.Count)
-                throw new ArgumentOutOfRangeException("length", length, "index + length is greater than array.Count.");
-
-            Memory.Fill(array.Pointer + index * SizeOfT, 0, length * SizeOfT);
-            ++array.Version;
-        }
-
-        public static void Copy(UnmanagedArray<T> source, int sourceIndex,
-            UnmanagedArray<T> destination, int destinationIndex, int length)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (sourceIndex < 0)
-                throw new ArgumentOutOfRangeException("sourceIndex", sourceIndex, "sourceIndex is less than zero.");
-            if (sourceIndex + length > source.Count)
-                throw new ArgumentOutOfRangeException("length", length, "sourceIndex + length is greater than source.Count.");
-
-            if (destination == null)
-                throw new ArgumentNullException("destination");
-            if (destinationIndex < 0)
-                throw new ArgumentOutOfRangeException("destinationIndex", destinationIndex, "destinationIndex is less than zero.");
-            if (destinationIndex + length > destination.Count)
-                throw new ArgumentOutOfRangeException("length", length, "destinationIndex + length is greater than destination.Count.");
-
-            Memory.Copy(
-                source.Pointer + sourceIndex * SizeOfT,
-                destination.Pointer + destinationIndex * SizeOfT, length * SizeOfT);
-            ++destination.Version;          
-        }
-
         public struct Enumerator : IEnumerator<T>
         {
             UnmanagedArray<T> Array;
@@ -167,7 +131,7 @@ namespace Ibasa.Interop
                     if (Version != Array.Version)
                     {
                         throw new InvalidOperationException();
-                    } 
+                    }
                     return Array[Index];
                 }
             }
@@ -184,7 +148,7 @@ namespace Ibasa.Interop
                 if (Version != Array.Version)
                 {
                     throw new InvalidOperationException();
-                } 
+                }
 
                 if (Index == Array.Count)
                     return false;
@@ -215,6 +179,46 @@ namespace Ibasa.Interop
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+    }
+
+    public static class UnmanagedArray
+    {
+        public static void Clear<T>(UnmanagedArray<T> array, int index, int count) where T : struct
+        {
+            if (array == null)
+                throw new ArgumentNullException("array");
+            if (index < 0)
+                throw new ArgumentOutOfRangeException("index", index, "index is less than zero.");
+            if (index + count > array.Count)
+                throw new ArgumentOutOfRangeException("count", count, "index + count is greater than array.Count.");
+
+            Memory.Fill(array.Pointer + index * UnmanagedArray<T>.SizeOfT, 0, count * UnmanagedArray<T>.SizeOfT);
+            ++array.Version;
+        }
+
+        public static void Copy<T>(UnmanagedArray<T> source, int sourceIndex,
+            UnmanagedArray<T> destination, int destinationIndex, int count) where T : struct
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (sourceIndex < 0)
+                throw new ArgumentOutOfRangeException("sourceIndex", sourceIndex, "sourceIndex is less than zero.");
+            if (sourceIndex + count > source.Count)
+                throw new ArgumentOutOfRangeException("count", count, "sourceIndex + count is greater than source.Count.");
+
+            if (destination == null)
+                throw new ArgumentNullException("destination");
+            if (destinationIndex < 0)
+                throw new ArgumentOutOfRangeException("destinationIndex", destinationIndex, "destinationIndex is less than zero.");
+            if (destinationIndex + count > destination.Count)
+                throw new ArgumentOutOfRangeException("count", count, "destinationIndex + count is greater than destination.Count.");
+
+            Memory.Copy(
+                source.Pointer + sourceIndex * UnmanagedArray<T>.SizeOfT,
+                destination.Pointer + destinationIndex * UnmanagedArray<T>.SizeOfT,
+                count * UnmanagedArray<T>.SizeOfT);
+            ++destination.Version;
         }
     }
 }
