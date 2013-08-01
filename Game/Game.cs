@@ -7,32 +7,25 @@ using System.Threading.Tasks;
 
 namespace Ibasa.Game
 {
-    public abstract class Game : IGame
+    public abstract class Game
     {
-        private GameClock Clock = new GameClock();
-
+        private Time _Time = new Time();
+        public Time Time { get { return _Time; } }
+        
         public TimeSpan InactiveSleepTime { get; set; }
         public bool IsActive { get; set; }
-
-        private TimeSpan AccumulatedTime;
-        private TimeSpan CurrentTime;
-        public TimeSpan TimeStep { get; set; }
-        public TimeSpan MaximumTimeStep { get; set; }
 
         List<Component> Components { get; set; }
         List<Property> Properties { get; set; }
         System.Collections.Concurrent.ConcurrentQueue<Message> MessageQueue { get; set; }
         EntityCollection Entities { get; set; }
 
-        public bool IsParallel { get; private set; }
+        internal bool IsParallel { get; private set; }
 
         public Game()
         {
             InactiveSleepTime = TimeSpan.FromSeconds(1.0);
             IsActive = true;
-
-            TimeStep = TimeSpan.FromMilliseconds(16.0);
-            MaximumTimeStep = TimeSpan.MaxValue;
 
             Components = new List<Component>();
             Properties = new List<Property>();
@@ -121,7 +114,7 @@ namespace Ibasa.Game
                 component.Initalize();
             }
 
-            Clock.Start();
+            Time.Start();
             _initalized = true;
         }
 
@@ -133,40 +126,19 @@ namespace Ibasa.Game
             if (!IsActive)
                 System.Threading.Thread.Sleep(InactiveSleepTime);
 
-            Clock.Tick();
-
-            AccumulatedTime += Clock.Elapsed;
-            bool isRunningSlowly = false;
-
-            if (AccumulatedTime > MaximumTimeStep)
-            {
-                AccumulatedTime = MaximumTimeStep;
-                isRunningSlowly = true;
-            }
-
-            TimeSpan time = CurrentTime;
-            while (AccumulatedTime >= TimeStep)
-            {
-                CurrentTime += TimeStep;
-                Update(new GameTime(CurrentTime, TimeStep, isRunningSlowly));
-                AccumulatedTime -= TimeStep;
-            }
-
-            Render(new GameTime(CurrentTime, CurrentTime - time, isRunningSlowly));
+            Time.Tick(FixedUpdate, Update);
         }
 
-        protected virtual void Update(GameTime elapsed)
+        protected virtual void FixedUpdate(GameTime time)
         {
-            IsParallel = false;
-
             foreach (var component in Components)
             {
-                component.Update(elapsed);
-            } 
+                component.FixedUpdate(time);
+            }
             
             IsParallel = true;
 
-            Parallel.ForEach(Components, component => component.ParallelUpdate(elapsed));
+            Parallel.ForEach(Components, component => component.ParallelUpdate(time));
 
             Message message;
             while (MessageQueue.TryDequeue(out message))
@@ -191,11 +163,11 @@ namespace Ibasa.Game
             Parallel.ForEach(Properties, property => property.Swap());
         }
 
-        protected virtual void Render(GameTime elapsed)
+        protected virtual void Update(GameTime time)
         {
             foreach (var component in Components)
             {
-                component.Render(elapsed);
+                component.Update(time);
             } 
         }
     }

@@ -209,7 +209,7 @@ namespace Ibasa.Media.Visual
 
         private void Load(Stream stream)
         {
-            var reader = new Ibasa.IO.BinaryReader(stream, Encoding.ASCII);
+            var reader = new Ibasa.IO.BinaryReader(stream, System.Text.Encoding.ASCII);
 
             FourCC signature = new FourCC(reader.ReadInt32());
 
@@ -529,7 +529,7 @@ namespace Ibasa.Media.Visual
         }
         public void Save(Stream stream)
         {
-            var writer = new Ibasa.IO.BinaryWriter(stream, Encoding.ASCII);
+            var writer = new Ibasa.IO.BinaryWriter(stream, System.Text.Encoding.ASCII);
             
             writer.Write((int)new FourCC("DDS "));
             writer.Write(124);

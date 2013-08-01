@@ -159,7 +159,12 @@ namespace Ibasa.Collections
             return _list.TrueForAll(match);
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public List<T>.Enumerator GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator()
         {
             return _list.GetEnumerator();
         }

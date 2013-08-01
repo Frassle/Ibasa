@@ -884,23 +884,23 @@ namespace Numerics_Generator
             #region Per component
             WriteLine("#region Per component");
 
-            WriteLine("#region Transform");
+            WriteLine("#region Map");
             foreach (var type in Shapes.Types)
             {
-                var transform = new Point(type, Dimension);
+                var map = new Point(type, Dimension);
 
                 WriteLine("/// <summary>");
-                WriteLine("/// Transforms the components of a point and returns the result.");
+                WriteLine("/// Maps the components of a point and returns the result.");
                 WriteLine("/// </summary>");
-                WriteLine("/// <param name=\"value\">The point to transform.</param>");
-                WriteLine("/// <param name=\"transformer\">A transform function to apply to each component.</param>");
-                WriteLine("/// <returns>The result of transforming each component of value.</returns>");
+                WriteLine("/// <param name=\"value\">The point to map.</param>");
+                WriteLine("/// <param name=\"mapping\">A mapping function to apply to each component.</param>");
+                WriteLine("/// <returns>The result of mapping each component of value.</returns>");
                 if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static {0} Transform({1} value, Func<{2}, {3}> transformer)", transform, Name, Type, transform.Type);
+                WriteLine("public static {0} Map({1} value, Func<{2}, {3}> mapping)", map, Name, Type, map.Type);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", transform,
-                    string.Join(", ", Components.Select(component => string.Format("transformer(value.{0})", component))));
+                WriteLine("return new {0}({1});", map,
+                    string.Join(", ", Components.Select(component => string.Format("mapping(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
             }
@@ -1135,7 +1135,7 @@ namespace Numerics_Generator
                 WriteLine("double theta = Functions.Atan2(value.Y, value.X);");
                 WriteLine("if (theta < 0)");
                 Indent();
-                WriteLine("theta += 2 * Constants.PI;");
+                WriteLine("theta += 2 * Constants.Pi;");
                 Dedent();
                 WriteLine("return new PolarCoordinate(");
                 WriteLine("     theta,");
@@ -1175,7 +1175,7 @@ namespace Numerics_Generator
                 WriteLine("double theta = Functions.Atan2(value.Y, value.X);");
                 WriteLine("if (theta < 0)");
                 Indent();
-                WriteLine("theta += 2 * Constants.PI;");
+                WriteLine("theta += 2 * Constants.Pi;");
                 Dedent();
                 WriteLine("return new SphericalCoordinate(");
                 WriteLine("     r,");

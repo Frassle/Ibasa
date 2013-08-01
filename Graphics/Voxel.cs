@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ibasa.Numerics.Geometry;
+using Ibasa.Numerics;
 
 namespace Ibasa.Graphics
 {

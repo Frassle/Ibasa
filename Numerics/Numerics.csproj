@@ -89,6 +89,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -101,7 +102,7 @@
     <Compile Include="Colorf.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Encoding.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Gamma.cs" />
     <Compile Include="Geometry\Boxd.cs" />
     <Compile Include="Geometry\Boxf.cs" />
@@ -127,24 +128,24 @@
     <Compile Include="Geometry\Linef.cs" />
     <Compile Include="Geometry\Linei.cs" />
     <Compile Include="Geometry\Linel.cs" />
-    <Compile Include="Geometry\Matrices\Matrix2x2d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix2x2f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix2x3d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix2x3f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix2x4d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix2x4f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix3x2d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix3x2f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix3x3d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix3x3f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix3x4d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix3x4f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix4x2d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix4x2f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix4x3d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix4x3f.cs" />
-    <Compile Include="Geometry\Matrices\Matrix4x4d.cs" />
-    <Compile Include="Geometry\Matrices\Matrix4x4f.cs" />
+    <Compile Include="Matrices\Matrix2x2d.cs" />
+    <Compile Include="Matrices\Matrix2x2f.cs" />
+    <Compile Include="Matrices\Matrix2x3d.cs" />
+    <Compile Include="Matrices\Matrix2x3f.cs" />
+    <Compile Include="Matrices\Matrix2x4d.cs" />
+    <Compile Include="Matrices\Matrix2x4f.cs" />
+    <Compile Include="Matrices\Matrix3x2d.cs" />
+    <Compile Include="Matrices\Matrix3x2f.cs" />
+    <Compile Include="Matrices\Matrix3x3d.cs" />
+    <Compile Include="Matrices\Matrix3x3f.cs" />
+    <Compile Include="Matrices\Matrix3x4d.cs" />
+    <Compile Include="Matrices\Matrix3x4f.cs" />
+    <Compile Include="Matrices\Matrix4x2d.cs" />
+    <Compile Include="Matrices\Matrix4x2f.cs" />
+    <Compile Include="Matrices\Matrix4x3d.cs" />
+    <Compile Include="Matrices\Matrix4x3f.cs" />
+    <Compile Include="Matrices\Matrix4x4d.cs" />
+    <Compile Include="Matrices\Matrix4x4f.cs" />
     <Compile Include="Geometry\Patches\Bezier.cs" />
     <Compile Include="Geometry\Patches\PatchPoint.cs" />
     <Compile Include="Geometry\Planed.cs" />
@@ -187,61 +188,61 @@
     <Compile Include="Geometry\Spherei.cs" />
     <Compile Include="Geometry\Spherel.cs" />
     <Compile Include="Geometry\SphericalCoordinate.cs" />
-    <Compile Include="Geometry\Vectors\Vector16b.cs" />
-    <Compile Include="Geometry\Vectors\Vector16d.cs" />
-    <Compile Include="Geometry\Vectors\Vector16f.cs" />
-    <Compile Include="Geometry\Vectors\Vector16h.cs" />
-    <Compile Include="Geometry\Vectors\Vector16i.cs" />
-    <Compile Include="Geometry\Vectors\Vector16l.cs" />
-    <Compile Include="Geometry\Vectors\Vector16s.cs" />
-    <Compile Include="Geometry\Vectors\Vector16sb.cs" />
-    <Compile Include="Geometry\Vectors\Vector16ui.cs" />
-    <Compile Include="Geometry\Vectors\Vector16ul.cs" />
-    <Compile Include="Geometry\Vectors\Vector16us.cs" />
-    <Compile Include="Geometry\Vectors\Vector2b.cs" />
-    <Compile Include="Geometry\Vectors\Vector2d.cs" />
-    <Compile Include="Geometry\Vectors\Vector2f.cs" />
-    <Compile Include="Geometry\Vectors\Vector2h.cs" />
-    <Compile Include="Geometry\Vectors\Vector2i.cs" />
-    <Compile Include="Geometry\Vectors\Vector2l.cs" />
-    <Compile Include="Geometry\Vectors\Vector2s.cs" />
-    <Compile Include="Geometry\Vectors\Vector2sb.cs" />
-    <Compile Include="Geometry\Vectors\Vector2ui.cs" />
-    <Compile Include="Geometry\Vectors\Vector2ul.cs" />
-    <Compile Include="Geometry\Vectors\Vector2us.cs" />
-    <Compile Include="Geometry\Vectors\Vector3b.cs" />
-    <Compile Include="Geometry\Vectors\Vector3d.cs" />
-    <Compile Include="Geometry\Vectors\Vector3f.cs" />
-    <Compile Include="Geometry\Vectors\Vector3h.cs" />
-    <Compile Include="Geometry\Vectors\Vector3i.cs" />
-    <Compile Include="Geometry\Vectors\Vector3l.cs" />
-    <Compile Include="Geometry\Vectors\Vector3s.cs" />
-    <Compile Include="Geometry\Vectors\Vector3sb.cs" />
-    <Compile Include="Geometry\Vectors\Vector3ui.cs" />
-    <Compile Include="Geometry\Vectors\Vector3ul.cs" />
-    <Compile Include="Geometry\Vectors\Vector3us.cs" />
-    <Compile Include="Geometry\Vectors\Vector4b.cs" />
-    <Compile Include="Geometry\Vectors\Vector4d.cs" />
-    <Compile Include="Geometry\Vectors\Vector4f.cs" />
-    <Compile Include="Geometry\Vectors\Vector4h.cs" />
-    <Compile Include="Geometry\Vectors\Vector4i.cs" />
-    <Compile Include="Geometry\Vectors\Vector4l.cs" />
-    <Compile Include="Geometry\Vectors\Vector4s.cs" />
-    <Compile Include="Geometry\Vectors\Vector4sb.cs" />
-    <Compile Include="Geometry\Vectors\Vector4ui.cs" />
-    <Compile Include="Geometry\Vectors\Vector4ul.cs" />
-    <Compile Include="Geometry\Vectors\Vector4us.cs" />
-    <Compile Include="Geometry\Vectors\Vector8b.cs" />
-    <Compile Include="Geometry\Vectors\Vector8d.cs" />
-    <Compile Include="Geometry\Vectors\Vector8f.cs" />
-    <Compile Include="Geometry\Vectors\Vector8h.cs" />
-    <Compile Include="Geometry\Vectors\Vector8i.cs" />
-    <Compile Include="Geometry\Vectors\Vector8l.cs" />
-    <Compile Include="Geometry\Vectors\Vector8s.cs" />
-    <Compile Include="Geometry\Vectors\Vector8sb.cs" />
-    <Compile Include="Geometry\Vectors\Vector8ui.cs" />
-    <Compile Include="Geometry\Vectors\Vector8ul.cs" />
-    <Compile Include="Geometry\Vectors\Vector8us.cs" />
+    <Compile Include="Vectors\Vector16b.cs" />
+    <Compile Include="Vectors\Vector16d.cs" />
+    <Compile Include="Vectors\Vector16f.cs" />
+    <Compile Include="Vectors\Vector16h.cs" />
+    <Compile Include="Vectors\Vector16i.cs" />
+    <Compile Include="Vectors\Vector16l.cs" />
+    <Compile Include="Vectors\Vector16s.cs" />
+    <Compile Include="Vectors\Vector16sb.cs" />
+    <Compile Include="Vectors\Vector16ui.cs" />
+    <Compile Include="Vectors\Vector16ul.cs" />
+    <Compile Include="Vectors\Vector16us.cs" />
+    <Compile Include="Vectors\Vector2b.cs" />
+    <Compile Include="Vectors\Vector2d.cs" />
+    <Compile Include="Vectors\Vector2f.cs" />
+    <Compile Include="Vectors\Vector2h.cs" />
+    <Compile Include="Vectors\Vector2i.cs" />
+    <Compile Include="Vectors\Vector2l.cs" />
+    <Compile Include="Vectors\Vector2s.cs" />
+    <Compile Include="Vectors\Vector2sb.cs" />
+    <Compile Include="Vectors\Vector2ui.cs" />
+    <Compile Include="Vectors\Vector2ul.cs" />
+    <Compile Include="Vectors\Vector2us.cs" />
+    <Compile Include="Vectors\Vector3b.cs" />
+    <Compile Include="Vectors\Vector3d.cs" />
+    <Compile Include="Vectors\Vector3f.cs" />
+    <Compile Include="Vectors\Vector3h.cs" />
+    <Compile Include="Vectors\Vector3i.cs" />
+    <Compile Include="Vectors\Vector3l.cs" />
+    <Compile Include="Vectors\Vector3s.cs" />
+    <Compile Include="Vectors\Vector3sb.cs" />
+    <Compile Include="Vectors\Vector3ui.cs" />
+    <Compile Include="Vectors\Vector3ul.cs" />
+    <Compile Include="Vectors\Vector3us.cs" />
+    <Compile Include="Vectors\Vector4b.cs" />
+    <Compile Include="Vectors\Vector4d.cs" />
+    <Compile Include="Vectors\Vector4f.cs" />
+    <Compile Include="Vectors\Vector4h.cs" />
+    <Compile Include="Vectors\Vector4i.cs" />
+    <Compile Include="Vectors\Vector4l.cs" />
+    <Compile Include="Vectors\Vector4s.cs" />
+    <Compile Include="Vectors\Vector4sb.cs" />
+    <Compile Include="Vectors\Vector4ui.cs" />
+    <Compile Include="Vectors\Vector4ul.cs" />
+    <Compile Include="Vectors\Vector4us.cs" />
+    <Compile Include="Vectors\Vector8b.cs" />
+    <Compile Include="Vectors\Vector8d.cs" />
+    <Compile Include="Vectors\Vector8f.cs" />
+    <Compile Include="Vectors\Vector8h.cs" />
+    <Compile Include="Vectors\Vector8i.cs" />
+    <Compile Include="Vectors\Vector8l.cs" />
+    <Compile Include="Vectors\Vector8s.cs" />
+    <Compile Include="Vectors\Vector8sb.cs" />
+    <Compile Include="Vectors\Vector8ui.cs" />
+    <Compile Include="Vectors\Vector8ul.cs" />
+    <Compile Include="Vectors\Vector8us.cs" />
     <Compile Include="GJK.cs" />
     <Compile Include="Half.cs" />
     <Compile Include="Integer.cs" />
@@ -271,7 +272,12 @@
       <Name>Ibasa</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

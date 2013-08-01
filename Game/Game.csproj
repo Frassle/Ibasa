@@ -43,9 +43,8 @@
     <Compile Include="Entity.cs" />
     <Compile Include="EntityCollection.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameClock.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="GameTime.cs" />
-    <Compile Include="IGame.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Component.cs" />

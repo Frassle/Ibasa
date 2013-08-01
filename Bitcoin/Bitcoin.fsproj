@@ -52,6 +52,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cryptography\Cryptography.csproj">
+      <Name>Cryptography</Name>
+      <Project>{4bb406be-b6da-439d-8321-bd664d9cd4ef}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
+      <Name>Ibasa</Name>
+      <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Numerics\Numerics.csproj">
       <Name>Numerics</Name>
       <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>

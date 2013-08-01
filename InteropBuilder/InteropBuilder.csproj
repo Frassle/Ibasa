@@ -39,7 +39,7 @@
       <HintPath>.\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>.\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>..\..\cecil\bin\net_4_0_Release\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks">
       <HintPath>.\Mono.Cecil.Rocks.dll</HintPath>

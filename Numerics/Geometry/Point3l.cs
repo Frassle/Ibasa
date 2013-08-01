@@ -903,46 +903,46 @@ namespace Ibasa.Numerics.Geometry
 		}
 		#endregion
 		#region Per component
-		#region Transform
+		#region Map
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point3d Transform(Point3l value, Func<long, double> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point3d Map(Point3l value, Func<long, double> mapping)
 		{
-			return new Point3d(transformer(value.X), transformer(value.Y), transformer(value.Z));
+			return new Point3d(mapping(value.X), mapping(value.Y), mapping(value.Z));
 		}
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point3f Transform(Point3l value, Func<long, float> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point3f Map(Point3l value, Func<long, float> mapping)
 		{
-			return new Point3f(transformer(value.X), transformer(value.Y), transformer(value.Z));
+			return new Point3f(mapping(value.X), mapping(value.Y), mapping(value.Z));
 		}
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point3l Transform(Point3l value, Func<long, long> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point3l Map(Point3l value, Func<long, long> mapping)
 		{
-			return new Point3l(transformer(value.X), transformer(value.Y), transformer(value.Z));
+			return new Point3l(mapping(value.X), mapping(value.Y), mapping(value.Z));
 		}
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point3i Transform(Point3l value, Func<long, int> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point3i Map(Point3l value, Func<long, int> mapping)
 		{
-			return new Point3i(transformer(value.X), transformer(value.Y), transformer(value.Z));
+			return new Point3i(mapping(value.X), mapping(value.Y), mapping(value.Z));
 		}
 		#endregion
 		/// <summary>
@@ -1007,7 +1007,7 @@ namespace Ibasa.Numerics.Geometry
 			double r = Functions.Sqrt(value.X * value.X + value.Y * value.Y + value.Z * value.Z);
 			double theta = Functions.Atan2(value.Y, value.X);
 			if (theta < 0)
-				theta += 2 * Constants.PI;
+				theta += 2 * Constants.Pi;
 			return new SphericalCoordinate(
 			     r,
 			     (double)Functions.Acos(value.Z / r),

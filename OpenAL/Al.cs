@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Ibasa.OpenAL
 {
-    public static class Al
+    public static unsafe class Al
     {
         /* bad value */
         public const int INVALID = -1;
@@ -297,43 +297,43 @@ namespace Ibasa.OpenAL
          * Renderer State management
          */
         [DllImport("openal32.dll", EntryPoint = "alEnable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Enable(int capability);
+        public static extern void Enable(int capability);
 
         [DllImport("openal32.dll", EntryPoint = "alDisable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Disable(int capability); 
+        public static extern void Disable(int capability); 
         
         [DllImport("openal32.dll", EntryPoint = "alDisable", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte IsEnabled(int capability); 
+        public static extern byte IsEnabled(int capability); 
 
         /*
          * State retrieval
          */        
         [DllImport("openal32.dll", EntryPoint = "alGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte* GetString(int param);
+        public static extern byte* GetString(int param);
 
         [DllImport("openal32.dll", EntryPoint = "alGetBooleanv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetBooleanv(int param, byte* data);
+        public static extern void GetBooleanv(int param, byte* data);
 
         [DllImport("openal32.dll", EntryPoint = "alGetIntegerv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetIntegerv(int param, int* data);
+        public static extern void GetIntegerv(int param, int* data);
 
         [DllImport("openal32.dll", EntryPoint = "alGetFloatv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetFloatv(int param, float* data);
+        public static extern void GetFloatv(int param, float* data);
 
         [DllImport("openal32.dll", EntryPoint = "alGetDoublev", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetDoublev(int param, double* data);
+        public static extern void GetDoublev(int param, double* data);
 
         [DllImport("openal32.dll", EntryPoint = "alGetBoolean", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte GetBoolean(int param);
+        public static extern byte GetBoolean(int param);
 
         [DllImport("openal32.dll", EntryPoint = "alGetInteger", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe int GetInteger(int param);
+        public static extern int GetInteger(int param);
 
         [DllImport("openal32.dll", EntryPoint = "alGetFloat", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe float GetFloat(int param);
+        public static extern float GetFloat(int param);
 
         [DllImport("openal32.dll", EntryPoint = "alGetDouble", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe double GetDouble(int param);
+        public static extern double GetDouble(int param);
 
 
         /*
@@ -341,7 +341,7 @@ namespace Ibasa.OpenAL
          * Obtain the most recent error generated in the AL state machine.
          */
         [DllImport("openal32.dll", EntryPoint = "alGetError", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe int GetError();
+        public static extern int GetError();
 
 
         /* 
@@ -351,13 +351,13 @@ namespace Ibasa.OpenAL
          */        
         [DllImport("openal32.dll", EntryPoint = "alIsExtensionPresent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern unsafe bool IsExtensionPresent(byte* extname);
+        public static extern bool IsExtensionPresent(byte* extname);
         
         [DllImport("openal32.dll", EntryPoint = "alGetProcAddress", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void* GetProcAddress(byte* fname);
+        public static extern void* GetProcAddress(byte* fname);
 
         [DllImport("openal32.dll", EntryPoint = "alGetEnumValue", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe int GetEnumValue(byte* ename);
+        public static extern int GetEnumValue(byte* ename);
 
 
         /*
@@ -377,43 +377,43 @@ namespace Ibasa.OpenAL
          * Set Listener parameters
          */
         [DllImport("openal32.dll", EntryPoint = "alListenerf", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Listenerf(int param, float value);
+        public static extern void Listenerf(int param, float value);
 
         [DllImport("openal32.dll", EntryPoint = "alListener3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Listener3f(int param, float value1, float value2, float value3);
+        public static extern void Listener3f(int param, float value1, float value2, float value3);
 
         [DllImport("openal32.dll", EntryPoint = "alListenerfv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Listenerfv(int param, float* values); 
+        public static extern void Listenerfv(int param, float* values); 
 
         [DllImport("openal32.dll", EntryPoint = "alListeneri", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Listeneri(int param, int value);
+        public static extern void Listeneri(int param, int value);
 
         [DllImport("openal32.dll", EntryPoint = "alListener3i", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Listener3i(int param, int value1, int value2, int value3);
+        public static extern void Listener3i(int param, int value1, int value2, int value3);
 
         [DllImport("openal32.dll", EntryPoint = "alListeneriv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Listeneriv(int param, int* values);
+        public static extern void Listeneriv(int param, int* values);
 
         /*
          * Get Listener parameters
          */
         [DllImport("openal32.dll", EntryPoint = "alGetListenerf", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetListenerf(int param, float* value);
+        public static extern void GetListenerf(int param, float* value);
 
         [DllImport("openal32.dll", EntryPoint = "alGetListener3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetListener3f(int param, float* value1, float* value2, float* value3);
+        public static extern void GetListener3f(int param, float* value1, float* value2, float* value3);
 
         [DllImport("openal32.dll", EntryPoint = "alGetListenerfv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetListenerfv(int param, float* values);
+        public static extern void GetListenerfv(int param, float* values);
 
         [DllImport("openal32.dll", EntryPoint = "alGetListeneri", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetListeneri(int param, int* value);
+        public static extern void GetListeneri(int param, int* value);
 
         [DllImport("openal32.dll", EntryPoint = "alGetListener3i", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetListener3i(int param, int* value1, int* value2, int* value3);
+        public static extern void GetListener3i(int param, int* value1, int* value2, int* value3);
 
         [DllImport("openal32.dll", EntryPoint = "alGetListeneriv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetListeneriv(int param, int* values);
+        public static extern void GetListeneriv(int param, int* values);
 
 
         /**
@@ -451,57 +451,57 @@ namespace Ibasa.OpenAL
 
         /* Create Source objects */
         [DllImport("openal32.dll", EntryPoint = "alGenSources", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GenSources(int n, uint* sources); 
+        public static extern void GenSources(int n, uint* sources); 
 
         /* Delete Source objects */
         [DllImport("openal32.dll", EntryPoint = "alDeleteSources", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void DeleteSources(int n, uint* sources);
+        public static extern void DeleteSources(int n, uint* sources);
 
         /* Verify a handle is a valid Source */ 
         [DllImport("openal32.dll", EntryPoint = "alIsSource", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte IsSource(uint sid); 
+        public static extern byte IsSource(uint sid); 
 
         /*
          * Set Source parameters
          */
         [DllImport("openal32.dll", EntryPoint = "alSourcef", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Sourcef(uint sid, int param, float value); 
+        public static extern void Sourcef(uint sid, int param, float value); 
 
         [DllImport("openal32.dll", EntryPoint = "alSource3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Source3f(uint sid, int param, float value1, float value2, float value3);
+        public static extern void Source3f(uint sid, int param, float value1, float value2, float value3);
 
         [DllImport("openal32.dll", EntryPoint = "alSourcefv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Sourcefv(uint sid, int param, float* values); 
+        public static extern void Sourcefv(uint sid, int param, float* values); 
 
         [DllImport("openal32.dll", EntryPoint = "alSourcei", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Sourcei(uint sid, int param, int value); 
+        public static extern void Sourcei(uint sid, int param, int value); 
 
         [DllImport("openal32.dll", EntryPoint = "alSource3i", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Source3i(uint sid, int param, int value1, int value2, int value3);
+        public static extern void Source3i(uint sid, int param, int value1, int value2, int value3);
 
         [DllImport("openal32.dll", EntryPoint = "alSourceiv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Sourceiv(uint sid, int param, int* values);
+        public static extern void Sourceiv(uint sid, int param, int* values);
 
         /*
          * Get Source parameters
          */
         [DllImport("openal32.dll", EntryPoint = "alGetSourcef", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetSourcef(uint sid, int param, float* value);
+        public static extern void GetSourcef(uint sid, int param, float* value);
 
         [DllImport("openal32.dll", EntryPoint = "alGetSource3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetSource3f(uint sid, int param, float* value1, float* value2, float* value3);
+        public static extern void GetSource3f(uint sid, int param, float* value1, float* value2, float* value3);
 
         [DllImport("openal32.dll", EntryPoint = "alGetSourcefv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetSourcefv(uint sid, int param, float* values);
+        public static extern void GetSourcefv(uint sid, int param, float* values);
 
         [DllImport("openal32.dll", EntryPoint = "alGetSourcei", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetSourcei(uint sid, int param, int* value);
+        public static extern void GetSourcei(uint sid, int param, int* value);
 
         [DllImport("openal32.dll", EntryPoint = "alGetSource3i", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetSource3i(uint sid, int param, int* value1, int* value2, int* value3);
+        public static extern void GetSource3i(uint sid, int param, int* value1, int* value2, int* value3);
 
         [DllImport("openal32.dll", EntryPoint = "alGetSourceiv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetSourceiv(uint sid, int param, int* values);
+        public static extern void GetSourceiv(uint sid, int param, int* values);
 
 
         /*
@@ -510,19 +510,19 @@ namespace Ibasa.OpenAL
 
         /* Play, replay, or resume (if paused) a list of Sources */
         [DllImport("openal32.dll", EntryPoint = "alSourcePlayv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourcePlayv(int ns, uint* sids);
+        public static extern void SourcePlayv(int ns, uint* sids);
 
         /* Stop a list of Sources */
         [DllImport("openal32.dll", EntryPoint = "alSourceStopv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourceStopv(int ns, uint* sids);
+        public static extern void SourceStopv(int ns, uint* sids);
 
         /* Rewind a list of Sources */
         [DllImport("openal32.dll", EntryPoint = "alSourceRewindv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourceRewindv(int ns, uint* sids);
+        public static extern void SourceRewindv(int ns, uint* sids);
 
         /* Pause a list of Sources */
         [DllImport("openal32.dll", EntryPoint = "alSourcePausev", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourcePausev(int ns, uint* sids);
+        public static extern void SourcePausev(int ns, uint* sids);
 
         /*
          * Source based playback calls
@@ -530,28 +530,28 @@ namespace Ibasa.OpenAL
 
         /* Play, replay, or resume a Source */
         [DllImport("openal32.dll", EntryPoint = "alSourcePlay", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourcePlay(uint sid);
+        public static extern void SourcePlay(uint sid);
 
         /* Stop a Source */
         [DllImport("openal32.dll", EntryPoint = "alSourceStop", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourceStop(uint sid);
+        public static extern void SourceStop(uint sid);
 
         /* Rewind a Source (set playback postiton to beginning) */
         [DllImport("openal32.dll", EntryPoint = "alSourceRewind", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourceRewind(uint sid);
+        public static extern void SourceRewind(uint sid);
 
         /* Pause a Source */
         [DllImport("openal32.dll", EntryPoint = "alSourcePause", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourcePause(uint sid);
+        public static extern void SourcePause(uint sid);
 
         /*
          * Source Queuing 
          */
         [DllImport("openal32.dll", EntryPoint = "alSourceQueueBuffers", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourceQueueBuffers(uint sid, int numEntries, uint* bids);
+        public static extern void SourceQueueBuffers(uint sid, int numEntries, uint* bids);
 
         [DllImport("openal32.dll", EntryPoint = "alSourceUnqueueBuffers", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SourceUnqueueBuffers(uint sid, int numEntries, uint* bids);
+        public static extern void SourceUnqueueBuffers(uint sid, int numEntries, uint* bids);
 
 
         /**
@@ -570,76 +570,76 @@ namespace Ibasa.OpenAL
 
         /* Create Buffer objects */
         [DllImport("openal32.dll", EntryPoint = "alGenBuffers", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GenBuffers(int n, uint* buffers);
+        public static extern void GenBuffers(int n, uint* buffers);
 
         /* Delete Buffer objects */
         [DllImport("openal32.dll", EntryPoint = "alDeleteBuffers", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void DeleteBuffers(int n, uint* buffers);
+        public static extern void DeleteBuffers(int n, uint* buffers);
 
         /* Verify a handle is a valid Buffer */
         [DllImport("openal32.dll", EntryPoint = "alIsBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte IsBuffer(uint bid);
+        public static extern byte IsBuffer(uint bid);
 
         /* Specify the data to be copied into a buffer */
         [DllImport("openal32.dll", EntryPoint = "alBufferData", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void BufferData(uint bid, int format, void* data, int size, int freq);
+        public static extern void BufferData(uint bid, int format, void* data, int size, int freq);
 
         /*
          * Set Buffer parameters
          */
         [DllImport("openal32.dll", EntryPoint = "alBufferf", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Bufferf(uint bid, int param, float value);
+        public static extern void Bufferf(uint bid, int param, float value);
 
         [DllImport("openal32.dll", EntryPoint = "alBuffer3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Buffer3f(uint bid, int param, float value1, float value2, float value3);
+        public static extern void Buffer3f(uint bid, int param, float value1, float value2, float value3);
 
         [DllImport("openal32.dll", EntryPoint = "alBufferfv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Bufferfv(uint bid, int param, float* values);
+        public static extern void Bufferfv(uint bid, int param, float* values);
 
         [DllImport("openal32.dll", EntryPoint = "alBufferi", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Bufferi(uint bid, int param, int value);
+        public static extern void Bufferi(uint bid, int param, int value);
 
         [DllImport("openal32.dll", EntryPoint = "alBuffer3i", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Buffer3i(uint bid, int param, int value1, int value2, int value3);
+        public static extern void Buffer3i(uint bid, int param, int value1, int value2, int value3);
 
         [DllImport("openal32.dll", EntryPoint = "alBufferiv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void Bufferiv(uint bid, int param, int* values);
+        public static extern void Bufferiv(uint bid, int param, int* values);
 
         /*
         * Get Buffer parameters
         */
         [DllImport("openal32.dll", EntryPoint = "alGetBufferf", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetBufferf(uint bid, int param, float* value);
+        public static extern void GetBufferf(uint bid, int param, float* value);
 
         [DllImport("openal32.dll", EntryPoint = "alGetBuffer3f", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetBuffer3f(uint bid, int param, float* value1, float* value2, float* value3);
+        public static extern void GetBuffer3f(uint bid, int param, float* value1, float* value2, float* value3);
 
         [DllImport("openal32.dll", EntryPoint = "alGetBufferfv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetBufferfv(uint bid, int param, float* values);
+        public static extern void GetBufferfv(uint bid, int param, float* values);
 
         [DllImport("openal32.dll", EntryPoint = "alGetBufferi", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetBufferi(uint bid, int param, int* value);
+        public static extern void GetBufferi(uint bid, int param, int* value);
 
         [DllImport("openal32.dll", EntryPoint = "alGetBuffer3i", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetBuffer3i(uint bid, int param, int* value1, int* value2, int* value3);
+        public static extern void GetBuffer3i(uint bid, int param, int* value1, int* value2, int* value3);
 
         [DllImport("openal32.dll", EntryPoint = "alGetBufferiv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetBufferiv(uint bid, int param, int* values);
+        public static extern void GetBufferiv(uint bid, int param, int* values);
 
 
         /*
          * Global Parameters
          */
         [DllImport("openal32.dll", EntryPoint = "alDopplerFactor", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void DopplerFactor(float value);
+        public static extern void DopplerFactor(float value);
 
         [DllImport("openal32.dll", EntryPoint = "alDopplerVelocity", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void DopplerVelocity(float value);
+        public static extern void DopplerVelocity(float value);
 
         [DllImport("openal32.dll", EntryPoint = "alSpeedOfSound", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SpeedOfSound(float value);
+        public static extern void SpeedOfSound(float value);
 
         [DllImport("openal32.dll", EntryPoint = "alDistanceModel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void DistanceModel(int distanceModel);
+        public static extern void DistanceModel(int distanceModel);
     }
 }

@@ -109,6 +109,24 @@ namespace Ibasa.Collections.Immutable
             _array = collection.ToArray();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the ImmutableArray{T} class using the provided 
+        /// initializer function to set each element.
+        /// </summary>
+        /// <param name="initializer">A function that creates an element for each index.</param>
+        /// <param name="count">The number of elements in the created array.</param>
+        /// <returns>A new array with count elements initalized by the initalizer function.</returns>
+        public static ImmutableArray<T> Create(Func<int, T> initializer, int count)
+        {
+            ImmutableArray<T> array = new ImmutableArray<T>(count);
+            for (int i = 0; i < count; ++i)
+            {
+                var value = initializer(i);
+                array._array[i] = value;
+            }
+            return array;
+        }
+
         #region Copy
         //
         // Summary:

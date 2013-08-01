@@ -522,18 +522,21 @@ namespace Ibasa.IO
         /// <exception cref="System.IO.EndOfStreamException">There are not enough bytes left to read in a structure of type T</exception>
         public T Read<T>() where T : struct
         {
-            var type = typeof(T);
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
+            int size = Ibasa.Interop.Memory.SizeOf<T>();
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
             int read = Read(buffer, 0, size);
             if (read != size)
-                throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", type.Name));
+                throw new EndOfStreamException(string.Format(
+                    "There are not enough bytes left to read in a structure of type {0}", typeof(T).Name));
 
-            T structure = default(T);
-            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(structure, System.Runtime.InteropServices.GCHandleType.Pinned);
-            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, handle.AddrOfPinnedObject(), size);
-            handle.Free();
-
+            T structure;
+            unsafe
+            {
+                fixed (byte* ptr = buffer)
+                {
+                    Ibasa.Interop.Memory.Read<T>(ptr, out structure);
+                }
+            }
             return structure;
         }
 
@@ -549,21 +552,25 @@ namespace Ibasa.IO
             if (array == null)
                 throw new ArgumentNullException("array is null.");
 
-            var type = typeof(T);
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
+            int size = Ibasa.Interop.Memory.SizeOf<T>();
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
-            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(array.Array, System.Runtime.InteropServices.GCHandleType.Pinned);
-            IntPtr target = handle.AddrOfPinnedObject();
-            for (int i = 0; i < array.Count; ++i)
+            unsafe
             {
-                int read = Read(buffer, 0, size);
-                if (read != size)
-                    throw new EndOfStreamException(string.Format("There are not enough bytes left to read in a structure of type {0}", type.Name));
+                fixed (byte* ptr = buffer)
+                {
+                    for (int i = 0; i < array.Count; ++i)
+                    {
+                        int read = Read(buffer, 0, size);
+                        if (read != size)
+                            throw new EndOfStreamException(string.Format(
+                                "There are not enough bytes left to read in a structure of type {0}", typeof(T).Name));
 
-                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, target, size);
-                target += size;
+                        T structure;
+                        Ibasa.Interop.Memory.Read<T>(ptr, out structure);
+                        array[i] = structure;
+                    }
+                }
             }
-            handle.Free();
         }
 
         /// <summary>

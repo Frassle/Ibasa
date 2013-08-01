@@ -14,8 +14,20 @@ namespace InteropBuilder
         {
             try
             {
-                var path = args.Length >= 1 ? args[0] : "Ibasa.Interop.dll";
-                AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(path);
+                var path = args.Length >= 1 ? args[0] : "Ibasa.dll";                
+
+                var symbolReader = new Mono.Cecil.Pdb.PdbReaderProvider();
+                var readerParameters = new ReaderParameters()
+                {
+                    SymbolReaderProvider = symbolReader,
+                    ReadSymbols = true,
+                };
+                var writerParameters = new WriterParameters()
+                {
+                    WriteSymbols = true,
+                };
+
+                AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(path, readerParameters);
 
                 Console.WriteLine("Loaded {0}.", path);
 
@@ -23,7 +35,7 @@ namespace InteropBuilder
 
                 Console.WriteLine("Saving new dll.");
 
-                assembly.Write(path);
+                assembly.Write(path, writerParameters);
             }
             catch (Exception e)
             {

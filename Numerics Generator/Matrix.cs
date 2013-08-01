@@ -44,7 +44,7 @@ namespace Numerics_Generator
             WriteLine("using System.Globalization;");
             WriteLine("using System.Runtime.InteropServices;");
             WriteLine("");
-            WriteLine("namespace Ibasa.Numerics.Geometry");
+            WriteLine("namespace Ibasa.Numerics");
             WriteLine("{");
             Indent();
             Declaration();
@@ -111,15 +111,13 @@ namespace Numerics_Generator
         private void Fields()
         {
             WriteLine("#region Fields");
-            for(int row = 1; row <= Rows; ++row)
+            foreach(var element in Elements)
             {
-                for(int column = 1; column <= Columns; ++column)
-                {
-                    WriteLine("/// <summary>");
-                    WriteLine("/// Gets the element of the matrix that exists in the {0} row and {1} column.", row.OrderName(), column.OrderName());
-                    WriteLine("/// </summary>");
-                    WriteLine("public readonly {0} M{1}{2};", Type, row, column);
-                }
+                WriteLine("/// <summary>");
+                WriteLine("/// Gets the element of the matrix that exists in the {0} row and {1} column.",
+                    (element.Row + 1).OrderName(), (element.Column + 1).OrderName());
+                WriteLine("/// </summary>");
+                WriteLine("public readonly {0} M{1}{2};", Type, (element.Row + 1), (element.Column + 1));
             }
             WriteLine("#endregion");
         }
@@ -151,7 +149,7 @@ namespace Numerics_Generator
             Indent();
             RowBounds();
             ColumnBounds();
-            WriteLine("int index = column + row * {0};", Columns);
+            WriteLine("int index = row + column * {0};", Rows);
             WriteLine("return this[index];");
             Dedent();
             WriteLine("}");
@@ -261,37 +259,368 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
 
-            WriteLine("public {0}({1})", Name,
-                string.Join(", ", Elements.Select(element => string.Format("{0} m{1}{2}", Type, element.Row + 1, element.Column + 1))));
-            WriteLine("{");
-            Indent();
-            for (int row = 1; row <= Rows; ++row)
+            var rows = new List<Element>();
+            for (int i = 0; i < Rows; ++i)
             {
-                for (int column = 1; column <= Columns; ++column)
+                for (int j = 0; j < Columns; ++j)
                 {
-                    WriteLine("M{0}{1} = m{0}{1};", row, column);
+                    rows.Add(new Element(i, j, 0));
                 }
             }
-            Dedent();
-            WriteLine("}");
-
-            var rowVector = new Vector(Type, Columns);
 
             WriteLine("public {0}({1})", Name,
-                string.Join(", ", Enumerable.Range(0, Rows).Select(row => string.Format("{0} row{1}", rowVector, row + 1))));
+                string.Join(", ", rows.Select(element => 
+                    string.Format("{0} {1}", Type, element.ToString().ToLower()))));
             WriteLine("{");
             Indent();
-            for (int row = 1; row <= Rows; ++row)
+            foreach (var element in Elements)
             {
-                for (int column = 1; column <= Columns; ++column)
-                {
-                    WriteLine("M{0}{1} = row{0}.{2};", row, column, rowVector.Components[column - 1]);
-                }
+                WriteLine("{0} = {1};", element.ToString(), element.ToString().ToLower());
             }
             Dedent();
             WriteLine("}");
 
             WriteLine("#endregion");
+
+            #region Transform
+            if (Rows == Columns)
+            {
+                WriteLine("#region Transform");
+
+                #region Rotation
+                WriteLine("#region Rotation");
+
+                if (Rows > 2)
+                {
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Creates a matrix that rotates around the x-axis.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"angle\">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>");
+                    WriteLine("/// <returns>The created rotation matrix.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} RotationX({1} angle)", Name, Type);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("var cos = Functions.Cos(angle);");
+                    WriteLine("var sin = Functions.Sin(angle);");
+
+                    WriteLine("return new {0}(", Name);
+                    Indent();
+                    WriteLine("1, 0, 0{0}", Rows == 4 ? ", 0," : ",");
+                    WriteLine("0, cos, sin{0}", Rows == 4 ? ", 0," : ",");
+                    WriteLine("0, -sin, cos{0}", Rows == 4 ? ", 0," : "");
+                    if (Rows == 4)
+                    {
+                        WriteLine("0, 0, 0, 1");
+                    }
+                    Dedent(");");
+                    Dedent();
+                    WriteLine("}");
+
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Creates a matrix that rotates around the y-axis.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"angle\">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>");
+                    WriteLine("/// <returns>The created rotation matrix.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} RotationY({1} angle)", Name, Type);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("var cos = Functions.Cos(angle);");
+                    WriteLine("var sin = Functions.Sin(angle);");
+
+                    WriteLine("return new {0}(", Name);
+                    Indent();
+                    WriteLine("cos, 0, -sin{0}", Rows == 4 ? ", 0," : ",");
+                    WriteLine("0, 1, 0{0}", Rows == 4 ? ", 0," : ",");
+                    WriteLine("sin, 0, cos{0}", Rows == 4 ? ", 0," : "");
+                    if (Rows == 4)
+                    {
+                        WriteLine("0, 0, 0, 1");
+                    }
+                    Dedent(");");
+                    Dedent();
+                    WriteLine("}");
+                }
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Creates a matrix that rotates around the z-axis.");
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"angle\">Angle of rotation in radians. Angles are measured clockwise when looking along the rotation axis toward the origin.</param>");
+                WriteLine("/// <returns>The created rotation matrix.</returns>");
+                if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                WriteLine("public static {0} RotationZ({1} angle)", Name, Type);
+                WriteLine("{");
+                Indent();
+                WriteLine("var cos = Functions.Cos(angle);");
+                WriteLine("var sin = Functions.Sin(angle);");
+
+                WriteLine("return new {0}(", Name);
+                Indent();
+                if(Rows == 2)
+                {
+                    WriteLine("cos, sin,");
+                    WriteLine("-sin, cos");
+                }
+                if (Rows == 3)
+                {
+                    WriteLine("cos, sin, 0,");
+                    WriteLine("-sin, cos, 0,");
+                    WriteLine("0, 0, 1");
+                }
+                if (Rows == 4)
+                {
+                    WriteLine("cos, sin, 0, 0,");
+                    WriteLine("-sin, cos, 0, 0,");
+                    WriteLine("0, 0, 1, 0,");
+                    WriteLine("0, 0, 0, 1");
+                }
+                Dedent(");");
+                Dedent();
+                WriteLine("}");
+
+                WriteLine("#endregion");
+                #endregion
+
+                #region Scaling
+                WriteLine("#region Scaling");
+                if(Rows == 2)
+                {
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Creates a matrix that scales along the x-axis and y-axis.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"x\">Scaling factor that is applied along the x-axis.</param>");
+                    WriteLine("/// <param name=\"y\">Scaling factor that is applied along the y-axis.</param>");
+                    WriteLine("/// <returns>The created scaling matrix.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} Scaling({1} x, {1} y)", Name, Type);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("return new {0}(", Name); 
+                    Indent();
+                    WriteLine("x, 0,");
+                    WriteLine("0, y");
+                    Dedent(");");
+                    Dedent();
+                    WriteLine("}");
+                }
+                else
+                {
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Creates a matrix that scales along the x-axis, y-axis and z-axis.");
+                    WriteLine("/// </summary>");                    
+                    WriteLine("/// <param name=\"x\">Scaling factor that is applied along the x-axis.</param>");
+                    WriteLine("/// <param name=\"y\">Scaling factor that is applied along the y-axis.</param>");
+                    WriteLine("/// <param name=\"z\">Scaling factor that is applied along the z-axis.</param>");
+                    WriteLine("/// <returns>The created scaling matrix.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} Scaling({1} x, {1} y, {1} z)", Name, Type);
+                    WriteLine("{");
+                    Indent(); 
+                    WriteLine("return new {0}(", Name);
+                    Indent();
+                    if (Rows == 3)
+                    {
+                        WriteLine("x, 0, 0,");
+                        WriteLine("0, y, 0,");
+                        WriteLine("0, 0, z");
+                    }
+                    if (Rows == 4)
+                    {
+                        WriteLine("x, 0, 0, 0,");
+                        WriteLine("0, y, 0, 0,");
+                        WriteLine("0, 0, z, 0,");
+                        WriteLine("0, 0, 0, 1");
+                    }
+                    Dedent(");");
+                    Dedent();
+                    WriteLine("}");
+                }
+                WriteLine("#endregion");
+                #endregion
+
+                #region Translation
+                WriteLine("#region Translation");
+                if (Rows == 3)
+                {
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Creates a matrix that translates along the x-axis and y-axis.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"x\">Translation along the x-axis.</param>");
+                    WriteLine("/// <param name=\"y\">Translation along the y-axis.</param>");
+                    WriteLine("/// <returns>The created translation matrix.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} Translation({1} x, {1} y)", Name, Type);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("return new {0}(", Name);
+                    Indent();
+                    WriteLine("1, 0, x,");
+                    WriteLine("0, 1, y,");
+                    WriteLine("0, 0, 1");
+                    Dedent(");");
+                    Dedent();
+                    WriteLine("}");
+                }
+                else if(Rows == 4)
+                {
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Creates a matrix that translates along the x-axis, y-axis and z-axis.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"x\">Translation along the x-axis.</param>");
+                    WriteLine("/// <param name=\"y\">Translation along the y-axis.</param>");
+                    WriteLine("/// <param name=\"z\">Translation along the z-axis.</param>");
+                    WriteLine("/// <returns>The created translation matrix.</returns>");
+                    if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
+                    WriteLine("public static {0} Translation({1} x, {1} y, {1} z)", Name, Type);
+                    WriteLine("{");
+                    Indent();
+                    WriteLine("return new {0}(", Name);
+                    Indent();
+                    WriteLine("1, 0, 0, x,");
+                    WriteLine("0, 1, 0, y,");
+                    WriteLine("0, 0, 1, z,");
+                    WriteLine("0, 0, 0, 1");
+                    Dedent(");");
+                    Dedent();
+                    WriteLine("}");
+                }
+                WriteLine("#endregion");
+                #endregion
+
+                WriteLine("#endregion");
+            }
+            #endregion
+
+            #region Projection
+            if (Rows == Columns && Rows == 4)
+            {
+                WriteLine("#region Projection");
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Creates an orthographic projection matrix.");
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"handedness\">Handedness of the created matrix.</param>");
+                WriteLine("/// <param name=\"width\">Width of the viewing volume.</param>");
+                WriteLine("/// <param name=\"height\">Height of the viewing volume.</param>");
+                WriteLine("/// <param name=\"znear\">Minimum z-value of the viewing volume.</param>");
+                WriteLine("/// <param name=\"zfar\">Maximum z-value of the viewing volume.</param>");
+                WriteLine("/// <returns>The created projection matrix.</returns>");
+                WriteLine("public static {0} Ortho(Handedness handedness, {1} width, {1} height, {1} znear, {1} zfar)", Name, Type);
+                Indent("{");
+                WriteLine("return Projection(ProjectionType.Orthographic, handedness, -width / 2, width / 2, -height / 2, height / 2, znear, zfar);");
+                Dedent("}");
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Creates a perspective projection matrix.");
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"handedness\">Handedness of the created matrix.</param>");
+                WriteLine("/// <param name=\"width\">Width of the viewing volume.</param>");
+                WriteLine("/// <param name=\"height\">Height of the viewing volume.</param>");
+                WriteLine("/// <param name=\"znear\">Minimum z-value of the viewing volume.</param>");
+                WriteLine("/// <param name=\"zfar\">Maximum z-value of the viewing volume.</param>");
+                WriteLine("/// <returns>The created projection matrix.</returns>");
+                WriteLine("public static {0} Perspective(Handedness handedness, {1} width, {1} height, {1} znear, {1} zfar)", Name, Type);
+                Indent("{");
+                WriteLine("return Projection(ProjectionType.Perspective, handedness, -width / 2, width / 2, -height / 2, height / 2, znear, zfar);");
+                Dedent("}");
+
+                WriteLine("/// <summary>");
+                WriteLine("/// Creates a perspective projection matrix based on a field of view.");
+                WriteLine("/// </summary>");
+                WriteLine("/// <param name=\"handedness\">Handedness of the created matrix.</param>");
+                WriteLine("/// <param name=\"fov\">Field of view in the y direction, in radians.</param>");
+                WriteLine("/// <param name=\"aspect\">Aspect ratio, defined as view space width divided by height.</param>");
+                WriteLine("/// <param name=\"znear\">Minimum z-value of the viewing volume.</param>");
+                WriteLine("/// <param name=\"zfar\">Maximum z-value of the viewing volume.</param>");
+                WriteLine("/// <returns>The created projection matrix.</returns>");
+                WriteLine("public static {0} PerspectiveFov(Handedness handedness, {1} fov, {1} aspect, {1} znear, {1} zfar)", Name, Type);
+                Indent("{");
+                WriteLine("var yScale = (1 / Functions.Tan(fov / 2));");
+                WriteLine("var xScale = yScale / aspect;");
+                WriteLine("var width = 2 * znear / xScale;");
+                WriteLine("var height = 2 * znear / yScale;");
+                WriteLine("return Projection(ProjectionType.Perspective, handedness, -width / 2, width / 2, -height / 2, height / 2, znear, zfar);");
+                Dedent("}");
+
+                //float zRange = zfar / (zfar - znear);
+
+                //result = new Matrix();
+                //result.M11 = 2.0f * znear / (right - left);
+                //result.M22 = 2.0f * znear / (top - bottom);
+
+                //result.M31 = (left + right) / (left - right);
+                //result.M32 = (top + bottom) / (bottom - top);
+                //result.M33 = zRange;
+                //result.M34 = 1.0f;
+                //result.M43 = -znear * zRange;
+
+                WriteLine("public static {0} Projection(ProjectionType type, Handedness handedness, {1} left, {1} right, {1} bottom, {1} top, {1} znear, {1} zfar)", Name, Type);
+                Indent("{");
+                WriteLine("var M11 = 2.0 / (right - left);");
+                WriteLine("var M12 = 0.0;");
+                WriteLine("var M13 = 0.0;");
+                WriteLine("var M14 = 0.0;");
+
+                WriteLine("var M21 = 0.0;");
+                WriteLine("var M22 = 2.0 / (top - bottom);");
+                WriteLine("var M23 = 0.0;");
+                WriteLine("var M24 = 0.0;");
+
+                WriteLine("var M31 = 0.0;");
+                WriteLine("var M32 = 0.0;");
+                WriteLine("var M33 = 2.0 / (zfar - znear);");
+                WriteLine("var M34 = 0.0;");
+
+                WriteLine("var M41 = 0.0;");
+                WriteLine("var M42 = 0.0;");
+                WriteLine("var M43 = 0.0;");
+                WriteLine("var M44 = 0.0;");
+
+                WriteLine("if (type == ProjectionType.Orthographic)");
+                Indent("{");
+
+                WriteLine("M14 = -(right + left) / (right - left);");
+                WriteLine("M24 = -(top + bottom) / (top - bottom);");
+                WriteLine("M34 = -(zfar + znear) / (zfar - znear);");
+                WriteLine("M44 = 1.0;");
+
+                Dedent("}");
+                WriteLine("else //if (type == ProjectionType.Perspective)");
+                Indent("{");
+
+                WriteLine("M11 *= znear;");
+                WriteLine("M22 *= znear;");
+
+                WriteLine("M13 = (left + right) / (left - right);");
+                WriteLine("M23 = (bottom + top) / (bottom - top);");
+                WriteLine("M33 = zfar / (zfar - znear);");
+                WriteLine("M43 = 1.0;");
+
+                WriteLine("M34 = (znear * zfar) / (znear - zfar);");
+
+                Dedent("}");
+
+                WriteLine("if (handedness == Handedness.Right)");
+                Indent("{");
+                WriteLine("M13 *= -1.0;");
+                WriteLine("M23 *= -1.0;");
+                WriteLine("M33 *= -1.0;");
+                WriteLine("M43 *= -1.0;");
+                Dedent("}");
+
+                WriteLine("return new {0}(", Name);
+                Indent();
+                WriteLine("({0})M11, ({0})M12, ({0})M13, ({0})M14,", Type);
+                WriteLine("({0})M21, ({0})M22, ({0})M23, ({0})M24,", Type);
+                WriteLine("({0})M31, ({0})M32, ({0})M33, ({0})M34,", Type);
+                WriteLine("({0})M41, ({0})M42, ({0})M43, ({0})M44", Type);
+                Dedent(");");
+                Dedent("}");
+
+                WriteLine("#endregion");
+            }
+            #endregion
         }
 
         private void Operations()
@@ -627,7 +956,8 @@ namespace Numerics_Generator
                 Indent();
                 WriteLine("return new {0}({1});", result, string.Join(", ",
                     result.Elements.Select(element => string.Join(" + ", Enumerable.Range(0, Columns).Select(k =>
-                        string.Format("left.M{0}{1} * right.M{2}{3}", element.Row + 1, k + 1, k + 1, element.Column + 1))))));
+                        string.Format("left.M{0}{1} * right.M{2}{3}", 
+                        element.Row + 1, k + 1, k + 1, element.Column + 1))))));
                 Dedent();
                 WriteLine("}");
             }
@@ -712,23 +1042,23 @@ namespace Numerics_Generator
             #region Per element
             WriteLine("#region Per element");
 
-            WriteLine("#region Transform");
+            WriteLine("#region Map");
             foreach (var type in Types)
             {
-                var transform = new Matrix(type, Rows, Columns);
+                var map = new Matrix(type, Rows, Columns);
 
                 WriteLine("/// <summary>");
-                WriteLine("/// Transforms the elements of a matrix and returns the result.");
+                WriteLine("/// Maps the elements of a matrix and returns the result.");
                 WriteLine("/// </summary>");
-                WriteLine("/// <param name=\"value\">The matrix to transform.</param>");
-                WriteLine("/// <param name=\"transformer\">A transform function to apply to each element.</param>");
-                WriteLine("/// <returns>The result of transforming each element of value.</returns>");
+                WriteLine("/// <param name=\"value\">The matrix to map.</param>");
+                WriteLine("/// <param name=\"mapping\">A mapping function to apply to each element.</param>");
+                WriteLine("/// <returns>The result of mapping each element of value.</returns>");
                 if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static {0} Transform({1} value, Func<{2}, {3}> transformer)", transform, Name, Type, transform.Type);
+                WriteLine("public static {0} Map({1} value, Func<{2}, {3}> mapping)", map, Name, Type, map.Type);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", transform,
-                    string.Join(", ", Elements.Select(element => string.Format("transformer(value.{0})", element))));
+                WriteLine("return new {0}({1});", map,
+                    string.Join(", ", Elements.Select(element => string.Format("mapping(value.{0})", element))));
                 Dedent();
                 WriteLine("}");
             }

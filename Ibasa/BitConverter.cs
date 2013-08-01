@@ -922,13 +922,23 @@ namespace Ibasa
         [CLSCompliant(false)]
         public static ulong SwapBytes(ulong value)
         {
-            return (ulong)(SwapBytes((uint)(value >> 0x20)) | (SwapBytes((uint)value) << 0x20));
+            return (ulong)SwapBytes((uint)(value >> 0x20)) | ((ulong)SwapBytes((uint)value) << 0x20);
         }
         [SecuritySafeCritical]
         [CLSCompliant(false)]
         public static ushort SwapBytes(ushort value)
         {
             return (ushort)((value >> 0x8) | (value << 0x8));
+        }
+        public static void SwapBytes(byte[] value)
+        {
+            Contract.Requires(value != null);
+            for (int i = 0; i < value.Length / 2; ++i)
+            {
+                byte temp = value[i];
+                value[i] = value[value.Length - (i + 1)];
+                value[value.Length - (i + 1)] = temp;
+            }
         }
         #endregion
 
@@ -1005,6 +1015,19 @@ namespace Ibasa
         {
             return IsLittleEndian ? value : SwapBytes(value);
         }
+        public static void SwapLittleEndian(byte[] value)
+        {
+            Contract.Requires(value != null);
+            if (IsLittleEndian)
+                return;
+
+            for (int i = 0; i < value.Length / 2; ++i)
+            {
+                byte temp = value[i];
+                value[i] = value[value.Length - (i + 1)];
+                value[value.Length - (i + 1)] = temp;
+            }
+        }
 
         public static byte SwapBigEndian(byte value)
         {
@@ -1053,6 +1076,19 @@ namespace Ibasa
         public static decimal SwapBigEndian(decimal value)
         {
             return !IsLittleEndian ? value : SwapBytes(value);
+        }
+        public static void SwapBigEndian(byte[] value)
+        {
+            Contract.Requires(value != null);
+            if (!IsLittleEndian)
+                return;
+
+            for (int i = 0; i < value.Length / 2; ++i)
+            {
+                byte temp = value[i];
+                value[i] = value[value.Length - (i + 1)];
+                value[value.Length - (i + 1)] = temp;
+            }
         }
         #endregion
     }

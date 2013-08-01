@@ -36,8 +36,20 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\packages\MathNet.Numerics.2.5.0\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics.FSharp">
+      <HintPath>..\packages\MathNet.Numerics.FSharp.2.5.0\lib\net40\MathNet.Numerics.FSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics.IO">
+      <HintPath>..\packages\MathNet.Numerics.2.5.0\lib\net40\MathNet.Numerics.IO.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,28 +57,66 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Blizzard\Blizzard.csproj">
+      <Project>{3a824756-54da-482f-8fd1-bb1dfeca826e}</Project>
+      <Name>Blizzard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cryptography\Cryptography.csproj">
+      <Project>{4bb406be-b6da-439d-8321-bd664d9cd4ef}</Project>
+      <Name>Cryptography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Game\Game.csproj">
+      <Project>{a61dda63-ff55-4393-8390-d3b94911b31e}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graphics\Graphics.csproj">
+      <Project>{005cda62-bc5a-49df-a9a1-835070ae06b4}</Project>
+      <Name>Graphics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ibasa\Ibasa.csproj">
       <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
       <Name>Ibasa</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Interop\Interop.csproj">
-      <Project>{ffce024e-bd5b-494e-b881-b1cee1512078}</Project>
-      <Name>Interop</Name>
+    <ProjectReference Include="..\Media\Media.csproj">
+      <Project>{e60f78be-b464-4894-81be-18140411b5fe}</Project>
+      <Name>Media</Name>
     </ProjectReference>
     <ProjectReference Include="..\Numerics\Numerics.csproj">
       <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>
       <Name>Numerics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OpenAL\OpenAL.csproj">
+      <Project>{39b5d464-05b2-4dce-80c2-e74ac543494c}</Project>
+      <Name>OpenAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenCL\OpenCL.csproj">
       <Project>{4435d9ed-80c8-4e0c-bcb7-2e74e9ed5c07}</Project>
       <Name>OpenCL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenGL\OpenGL.csproj">
+      <Project>{4a7804e5-67a1-4d19-af87-1180c0f3c368}</Project>
+      <Name>OpenGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Packaging\Packaging.csproj">
+      <Project>{7ee0d750-a48a-4832-af90-a1de4d73b7ab}</Project>
+      <Name>Packaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Platform\Platform.csproj">
+      <Project>{282eb28d-b6ad-49e8-8743-a79acc6468fb}</Project>
+      <Name>Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Valve\Valve.csproj">
+      <Project>{4aa2ec27-4e8d-4812-820e-00c23534b054}</Project>
+      <Name>Valve</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

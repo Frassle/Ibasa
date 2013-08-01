@@ -29,7 +29,7 @@ namespace Ibasa.Numerics.Geometry
         public PolarCoordinate(double theta, double rho = 1)
         {
             Contract.Requires(0 <= rho);
-            Contract.Requires(0 <= theta && theta <= 2 * Constants.PI);
+            Contract.Requires(0 <= theta && theta <= 2 * Constants.Pi);
 
             Rho = rho;
             Theta = theta;

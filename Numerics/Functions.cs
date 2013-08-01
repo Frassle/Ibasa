@@ -47,6 +47,81 @@ namespace Ibasa.Numerics
         }
         #endregion
 
+        #region ModPow
+        /// <summary>
+        /// Performs modulus division on a number raised to the power of another number.
+        /// </summary>
+        /// <param name="value">The number to raise to the exponent power.</param>
+        /// <param name="exponent">The exponent to raise value by.</param>
+        /// <param name="modulus">The value to divide valueexponent by.</param>
+        /// <returns>The remainder after dividing valueexponent by modulus.</returns>
+        public static long ModPow(long value, long exponent, long modulus)
+        {
+            if (modulus == 0)
+            {
+                throw new DivideByZeroException("modulus is zero.");
+            }
+            else if (exponent < 0)
+            {
+                throw new ArgumentException("exponent is negative.", "exponent");
+            }
+            else if (exponent == 0)
+            {
+                return 1 % modulus;
+            }
+            else if (exponent == 1)
+            {
+                return value % modulus;
+            }
+            else if (exponent % 2 != 0)
+            {
+                return (ModPow(value, (exponent - 1), modulus) * (value % modulus)) % modulus;
+            }
+            else
+            {
+                var z = ModPow(value, exponent / 2, modulus);
+                return (z * z) % modulus;
+            }
+        }
+
+        /// <summary>
+        /// Performs modulus division on a number raised to the power of another number.
+        /// </summary>
+        /// <param name="value">The number to raise to the exponent power.</param>
+        /// <param name="exponent">The exponent to raise value by.</param>
+        /// <param name="modulus">The value to divide valueexponent by.</param>
+        /// <returns>The remainder after dividing valueexponent by modulus.</returns>
+        public static int ModPow(int value, int exponent, int modulus)
+        {
+            if (modulus == 0)
+            {
+                throw new DivideByZeroException("modulus is zero.");
+            }
+            else if (exponent < 0)
+            {
+                throw new ArgumentException("exponent is negative.", "exponent");
+            }
+            else if (exponent == 0)
+            {
+                return 1 % modulus;
+            }
+            else if (exponent == 1)
+            {
+                return value % modulus;
+            }
+            else if (exponent % 2 != 0)
+            {
+                return (ModPow(value, (exponent - 1), modulus) * (value % modulus)) % modulus;
+            }
+            else
+            {
+                var z = ModPow(value, exponent / 2, modulus);
+                return (z * z) % modulus;
+            }
+        }
+        #endregion
+
+
         #region Trigonometric
         /// <summary>
         /// Converts a number in radians to degrees.
@@ -56,7 +131,7 @@ namespace Ibasa.Numerics
         [Pure]
         public static double ToDegrees(double radians)
         {
-            return radians * 360.0 / Constants.TAU;
+            return radians * 360.0 / Constants.Tau;
         }
         /// <summary>
         /// Converts a number in degrees to radians.
@@ -66,7 +141,7 @@ namespace Ibasa.Numerics
         [Pure]
         public static double ToRadians(double degrees)
         {
-            return degrees * Constants.TAU / 360.0;
+            return degrees * Constants.Tau / 360.0;
         }
 
         #region Sin, Cos, Tan

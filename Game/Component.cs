@@ -13,7 +13,7 @@ namespace Ibasa.Game
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        public Component(IGame game)
+        public Component(Game game)
         {
             Game = game;
             _UpdateOrder = 0;
@@ -33,7 +33,7 @@ namespace Ibasa.Game
         /// <summary>
         /// The game this component is attached to.
         /// </summary>
-        public IGame Game
+        public Game Game
         {
             get;
             private set;
@@ -233,22 +233,25 @@ namespace Ibasa.Game
         }
 
         /// <summary>
-        /// Called when the GameComponent needs to be updated. Called for each component sequentially based on UpdateOrder.
+        /// Called when the GameComponent needs to be updated. 
+        /// Called for each component sequentially based on UpdateOrder.
         /// </summary>
-        /// <param name="elapsed">Time elapsed since the last call to Update.</param>
-        public virtual void Update(GameTime elapsed) { }
+        /// <param name="elapsed">Fixed time step since the last update.</param>
+        public virtual void FixedUpdate(GameTime time) { }
 
         /// <summary>
-        /// Called when the GameComponent needs to be updated. Called in parallel with all other systems after sequential Update.
+        /// Called when the GameComponent needs to be updated. 
+        /// Called in parallel with all other systems after sequential FixedUpdate.
         /// </summary>
-        /// <param name="elapsed">Time elapsed since the last call to ParallelUpdate.</param>
-        public virtual void ParallelUpdate(GameTime elapsed) { }
+        /// <param name="elapsed">Fixed time step since the last update.</param>
+        public virtual void ParallelUpdate(GameTime time) { }
 
         /// <summary>
-        /// Called when the GameComponent needs to be rendered.
+        /// Called when the GameComponent needs to be updated.
+        /// Called for each component sequentially based on after FixedUpdate and ParallelUpdate.
         /// </summary>
-        /// <param name="elapsed">Time elapsed since the last call to Render.</param>
-        public virtual void Render(GameTime elapsed)
+        /// <param name="elapsed">Variable time since last frame.</param>
+        public virtual void Update(GameTime time)
         {
         }
     }

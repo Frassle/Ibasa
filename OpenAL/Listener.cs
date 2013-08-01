@@ -1,4 +1,5 @@
-﻿using Ibasa.Numerics.Geometry;
+﻿using Ibasa.Numerics;
+using Ibasa.Numerics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;

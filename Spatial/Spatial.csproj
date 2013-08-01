@@ -52,10 +52,6 @@
       <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
       <Name>Ibasa</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Numerics\Numerics.csproj">
-      <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
-      <Name>Numerics</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

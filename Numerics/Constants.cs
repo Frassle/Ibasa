@@ -18,12 +18,12 @@ namespace Ibasa.Numerics
         /// Represents the ratio of the circumference of a circle to its diameter, specified
         /// by the constant, π.
         /// </summary>
-        public const double PI = Math.PI;
+        public const double Pi = Math.PI;
         /// <summary>
         /// Represents the ratio of the circumference of a circle to its radius, specified
         /// by the constant, τ.
         /// </summary>
-        public const double TAU = PI * 2.0;
+        public const double Tau = Pi * 2.0;
         /// <summary>
         /// The speed of light in a vacuum, in meters per second.
         /// </summary>
@@ -32,28 +32,34 @@ namespace Ibasa.Numerics
         /// The gravitational constant, in meters cubed per kilogram second squared.
         /// </summary>
         public const double G = 0.00000000006673848;
+    }
 
+    /// <summary>
+    /// Provides common mathematical and physical constants.
+    /// </summary>
+    public static class ConstantsF
+    {
         /// <summary>
         /// Represents the natural logarithmic base, specified by the constant, e.
         /// </summary>
-        public const float Ef = (float)E;
+        public const float E = (float)Constants.E;
         /// <summary>
         /// Represents the ratio of the circumference of a circle to its diameter, specified
         /// by the constant, π.
         /// </summary>
-        public const float PIf = (float)PI;
+        public const float Pi = (float)Constants.Pi;
         /// <summary>
         /// Represents the ratio of the circumference of a circle to its radius, specified
         /// by the constant, τ.
         /// </summary>
-        public const float TAUf = (float)TAU;
+        public const float Tau = (float)Constants.Tau;
         /// <summary>
         /// The speed of light in a vacuum, in meters per second.
         /// </summary>
-        public const float Cf = (float)C;
+        public const float C = (float)Constants.C;
         /// <summary>
         /// The gravitational constant, in meters cubed per kilogram second squared.
         /// </summary>
-        public const double Gf = (float)G;
+        public const double G = (float)Constants.G;
     }
 }

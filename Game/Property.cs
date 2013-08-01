@@ -13,19 +13,20 @@ namespace Ibasa.Game
             private set;
         }
 
-        public IGame Game
+        public Game Game
         {
             get;
             private set;
         }
 
-        public Property(IGame game, string name)
+        public Property(Game game, string name)
         {
             Game = game;
             Name = name;
         }
 
         public abstract void Remove(Entity entity);
+        public abstract void Add(Entity entity);
 
         public abstract void Swap();
     }
@@ -40,7 +41,7 @@ namespace Ibasa.Game
         System.Collections.Concurrent.ConcurrentBag<KeyValuePair<Entity, T>> ToAdd;
         System.Collections.Concurrent.ConcurrentBag<Entity> ToRemove;
 
-        public Property(IGame game, string name)
+        public Property(Game game, string name)
             : base(game, name)
         {
             Frontbuffer = new KeyValuePair<Entity, T>[10];
@@ -104,6 +105,11 @@ namespace Ibasa.Game
             }
         }
 
+        public override void Add(Entity entity)
+        {
+            Add(entity, default(T));
+        }
+        
         public override void Remove(Entity entity)
         {
             if (Game.IsParallel)
@@ -190,7 +196,7 @@ namespace Ibasa.Game
         public override void Swap()
         {
             if (Game.IsParallel)
-                throw new Exception("Tryed to swap in a parallel context.");
+                throw new Exception("Tried to swap in a parallel context.");
 
             var buffer = Frontbuffer;
 

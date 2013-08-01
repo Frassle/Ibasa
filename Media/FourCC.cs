@@ -48,7 +48,7 @@ namespace Ibasa.Media
         }
 
         public FourCC(string code)
-            : this(code[0], code[1], code[1], code[1])
+            : this(code[0], code[1], code[2], code[3])
         {
             Contract.Requires(code != null, "code cannot be null.");
             Contract.Requires(code.Length >= 4, "code must have a length of at least 4.");

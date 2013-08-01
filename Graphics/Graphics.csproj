@@ -31,7 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,13 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Vertex.cs" />
     <Compile Include="Voxel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
+      <Project>{5bdd6d94-0fa4-415c-9625-141347ac5bef}</Project>
+      <Name>Ibasa</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Numerics\Numerics.csproj">
-      <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
+      <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>
       <Name>Numerics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenGL\OpenGL.csproj">
+      <Project>{4a7804e5-67a1-4d19-af87-1180c0f3c368}</Project>
+      <Name>OpenGL</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpIL\SharpIL.csproj">
       <Project>{55ACA20C-0204-4A40-B274-5BC258CEC87F}</Project>

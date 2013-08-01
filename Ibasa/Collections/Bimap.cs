@@ -42,7 +42,7 @@ namespace Ibasa.Collections
         {
             foreach (var pair in leftMap)
             {
-                foreach (var item in pair.Value)
+                foreach (var item in pair)
                 {
                     yield return Tuple.Create(pair.Key, item);
                 }

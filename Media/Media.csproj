@@ -60,7 +60,7 @@
       <Name>Ibasa</Name>
     </ProjectReference>
     <ProjectReference Include="..\Numerics\Numerics.csproj">
-      <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
+      <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>
       <Name>Numerics</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpAL\SharpAL.csproj">

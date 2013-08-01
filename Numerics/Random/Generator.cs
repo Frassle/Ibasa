@@ -71,7 +71,7 @@ namespace Ibasa.Numerics.Random
         /// </summary>
         /// <param name="buffer">An array of bytes to contain random numbers.</param>
         /// <exception cref="System.ArgumentNullException">buffer is null.</exception>
-        public void NextBytes(byte[] buffer)
+        public virtual void NextBytes(byte[] buffer)
         {
             Contract.Requires(buffer != null, "buffer is null.");
 
@@ -100,7 +100,7 @@ namespace Ibasa.Numerics.Random
         /// A double-precision floating point number greater than or equal to 0.0, 
         /// and less than or equal to 1.0.
         /// </returns>
-        public double NextDouble()
+        public virtual double NextDouble()
         {
             return (1.0 / Max) * Next();
         }

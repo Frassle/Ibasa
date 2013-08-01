@@ -12,7 +12,7 @@ namespace Ibasa.Numerics
             var lpm = Functions.Factorial(l + Functions.Abs(m));
             var lmm = Functions.Factorial(l - Functions.Abs(m));
 
-            return Functions.Sqrt(((2 * l + 1) * lmm) / (4 * Constants.PI * lpm));
+            return Functions.Sqrt(((2 * l + 1) * lmm) / (4 * Constants.Pi * lpm));
         }
 
         private static double P(int l, int m, double x)

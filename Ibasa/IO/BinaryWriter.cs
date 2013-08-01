@@ -398,12 +398,16 @@ namespace Ibasa.IO
         /// <param name="structure">The structure to write.</param>
         public void Write<T>(T structure) where T : struct
         {
-            var type = typeof(T);
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
+            int size = Ibasa.Interop.Memory.SizeOf<T>();
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
-            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(structure, System.Runtime.InteropServices.GCHandleType.Pinned);
-            System.Runtime.InteropServices.Marshal.Copy(handle.AddrOfPinnedObject(), buffer, 0, size);
-            handle.Free();
+
+            unsafe
+            {
+                fixed (byte* ptr = buffer)
+                {
+                    Ibasa.Interop.Memory.Write<T>(ptr, ref structure);
+                }
+            }
 
             Write(buffer, 0, size);
         }
@@ -419,18 +423,20 @@ namespace Ibasa.IO
             if (array == null)
                 throw new ArgumentNullException("array is null.");
 
-            var type = typeof(T);
-            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
+            int size = Ibasa.Interop.Memory.SizeOf<T>();
             byte[] buffer = size <= Buffer.Length ? Buffer : new byte[size];
-            System.Runtime.InteropServices.GCHandle handle = System.Runtime.InteropServices.GCHandle.Alloc(array.Array, System.Runtime.InteropServices.GCHandleType.Pinned);
-            IntPtr target = handle.AddrOfPinnedObject();
-            for (int i = 0; i < array.Count; ++i)
+            unsafe
             {
-                System.Runtime.InteropServices.Marshal.Copy(target, buffer, 0, size);
-                Write(buffer, 0, size);
-                target += size;
+                fixed (byte* ptr = buffer)
+                {
+                    for (int i = 0; i < array.Count; ++i)
+                    {
+                        var structure = array[i];
+                        Ibasa.Interop.Memory.Write<T>(ptr, ref structure);
+                        Write(buffer, 0, size);
+                    }
+                }
             }
-            handle.Free();
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿module Base58
 
 let private alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz" |> Seq.toArray
-let private encoding = Ibasa.Numerics.Encoding(alphabet)
+let private encoding = Ibasa.Text.BaseEncoding(alphabet)
 
 let encode (bytes : byte[]) = 
-    encoding.Encode(bytes)
+    encoding.GetString(bytes)
 
 let decode (code : string) =
-    encoding.Decode(code)
+    encoding.GetBytes(code)

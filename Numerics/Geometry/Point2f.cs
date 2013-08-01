@@ -637,46 +637,46 @@ namespace Ibasa.Numerics.Geometry
 		}
 		#endregion
 		#region Per component
-		#region Transform
+		#region Map
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point2d Transform(Point2f value, Func<float, double> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point2d Map(Point2f value, Func<float, double> mapping)
 		{
-			return new Point2d(transformer(value.X), transformer(value.Y));
+			return new Point2d(mapping(value.X), mapping(value.Y));
 		}
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point2f Transform(Point2f value, Func<float, float> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point2f Map(Point2f value, Func<float, float> mapping)
 		{
-			return new Point2f(transformer(value.X), transformer(value.Y));
+			return new Point2f(mapping(value.X), mapping(value.Y));
 		}
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point2l Transform(Point2f value, Func<float, long> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point2l Map(Point2f value, Func<float, long> mapping)
 		{
-			return new Point2l(transformer(value.X), transformer(value.Y));
+			return new Point2l(mapping(value.X), mapping(value.Y));
 		}
 		/// <summary>
-		/// Transforms the components of a point and returns the result.
+		/// Maps the components of a point and returns the result.
 		/// </summary>
-		/// <param name="value">The point to transform.</param>
-		/// <param name="transformer">A transform function to apply to each component.</param>
-		/// <returns>The result of transforming each component of value.</returns>
-		public static Point2i Transform(Point2f value, Func<float, int> transformer)
+		/// <param name="value">The point to map.</param>
+		/// <param name="mapping">A mapping function to apply to each component.</param>
+		/// <returns>The result of mapping each component of value.</returns>
+		public static Point2i Map(Point2f value, Func<float, int> mapping)
 		{
-			return new Point2i(transformer(value.X), transformer(value.Y));
+			return new Point2i(mapping(value.X), mapping(value.Y));
 		}
 		#endregion
 		/// <summary>
@@ -836,7 +836,7 @@ namespace Ibasa.Numerics.Geometry
 		{
 			double theta = Functions.Atan2(value.Y, value.X);
 			if (theta < 0)
-				theta += 2 * Constants.PI;
+				theta += 2 * Constants.Pi;
 			return new PolarCoordinate(
 			     theta,
 			     (double)Functions.Sqrt(value.X * value.X + value.Y * value.Y));

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ibasa.OpenCL
 {
-    public static class Cl
+    public static unsafe class Cl
     {
         [StructLayout(LayoutKind.Sequential, Pack=1)]
         public struct image_format 
@@ -493,13 +493,13 @@ namespace Ibasa.OpenCL
         /* Platform API */
         
         [DllImport("opencl.dll", EntryPoint = "clGetPlatformIDs", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetPlatformIDs(
+        public static extern int GetPlatformIDs(
             uint num_entries, 
             IntPtr* platforms, 
             uint* num_platforms);
 
         [DllImport("opencl.dll", EntryPoint = "clGetPlatformInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetPlatformInfo(
+        public static extern int GetPlatformInfo(
             IntPtr platform, 
             int param_name, 
             UIntPtr param_value_size,
@@ -509,7 +509,7 @@ namespace Ibasa.OpenCL
         /* Device APIs */
 
         [DllImport("opencl.dll", EntryPoint = "clGetDeviceIDs", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetDeviceIDs(
+        public static extern int GetDeviceIDs(
             IntPtr platform,
             uint device_type,
             uint num_entries,
@@ -517,7 +517,7 @@ namespace Ibasa.OpenCL
             uint* num_devices);
 
         [DllImport("opencl.dll", EntryPoint = "clGetDeviceInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetDeviceInfo(
+        public static extern int GetDeviceInfo(
             IntPtr device,
             int param_name,
             UIntPtr param_value_size,
@@ -525,7 +525,7 @@ namespace Ibasa.OpenCL
             UIntPtr* param_value_size_ret);
         
         [DllImport("opencl.dll", EntryPoint = "clCreateSubDevices", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int CreateSubDevices(
+        public static extern int CreateSubDevices(
             IntPtr in_device,
             IntPtr* properties,
             uint num_devices,
@@ -533,17 +533,17 @@ namespace Ibasa.OpenCL
             uint* num_devices_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clRetainDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainDevice(
+        public static extern int RetainDevice(
             IntPtr device);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseDevice(
+        public static extern int ReleaseDevice(
             IntPtr device);
     
         /* Context APIs  */
 
         [DllImport("opencl.dll", EntryPoint = "clCreateContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateContext(
+        public static extern IntPtr CreateContext(
             IntPtr* properties,
             uint num_devices,
             IntPtr* devices,
@@ -552,7 +552,7 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clCreateContextFromType", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateContextFromType(
+        public static extern IntPtr CreateContextFromType(
             IntPtr* properties,
             int device_type,
             IntPtr pfn_notify,
@@ -560,15 +560,15 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
         
         [DllImport("opencl.dll", EntryPoint = "clRetainContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainContext(
+        public static extern int RetainContext(
             IntPtr context);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseContext(
+        public static extern int ReleaseContext(
             IntPtr context);
 
         [DllImport("opencl.dll", EntryPoint = "clGetContextInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetContextInfo(
+        public static extern int GetContextInfo(
             IntPtr context,
             int param_name,
             UIntPtr param_value_size,
@@ -577,22 +577,22 @@ namespace Ibasa.OpenCL
 
         /* Command Queue APIs */
         [DllImport("opencl.dll", EntryPoint = "clCreateCommandQueue", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateCommandQueue(
+        public static extern IntPtr CreateCommandQueue(
             IntPtr context,
             IntPtr device,
             ulong properties,
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clRetainCommandQueue", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainCommandQueue(
+        public static extern int RetainCommandQueue(
             IntPtr command_queue);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseCommandQueue", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseCommandQueue(
+        public static extern int ReleaseCommandQueue(
             IntPtr command_queue);
 
         [DllImport("opencl.dll", EntryPoint = "clGetCommandQueueInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetCommandQueueInfo(
+        public static extern int GetCommandQueueInfo(
             IntPtr command_queue,
             int param_name,
             UIntPtr param_value_size,
@@ -601,7 +601,7 @@ namespace Ibasa.OpenCL
 
         /* Memory Object APIs */
         [DllImport("opencl.dll", EntryPoint = "clCreateBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateBuffer(
+        public static extern IntPtr CreateBuffer(
             IntPtr context,
             ulong flags,
             UIntPtr size,
@@ -609,7 +609,7 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clCreateSubBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateSubBuffer(
+        public static extern IntPtr CreateSubBuffer(
             IntPtr buffer,
             ulong flags,
             uint buffer_create_type,
@@ -617,7 +617,7 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clCreateImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateImage(
+        public static extern IntPtr CreateImage(
             IntPtr context,
             ulong flags,
             image_format* image_format,
@@ -626,15 +626,15 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clRetainMemObject", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainMemObject(
+        public static extern int RetainMemObject(
             IntPtr memobj);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseMemObject", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseMemObject(
+        public static extern int ReleaseMemObject(
             IntPtr memobj);
 
         [DllImport("opencl.dll", EntryPoint = "clGetSupportedImageFormats", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetSupportedImageFormats(
+        public static extern int GetSupportedImageFormats(
             IntPtr context,
             ulong flags,
             uint image_type,
@@ -643,7 +643,7 @@ namespace Ibasa.OpenCL
             uint* num_image_formats);
         
         [DllImport("opencl.dll", EntryPoint = "clGetMemObjectInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetMemObjectInfo(
+        public static extern int GetMemObjectInfo(
             IntPtr memobj,
             int param_name,
             UIntPtr param_value_size,
@@ -651,7 +651,7 @@ namespace Ibasa.OpenCL
             UIntPtr* param_value_size_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clGetImageInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetImageInfo(
+        public static extern int GetImageInfo(
             IntPtr memobj,
             int param_name,
             UIntPtr param_value_size,
@@ -659,7 +659,7 @@ namespace Ibasa.OpenCL
             UIntPtr* param_value_size_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clSetMemObjectDestructorCallback", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int SetMemObjectDestructorCallback(
+        public static extern int SetMemObjectDestructorCallback(
             IntPtr memobj,
             IntPtr pfn_notify,
             void* user_data);
@@ -667,7 +667,7 @@ namespace Ibasa.OpenCL
 
         /* Sampler APIs */
         [DllImport("opencl.dll", EntryPoint = "clCreateSampler", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateSampler(
+        public static extern IntPtr CreateSampler(
             IntPtr context,
             uint normalized_coords,
             uint addressing_mode,
@@ -675,15 +675,15 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clRetainSampler", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainSampler(
+        public static extern int RetainSampler(
             IntPtr sampler);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseSampler", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseSampler(
+        public static extern int ReleaseSampler(
             IntPtr sampler);
 
         [DllImport("opencl.dll", EntryPoint = "clGetSamplerInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetSamplerInfo(
+        public static extern int GetSamplerInfo(
             IntPtr sampler,
             int param_name,
             UIntPtr param_value_size,
@@ -692,7 +692,7 @@ namespace Ibasa.OpenCL
                             
         /* Program Object APIs  */
         [DllImport("opencl.dll", EntryPoint = "clCreateProgramWithSource", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateProgramWithSource(
+        public static extern IntPtr CreateProgramWithSource(
             IntPtr context,
             uint count,
             byte** strings,
@@ -700,7 +700,7 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clCreateProgramWithBinary", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateProgramWithBinary(
+        public static extern IntPtr CreateProgramWithBinary(
             IntPtr context,
             uint num_devices,
             IntPtr* device_list,
@@ -710,7 +710,7 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clCreateProgramWithBuiltInKernels", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateProgramWithBuiltInKernels(
+        public static extern IntPtr CreateProgramWithBuiltInKernels(
             IntPtr context,
             uint num_devices,
             IntPtr* device_list,
@@ -718,15 +718,15 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clRetainProgram", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainProgram(
+        public static extern int RetainProgram(
             IntPtr program);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseProgram", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseProgram(
+        public static extern int ReleaseProgram(
             IntPtr program);
 
         [DllImport("opencl.dll", EntryPoint = "clBuildProgram", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int BuildProgram(
+        public static extern int BuildProgram(
             IntPtr program,
             uint num_devices,
             IntPtr* device_list,
@@ -735,7 +735,7 @@ namespace Ibasa.OpenCL
             void* user_data);
         
         [DllImport("opencl.dll", EntryPoint = "clCompileProgram", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int CompileProgram(
+        public static extern int CompileProgram(
             IntPtr program,
             uint num_devices,
             IntPtr* device_list,
@@ -747,7 +747,7 @@ namespace Ibasa.OpenCL
             void* user_data);
 
         [DllImport("opencl.dll", EntryPoint = "clLinkProgram", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr LinkProgram(
+        public static extern IntPtr LinkProgram(
             IntPtr context,
             uint num_devices,
             IntPtr* device_list,
@@ -759,11 +759,11 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clUnloadPlatformCompiler", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int UnloadPlatformCompiler(
+        public static extern int UnloadPlatformCompiler(
             IntPtr platform);
 
         [DllImport("opencl.dll", EntryPoint = "clGetProgramInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetProgramInfo(
+        public static extern int GetProgramInfo(
             IntPtr program,
             int param_name,
             UIntPtr param_value_size,
@@ -771,7 +771,7 @@ namespace Ibasa.OpenCL
             UIntPtr* param_value_size_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clGetProgramBuildInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetProgramBuildInfo(
+        public static extern int GetProgramBuildInfo(
             IntPtr program,
             IntPtr device,
             int param_name,
@@ -781,35 +781,35 @@ namespace Ibasa.OpenCL
                             
         /* Kernel Object APIs */
         [DllImport("opencl.dll", EntryPoint = "clCreateKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateKernel(
+        public static extern IntPtr CreateKernel(
             IntPtr program,
             byte* kernel_name,
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clCreateKernelsInProgram", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int CreateKernelsInProgram(
+        public static extern int CreateKernelsInProgram(
             IntPtr program,
             uint num_kernels,
             IntPtr* kernels,
             uint* num_kernels_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clRetainKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainKernel(
+        public static extern int RetainKernel(
             IntPtr kernel);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseKernel(
+        public static extern int ReleaseKernel(
             IntPtr kernel);
 
         [DllImport("opencl.dll", EntryPoint = "clSetKernelArg", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int SetKernelArg(
+        public static extern int SetKernelArg(
             IntPtr kernel,
             uint arg_index,
             UIntPtr arg_size,
             void* arg_value);
         
         [DllImport("opencl.dll", EntryPoint = "clGetKernelInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetKernelInfo(
+        public static extern int GetKernelInfo(
             IntPtr kernel,
             int param_name,
             UIntPtr param_value_size,
@@ -817,7 +817,7 @@ namespace Ibasa.OpenCL
             UIntPtr* param_value_size_ret);
         
         [DllImport("opencl.dll", EntryPoint = "clGetKernelArgInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetKernelArgInfo(
+        public static extern int GetKernelArgInfo(
             IntPtr kernel,
             uint arg_index,
             int param_name,
@@ -826,7 +826,7 @@ namespace Ibasa.OpenCL
             UIntPtr* param_value_size_ret);
         
         [DllImport("opencl.dll", EntryPoint = "clGetKernelWorkGroupInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetKernelWorkGroupInfo(
+        public static extern int GetKernelWorkGroupInfo(
             IntPtr kernel,
             IntPtr device,
             int param_name,
@@ -836,12 +836,12 @@ namespace Ibasa.OpenCL
 
         /* Event Object APIs */
         [DllImport("opencl.dll", EntryPoint = "clWaitForEvents", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int WaitForEvents(
+        public static extern int WaitForEvents(
             uint num_events,
             IntPtr* event_list);
 
         [DllImport("opencl.dll", EntryPoint = "clGetEventInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetEventInfo(
+        public static extern int GetEventInfo(
             IntPtr @event,
             int param_name,
             UIntPtr param_value_size,
@@ -850,25 +850,25 @@ namespace Ibasa.OpenCL
 
         
         [DllImport("opencl.dll", EntryPoint = "clCreateUserEvent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateUserEvent(
+        public static extern IntPtr CreateUserEvent(
             IntPtr context,
             int* errcode_ret);
 
         [DllImport("opencl.dll", EntryPoint = "clRetainEvent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int RetainEvent(
+        public static extern int RetainEvent(
             IntPtr @event);
 
         [DllImport("opencl.dll", EntryPoint = "clReleaseEvent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int ReleaseEvent(
+        public static extern int ReleaseEvent(
             IntPtr @event);
 
         [DllImport("opencl.dll", EntryPoint = "clSetUserEventStatus", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int SetUserEventStatus(
+        public static extern int SetUserEventStatus(
             IntPtr @event,
             int execution_status);
 
         [DllImport("opencl.dll", EntryPoint = "clSetEventCallback", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int SetEventCallback(
+        public static extern int SetEventCallback(
             IntPtr @event,
             int command_exec_callback_type,
             IntPtr pfn_notify,
@@ -876,7 +876,7 @@ namespace Ibasa.OpenCL
 
         /* Profiling APIs */
         [DllImport("opencl.dll", EntryPoint = "clGetEventProfilingInfo", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int GetEventProfilingInfo(
+        public static extern int GetEventProfilingInfo(
             IntPtr @event,
             int param_name,
             UIntPtr param_value_size,
@@ -885,16 +885,16 @@ namespace Ibasa.OpenCL
 
         ///* Flush and Finish APIs */
         [DllImport("opencl.dll", EntryPoint = "clFlush", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int Flush(
+        public static extern int Flush(
             IntPtr command_queue);
 
         [DllImport("opencl.dll", EntryPoint = "clFinish", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int Finish(
+        public static extern int Finish(
             IntPtr command_queue);
 
         /* Enqueued Commands APIs */
         [DllImport("opencl.dll", EntryPoint = "clEnqueueReadBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueReadBuffer(
+        public static extern int EnqueueReadBuffer(
             IntPtr command_queue,
             IntPtr buffer,
             uint blocking_read,
@@ -907,7 +907,7 @@ namespace Ibasa.OpenCL
                             
         
         //[DllImport("opencl.dll", EntryPoint = "clEnqueueReadBufferRect", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        //public static unsafe extern int EnqueueReadBufferRect(
+        //public static extern int EnqueueReadBufferRect(
         //    IntPtr command_queue ,
         //    IntPtr buffer ,
         //    bool blocking_read ,
@@ -924,7 +924,7 @@ namespace Ibasa.OpenCL
         //    IntPtr @event);
                             
         [DllImport("opencl.dll", EntryPoint = "clEnqueueWriteBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueWriteBuffer(
+        public static extern int EnqueueWriteBuffer(
             IntPtr command_queue,
             IntPtr buffer,
             uint blocking_write,
@@ -935,7 +935,7 @@ namespace Ibasa.OpenCL
             IntPtr* event_wait_list,
             IntPtr* @event);
                             
-        //public static unsafe extern int
+        //public static extern int
         //clEnqueueWriteBufferRect(cl_command_queue    /* command_queue */,
         //                         mem              /* buffer */,
         //                         bool             /* blocking_write */,
@@ -952,7 +952,7 @@ namespace Ibasa.OpenCL
         //                         event *          /* event */) API_SUFFIX__VERSION_1_1;
                             
         [DllImport("opencl.dll", EntryPoint = "clEnqueueFillBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueFillBuffer(
+        public static extern int EnqueueFillBuffer(
             IntPtr command_queue,
             IntPtr buffer, 
             void* pattern, 
@@ -964,7 +964,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
                            
         [DllImport("opencl.dll", EntryPoint = "clEnqueueCopyBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueCopyBuffer(            
+        public static extern int EnqueueCopyBuffer(            
             IntPtr command_queue,
             IntPtr src_buffer,
             IntPtr dst_buffer,
@@ -975,7 +975,7 @@ namespace Ibasa.OpenCL
             IntPtr* event_wait_list,
             IntPtr* @event);
                             
-        //public static unsafe extern int
+        //public static extern int
         //clEnqueueCopyBufferRect(cl_command_queue    /* command_queue */, 
         //                        mem              /* src_buffer */,
         //                        mem              /* dst_buffer */, 
@@ -991,7 +991,7 @@ namespace Ibasa.OpenCL
         //                        event *          /* event */) API_SUFFIX__VERSION_1_1;
                             
         [DllImport("opencl.dll", EntryPoint = "clEnqueueReadImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueReadImage(
+        public static extern int EnqueueReadImage(
             IntPtr command_queue,
             IntPtr image,
             uint blocking_read, 
@@ -1005,7 +1005,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueWriteImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueWriteImage(
+        public static extern int EnqueueWriteImage(
             IntPtr command_queue,
             IntPtr image,
             uint blocking_write, 
@@ -1019,7 +1019,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueFillImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueFillImage(
+        public static extern int EnqueueFillImage(
             IntPtr command_queue,
             IntPtr image, 
             void* fill_color, 
@@ -1030,7 +1030,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
                             
         [DllImport("opencl.dll", EntryPoint = "clEnqueueCopyImage", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueCopyImage(
+        public static extern int EnqueueCopyImage(
             IntPtr command_queue,
             IntPtr src_image,
             IntPtr dst_image, 
@@ -1041,7 +1041,7 @@ namespace Ibasa.OpenCL
             IntPtr* event_wait_list,
             IntPtr* @event);
 
-        //public static unsafe extern int
+        //public static extern int
         //clEnqueueCopyImageToBuffer(cl_command_queue /* command_queue */,
         //                           mem           /* src_image */,
         //                           mem           /* dst_buffer */, 
@@ -1052,7 +1052,7 @@ namespace Ibasa.OpenCL
         //                           const event * /* event_wait_list */,
         //                           event *       /* event */);
 
-        //public static unsafe extern int
+        //public static extern int
         //clEnqueueCopyBufferToImage(cl_command_queue /* command_queue */,
         //                           mem           /* src_buffer */,
         //                           mem           /* dst_image */, 
@@ -1065,7 +1065,7 @@ namespace Ibasa.OpenCL
 
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueMapBuffer", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern void* EnqueueMapBuffer(
+        public static extern void* EnqueueMapBuffer(
             IntPtr command_queue,
             IntPtr buffer,
             uint blocking_map, 
@@ -1092,7 +1092,7 @@ namespace Ibasa.OpenCL
         //                  int *          /* errcode_ret */);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueUnmapMemObject", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueUnmapMemObject(
+        public static extern int EnqueueUnmapMemObject(
             IntPtr command_queue,
             IntPtr memobj,
             void* mapped_ptr,
@@ -1101,7 +1101,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueMigrateMemObjects", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueMigrateMemObjects(
+        public static extern int EnqueueMigrateMemObjects(
             IntPtr command_queue,
             uint num_mem_objects,
             IntPtr* memobj,
@@ -1111,7 +1111,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueNDRangeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueNDRangeKernel(
+        public static extern int EnqueueNDRangeKernel(
             IntPtr command_queue,
             IntPtr kernel,
             uint work_dim,
@@ -1123,7 +1123,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueTask", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueTask(
+        public static extern int EnqueueTask(
             IntPtr command_queue,
             IntPtr kernel,
             uint num_events_in_wait_list,
@@ -1131,7 +1131,7 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueNativeKernel", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueNativeKernel(
+        public static extern int EnqueueNativeKernel(
             IntPtr  command_queue,
             IntPtr user_func, 
             void* args,
@@ -1144,14 +1144,14 @@ namespace Ibasa.OpenCL
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueMarkerWithWaitList", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueMarkerWithWaitList(
+        public static extern int EnqueueMarkerWithWaitList(
             IntPtr command_queue,
             uint num_events_in_wait_list,
             IntPtr* event_wait_list,
             IntPtr* @event);
 
         [DllImport("opencl.dll", EntryPoint = "clEnqueueBarrierWithWaitList", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueBarrierWithWaitList(
+        public static extern int EnqueueBarrierWithWaitList(
             IntPtr command_queue,
             uint num_events_in_wait_list,
             IntPtr* event_wait_list,
@@ -1167,13 +1167,13 @@ namespace Ibasa.OpenCL
          */       
 
         [DllImport("opencl.dll", EntryPoint = "clGetExtensionFunctionAddressForPlatform", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern void* GetExtensionFunctionAddressForPlatform(
+        public static extern void* GetExtensionFunctionAddressForPlatform(
             IntPtr platform,
             byte* func_name);
 
         //// Deprecated OpenCL 1.1 APIs
         [DllImport("opencl.dll", EntryPoint = "clCreateImage2D", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateImage2D(
+        public static extern IntPtr CreateImage2D(
             IntPtr context,
             ulong flags,
             image_format* image_format,
@@ -1184,7 +1184,7 @@ namespace Ibasa.OpenCL
             int* errcode_ret);
     
         [DllImport("opencl.dll", EntryPoint = "clCreateImage3D", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern IntPtr CreateImage3D(
+        public static extern IntPtr CreateImage3D(
             IntPtr context,
             ulong flags,
             image_format* image_format,
@@ -1198,27 +1198,27 @@ namespace Ibasa.OpenCL
     
         [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clEnqueueMarker", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueMarker(
+        public static extern int EnqueueMarker(
             IntPtr command_queue,
             IntPtr* @event);
 
         [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clEnqueueWaitForEvents", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueWaitForEvents(
+        public static extern int EnqueueWaitForEvents(
             IntPtr command_queue,
             uint num_events,
             IntPtr* event_list);
 
         [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clEnqueueBarrier", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int EnqueueBarrier(IntPtr command_queue);
+        public static extern int EnqueueBarrier(IntPtr command_queue);
 
         [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clUnloadCompiler", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern int UnloadCompiler();
+        public static extern int UnloadCompiler();
 
         [Obsolete("Deprecated OpenCL 1.1 API.")]
         [DllImport("opencl.dll", EntryPoint = "clGetExtensionFunctionAddress", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static unsafe extern void* GetExtensionFunctionAddress(byte* func_name);
+        public static extern void* GetExtensionFunctionAddress(byte* func_name);
     }
 }

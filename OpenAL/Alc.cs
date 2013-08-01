@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Ibasa.OpenAL
 {
-    public static class Alc
+    public static unsafe class Alc
     {
         /* Boolean False. */
         public const int FALSE = 0;
@@ -107,35 +107,35 @@ namespace Ibasa.OpenAL
         * Context Management
         */
         [DllImport("openal32.dll", EntryPoint = "alcCreateContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe IntPtr CreateContext(IntPtr device, int* attrlist);
+        public static extern IntPtr CreateContext(IntPtr device, int* attrlist);
 
         [DllImport("openal32.dll", EntryPoint = "alcMakeContextCurrent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte MakeContextCurrent(IntPtr context);
+        public static extern byte MakeContextCurrent(IntPtr context);
 
         [DllImport("openal32.dll", EntryPoint = "alcProcessContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void ProcessContext(IntPtr context);
+        public static extern void ProcessContext(IntPtr context);
 
         [DllImport("openal32.dll", EntryPoint = "alcSuspendContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void SuspendContext(IntPtr context);
+        public static extern void SuspendContext(IntPtr context);
 
         [DllImport("openal32.dll", EntryPoint = "alcDestroyContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void DestroyContext(IntPtr context);
+        public static extern void DestroyContext(IntPtr context);
 
         [DllImport("openal32.dll", EntryPoint = "alcGetCurrentContext", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe IntPtr GetCurrentContext();
+        public static extern IntPtr GetCurrentContext();
 
         [DllImport("openal32.dll", EntryPoint = "alcGetContextsDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe IntPtr GetContextsDevice(IntPtr context);
+        public static extern IntPtr GetContextsDevice(IntPtr context);
 
 
         /*
         * Device Management
         */
         [DllImport("openal32.dll", EntryPoint = "alcOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe IntPtr OpenDevice(byte* devicename);
+        public static extern IntPtr OpenDevice(byte* devicename);
 
         [DllImport("openal32.dll", EntryPoint = "alcCloseDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte CloseDevice(IntPtr device);
+        public static extern byte CloseDevice(IntPtr device);
 
 
         /*
@@ -143,7 +143,7 @@ namespace Ibasa.OpenAL
         * Obtain the most recent Context error
         */
         [DllImport("openal32.dll", EntryPoint = "alcGetError", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe int GetError(IntPtr device);
+        public static extern int GetError(IntPtr device);
 
 
         /*
@@ -152,41 +152,41 @@ namespace Ibasa.OpenAL
         * function pointers and enum values.
         */
         [DllImport("openal32.dll", EntryPoint = "alcIsExtensionPresent", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte IsExtensionPresent(IntPtr device, byte* extname);
+        public static extern byte IsExtensionPresent(IntPtr device, byte* extname);
 
         [DllImport("openal32.dll", EntryPoint = "alcGetProcAddress", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void* GetProcAddress(IntPtr device, byte* funcname);
+        public static extern void* GetProcAddress(IntPtr device, byte* funcname);
 
         [DllImport("openal32.dll", EntryPoint = "alcGetEnumValue", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe int GetEnumValue(IntPtr device, byte* enumname);
+        public static extern int GetEnumValue(IntPtr device, byte* enumname);
 
 
         /*
         * Query functions
         */
         [DllImport("openal32.dll", EntryPoint = "alcGetString", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte* GetString(IntPtr device, int param);
+        public static extern byte* GetString(IntPtr device, int param);
 
         [DllImport("openal32.dll", EntryPoint = "alcGetIntegerv", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void GetIntegerv(IntPtr device, int param, int size, int* data);
+        public static extern void GetIntegerv(IntPtr device, int param, int size, int* data);
 
 
         /*
         * Capture functions
         */
         [DllImport("openal32.dll", EntryPoint = "alcCaptureOpenDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe IntPtr CaptureOpenDevice(byte* devicename, uint frequency, int format, int buffersize);
+        public static extern IntPtr CaptureOpenDevice(byte* devicename, uint frequency, int format, int buffersize);
 
         [DllImport("openal32.dll", EntryPoint = "alcCaptureCloseDevice", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe byte CaptureCloseDevice(IntPtr device);
+        public static extern byte CaptureCloseDevice(IntPtr device);
 
         [DllImport("openal32.dll", EntryPoint = "alcCaptureStart", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void CaptureStart(IntPtr device);
+        public static extern void CaptureStart(IntPtr device);
 
         [DllImport("openal32.dll", EntryPoint = "alcCaptureStop", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void CaptureStop(IntPtr device);
+        public static extern void CaptureStop(IntPtr device);
         
         [DllImport("openal32.dll", EntryPoint = "alcCaptureSamples", ExactSpelling = true, CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity()]
-        public static extern unsafe void CaptureSamples(IntPtr device, void* buffer, int samples);
+        public static extern void CaptureSamples(IntPtr device, void* buffer, int samples);
     }
 }

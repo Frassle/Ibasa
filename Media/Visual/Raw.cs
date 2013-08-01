@@ -45,7 +45,7 @@ namespace Ibasa.Media.Visual
 
         private void Load(Stream stream, Size3i size, Format format)
         {
-            BinaryReader reader = new BinaryReader(stream, Encoding.ASCII);
+            BinaryReader reader = new BinaryReader(stream, System.Text.Encoding.ASCII);
 
             Resource resource = new Resource(size, 1, 1, format);
 

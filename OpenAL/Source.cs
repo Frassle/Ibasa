@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
+using Ibasa.Numerics;
 using Ibasa.Numerics.Geometry;
 
 namespace Ibasa.OpenAL

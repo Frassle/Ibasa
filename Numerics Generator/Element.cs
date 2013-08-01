@@ -12,7 +12,7 @@ namespace Numerics_Generator
         public int Column { get; private set; }
         public int Index { get; private set; }
 
-        private Element(int row, int column, int index)
+        public Element(int row, int column, int index)
         {
             Name = string.Format("M{0}{1}", row + 1, column + 1);
             Row = row;
@@ -23,11 +23,11 @@ namespace Numerics_Generator
         public static Element[] Elements(int rows, int columns)
         {
             Element[] elements = new Element[rows * columns];
-            for (int row = 0; row < rows; ++row)
+            for (int column = 0; column < columns; ++column)
             {
-                for (int column = 0; column < columns; ++column)
+                for (int row = 0; row < rows; ++row)
                 {
-                    int index = column + row * columns;
+                    int index = row + column * rows;
                     elements[index] = new Element(row, column, index);
                 }
             }

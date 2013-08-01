@@ -1,4 +1,4 @@
-﻿using Ibasa.Numerics.Geometry;
+﻿using Ibasa.Numerics;
 
 namespace Ibasa.SharpIL
 {	

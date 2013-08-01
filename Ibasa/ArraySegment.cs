@@ -134,7 +134,6 @@ namespace Ibasa
 
             public void Dispose()
             {
-                throw new NotImplementedException();
             }
 
             public void Reset()
@@ -254,5 +253,21 @@ namespace Ibasa
         }
 
         #endregion
+
+        public static void Copy(ArraySegment<T> source, ArraySegment<T> destination, int count)
+        {
+            System.Array.Copy(
+                source.Array, source.Offset,
+                destination.Array, destination.Offset, count);
+        }
+
+        public static void Copy(
+            ArraySegment<T> source, int sourceIndex, 
+            ArraySegment<T> destination, int destinationIndex, int count)
+        {
+            System.Array.Copy(
+                source.Array, source.Offset + sourceIndex, 
+                destination.Array, destination.Offset + destinationIndex, count);
+        }            
     }
 }

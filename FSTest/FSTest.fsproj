@@ -48,13 +48,6 @@
     <Compile Include="Program.fs" />
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Numerics\Numerics.csproj">
-      <Name>Numerics</Name>
-      <Project>{506e525d-5b23-4066-904d-c054c3ef74a8}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>

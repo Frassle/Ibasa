@@ -13,7 +13,6 @@ namespace Ibasa.Collections
     /// Represents a double ended queue of objects that can be accessed by index.
     /// </summary>
     /// <typeparam name="T">Specifies the type of elements in the deque.</typeparam>
-    [Serializable]
     public sealed class Deque<T> : IList<T>
     {
         // Stores items in Blocks, each block holds 16 items.

@@ -9,7 +9,7 @@ namespace Ibasa.Packaging
     {
         public abstract DirectoryInfo Root { get; }
 
-        public abstract Path Path { get; }
+        public virtual Path Path { get { return new Path(); } }
 
         public abstract DirectoryInfo GetDirectoryInfo(string path);
         public abstract FileInfo GetFileInfo(string path);

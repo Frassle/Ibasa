@@ -65,7 +65,7 @@ namespace Numerics_Generator
                     var vector = new Vector(type, dimension);
                     vector.Generate();
 
-                    var path = System.IO.Path.Combine(root, "Geometry", "Vectors", vector.Name + ".cs");
+                    var path = System.IO.Path.Combine(root, "Vectors", vector.Name + ".cs");
                     System.IO.File.WriteAllText(path, vector.Text);
                     Console.WriteLine("Done - " + vector.Name);
                 }
@@ -79,7 +79,7 @@ namespace Numerics_Generator
                     {
                         var matrix = new Matrix(type, rows, columns);
                         matrix.Generate();
-                        var path = System.IO.Path.Combine(root, "Geometry", "Matrices", matrix.Name + ".cs");
+                        var path = System.IO.Path.Combine(root, "Matrices", matrix.Name + ".cs");
                         System.IO.File.WriteAllText(path, matrix.Text);
                         Console.WriteLine("Done - " + matrix.Name);
                     }
@@ -153,8 +153,6 @@ namespace Numerics_Generator
                 System.IO.File.WriteAllText(path, ray.Text);
                 Console.WriteLine("Done - " + ray.Name);
             }
-
-            Console.ReadLine();
         }
     }
 }

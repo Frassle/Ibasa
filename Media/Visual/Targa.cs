@@ -85,7 +85,7 @@ namespace Ibasa.Media.Visual
 
         public string ImageId
         {
-            get { return Encoding.ASCII.GetString(Header.ImageId); }
+            get { return System.Text.Encoding.ASCII.GetString(Header.ImageId); }
             set
             {
                 if (value == null)
@@ -94,7 +94,7 @@ namespace Ibasa.Media.Visual
                     return;
                 }
 
-                byte[] data = Encoding.ASCII.GetBytes(value);
+                byte[] data = System.Text.Encoding.ASCII.GetBytes(value);
                 if (data.Length > 255)
                     throw new ArgumentException("ImageId must be stored in less than 256 bytes.", "value");
                 Header.ImageId = data;
@@ -254,7 +254,7 @@ namespace Ibasa.Media.Visual
         {
             get
             {
-                return Extension.AuthorName == null ? null : Encoding.ASCII.GetString(Extension.AuthorName);
+                return Extension.AuthorName == null ? null : System.Text.Encoding.ASCII.GetString(Extension.AuthorName);
             }
             set
             {
@@ -264,12 +264,12 @@ namespace Ibasa.Media.Visual
                     return;
                 }
 
-                int length = Encoding.ASCII.GetByteCount(value);
+                int length = System.Text.Encoding.ASCII.GetByteCount(value);
                 if (length > 40)
                     throw new ArgumentException("AuthorName must be stored in less than 41 bytes.", "value");
                 if (Extension.AuthorName == null)
                     Extension.AuthorName = new byte[41];
-                Encoding.ASCII.GetBytes(value, 0, value.Length, Extension.AuthorName, 0);
+                System.Text.Encoding.ASCII.GetBytes(value, 0, value.Length, Extension.AuthorName, 0);
                 Array.Clear(Extension.AuthorName, length, 41 - length);
             }
         }
@@ -283,10 +283,10 @@ namespace Ibasa.Media.Visual
 
                 string[] comments = new string[4];
 
-                comments[0] = Encoding.ASCII.GetString(Extension.AuthorComments, 0, 80);
-                comments[1] = Encoding.ASCII.GetString(Extension.AuthorComments, 81, 80);
-                comments[2] = Encoding.ASCII.GetString(Extension.AuthorComments, 162, 80);
-                comments[3] = Encoding.ASCII.GetString(Extension.AuthorComments, 243, 80);
+                comments[0] = System.Text.Encoding.ASCII.GetString(Extension.AuthorComments, 0, 80);
+                comments[1] = System.Text.Encoding.ASCII.GetString(Extension.AuthorComments, 81, 80);
+                comments[2] = System.Text.Encoding.ASCII.GetString(Extension.AuthorComments, 162, 80);
+                comments[3] = System.Text.Encoding.ASCII.GetString(Extension.AuthorComments, 243, 80);
 
                 return comments;
             }
@@ -304,14 +304,14 @@ namespace Ibasa.Media.Visual
                 int line = 0;
                 for (; line < value.Length; ++line)
                 {
-                    int length = Encoding.ASCII.GetByteCount(value[line]);
+                    int length = System.Text.Encoding.ASCII.GetByteCount(value[line]);
                     if (length > 80)
                         throw new ArgumentException("AuthorComment must be stored in less than 80 bytes per line.", "value");
 
                     if (Extension.AuthorComments == null)
                         Extension.AuthorComments = new byte[324];
 
-                    Encoding.ASCII.GetBytes(value[line], 0, value.Length, Extension.AuthorComments, line * 81);
+                    System.Text.Encoding.ASCII.GetBytes(value[line], 0, value.Length, Extension.AuthorComments, line * 81);
                     Array.Clear(Extension.AuthorName, line * 81 + length, 81 - length);
                 }
                 for (; line < 4; ++line)
@@ -345,7 +345,7 @@ namespace Ibasa.Media.Visual
         {
             get
             {
-                return Extension.JobId == null ? null : Encoding.ASCII.GetString(Extension.JobId);
+                return Extension.JobId == null ? null : System.Text.Encoding.ASCII.GetString(Extension.JobId);
             }
             set
             {
@@ -355,12 +355,12 @@ namespace Ibasa.Media.Visual
                     return;
                 }
 
-                int length = Encoding.ASCII.GetByteCount(value);
+                int length = System.Text.Encoding.ASCII.GetByteCount(value);
                 if (length > 40)
                     throw new ArgumentException("JobId must be stored in less than 41 bytes.", "value");
                 if (Extension.JobId == null)
                     Extension.JobId = new byte[41];
-                Encoding.ASCII.GetBytes(value, 0, value.Length, Extension.JobId, 0);
+                System.Text.Encoding.ASCII.GetBytes(value, 0, value.Length, Extension.JobId, 0);
                 Array.Clear(Extension.JobId, length, 41 - length);
             }
         }
@@ -386,7 +386,7 @@ namespace Ibasa.Media.Visual
         {
             get
             {
-                return Extension.SoftwareId == null ? null : Encoding.ASCII.GetString(Extension.SoftwareId);
+                return Extension.SoftwareId == null ? null : System.Text.Encoding.ASCII.GetString(Extension.SoftwareId);
             }
             set
             {
@@ -396,12 +396,12 @@ namespace Ibasa.Media.Visual
                     return;
                 }
 
-                int length = Encoding.ASCII.GetByteCount(value);
+                int length = System.Text.Encoding.ASCII.GetByteCount(value);
                 if (length > 40)
                     throw new ArgumentException("SoftwareId must be stored in less than 41 bytes.", "value");
                 if (Extension.SoftwareId == null)
                     Extension.SoftwareId = new byte[41];
-                Encoding.ASCII.GetBytes(value, 0, value.Length, Extension.SoftwareId, 0);
+                System.Text.Encoding.ASCII.GetBytes(value, 0, value.Length, Extension.SoftwareId, 0);
                 Array.Clear(Extension.SoftwareId, length, 41 - length);
             }
         }
@@ -603,7 +603,7 @@ namespace Ibasa.Media.Visual
 
         private void Load(Stream stream)
         {
-            var reader = new Ibasa.IO.BinaryReader(stream, Encoding.ASCII);
+            var reader = new Ibasa.IO.BinaryReader(stream, System.Text.Encoding.ASCII);
 
             ReadHeader(reader);
             ReadColorMap(reader);
@@ -974,7 +974,7 @@ namespace Ibasa.Media.Visual
 
         public void Save(Stream stream)
         {
-            var writer = new Ibasa.IO.BinaryWriter(stream, Encoding.ASCII);
+            var writer = new Ibasa.IO.BinaryWriter(stream, System.Text.Encoding.ASCII);
 
             WriteHeader(writer);
             //WriteColorMap(writer); dont use color maps
@@ -1108,7 +1108,7 @@ namespace Ibasa.Media.Visual
 
             writer.Write((uint)extensionOffset);
             writer.Write((uint)developerOffset);
-            writer.Write(Encoding.ASCII.GetBytes("TRUEVISION-XFILE.\0"));
+            writer.Write(System.Text.Encoding.ASCII.GetBytes("TRUEVISION-XFILE.\0"));
         }
 
 

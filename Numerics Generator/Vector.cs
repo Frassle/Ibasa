@@ -52,8 +52,9 @@ namespace Numerics_Generator
             WriteLine("using System.Diagnostics.Contracts;");
             WriteLine("using System.Globalization;");
             WriteLine("using System.Runtime.InteropServices;");
+            WriteLine("using Ibasa.Numerics.Geometry;");
             WriteLine("");
-            WriteLine("namespace Ibasa.Numerics.Geometry");
+            WriteLine("namespace Ibasa.Numerics");
             WriteLine("{");
             Indent();
             Declaration();
@@ -467,6 +468,44 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
 
+            if (Dimension <= 4 && Matrix.Types.Contains(Type))
+            {
+                foreach (var size in Matrix.Sizes)
+                {
+                    var matrixA = new Matrix(Type, size, Dimension);
+                    var matrixB = new Matrix(Type, Dimension, size);
+                    var vector = new Vector(Type, size);
+
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Returns the product of a matrix and vector.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"left\">The matrix to multiply.</param>");
+                    WriteLine("/// <param name=\"right\">The vector to multiply.</param>");
+                    WriteLine("/// <returns>The product of the left and right parameters.</returns>");
+                    WriteLine("public static {0} operator *({1} left, {2} right)", vector, matrixA, Name);
+                    Indent("{");
+                    WriteLine("return new {0}({1});", vector, string.Join(", ",
+                        vector.Components.Select(i =>
+                        string.Join(" + ", Enumerable.Range(0, Dimension).Select(j =>
+                            string.Format("left.M{0}{1} * right.{2}", i.Index + 1, j + 1, Components[j]))))));
+                    Dedent("}");
+
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Returns the product of a matrix and vector.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"right\">The vector to multiply.</param>");
+                    WriteLine("/// <param name=\"left\">The matrix to multiply.</param>");
+                    WriteLine("/// <returns>The product of the left and right parameters.</returns>");
+                    WriteLine("public static {0} operator *({1} left, {2} right)", vector, Name, matrixB);
+                    Indent("{");
+                    WriteLine("return new {0}({1});", vector, string.Join(", ",
+                        vector.Components.Select(i =>
+                        string.Join(" + ", Enumerable.Range(0, Dimension).Select(j =>
+                            string.Format("left.{0} * right.M{1}{2}",Components[j], j + 1, i.Index + 1))))));
+                    Dedent("}");
+                }
+            }
+
             WriteLine("/// <summary>");
             WriteLine("/// Divides a vector by a scalar and returns the result.");
             WriteLine("/// </summary>");
@@ -862,6 +901,32 @@ namespace Numerics_Generator
             Dedent();
             WriteLine("}");
 
+            if (Dimension <= 4 && Matrix.Types.Contains(Type))
+            {
+                foreach (var size in Matrix.Sizes)
+                {
+                    var matrix = new Matrix(Type, size, Dimension);
+                    var vector = new Vector(Type, size);
+
+                    WriteLine("/// <summary>");
+                    WriteLine("/// Returns the product of a matrix and vector.");
+                    WriteLine("/// </summary>");
+                    WriteLine("/// <param name=\"matrix\">The matrix to multiply.</param>");
+                    WriteLine("/// <param name=\"vector\">The vector to multiply.</param>");
+                    WriteLine("/// <returns>The product of the left and right parameters.</returns>");
+                    WriteLine("public static {0} Multiply({1} matrix, {2} vector)", vector, matrix, Name);
+                    WriteLine("{");
+
+                    Indent();
+                    WriteLine("return new {0}({1});", vector, string.Join(", ",
+                        vector.Components.Select(i =>
+                        string.Join(" + ", Enumerable.Range(0, Dimension).Select(j =>
+                            string.Format("matrix.M{0}{1} * vector.{2}", i.Index + 1, j + 1, Components[j]))))));
+                    Dedent();
+                    WriteLine("}");
+                }
+            }
+
             WriteLine("/// <summary>");
             WriteLine("/// Divides a vector by a scalar and returns the result.");
             WriteLine("/// </summary>");
@@ -1054,23 +1119,23 @@ namespace Numerics_Generator
             #region Per component
             WriteLine("#region Per component");
 
-            WriteLine("#region Transform");
+            WriteLine("#region Map");
             foreach(var type in Types)
             {
-                var transform = new Vector(type, Dimension);
+                var map = new Vector(type, Dimension);
 
                 WriteLine("/// <summary>");
-                WriteLine("/// Transforms the components of a vector and returns the result.");
+                WriteLine("/// Maps the components of a vector and returns the result.");
                 WriteLine("/// </summary>");
-                WriteLine("/// <param name=\"value\">The vector to transform.</param>");
-                WriteLine("/// <param name=\"transformer\">A transform function to apply to each component.</param>");
-                WriteLine("/// <returns>The result of transforming each component of value.</returns>");
+                WriteLine("/// <param name=\"value\">The vector to map.</param>");
+                WriteLine("/// <param name=\"mapping\">A mapping function to apply to each component.</param>");
+                WriteLine("/// <returns>The result of mapping each component of value.</returns>");
                 if (!Type.IsCLSCompliant) { WriteLine("[CLSCompliant(false)]"); }
-                WriteLine("public static {0} Transform({1} value, Func<{2}, {3}> transformer)", transform, Name, Type, transform.Type);
+                WriteLine("public static {0} Map({1} value, Func<{2}, {3}> mapping)", map, Name, Type, map.Type);
                 WriteLine("{");
                 Indent();
-                WriteLine("return new {0}({1});", transform,
-                    string.Join(", ", Components.Select(component => string.Format("transformer(value.{0})", component))));
+                WriteLine("return new {0}({1});", map,
+                    string.Join(", ", Components.Select(component => string.Format("mapping(value.{0})", component))));
                 Dedent();
                 WriteLine("}");
             }
@@ -1305,7 +1370,7 @@ namespace Numerics_Generator
                 WriteLine("double theta = Functions.Atan2(value.Y, value.X);");
                 WriteLine("if (theta < 0)");
                 Indent();
-                WriteLine("theta += 2 * Constants.PI;");
+                WriteLine("theta += 2 * Constants.Pi;");
                 Dedent();
                 WriteLine("return new PolarCoordinate(");
                 WriteLine("     theta,");
@@ -1345,7 +1410,7 @@ namespace Numerics_Generator
                 WriteLine("double theta = Functions.Atan2(value.Y, value.X);");
                 WriteLine("if (theta < 0)");
                 Indent();
-                WriteLine("theta += 2 * Constants.PI;");
+                WriteLine("theta += 2 * Constants.Pi;");
                 Dedent();
                 WriteLine("return new SphericalCoordinate(");
                 WriteLine("     (double)Functions.Acos(value.Z / r),");
