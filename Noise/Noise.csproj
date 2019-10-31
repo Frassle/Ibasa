@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BCA031F5-8D62-4FAB-A0B8-A9AC4E2DF826}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ibasa.Noise</RootNamespace>
+    <AssemblyName>Ibasa.Noise</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>False</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsBuildReferenceAssembly>False</CodeContractsBuildReferenceAssembly>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsLibPaths />
+    <CodeContractsPlatformPath />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>none</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DocumentationFile>bin\Release\Ibasa.Noise.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cache.cs" />
+    <Compile Include="Checkerboard.cs" />
+    <Compile Include="Billow.cs" />
+    <Compile Include="Clamp.cs" />
+    <Compile Include="Colors\Channel.cs" />
+    <Compile Include="Colors\Convolution.cs" />
+    <Compile Include="Colors\Sobel.cs" />
+    <Compile Include="Colors\Transform.cs" />
+    <Compile Include="Constant.cs" />
+    <Compile Include="Curve.cs" />
+    <Compile Include="Cylinders.cs" />
+    <Compile Include="Sampler.cs" />
+    <Compile Include="TranslatePoint.cs" />
+    <Compile Include="Exponent.cs" />
+    <Compile Include="Fbm.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Perlin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quality.cs" />
+    <Compile Include="Reduce.cs" />
+    <Compile Include="RidgedMulti.cs" />
+    <Compile Include="RotatePoint.cs" />
+    <Compile Include="ScaleBias.cs" />
+    <Compile Include="ScalePoint.cs" />
+    <Compile Include="Select.cs" />
+    <Compile Include="Map.cs" />
+    <None Include="Simplex.cs">
+      <SubType>Code</SubType>
+    </None>
+    <Compile Include="Sounds\CosineWave.cs" />
+    <Compile Include="Sounds\SawtoothWave.cs" />
+    <Compile Include="Sounds\SineWave.cs" />
+    <Compile Include="Sounds\SquareWave.cs" />
+    <Compile Include="Sounds\TriangleWave.cs" />
+    <Compile Include="Spheres.cs" />
+    <Compile Include="Tileable.cs" />
+    <Compile Include="Value.cs" />
+    <Compile Include="Voronoi.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ibasa\Ibasa.csproj">
+      <Project>{5BDD6D94-0FA4-415C-9625-141347AC5BEF}</Project>
+      <Name>Ibasa</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Numerics\Numerics.csproj">
+      <Project>{506E525D-5B23-4066-904D-C054C3EF74A8}</Project>
+      <Name>Numerics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
